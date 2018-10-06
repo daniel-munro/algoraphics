@@ -1,0 +1,4 @@
+plugins:
+  - collapseGroups: false
+  - convertPathData:
+      applyTransforms: false
