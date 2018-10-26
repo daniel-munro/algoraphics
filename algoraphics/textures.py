@@ -13,7 +13,7 @@ from .images import array_to_image
 from .grid import grid_tree_dists
 
 
-def add_shadows(objects, stdev, darkness):
+def add_shadows(objects, stdev=10, darkness=0.5):
     """Add shadows to objects.
 
     Each item (nested or not) in objects is replaced with a group with
@@ -34,7 +34,7 @@ def add_shadows(objects, stdev, darkness):
 
 
 def with_shadow(obj, stdev, darkness):
-    """Add shadow to object.
+    """Add shadow to an object.
 
     Like add_shadows() but returns a group with a single shadow filter.
 
@@ -58,7 +58,7 @@ def filtered(obj, fltr):
         fltr (dict): A filter.
 
     Returns:
-        A group with `obj` as members and filter applied to group.
+        dict: A group with `obj` as members and filter applied to group.
 
     """
     obj = obj if isinstance(obj, list) else [obj]
@@ -76,7 +76,7 @@ def billowing(w, h, colors, scale, gradient_mode='rgb'):
         gradient_mode (str): 'rgb' or 'hsl' to choose the appearance of the gradient.
 
     Returns:
-        A PIL image object (i.e. not a dict).
+        Image: A PIL image object (i.e. not a dict).
 
     """
     dists = grid_tree_dists(rows=h, cols=w)
@@ -84,7 +84,7 @@ def billowing(w, h, colors, scale, gradient_mode='rgb'):
     return array_to_image(mat)
 
 
-def billow_region(outline, colors, scale, gradient_mode='rgb'):
+def billow_region(outline, colors, scale=200, gradient_mode='rgb'):
     """Fill region with billowing texture.
 
     Args:
@@ -94,7 +94,7 @@ def billow_region(outline, colors, scale, gradient_mode='rgb'):
         gradient_mode (str): 'rgb' or 'hsl' to choose appearance of gradient.
 
     Returns:
-        A group object with clip.
+        dict: A group with clip.
 
     """
     bound = add_margin(bounding_box(outline), 2)
@@ -131,8 +131,8 @@ def tear_paper_rect(objects, bounds):
         bounds (tuple): A rectangle will be torn just inside these bounds.
 
     Returns:
-        A shadow-filtered group containing a clipped group containing
-        original shapes.
+        dict: A shadow-filtered group containing a clipped group
+        containing original shapes.
 
     """
     e = 10

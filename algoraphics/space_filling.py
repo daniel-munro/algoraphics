@@ -23,7 +23,7 @@ def fill_region(outline, object_fun, max_tries=None):
         max_tries (int): If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.
 
     Returns:
-        A group dict with clip.
+        dict: A group with clip.
 
     """
     bounds = add_margin(bounding_box(outline), 10)
@@ -61,7 +61,7 @@ def filament_fill_obj(bounds, color_fun, width, l_min, l_max, l_max_step):
         l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.
 
     Returns:
-        A list of polygons (the segments in order).
+        list: The ordered segment polygons.
 
     """
     c = ((bounds[0] + bounds[1]) / 2., (bounds[2] + bounds[3]) / 2.)
@@ -86,7 +86,7 @@ def filament_fill(color_fun, width, l_min, l_max, l_max_step=None):
         l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by a random walk, and this will be the maximum step size.
 
     Returns:
-        A function used by fill_region().
+        function: A function used by fill_region().
 
     """
     return lambda bounds: filament_fill_obj(bounds, color_fun, width,

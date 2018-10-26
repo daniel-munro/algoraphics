@@ -24,7 +24,7 @@ def mitchell_points(n, n_cand, bounds):
         bounds (tuple): A bounds tuple.
 
     Returns:
-        A list of points.
+        list: The generated points.
 
     """
     x_min, x_max, y_min, y_max = bounds
@@ -60,9 +60,9 @@ def voronoi_regions(points):
         points (list): A list of points.
 
     Returns:
-        A list of polygon shapes.  Items do not correspond to input
-        points because points on the periphery do not have finite
-        regions.
+        list: A list of polygon shapes.  Items do not correspond to
+        input points because points on the periphery do not have
+        finite regions.
 
     """
     vor = spatial.Voronoi(np.array(points))
@@ -81,7 +81,7 @@ def voronoi_edges(points):
         points (list): A list of points.
 
     Returns:
-        A list of line shapes.
+        list: A list of line shapes.
 
     """
     vor = spatial.Voronoi(np.array(points))
@@ -97,9 +97,9 @@ def delaunay_regions(points):
         points (list): A list of points.
 
     Returns:
-        A list of triangular polygon shapes.  Items do not correspond
-        to input points because points on the periphery do not have
-        finite regions.
+        list: A list of triangular polygon shapes.  Items do not
+        correspond to input points because points on the periphery do
+        not have finite regions.
 
     """
 
@@ -118,7 +118,7 @@ def delaunay_edges(points):
         points (list): A list of points.
 
     Returns:
-        A list of line shapes.
+        list: A list of line shapes.
 
     """
     tri = spatial.Delaunay(np.array(points))
@@ -134,7 +134,7 @@ def delaunay_edges(points):
     return [dict(type='line', p1=ed[0], p2=ed[1]) for ed in edges]
 
 
-def tile_region(outline, tile_fun, tile_size, regularity=10):
+def tile_region(outline, tile_fun, tile_size=500, regularity=10):
     """Fill region with (uncolored) tiles.
 
     Args:
@@ -144,7 +144,7 @@ def tile_region(outline, tile_fun, tile_size, regularity=10):
         regularity (int): A value of one or higher, passed to mitchell_points.
 
     Returns:
-        A group dict with clip.
+        dict: A group with clip.
 
     """
     bounds = add_margin(bounding_box(outline), 30)
@@ -167,7 +167,7 @@ def tile_canvas(w, h, tile_fun, tile_size, regularity=10):
         regularity (int): A value of one or higher, passed to mitchell_points.
 
     Returns:
-        A list of shapes.
+        list: A list of shapes.
 
     """
     margin = 30
@@ -189,7 +189,7 @@ def nested_triangles(tip, height, min_level, max_level):
         max_level (int): The level of the smallest triangles.
 
     Returns:
-        A list of triangle polygon shapes.
+        list: A list of triangle polygon shapes.
 
     """
     def process_triangle(tip, height, level, triangles):
@@ -229,7 +229,7 @@ def fill_nested_triangles(outline, min_level, max_level, color1=None,
         color2 (color): The color for the opposing half of the triangles. This can be a function but this half of triangles will all be one color because it is the background.
 
     Returns:
-        A region dict with outline as clip.
+        dict: A group with outline as clip.
 
     """
     rotation = np.random.uniform(0, 360)
@@ -249,6 +249,7 @@ def fill_nested_triangles(outline, min_level, max_level, color1=None,
 
 
 def fill_ishihara_spots(outline, r_min=2, r_max=9):
+    """TODO"""
     bounds = bounding_box(outline)
     bounds_area = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2])
     n_points = int(bounds_area /

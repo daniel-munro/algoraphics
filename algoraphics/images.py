@@ -38,7 +38,7 @@ def encode_image(image, frmt):
         frmt (str): Either 'JPEG' or 'PNG'.
 
     Returns:
-        A string for the encoded image.
+        str: The image encoding.
 
     """
     formats = dict(JPEG='jpg', PNG='png')
@@ -56,7 +56,7 @@ def array_to_image(array, scale=True):
         scale (bool): If True, values in 2D array will be scaled so that the highest values are 255 (white).
 
     Returns:
-        A PIL image in RGB mode.
+        Image: A PIL image in RGB mode.
 
     """
     if scale and len(array.shape) == 2:
@@ -97,30 +97,20 @@ def sample_colors(image, points):
 
     Args:
         image (Image): A PIL image.
-        points (list): A list of image coordinates.
+        points (list|tuple): A list of image coordinates, or a single coordinate.
 
     Returns:
-        A list of colors corresponding to `points`.
+        list: A list of colors corresponding to `points`, or a single color if input is a single point.
 
     """
+    if type(points) is tuple:
+        return sample_colors(image, [points])[0]
     pixels = image.load()
-    # sample from nearest pixel if point is out of range
+    # Sample from nearest pixel if point is out of range:
     points = [(max(0, p[0]), max(0, p[1])) for p in points]
     points = [(min(p[0], image.size[0] - 1), min(p[1], image.size[1] - 1))
               for p in points]
-    # def in_range(p):
-        # return p[0] >= 0 and p[0] < image.size[0] and p[1] >= 0 and p[1] < image.size[1]
     return [pixels[p[0], p[1]] for p in points]
-
-
-# TODO: Just allow sample_colors to check for a (non-list) point.
-def sample_color(image, point):
-    """Sample a color from an image.
-
-    Like sample_colors but returns a single color.
-
-    """
-    return sample_colors(image, [point])[0]
 
 
 def region_color(outline, image, n_points=10):
@@ -132,7 +122,7 @@ def region_color(outline, image, n_points=10):
         n_points (int): Number of points to sample.
 
     Returns:
-        The average color of the sampled image points.
+        Color: The average color of the sampled image points.
 
     """
     points = sample_points_in_shape(outline, n_points)
@@ -166,7 +156,7 @@ def color_distances(pixels, color):
         color (rgb): A reference color.
 
     Returns:
-        A 2D array of distances between 0 and 1.
+        numpy.ndarray: A 2D array of distances between 0 and 1.
 
     """
     x = np.zeros_like(pixels)
@@ -187,7 +177,7 @@ def segment_image(image, n_segments=100, compactness=10, smoothness=0):
         smoothness (float): The width of gaussian smoothing applied before segmentation.
 
     Returns:
-        A 2D array of integer segment labels.
+        numpy.ndarray: A 2D array of integer segment labels.
 
     """
     return slic(np.array(image), n_segments, compactness,
@@ -207,7 +197,7 @@ def pad_array(pixels, margin=1):
         margin (int): The width of padding on each side.
 
     Returns:
-        A 2D array with 2 * `margin` added to both dimensions.
+        numpy.ndarray: A 2D array with 2 * `margin` added to both dimensions.
 
     """
     for i in range(margin):
@@ -245,8 +235,8 @@ def segments_to_shapes(seg, simplify=None, expand=1, curvature=0.2):
         curvature (float): The degree of curvature for the splines.  Usually between zero and one.
 
     Returns:
-        A list of spline shapes, generally in order from left to right
-        and then bottom to top.
+        list: A list of spline shapes, generally in order from left to
+        right and then bottom to top.
 
     """
     shapes = []
@@ -280,8 +270,8 @@ def image_regions(image, n_segments=100, compactness=10, smoothness=0,
         curvature (float): The degree of curvature in spline.  Usually between zero and one.
 
     Returns:
-        A list of spline shapes, generally in order from left to right
-        and then bottom to top.
+        list: A list of spline shapes, generally in order from left to
+        right and then bottom to top.
 
     """
     seg = segment_image(image, n_segments, compactness, smoothness)

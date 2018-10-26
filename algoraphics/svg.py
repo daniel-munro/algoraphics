@@ -8,13 +8,14 @@ write SVG files.
 import os
 import random
 import string
+import subprocess
 
 from .main import flatten, scale_shapes, translate_shapes
 from .paths import write_path, spline
 from .images import encode_image
 
 
-def match_dict(dicts, d):
+def _match_dict(dicts, d):
     """Return index of dictionary in `dicts` matching `d`, or None if no match."""
     for i in range(len(dicts)):
         if dicts[i] == d:
@@ -31,7 +32,7 @@ def write_object(obj, defs, filters):
         filters (list): A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.
 
     Returns:
-        A SVG string.
+        str: An SVG encoding.
 
     """
     if obj['type'] == 'polygon':
@@ -55,19 +56,14 @@ def write_object(obj, defs, filters):
         if 'style' in obj and 'fill' not in obj['style']:
             obj['style']['fill'] = 'none'
 
-    elif obj['type'] == 'rectangle':
-        output = '<rect x="' + str(obj['start'][0]) + '" y="'
-        + str(obj['start'][1]) + '" width="' + str(obj['w']) + '" height="'
-        + str(obj['h']) + '" '
-
     elif obj['type'] == 'circle':
-        output = '<circle cx="' + str(obj['c'][0]) + '" cy="'
-        + str(obj['c'][1]) + '" r="' + str(obj['r']) + '" '
+        output = ('<circle cx="' + str(obj['c'][0]) + '" cy="'
+                  + str(obj['c'][1]) + '" r="' + str(obj['r']) + '" ')
 
     elif obj['type'] == 'line':
-        output = '<line x1="' + str(obj['p1'][0]) + '" y1="'
-        + str(obj['p1'][1]) + '" x2="' + str(obj['p2'][0]) + '" y2="'
-        + str(obj['p2'][1]) + '" '
+        output = ('<line x1="' + str(obj['p1'][0]) + '" y1="'
+                  + str(obj['p1'][1]) + '" x2="' + str(obj['p2'][0])
+                  + '" y2="' + str(obj['p2'][1]) + '" ')
 
     elif obj['type'] == 'polyline':
         points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in obj['points']])
@@ -97,8 +93,9 @@ def write_object(obj, defs, filters):
             output += 'x="' + str(obj['x']) + '" '
         if 'y' in obj:
             output += 'y="' + str(obj['y']) + '" '
-        output += 'width="' + str(obj['w']) + '" height="' + str(obj['h'])
-        + '" xlink:href="' + encode_image(obj['image'], obj['format']) + '"'
+        output += ('width="' + str(obj['w']) + '" height="' + str(obj['h'])
+                   + '" xlink:href="' +
+                   encode_image(obj['image'], obj['format']) + '"')
 
     elif obj['type'] == 'group':
         output = '<g '
@@ -119,7 +116,7 @@ def write_object(obj, defs, filters):
         output += 'style="' + write_style(obj['style']) + '" '
 
     if 'filter' in obj:
-        match = match_dict(filters, obj['filter'])
+        match = _match_dict(filters, obj['filter'])
         if match is None:
             filters.append(obj['filter'])
             match = len(filters) - 1
@@ -148,19 +145,19 @@ def write_style(style):
         style (dict): A dictionary with attributes as keys. Underscores will be replaced with hyphens, which are not allowed in keys.
 
     Returns:
-        A SVG string which should be inserted between the quotes of
-        style="...".
+        str: An SVG encoding which should be inserted between the
+        quotes of style="...".
 
     """
     style = style.copy()  # keep objects intact for reuse.
     if 'fill' in style and isinstance(style['fill'], tuple):
-        style['fill'] = 'rgb('
-        + ', '.join([str(x) for x in style['fill']])
-        + ')'
+        style['fill'] = ('rgb('
+                         + ', '.join([str(x) for x in style['fill']])
+                         + ')')
     if 'stroke' in style and isinstance(style['stroke'], tuple):
-        style['stroke'] = 'rgb('
-        + ', '.join([str(x) for x in style['stroke']])
-        + ')'
+        style['stroke'] = ('rgb('
+                           + ', '.join([str(x) for x in style['stroke']])
+                           + ')')
 
     if 'stroke' in style and style['stroke'] == 'match':
         if 'fill' in style:
@@ -180,7 +177,7 @@ def write_filters(filters):
         filters (list): A list of filters.
 
     Returns:
-        An SVG string.
+        str: An SVG encoding.
 
     """
     fltrs = []
@@ -200,13 +197,13 @@ def write_filters(filters):
             # f += '</feComponentTransfer>\n'
 
             # alt to feComponentTransfer:
-            f += '<feFlood flood-color="black" flood-opacity="'
-            + str(fltr['darkness']) + '" />\n'
+            f += ('<feFlood flood-color="black" flood-opacity="'
+                  + str(fltr['darkness']) + '" />\n')
             f += '<feComposite in2="blur" operator="in" />\n'
             
-            f += '<feMerge>'
-            + '<feMergeNode /><feMergeNode in="SourceGraphic" />'
-            + '</feMerge>\n'
+            f += ('<feMerge>'
+                  + '<feMergeNode /><feMergeNode in="SourceGraphic" />'
+                  + '</feMerge>\n')
             f += '</filter>\n'
 
         # if fltr['type'] == 'shadow':
@@ -222,34 +219,34 @@ def write_filters(filters):
             # f += '<feComposite in2="SourceGraphic" in="diffLight3" operator="atop" />\n'
 
             f = '<filter id="filter' + str(i) + '">\n'
-            f += '<feTurbulence type="fractalNoise" baseFrequency="0.02" '
-            + 'numOctaves="5" result="noise" />\n'
-            f += '<feDiffuseLighting in="noise" lighting-color="white" '
-            + 'surfaceScale="0.5" result="diffLight">\n'
+            f += ('<feTurbulence type="fractalNoise" baseFrequency="0.02" '
+                  + 'numOctaves="5" result="noise" />\n')
+            f += ('<feDiffuseLighting in="noise" lighting-color="white" '
+                  + 'surfaceScale="0.5" result="diffLight">\n')
             f += '<feDistantLight azimuth="45" elevation="35" />\n'
             f += '</feDiffuseLighting>\n'
-            
-            f += '<feColorMatrix in="diffLight" type="matrix" '
-            + 'values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0" '
-            + 'result="diffLightLight" />\n'
-            f += '<feColorMatrix in="diffLight" type="matrix" '
-            + 'values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1 0 0 0 1" '
-            + 'result="diffLightShadow" />\n'
-            
-            f += '<feComponentTransfer in="diffLightLight" '
-            + 'result="diffLightLight2">\n'
+
+            f += ('<feColorMatrix in="diffLight" type="matrix" '
+                  + 'values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0" '
+                  + 'result="diffLightLight" />\n')
+            f += ('<feColorMatrix in="diffLight" type="matrix" '
+                  + 'values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1 0 0 0 1" '
+                  + 'result="diffLightShadow" />\n')
+
+            f += ('<feComponentTransfer in="diffLightLight" '
+                  + 'result="diffLightLight2">\n')
             f += '<feFuncA type="table" tableValues="0 0 0.8" />\n'
             f += '</feComponentTransfer>\n'
-            
-            f += '<feComponentTransfer in="diffLightShadow" '
-            + 'result="diffLightShadow2">\n'
+
+            f += ('<feComponentTransfer in="diffLightShadow" '
+                  + 'result="diffLightShadow2">\n')
             f += '<feFuncA type="table" tableValues="0 0 0.5 0.5" />\n'
             f += '</feComponentTransfer>\n'
-            
-            f += '<feComposite in2="SourceGraphic" in="diffLightShadow2" '
-            + 'operator="atop" result="sourceWithShadow" />\n'
-            f += '<feComposite in2="sourceWithShadow" in="diffLightLight2" '
-            + 'operator="atop" />\n'
+
+            f += ('<feComposite in2="SourceGraphic" in="diffLightShadow2" '
+                  + 'operator="atop" result="sourceWithShadow" />\n')
+            f += ('<feComposite in2="sourceWithShadow" in="diffLightLight2" '
+                  + 'operator="atop" />\n')
             f += '</filter>\n'
 
         fltrs.append(f)
@@ -291,9 +288,16 @@ def write_SVG(objects, w, h, file_name, optimize=True):
 
     open(file_name, 'w').write(out)
     if optimize:
-        os.system('svgo --quiet --precision=2 '
-                  + '--config=/home/dan/coding/graphics/algographics/'
-                  + 'svgo_config.txt -i ' + file_name)
+        # TODO: change to subprocess.run().
+        # os.system('svgo --quiet --precision=2 '
+        #           + '--config=/home/dan/coding/graphics/algoraphics/scripts/'
+        #           + 'svgo_config.txt -i ' + file_name)
+        subprocess.run([
+            'svgo', '--quiet', '--precision=2',
+            # '--config=/home/dan/coding/graphics/algoraphics/scripts/svgo_config.txt',
+            # '--disable=collapseGroups',
+            '--input=' + file_name
+        ])
 
 
 def write_frames(fun, n, w, h, file_name):

@@ -11,6 +11,14 @@ import colorsys
 import matplotlib.colors
 
 
+class Color:
+    """TODO"""
+    def __init__(self, hue=None, sat=None, li=None):
+        self.hue = hue
+        self.sat = sat
+        self.li = li
+
+
 def rgb_to_hsl(rgb):
     """Convert RGB tuple to HSL tuple."""
     h, l, s = colorsys.rgb_to_hls(rgb[0] / 255., rgb[1] / 255., rgb[2] / 255.)
@@ -53,12 +61,12 @@ def rand_col_from_ranges(r, g, b):
     choose from, e.g. produced from range(40, 200).
 
     Returns:
-        An RGB tuple.
+        tuple: An RGB tuple.
 
     """
     result = []
     for x in (r, g, b):
-        if not isinstance(x, list):
+        if type(x) not in (list, range):
             x = [x]
         result.append(random.choice(x))
     return tuple(result)
@@ -74,7 +82,7 @@ def rand_col_nearby(color, hue_tol, sat_tol, light_tol):
         light_tol (float): Maximum lightness deviation, usually 0 to 1.
 
     Returns:
-        An RGB tuple.
+        tuple: An RGB tuple.
 
     """
     hue, sat, li = rgb_to_hsl(color)
@@ -93,7 +101,7 @@ def average_color(colors):
         colors (list): A list of RGB tuples.
 
     Returns:
-        An RGB tuple.
+        tuple: The average color.
 
     """
     colors = np.array(colors)
@@ -111,7 +119,7 @@ def contrasting_lightness(color, light_diff):
         light_diff (float): Magnitude of difference in lightness, between 0 and 1.
 
     Returns:
-        An RGB tuple.
+        tuple: An RGB tuple.
 
     """
     hsl = rgb_to_hsl(color)
@@ -133,7 +141,7 @@ def color_mixture(color1, color2, proportion=0.5, mode='rgb'):
         mode (str): Either 'rgb' or 'hsl'.
 
     Returns:
-        An RGB or HSL tuple.
+        tuple: An RGB or HSL tuple.
 
     """
     if mode == 'rgb':
@@ -166,13 +174,13 @@ def map_to_gradient(values, colors, period, gradient_mode='rgb'):
         values (numpy.ndarray): A 2D array.
         colors (list): A list of RGB colors.
         period (float|int): The range of values covered by gradient before it repeats.
-        gradient_mode (str): Either 'rgb' or 'hsv'. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.
+        gradient_mode (str): Either 'rgb' or 'hsl'. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.
 
     Returns:
-        A 3D array of RGB values.
+        numpy.ndarray: A 3D array of RGB values.
 
     """
-    if gradient_mode == 'hsv':
+    if gradient_mode == 'hsl':
         colors = [rgb_to_hsv(np.array([[c]]))[0, 0, :] for c in colors]
 
     values = np.array(values) % period / period * len(colors)

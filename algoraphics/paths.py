@@ -18,7 +18,7 @@ def polygon(points):
         points (list): A list of points.
 
     Returns:
-        A SVG path string.
+        str: An SVG path.
 
     """
     output = 'M' + str(points[0][0]) + ' ' + str(points[0][1]) + ' '
@@ -37,7 +37,7 @@ def spline(points, curvature=0.3, circular=False):
         circular (bool): If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
 
     Returns:
-        A SVG path string.
+        str: An SVG path.
 
     """
     if circular:
@@ -72,6 +72,7 @@ def spline(points, curvature=0.3, circular=False):
 
 
 def write_path(d):
+    """TODO"""
     def pnt(p):
         return str(p[0]) + ' ' + str(p[1])
 
@@ -108,7 +109,7 @@ def wave(start, direction, width, period, length):
         length (float|int): End-to-end length of the wave.
 
     Returns:
-        A spline dict.
+        dict: A spline shape.
 
     """
     points = [endpoint(start, rad(direction + 90), width / 2.)]
@@ -122,3 +123,22 @@ def wave(start, direction, width, period, length):
         else:
             points.append(endpoint(ref_point, rad(direction - 90), width / 2.))
     return dict(type='spline', points=points)
+
+
+def rectangle(start=None, w=None, h=None, bounds=None):
+    """TODO"""
+    if start is not None:
+        assert w is not None and h is not None
+        pts = [start,
+               (start[0] + w, start[1]),
+               (start[0] + w, start[1] + h),
+               (start[0], start[1] + h)]
+    else:
+        pts = [(bounds[0], bounds[2]), (bounds[1], bounds[2]),
+               (bounds[1], bounds[3]), (bounds[0], bounds[3])]
+    return dict(type='polygon', points=pts)
+
+
+def circle(c, r):
+    """TODO"""
+    return dict(type='circle', c=c, r=r)

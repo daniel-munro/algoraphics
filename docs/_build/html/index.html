@@ -165,7 +165,7 @@
             
   <div class="section" id="module-algoraphics">
 <span id="documentation-for-algoraphics"></span><h1>Documentation for algoraphics<a class="headerlink" href="#module-algoraphics" title="Permalink to this headline">¶</a></h1>
-<p>Functions used to create graphics that use algorithms and randomness.</p>
+<p>A library for creating graphics that use algorithms and randomness.</p>
 <span class="target" id="module-algoraphics.main"></span><div class="section" id="main-py">
 <h2>main.py<a class="headerlink" href="#main-py" title="Permalink to this headline">¶</a></h2>
 <p>General functions for creating graphics.</p>
@@ -180,12 +180,15 @@ issues at the edges of the region or canvas.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bounds</strong> (<em>tuple</em>) – min x, max x, min y, and max y.</li>
-<li><strong>margin</strong> (<em>number</em>) – width of margin.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – A tuple of min x, max x, min y, and max y.</li>
+<li><strong>margin</strong> (<em>float|int</em>) – The width of the margin.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A bounds tuple that includes the margin on all sides.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Bounds that include the margin on all sides.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -207,7 +210,10 @@ issues at the edges of the region or canvas.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of floats.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -224,14 +230,17 @@ issues at the edges of the region or canvas.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fill</strong> (<em>color</em>) – background color.</li>
+<li><strong>fill</strong> (<em>color</em>) – The background color.</li>
 <li><strong>w</strong> (<em>int</em>) – width of canvas.</li>
 <li><strong>h</strong> (<em>int</em>) – height of canvas.</li>
 <li><strong>margin</strong> (<em>int</em>) – width of margin to include to avoid edge artifacts.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A filled rectangle shape covering the canvas.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A filled rectangular polygon covering the canvas.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -246,10 +255,12 @@ issues at the edges of the region or canvas.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shapes</strong> (<em>list|dict</em>) – One or more shapes.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A tuple containing min x, max x, min y, and max y coordinates
-of input.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The min x, max x, min y, and max y coordinates of the
+input.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -263,9 +274,11 @@ of input.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<em>shape</em>) – a shape.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<em>dict</em>) – A shape.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A point.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -281,14 +294,16 @@ of input.</td>
 <dl class="function">
 <dt id="algoraphics.main.flatten">
 <code class="descclassname">algoraphics.main.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.flatten" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create flattened list from nested list.</p>
+<dd><p>Create a flattened list from a nested list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (<em>object</em>) – A nested list or a non-list.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of all non-list elements of input.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The non-list elements within the input.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
@@ -309,7 +324,10 @@ of input.</td>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of floats.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -325,8 +343,8 @@ of input.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>points</strong> (<em>list</em>) – list of points.</li>
-<li><strong>boundary</strong> (<em>object</em>) – one or more shapes giving the boundary.</li>
+<li><strong>points</strong> (<em>list</em>) – A list of points.</li>
+<li><strong>boundary</strong> (<em>dict|list</em>) – One or more shapes giving the boundary.</li>
 </ul>
 </td>
 </tr>
@@ -344,13 +362,19 @@ of input.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<em>list</em>) – list of shapes.</li>
-<li><strong>boundary</strong> (<em>object</em>) – one or more shapes giving the boundary.</li>
+<li><strong>shapes</strong> (<em>list</em>) – A list of shapes.</li>
+<li><strong>boundary</strong> (<em>dict|list</em>) – One or more shapes giving the boundary.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.markov_next">
+<code class="descclassname">algoraphics.main.</code><code class="descname">markov_next</code><span class="sig-paren">(</span><em>state</em>, <em>trans_probs</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.markov_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
 </dd></dl>
 
 <dl class="function">
@@ -368,9 +392,11 @@ of input.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>list</em>) – list of vertex points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>list</em>) – The vertex points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A float.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The area.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -387,6 +413,8 @@ of input.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>list</em>) – A list of vertex points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A point.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +438,10 @@ of input.</td>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of floats.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -427,8 +458,8 @@ of input.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>region</strong> (<em>dict</em>) – a clipped group object.</li>
-<li><strong>color</strong> (<em>color</em><em>, </em><em>function</em>) – color or function to apply to region.</li>
+<li><strong>region</strong> (<em>dict</em>) – A clipped group object.</li>
+<li><strong>color</strong> (<em>color|function</em>) – A color or function to apply to the region.</li>
 </ul>
 </td>
 </tr>
@@ -439,7 +470,7 @@ of input.</td>
 <dl class="function">
 <dt id="algoraphics.main.remove_hidden">
 <code class="descclassname">algoraphics.main.</code><code class="descname">remove_hidden</code><span class="sig-paren">(</span><em>shapes</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.remove_hidden" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes shapes from (nested) list if they are entirely covered.</p>
+<dd><p>Remove shapes from (nested) list if they are entirely covered.</p>
 <p>Used to optimize SVG file without altering appearance, e.g. when
 randomly placing objects to fill a region.  Ignores opacity when
 determining overlap.</p>
@@ -463,10 +494,10 @@ determining overlap.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<em>list</em>) – list whose items are shapes or lists.</li>
+<li><strong>objects</strong> (<em>list</em>) – A list whose items are shapes or lists.</li>
 <li><strong>by</strong> (<em>str</em>) – ‘random’ to shuffle objects.  ‘out to in’ to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.</li>
-<li><strong>w</strong> (<em>float</em>) – Canvas width, used to get center when by=’out to in’.</li>
-<li><strong>h</strong> (<em>float</em>) – Canvas height, used to get center when by=’out to in’.</li>
+<li><strong>w</strong> (<em>float|int</em>) – Canvas width, used to get center when by=’out to in’.</li>
+<li><strong>h</strong> (<em>float|int</em>) – Canvas height, used to get center when by=’out to in’.</li>
 </ul>
 </td>
 </tr>
@@ -483,16 +514,10 @@ determining overlap.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<em>object</em>) – one or more shapes.</li>
-<li><strong>poisition</strong> (<em>point</em>) – reference point.</li>
-<li><strong>h_align</strong> (<em>str</em>) – </li>
-<li><strong>to move left bound to reference point.</strong> (<em>'left'</em>) – </li>
-<li><strong>to horizontally center object around reference point.</strong> (<em>'center'</em>) – </li>
-<li><strong>to move right bound to reference point.</strong> (<em>'right'</em>) – </li>
-<li><strong>v_align</strong> (<em>str</em>) – </li>
-<li><strong>to move lower bound to reference point.</strong> (<em>'bottom'</em>) – </li>
-<li><strong>to vertically center object around reference point.</strong> (<em>'middle'</em>) – </li>
-<li><strong>to move upper bound to reference point.</strong> (<em>'top'</em>) – </li>
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>poisition</strong> (<em>tuple</em>) – reference point.</li>
+<li><strong>h_align</strong> (<em>str</em>) – ‘left’ to move left bound to reference point.  ‘center’ to horizontally center object around reference point.  ‘right’ to move right bound to reference point.</li>
+<li><strong>v_align</strong> (<em>str</em>) – ‘bottom’ to move lower bound to reference point.  ‘middle’ to vertically center object around reference point.  ‘top’ to move upper bound to reference point.</li>
 </ul>
 </td>
 </tr>
@@ -503,15 +528,15 @@ determining overlap.</p>
 <dl class="function">
 <dt id="algoraphics.main.rotate_shapes">
 <code class="descclassname">algoraphics.main.</code><code class="descname">rotate_shapes</code><span class="sig-paren">(</span><em>shapes</em>, <em>angle</em>, <em>pivot=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.rotate_shapes" title="Permalink to this definition">¶</a></dt>
-<dd><p>rotate one or more shapes around a point.</p>
+<dd><p>Rotate one or more shapes around a point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<em>object</em>) – one or more shapes.</li>
-<li><strong>angle</strong> (<em>number</em>) – angle of rotation in degrees.</li>
-<li><strong>pivot</strong> (<em>point</em>) – rotation pivot point.</li>
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>angle</strong> (<em>float|int</em>) – The angle of rotation in degrees.</li>
+<li><strong>pivot</strong> (<em>tuple</em>) – The rotation pivot point.</li>
 </ul>
 </td>
 </tr>
@@ -522,21 +547,24 @@ determining overlap.</p>
 <dl class="function">
 <dt id="algoraphics.main.rotated_bounding_box">
 <code class="descclassname">algoraphics.main.</code><code class="descname">rotated_bounding_box</code><span class="sig-paren">(</span><em>shapes</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.rotated_bounding_box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find rotated bounding box of shape or shape collection.</p>
+<dd><p>Find the rotated bounding box of a shape or shape collection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>shapes</strong> (<em>object</em>) – one or more shapes.</li>
-<li><strong>angle</strong> (<em>number</em>) – orientation of bounding box in degrees.</li>
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>angle</strong> (<em>float|int</em>) – The orientation of the bounding box in degrees.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple containing min x, max x, min y, and max y coordinates
-in rotated space.  Anything created using these coordinates
-must then be rotated by the same angle around the origin to be
-in the right place.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The min x, max x, min y, and max y coordinates in
+rotated space.  Anything created using these coordinates must
+then be rotated by the same angle around the origin to be in
+the right place.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -552,12 +580,15 @@ in the right place.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>shape</strong> (<em>shape</em>) – a shape (currently works for polygons and splines).</li>
-<li><strong>n</strong> (<em>int</em>) – number of points to sample.</li>
+<li><strong>shape</strong> (<em>dict</em>) – A shape (currently works for polygons and splines).</li>
+<li><strong>n</strong> (<em>int</em>) – Number of points to sample.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sampled points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -579,9 +610,9 @@ in the right place.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>obj</strong> (<em>dict</em><em>, </em><em>list</em>) – shape or (nested) list of shapes.</li>
-<li><strong>attribute</strong> (<em>str</em>) – name of style attribute (replace ‘-‘ with ‘_’).</li>
-<li><strong>value</strong> (<em>str</em><em>, </em><em>number</em><em>, </em><em>function</em>) – either single value or function that returns values when called with no arguments.</li>
+<li><strong>obj</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes.</li>
+<li><strong>attribute</strong> (<em>str</em>) – Name of the style attribute (replace ‘-‘ with ‘_’).</li>
+<li><strong>value</strong> (<em>str|number|function</em>) – either a single value or a function that returns values when called with no arguments.</li>
 </ul>
 </td>
 </tr>
@@ -601,6 +632,8 @@ in the right place.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new list with same objects as input but reordered.</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -608,15 +641,15 @@ in the right place.</p>
 <dl class="function">
 <dt id="algoraphics.main.translate_shapes">
 <code class="descclassname">algoraphics.main.</code><code class="descname">translate_shapes</code><span class="sig-paren">(</span><em>shapes</em>, <em>dx</em>, <em>dy</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.translate_shapes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift location of one or more shapes.</p>
+<dd><p>Shift the location of one or more shapes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<em>object</em>) – one or more shapes.</li>
-<li><strong>dx</strong> (<em>number</em>) – movement in x direction.</li>
-<li><strong>dy</strong> (<em>number</em>) – movement in y direction.</li>
+<li><strong>shapes</strong> (<em>list|dict</em>) – One or more shapes.</li>
+<li><strong>dx</strong> (<em>float|int</em>) – Horizontal shift.</li>
+<li><strong>dy</strong> (<em>float|int</em>) – Vertical shift.</li>
 </ul>
 </td>
 </tr>
@@ -628,6 +661,12 @@ in the right place.</p>
 <span class="target" id="module-algoraphics.color"></span><div class="section" id="color-py">
 <h2>color.py<a class="headerlink" href="#color-py" title="Permalink to this headline">¶</a></h2>
 <p>Functions for working with colors.</p>
+<dl class="class">
+<dt id="algoraphics.color.Color">
+<em class="property">class </em><code class="descclassname">algoraphics.color.</code><code class="descname">Color</code><span class="sig-paren">(</span><em>hue=None</em>, <em>sat=None</em>, <em>li=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="algoraphics.color.average_color">
 <code class="descclassname">algoraphics.color.</code><code class="descname">average_color</code><span class="sig-paren">(</span><em>colors</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.average_color" title="Permalink to this definition">¶</a></dt>
@@ -638,7 +677,9 @@ in the right place.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colors</strong> (<em>list</em>) – A list of RGB tuples.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An RGB tuple.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The average color.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -660,7 +701,10 @@ in the right place.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An RGB or HSL tuple.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An RGB or HSL tuple.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -683,7 +727,10 @@ Used to create color pairs for a mixture of light and dark colors.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An RGB tuple.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An RGB tuple.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -728,12 +775,15 @@ gradient.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>values</strong> (<em>numpy.ndarray</em>) – A 2D array.</li>
 <li><strong>colors</strong> (<em>list</em>) – A list of RGB colors.</li>
-<li><strong>period</strong> (<em>number</em>) – The range of values covered by gradient before it repeats.</li>
-<li><strong>gradient_mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsv’. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.</li>
+<li><strong>period</strong> (<em>float|int</em>) – The range of values covered by gradient before it repeats.</li>
+<li><strong>gradient_mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsl’. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 3D array of RGB values.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 3D array of RGB values.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -751,6 +801,8 @@ choose from, e.g. produced from range(40, 200).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An RGB tuple.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -772,7 +824,10 @@ choose from, e.g. produced from range(40, 200).</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An RGB tuple.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An RGB tuple.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
@@ -806,70 +861,18 @@ choose from, e.g. produced from range(40, 200).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the filament.</li>
 <li><strong>direction</strong> (<em>number</em>) – The starting direction (in degrees) of the filament.</li>
-<li><strong>width</strong> (<em>number</em>) – The width of the filament (at segment joining edges).</li>
-<li><strong>l_min</strong> (<em>number</em>) – Minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>number</em>) – Maximum side length of segment.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The width of the filament (at segment joining edges).</li>
+<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
+<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
 <li><strong>segments</strong> (<em>int</em>) – Number of segments in filament.</li>
-<li><strong>l_max_step</strong> (<em>number</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
+<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of polygons (the segments in order).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of polygons (the segments in order).</p>
 </td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.filaments.next_segment">
-<code class="descclassname">algoraphics.filaments.</code><code class="descname">next_segment</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em>, <em>l1</em>, <em>l2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.filaments.next_segment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get next filament segment.</p>
-<p>Each segment is a trapezoid connected to adjacent segments along the
-same-length sides. Thus, the difference in lengths of the remaining two
-sides determines the angles, and consequently the filament curvature.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p1</strong> (<em>point</em>) – If segment is drawn above previous one, this is the lower left vertex of new segment.</li>
-<li><strong>p2</strong> (<em>point</em>) – The lower right vertex of new segment.</li>
-<li><strong>l1</strong> (<em>number</em>) – Length of side extending from p1.</li>
-<li><strong>l2</strong> (<em>number</em>) – Length of side extending from p2.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of four points starting with p1 and going around
-counter-clockwise.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.filaments.next_tapered_segment">
-<code class="descclassname">algoraphics.filaments.</code><code class="descname">next_tapered_segment</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em>, <em>l1</em>, <em>l2</em>, <em>shrinkage</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.filaments.next_tapered_segment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get next tapered filament segment.</p>
-<p>Like tapered_segment, but the edge opposite p1-p2 shrinks for
-every segment.  When the starting edge reaches 1.5 times the
-shrinkage amount, a triangular segment is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p1</strong> (<em>point</em>) – If segment is drawn above previous one, this is the lower left vertex of new segment.</li>
-<li><strong>p2</strong> (<em>point</em>) – The lower right vertex of new segment.</li>
-<li><strong>l1</strong> (<em>number</em>) – The length of the side extending from p1.</li>
-<li><strong>l2</strong> (<em>number</em>) – The length of the side extending fom p2.</li>
-<li><strong>shrinkage</strong> (<em>number</em>) – Absolute decrease from starting to opposite edge.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of four (or three) points starting with p1 and going
-around counter-clockwise.</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -886,16 +889,19 @@ around counter-clockwise.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the filament.</li>
-<li><strong>direction</strong> (<em>number</em>) – The starting direction (in degrees) of filament.</li>
-<li><strong>width</strong> (<em>number</em>) – The width of filament (at segment joining edges).</li>
-<li><strong>l_min</strong> (<em>number</em>) – Minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>number</em>) – Maximum side length of segment.</li>
+<li><strong>direction</strong> (<em>float|int</em>) – The starting direction (in degrees) of filament.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The width of filament (at segment joining edges).</li>
+<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
+<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
 <li><strong>segments</strong> (<em>int</em>) – Number of segments in filament.</li>
-<li><strong>l_max_step</strong> (<em>number</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
+<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of polygons (the segments in order).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ordered segment polygons.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -952,8 +958,11 @@ around counter-clockwise.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">If index is False, returns point, otherwise returns index of
-point in list.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">If index is False, returns point, otherwise returns
+index of point in list.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple|int</p>
 </td>
 </tr>
 </tbody>
@@ -990,7 +999,7 @@ that consecutive points are no more than ‘spacing’ distance apart.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<em>list</em>) – A list of points.</li>
-<li><strong>spacing</strong> (<em>number</em>) – Maximum distance between adjacent points.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – Maximum distance between adjacent points.</li>
 </ul>
 </td>
 </tr>
@@ -1015,7 +1024,7 @@ that consecutive points are no more than ‘spacing’ distance apart.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<em>list</em>) – A list of points.</li>
-<li><strong>deviation</strong> (<em>number</em>) – For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.</li>
+<li><strong>deviation</strong> (<em>float|int</em>) – For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.</li>
 <li><strong>type</strong> (<em>str</em>) – The type of noise, ‘gaussian’ or ‘uniform’.</li>
 </ul>
 </td>
@@ -1046,7 +1055,10 @@ width, the outline of the stroke is returned.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1076,14 +1088,17 @@ point.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>center</strong> (<em>point</em>) – The center of the arc.</li>
-<li><strong>radius</strong> (<em>number</em>) – The radius of the arc.</li>
-<li><strong>theta_start</strong> (<em>number</em>) – The starting position in degrees.</li>
-<li><strong>theta_end</strong> (<em>number</em>) – The ending position in degrees.</li>
-<li><strong>spacing</strong> (<em>number</em>) – The approximate distance between adjacent points.</li>
+<li><strong>radius</strong> (<em>float|int</em>) – The radius of the arc.</li>
+<li><strong>theta_start</strong> (<em>float|int</em>) – The starting position in degrees.</li>
+<li><strong>theta_end</strong> (<em>float|int</em>) – The ending position in degrees.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – The approximate distance between adjacent points.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1101,11 +1116,14 @@ point.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<em>point</em>) – The first point.</li>
 <li><strong>end</strong> (<em>point</em>) – The last point.</li>
-<li><strong>spacing</strong> (<em>number</em>) – The approximate (max) distance between adjacent points.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – The approximate (max) distance between adjacent points.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1147,8 +1165,8 @@ point.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<em>list</em>) – A list of points, which can be nested.</li>
-<li><strong>cx</strong> (<em>number</em>) – The horizontal scale factor.</li>
-<li><strong>cy</strong> (<em>number</em>) – The vertical scale factor. If omitted, y-coordinates will be scaled by cx.</li>
+<li><strong>cx</strong> (<em>float|int</em>) – The horizontal scale factor.</li>
+<li><strong>cy</strong> (<em>float|int</em>) – The vertical scale factor. If omitted, y-coordinates will be scaled by cx.</li>
 </ul>
 </td>
 </tr>
@@ -1208,8 +1226,11 @@ other grids.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D binary array with dimensions in sparse format indicating
-which cells are connected.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 2D binary array with dimensions in sparse
+format indicating which cells are connected.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1232,7 +1253,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of integers.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 2D array of integers.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1253,7 +1277,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of ((r1, c1), (r2, c2)) coordinate tuple pairs.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of ((r1, c1), (r2, c2)) coordinate tuple pairs.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1274,7 +1301,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 3D boolean array (rows x cols x [d?, r?, u?, l?]).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 3D boolean array (rows x cols x [d?, r?, u?, l?]).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1299,7 +1329,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL image in RGB mode.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A PIL image in RGB mode.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Image</p>
 </td>
 </tr>
 </tbody>
@@ -1320,7 +1353,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of distances between 0 and 1.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 2D array of distances between 0 and 1.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1342,7 +1378,10 @@ cyclical color gradient to create a billowing effect.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A string for the encoded image.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The image encoding.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
 </td>
 </tr>
 </tbody>
@@ -1396,8 +1435,11 @@ irregular.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spline shapes, generally in order from left to right
-and then bottom to top.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of spline shapes, generally in order from left to
+right and then bottom to top.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1428,7 +1470,10 @@ other.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array with 2 * <cite>margin</cite> added to both dimensions.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 2D array with 2 * <cite>margin</cite> added to both dimensions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1450,7 +1495,10 @@ other.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The average color of the sampled image points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The average color of the sampled image points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color">Color</a></p>
 </td>
 </tr>
 </tbody>
@@ -1479,13 +1527,6 @@ scales down.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.images.sample_color">
-<code class="descclassname">algoraphics.images.</code><code class="descname">sample_color</code><span class="sig-paren">(</span><em>image</em>, <em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.sample_color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample a color from an image.</p>
-<p>Like sample_colors but returns a single color.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.images.sample_colors">
 <code class="descclassname">algoraphics.images.</code><code class="descname">sample_colors</code><span class="sig-paren">(</span><em>image</em>, <em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.sample_colors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample colors from an image.</p>
@@ -1495,11 +1536,14 @@ scales down.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>image</strong> (<em>Image</em>) – A PIL image.</li>
-<li><strong>points</strong> (<em>list</em>) – A list of image coordinates.</li>
+<li><strong>points</strong> (<em>list|tuple</em>) – A list of image coordinates, or a single coordinate.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of colors corresponding to <cite>points</cite>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of colors corresponding to <cite>points</cite>, or a single color if input is a single point.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1523,7 +1567,10 @@ scales down.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of integer segment labels.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 2D array of integer segment labels.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -1547,8 +1594,11 @@ scales down.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spline shapes, generally in order from left to right
-and then bottom to top.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of spline shapes, generally in order from left to
+right and then bottom to top.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1560,6 +1610,12 @@ and then bottom to top.</p>
 <h2>mazes.py<a class="headerlink" href="#mazes-py" title="Permalink to this headline">¶</a></h2>
 <p>Create maze-like fill patterns.</p>
 <dl class="class">
+<dt id="algoraphics.mazes.Maze_Style">
+<em class="property">class </em><code class="descclassname">algoraphics.mazes.</code><code class="descname">Maze_Style</code><a class="headerlink" href="#algoraphics.mazes.Maze_Style" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="algoraphics.mazes.Maze_Style_Jagged">
 <em class="property">class </em><code class="descclassname">algoraphics.mazes.</code><code class="descname">Maze_Style_Jagged</code><span class="sig-paren">(</span><em>min_w</em>, <em>max_w</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.mazes.Maze_Style_Jagged" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate pieces for jagged maze.</p>
@@ -1568,8 +1624,8 @@ and then bottom to top.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>min_w</strong> (<em>float</em>) – minimum width of channel segment relative to cell width.</li>
-<li><strong>max_w</strong> (<em>float</em>) – maximum width of channel segment relative to cell width.</li>
+<li><strong>min_w</strong> (<em>float</em>) – Minimum width of channel segment relative to cell width.</li>
+<li><strong>max_w</strong> (<em>float</em>) – Maximum width of channel segment relative to cell width.</li>
 </ul>
 </td>
 </tr>
@@ -1585,11 +1641,7 @@ and then bottom to top.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rel_thickness</strong> (<em>float</em>) – Channel width relative to cell width,</li>
-<li><strong>0 to 1.</strong> (<em>from</em>) – </li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<em>float</em>) – Channel width relative to cell width, from 0 to 1.</td>
 </tr>
 </tbody>
 </table>
@@ -1603,11 +1655,7 @@ and then bottom to top.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rel_thickness</strong> (<em>float</em>) – channel width relative to cell width,</li>
-<li><strong>0 to 1.</strong> (<em>from</em>) – </li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<em>float</em>) – Channel width relative to cell width, from 0 to 1.</td>
 </tr>
 </tbody>
 </table>
@@ -1621,31 +1669,7 @@ and then bottom to top.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<em>float</em>) – channel width relative to cell width, from 0 to 1.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.mazes.draw_cell">
-<code class="descclassname">algoraphics.mazes.</code><code class="descname">draw_cell</code><span class="sig-paren">(</span><em>coords</em>, <em>dir_from</em>, <em>neighbor_mat</em>, <em>style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.mazes.draw_cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get subtree path recursively for a cell.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>coords</strong> (<em>tuple</em>) – current (r, c) coordinates.</li>
-<li><strong>dir_from</strong> (<em>int</em>) – direction from which cell was entered (returned subtree will include the remaining connected directions).</li>
-<li><strong>neighbor_mat</strong> (<em>array</em>) – boolean array with dimensions (rows, cols, 4) indicating if neighboring cells are connected.</li>
-<li><strong>draw_fun</strong> (<em>function</em>) – drawing function.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Path list for subtree that excludes everything in the
-originating direction.</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<em>float</em>) – Channel width relative to cell width, from 0 to 1.</td>
 </tr>
 </tbody>
 </table>
@@ -1660,14 +1684,17 @@ originating direction.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict</em><em>, </em><em>list</em>) – shape/s that will become the clip.</li>
-<li><strong>spacing</strong> (<em>number</em>) – cell width of grid.</li>
-<li><strong>draw_fun</strong> (<em>function</em>) – maze-drawing function that takes a component keyword and returns one or more paths to be assembled.</li>
-<li><strong>rotation</strong> (<em>number</em>) – orientation of grid in degrees.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – The shape/s that will become the clip.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – The cell width of the grid.</li>
+<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.mazes.Maze_Style" title="algoraphics.mazes.Maze_Style"><em>Maze_Style</em></a>) – An object specifying how the maze path is to be drawn.</li>
+<li><strong>rotation</strong> (<em>float|int</em>) – The orientation of the grid in degrees.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group dict with clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -1686,14 +1713,17 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict</em><em>, </em><em>list</em>) – shape/s that will become the clip.</li>
-<li><strong>spacing</strong> (<em>number</em>) – cell width of grid.</li>
-<li><strong>draw_fun</strong> (<em>function</em>) – maze-drawing function that takes a component keyword and returns one or more paths to be assembled.</li>
-<li><strong>color</strong> (<em>color</em>) – fill color for maze.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – The shape/s that will become the clip.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – The cell width of the grid.</li>
+<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.mazes.Maze_Style" title="algoraphics.mazes.Maze_Style"><em>Maze_Style</em></a>) – An object specifying how the maze path is to be drawn.</li>
+<li><strong>color</strong> (<em>color</em>) – The fill color for the maze.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group dict with clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -1709,36 +1739,18 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>rows</strong> (<em>int</em>) – number of rows in grid.</li>
-<li><strong>cols</strong> (<em>int</em>) – number of cols in grid.</li>
-<li><strong>spacing</strong> (<em>number</em>) – cell width.</li>
-<li><strong>start</strong> (<em>point</em>) – bottom-left coordinate of grid.</li>
-<li><strong>draw_fun</strong> (<em>function</em>) – maze-drawing function that takes a component keyword and returns one or more paths to be assembled.</li>
+<li><strong>rows</strong> (<em>int</em>) – Number of rows in grid.</li>
+<li><strong>cols</strong> (<em>int</em>) – Number of cols in grid.</li>
+<li><strong>spacing</strong> (<em>float|int</em>) – The cell width.</li>
+<li><strong>start</strong> (<em>point</em>) – The bottom-left coordinate of the grid.</li>
+<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.mazes.Maze_Style" title="algoraphics.mazes.Maze_Style"><em>Maze_Style</em></a>) – An object specifying how the maze path is to be drawn.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A path shape.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A path shape.</p>
 </td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.mazes.new_coords">
-<code class="descclassname">algoraphics.mazes.</code><code class="descname">new_coords</code><span class="sig-paren">(</span><em>prev_coords</em>, <em>direction</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.mazes.new_coords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get grid coordinates after moving one step from <cite>prev_coords</cite> in <cite>direction</cite>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>prev_coords</strong> (<em>tuple</em>) – starting (r, c) coordinates.</li>
-<li><strong>direction</strong> (<em>int</em>) – direction of movement (0=d, 1=r, 2=u, 3=l).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new grid coordinate tuple.</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -1754,15 +1766,17 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>coords</strong> (<em>tuple</em>) – current (r, c) coordinates.</li>
-<li><strong>direc</strong> (<em>int</em>) – direction of neighbor to process (0=d, 1=r, 2=u, 3=l).</li>
-<li><strong>neighbor_mat</strong> (<em>array</em>) – boolean array with dimensions (rows, cols, 4)</li>
-<li><strong>if neighboring cells are connected.</strong> (<em>indicating</em>) – </li>
-<li><strong>draw_fun</strong> (<em>function</em>) – drawing function.</li>
+<li><strong>coords</strong> (<em>tuple</em>) – The current (r, c) coordinates.</li>
+<li><strong>direc</strong> (<em>int</em>) – Direction of neighbor to process (0=d, 1=r, 2=u, 3=l).</li>
+<li><strong>neighbor_mat</strong> (<em>numpy.ndarray</em>) – A boolean array with dimensions (rows, cols, 4) indicating if neighboring cells are connected.</li>
+<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.mazes.Maze_Style" title="algoraphics.mazes.Maze_Style"><em>Maze_Style</em></a>) – An object specifying how the maze path is to be drawn.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Path list for neighboring subtree.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Path list for neighboring subtree.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1778,8 +1792,8 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>list</em><em>, </em><em>tuple</em>) – path list or tuple of path lists.</li>
-<li><strong>times</strong> (<em>int</em>) – number of 90 degree counter-clockwise turns.</li>
+<li><strong>path</strong> (<em>list|tuple</em>) – A path list or tuple of path lists.</li>
+<li><strong>times</strong> (<em>int</em>) – Number of 90 degree counter-clockwise turns.</li>
 </ul>
 </td>
 </tr>
@@ -1797,8 +1811,8 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>list</em><em>, </em><em>tuple</em>) – path list or tuple of path lists.</li>
-<li><strong>coords</strong> (<em>tuple</em>) – (r, c) coordinates to move to.</li>
+<li><strong>path</strong> (<em>list|tuple</em>) – A path list or tuple of path lists.</li>
+<li><strong>coords</strong> (<em>tuple</em>) – The (r, c) coordinates to move to.</li>
 </ul>
 </td>
 </tr>
@@ -1811,10 +1825,72 @@ different color.</p>
 <h2>paint.py<a class="headerlink" href="#paint-py" title="Permalink to this headline">¶</a></h2>
 <p>Create blow-paint effects along shape boundaries.</p>
 <dl class="function">
-<dt id="algoraphics.paint.blow_paint_edge">
-<code class="descclassname">algoraphics.paint.</code><code class="descname">blow_paint_edge</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>spacing=20</em>, <em>length=40</em>, <em>len_dev=0.25</em>, <em>width=5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paint.blow_paint_edge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw blow-paint shapes along an edge.</p>
-<p>Draws toward the right when facing start to end).</p>
+<dt id="algoraphics.paint.blow_paint_area">
+<code class="descclassname">algoraphics.paint.</code><code class="descname">blow_paint_area</code><span class="sig-paren">(</span><em>points</em>, <em>spacing=20</em>, <em>length=40</em>, <em>len_dev=0.25</em>, <em>width=5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paint.blow_paint_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a blow-paint effect around an area.</p>
+<p>Creates ‘fingers’ of paint projecting from each edge, as if being
+blown along the page perpindicular to the edge.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<em>list</em>) – The vertices of the polygonal area.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Average distance between paint fingers.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paint.blow_paint_line">
+<code class="descclassname">algoraphics.paint.</code><code class="descname">blow_paint_line</code><span class="sig-paren">(</span><em>points</em>, <em>line_width=10</em>, <em>spacing=20</em>, <em>length=20</em>, <em>len_dev=0.33</em>, <em>width=5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paint.blow_paint_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a blow-paint effect connecting a sequence of points.</p>
+<p>Creates ‘fingers’ of paint projecting from each edge, as if being
+blown along the page perpindicular to the edge (in both
+directions).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<em>list</em>) – The points to connect.</li>
+<li><strong>line_width</strong> (<em>float</em>) – The thickness of the line (excluding the fingers).</li>
+<li><strong>spacing</strong> (<em>float</em>) – Average distance between paint fingers.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paint.blow_paint_spot">
+<code class="descclassname">algoraphics.paint.</code><code class="descname">blow_paint_spot</code><span class="sig-paren">(</span><em>point</em>, <em>length=10</em>, <em>len_dev=0.7</em>, <em>width=3</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paint.blow_paint_spot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a paint splatter.</p>
+<p>Creates ‘fingers’ of paint projecting from a point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>point</strong> (<em>tuple</em>) – The center of the splatter.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -1822,19 +1898,33 @@ different color.</p>
 <h2>paths.py<a class="headerlink" href="#paths-py" title="Permalink to this headline">¶</a></h2>
 <p>Generate path strings.</p>
 <dl class="function">
+<dt id="algoraphics.paths.circle">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.paths.polygon">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate path string for polygon.</p>
+<dd><p>Generate path string for a polygon.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – list of points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – A list of points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A SVG path string.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paths.rectangle">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
 </dd></dl>
 
 <dl class="function">
@@ -1846,13 +1936,16 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>list</em>) – list of points.</li>
-<li><strong>curvature</strong> (<em>number</em>) – distance to control point relative to distance to adjacent point. Usually between zero and one.</li>
-<li><strong>circular</strong> (<em>bool</em>) – if False, spline ends reasonably at the first and last points. If True, the ends of the spline will connect smoothly.</li>
+<li><strong>points</strong> (<em>list</em>) – A list of points.</li>
+<li><strong>curvature</strong> (<em>number</em>) – The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.</li>
+<li><strong>circular</strong> (<em>bool</em>) – If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A SVG path string.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An SVG path.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
 </td>
 </tr>
 </tbody>
@@ -1862,25 +1955,34 @@ different color.</p>
 <dl class="function">
 <dt id="algoraphics.paths.wave">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">wave</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>period</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.wave" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate wave spline.</p>
+<dd><p>Generate a wave spline.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>point</em>) – starting point of wave.</li>
-<li><strong>direction</strong> (<em>number</em>) – direction (in degrees) of wave.</li>
-<li><strong>width</strong> (<em>number</em>) – total amplitude of wave from peak to trough.</li>
-<li><strong>period</strong> (<em>number</em>) – period of wave.</li>
-<li><strong>length</strong> (<em>number</em>) – end-to-end length of wave.</li>
+<li><strong>start</strong> (<em>point</em>) – Starting point of the wave.</li>
+<li><strong>direction</strong> (<em>float|int</em>) – Direction (in degrees) of the wave.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The total amplitude of the wave from peak to trough.</li>
+<li><strong>period</strong> (<em>float|int</em>) – Period of the wave.</li>
+<li><strong>length</strong> (<em>float|int</em>) – End-to-end length of the wave.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A spline dict.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spline shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paths.write_path">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">write_path</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.write_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
 </dd></dl>
 
 </div>
@@ -1888,9 +1990,9 @@ different color.</p>
 <h2>ripples.py<a class="headerlink" href="#ripples-py" title="Permalink to this headline">¶</a></h2>
 <p>Create space-filling ripple effects.</p>
 <dl class="function">
-<dt id="algoraphics.ripples.next_point">
-<code class="descclassname">algoraphics.ripples.</code><code class="descname">next_point</code><span class="sig-paren">(</span><em>points</em>, <em>spacing</em>, <em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.ripples.next_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>Continue from last two elements of points.</p>
+<dt id="algoraphics.ripples.ripple_canvas">
+<code class="descclassname">algoraphics.ripples.</code><code class="descname">ripple_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>spacing</em>, <em>trans_probs=None</em>, <em>existing_pts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.ripples.ripple_canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
 </dd></dl>
 
 </div>
@@ -1906,15 +2008,18 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>color_fun</strong> (<em>function</em>) – called for each segment to get fill color.</li>
-<li><strong>width</strong> (<em>number</em>) – width of filament.</li>
-<li><strong>l_min</strong> (<em>number</em>) – minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>number</em>) – maximum side length of segment.</li>
-<li><strong>l_max_step</strong> (<em>number</em>) – if not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
+<li><strong>color_fun</strong> (<em>function</em>) – Called for each segment to get fill color.</li>
+<li><strong>width</strong> (<em>float|int</em>) – Width of the filament.</li>
+<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of a segment.</li>
+<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of a segment.</li>
+<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by a random walk, and this will be the maximum step size.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A function used by fill_region().</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A function used by fill_region().</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">function</p>
 </td>
 </tr>
 </tbody>
@@ -1931,16 +2036,19 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bounds</strong> (<em>tuple</em>) – bounds tuple.</li>
-<li><strong>color_fun</strong> (<em>function</em>) – called for each segment to get fill color.</li>
-<li><strong>width</strong> (<em>number</em>) – width of filament.</li>
-<li><strong>l_min</strong> (<em>number</em>) – minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>number</em>) – maximum side length of segment.</li>
-<li><strong>l_max_step</strong> (<em>number</em>) – if not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – A bounds tuple.</li>
+<li><strong>color_fun</strong> (<em>function</em>) – Called for each segment to get fill color.</li>
+<li><strong>width</strong> (<em>float|int</em>) – Width of filament.</li>
+<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
+<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
+<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of polygons (the segments in order).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ordered segment polygons.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -1950,19 +2058,22 @@ different color.</p>
 <dl class="function">
 <dt id="algoraphics.space_filling.fill_region">
 <code class="descclassname">algoraphics.space_filling.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.space_filling.fill_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill region by iteratively placing randomly generated objects.</p>
+<dd><p>Fill a region by iteratively placing randomly generated objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict</em><em>, </em><em>list</em>) – shape or (nested) list of shapes that will become clip.</li>
-<li><strong>object_fun</strong> (<em>function</em>) – function that takes bounds as input and returns one randomly generated object. Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
-<li><strong>max_tries</strong> (<em>int</em>) – if not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become clip.</li>
+<li><strong>object_fun</strong> (<em>function</em>) – A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
+<li><strong>max_tries</strong> (<em>int</em>) – If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group dict with clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -1974,25 +2085,19 @@ different color.</p>
 <h2>svg.py<a class="headerlink" href="#svg-py" title="Permalink to this headline">¶</a></h2>
 <p>write SVG files.</p>
 <dl class="function">
-<dt id="algoraphics.svg.match_dict">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">match_dict</code><span class="sig-paren">(</span><em>dicts</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.match_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return index of dictionary in <cite>dicts</cite> matching <cite>d</cite>, or None if no match.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.svg.write_SVG">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">write_SVG</code><span class="sig-paren">(</span><em>objects</em>, <em>w</em>, <em>h</em>, <em>file_name</em>, <em>optimize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_SVG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write SVG file for a collection of objects.</p>
+<dd><p>Write an SVG file for a collection of objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<em>dict</em><em>, </em><em>list</em>) – a (nested) collection of objects.  Placed onto canvas in order after flattening.</li>
-<li><strong>w</strong> (<em>int</em>) – width of canvas.</li>
-<li><strong>h</strong> (<em>int</em>) – height of canvas.</li>
-<li><strong>file_name</strong> (<em>str</em>) – file name to write to.</li>
-<li><strong>optimize</strong> (<em>bool</em>) – whether to optimize SVG file using svgo.</li>
+<li><strong>objects</strong> (<em>dict|list</em>) – A (nested) collection of objects.  Placed onto the canvas in order after flattening.</li>
+<li><strong>w</strong> (<em>int</em>) – Width of canvas.</li>
+<li><strong>h</strong> (<em>int</em>) – Height of canvas.</li>
+<li><strong>file_name</strong> (<em>str</em>) – The file name to write to.</li>
+<li><strong>optimize</strong> (<em>bool</em>) – Whether to optimize the SVG file using svgo.</li>
 </ul>
 </td>
 </tr>
@@ -2003,14 +2108,16 @@ different color.</p>
 <dl class="function">
 <dt id="algoraphics.svg.write_filters">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">write_filters</code><span class="sig-paren">(</span><em>filters</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_filters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate SVG representation of all filters used in graphic.</p>
+<dd><p>Generate an SVG representation of all filters used in graphic.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filters</strong> (<em>list</em>) – A list of filters.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A SVG string.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG encoding.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
@@ -2026,11 +2133,11 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fun</strong> (<em>function</em>) – function called with no arguments that returns an SVG object collection.</li>
-<li><strong>n</strong> (<em>int</em>) – number of frames to generate.</li>
-<li><strong>w</strong> (<em>int</em>) – width of canvas.</li>
-<li><strong>h</strong> (<em>int</em>) – height of canvas.</li>
-<li><strong>file_name</strong> (<em>str</em>) – file name (without extension) to write to. File names will be [file_name]_0.svg, etc.</li>
+<li><strong>fun</strong> (<em>function</em>) – A function called with no arguments that returns an SVG object collection.</li>
+<li><strong>n</strong> (<em>int</em>) – Number of frames to generate.</li>
+<li><strong>w</strong> (<em>int</em>) – Width of the canvas.</li>
+<li><strong>h</strong> (<em>int</em>) – Height of the canvas.</li>
+<li><strong>file_name</strong> (<em>str</em>) – A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.</li>
 </ul>
 </td>
 </tr>
@@ -2047,13 +2154,16 @@ different color.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj</strong> (<em>dict</em>) – a shape, group, text, or image dictionary.</li>
-<li><strong>defs</strong> (<em>list</em>) – a list of strings used to collect SVG representations of all clip paths, filters, etc.</li>
-<li><strong>filters</strong> (<em>list</em>) – collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.</li>
+<li><strong>obj</strong> (<em>dict</em>) – A shape, group, text, or image dictionary.</li>
+<li><strong>defs</strong> (<em>list</em>) – A list of strings used to collect SVG representations of all clip paths, filters, etc.</li>
+<li><strong>filters</strong> (<em>list</em>) – A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A SVG string.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An SVG encoding.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
 </td>
 </tr>
 </tbody>
@@ -2063,20 +2173,17 @@ different color.</p>
 <dl class="function">
 <dt id="algoraphics.svg.write_style">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">write_style</code><span class="sig-paren">(</span><em>style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate SVG representation of an object’s style.</p>
+<dd><p>Generate an SVG representation of an object’s style.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>style</strong> (<em>dict</em>) – dictionary with attributes as keys. Underscores will be</li>
-<li><strong>with hyphens</strong><strong>, </strong><strong>which are not allowed in keys.</strong> (<em>replaced</em>) – </li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>style</strong> (<em>dict</em>) – A dictionary with attributes as keys. Underscores will be replaced with hyphens, which are not allowed in keys.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A SVG string which should be inserted between the quotes of
-style=”…”.</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG encoding which should be inserted between the
+quotes of style=”…”.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
@@ -2095,15 +2202,18 @@ style=”…”.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>x</strong> (<em>number</em>) – reference x coordinate.</li>
-<li><strong>y</strong> (<em>number</em>) – reference y coordinate.</li>
-<li><strong>align</strong> (<em>str</em>) – alignment to reference point. ‘left’, ‘center’, or ‘right’.</li>
-<li><strong>color</strong> (<em>color</em>) – text fill color.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>x</strong> (<em>float|int</em>) – The reference x coordinate.</li>
+<li><strong>y</strong> (<em>float|int</em>) – The reference y coordinate.</li>
+<li><strong>align</strong> (<em>str</em>) – The alignment to reference point.  ‘left’, ‘center’, or ‘right’.</li>
+<li><strong>color</strong> (<em>color</em>) – The text fill color.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A text dict.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A text shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2119,15 +2229,19 @@ style=”…”.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>char</strong> (<em>str</em>) – a character.</li>
-<li><strong>start</strong> (<em>point</em>) – lower-left point of character bounds.</li>
-<li><strong>h</strong> (<em>number</em>) – line height.</li>
-<li><strong>sp</strong> (<em>number</em>) – distance between adjacent points.</li>
+<li><strong>char</strong> (<em>str</em>) – A character.</li>
+<li><strong>start</strong> (<em>tuple</em>) – The lower-left point of the character bounds.</li>
+<li><strong>h</strong> (<em>float|int</em>) – The line height.</li>
+<li><strong>sp</strong> (<em>float|int</em>) – Distance between adjacent points.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of lists of points. Each list of points corresponds to
-a pen stroke (i.e. what can be drawn without lifting the pen).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of lists of points.  Each list of points
+corresponds to a pen stroke (i.e. what can be drawn without
+lifting the pen).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2143,14 +2257,18 @@ a pen stroke (i.e. what can be drawn without lifting the pen).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>height</strong> (<em>number</em>) – line height.</li>
-<li><strong>top_color</strong> (<em>color</em>) – color for top (inner) splatters.</li>
-<li><strong>bottom_color</strong> (<em>color</em>) – color for bottom (outer) splatters.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>height</strong> (<em>number</em>) – The line height.</li>
+<li><strong>top_color</strong> (<em>color</em>) – The color for top (inner) splatters.</li>
+<li><strong>bottom_color</strong> (<em>color</em>) – The color for bottom (outer) splatters.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of two lists of circle shapes (inner lists are randomized).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of two lists of circle shapes (inner lists are
+randomized).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2168,27 +2286,24 @@ square root of deviation, and points are uniformly jittered.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>height</strong> (<em>number</em>) – line height.</li>
-<li><strong>spread</strong> (<em>number</em>) – standard deviation of point jittering.</li>
-<li><strong>density</strong> (<em>number</em>) – number of dots per pixel.</li>
-<li><strong>min_size</strong> (<em>number</em>) – smallest dot radius.</li>
-<li><strong>max_size</strong> (<em>number</em>) – largest dot radius.</li>
-<li><strong>fill</strong> (<em>color</em>) – fill color or function.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>height</strong> (<em>float|int</em>) – The line height.</li>
+<li><strong>spread</strong> (<em>float|int</em>) – Standard deviation of point jittering.</li>
+<li><strong>density</strong> (<em>float|int</em>) – Number of dots per pixel.</li>
+<li><strong>min_size</strong> (<em>float|int</em>) – The smallest dot radius.</li>
+<li><strong>max_size</strong> (<em>float|int</em>) – The largest dot radius.</li>
+<li><strong>fill</strong> (<em>color</em>) – A fill color or function.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of circle shapes (in random order).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of circle shapes (in random order).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.text.rel_char_spacing">
-<code class="descclassname">algoraphics.text.</code><code class="descname">rel_char_spacing</code><span class="sig-paren">(</span><em>char</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.rel_char_spacing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get character’s left and right spacing relative to line height.</p>
 </dd></dl>
 
 <dl class="function">
@@ -2200,17 +2315,20 @@ square root of deviation, and points are uniformly jittered.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>height</strong> (<em>number</em>) – line height.</li>
-<li><strong>spread</strong> (<em>number</em>) – standard deviation of point jittering.</li>
-<li><strong>density</strong> (<em>number</em>) – number of dots per pixel.</li>
-<li><strong>min_size</strong> (<em>number</em>) – smallest dot radius.</li>
-<li><strong>max_size</strong> (<em>number</em>) – largest dot radius.</li>
-<li><strong>fill</strong> (<em>color</em>) – fill color or function.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>height</strong> (<em>float|int</em>) – The line height.</li>
+<li><strong>spread</strong> (<em>float|int</em>) – Standard deviation of point jittering.</li>
+<li><strong>density</strong> (<em>float|int</em>) – Number of dots per pixel.</li>
+<li><strong>min_size</strong> (<em>float|int</em>) – The smallest dot radius.</li>
+<li><strong>max_size</strong> (<em>float|int</em>) – The largest dot radius.</li>
+<li><strong>fill</strong> (<em>color</em>) – A fill color or function.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of circle shapes (in random order).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of circle shapes (in random order).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2226,14 +2344,17 @@ square root of deviation, and points are uniformly jittered.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>height</strong> (<em>number</em>) – line height.</li>
-<li><strong>spread</strong> (<em>number</em>) – max deviation of point jittering.</li>
-<li><strong>density</strong> (<em>number</em>) – number of spline points per pixel.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>height</strong> (<em>float|int</em>) – The line height.</li>
+<li><strong>spread</strong> (<em>float|int</em>) – Maximum deviation of point jittering.</li>
+<li><strong>density</strong> (<em>float|int</em>) – Number of spline points per pixel.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of splines.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of splines.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2250,17 +2371,20 @@ square root of deviation, and points are uniformly jittered.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<em>str</em>) – the text.</li>
-<li><strong>height</strong> (<em>number</em>) – line height.</li>
-<li><strong>pt_spacing</strong> (<em>number</em>) – approximate distance between adjacent points.</li>
-<li><strong>char_spacing</strong> (<em>number</em>) – size of largest space on either side of each character relative to line height. This space is shrunk for certain characters depending on shape.</li>
-<li><strong>grouping</strong> (<em>str</em>) – <cite>points</cite> to return list of points, <cite>strokes</cite> to group by stroke.</li>
+<li><strong>text</strong> (<em>str</em>) – The text.</li>
+<li><strong>height</strong> (<em>float|int</em>) – Line height.</li>
+<li><strong>pt_spacing</strong> (<em>float|int</em>) – Approximate distance between adjacent points.</li>
+<li><strong>char_spacing</strong> (<em>number</em>) – Size of the largest space on either side of each character relative to line height.  This space is shrunk for certain characters depending on shape.</li>
+<li><strong>grouping</strong> (<em>str</em>) – ‘points’ to return list of points, ‘strokes’ to group by stroke.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Either list of points or list of lists of points in which each
-list of points corresponds to a pen stroke (i.e. what can be
-drawn without lifting the pin).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Either a list of points or a list of lists of points in
+which each list of points corresponds to a pen stroke
+(i.e. what can be drawn without lifting the pin).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2279,7 +2403,7 @@ drawn without lifting the pin).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<em>dict</em><em>, </em><em>list</em>) – shape or (nested) list of shapes.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes.</td>
 </tr>
 </tbody>
 </table>
@@ -2287,7 +2411,7 @@ drawn without lifting the pin).</p>
 
 <dl class="function">
 <dt id="algoraphics.textures.add_shadows">
-<code class="descclassname">algoraphics.textures.</code><code class="descname">add_shadows</code><span class="sig-paren">(</span><em>objects</em>, <em>stdev</em>, <em>darkness</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.add_shadows" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.textures.</code><code class="descname">add_shadows</code><span class="sig-paren">(</span><em>objects</em>, <em>stdev=10</em>, <em>darkness=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.add_shadows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add shadows to objects.</p>
 <p>Each item (nested or not) in objects is replaced with a group with
 shadow filter. So items that are shapes will have their own
@@ -2298,9 +2422,9 @@ one shadow for the composite object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<em>list</em>) – list of objects (can be nested).</li>
-<li><strong>stdev</strong> (<em>number</em>) – standard deviation of shadow gradient.</li>
-<li><strong>darkness</strong> (<em>number</em>) – below one for lighter shadow, above one for darker.</li>
+<li><strong>objects</strong> (<em>list</em>) – A list of objects (can be nested).</li>
+<li><strong>stdev</strong> (<em>float|int</em>) – Standard deviation of shadow gradient.</li>
+<li><strong>darkness</strong> (<em>float|int</em>) – A number below one for lighter shadow, above one for darker.</li>
 </ul>
 </td>
 </tr>
@@ -2310,21 +2434,24 @@ one shadow for the composite object.</p>
 
 <dl class="function">
 <dt id="algoraphics.textures.billow_region">
-<code class="descclassname">algoraphics.textures.</code><code class="descname">billow_region</code><span class="sig-paren">(</span><em>outline</em>, <em>colors</em>, <em>scale</em>, <em>gradient_mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.billow_region" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.textures.</code><code class="descname">billow_region</code><span class="sig-paren">(</span><em>outline</em>, <em>colors</em>, <em>scale=200</em>, <em>gradient_mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.billow_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill region with billowing texture.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict</em><em>, </em><em>list</em>) – object that will become the clip.</li>
-<li><strong>colors</strong> (<em>list</em>) – list of rgb colors to cycle through.</li>
-<li><strong>scale</strong> (<em>int</em>) – distance in pixels for each color cycle.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – The object that will become the clip.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of rgb colors to cycle through.</li>
+<li><strong>scale</strong> (<em>int</em>) – The distance in pixels for each color cycle.</li>
 <li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose appearance of gradient.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group object with clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2334,21 +2461,24 @@ one shadow for the composite object.</p>
 <dl class="function">
 <dt id="algoraphics.textures.billowing">
 <code class="descclassname">algoraphics.textures.</code><code class="descname">billowing</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>colors</em>, <em>scale</em>, <em>gradient_mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.billowing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate billowing texture.</p>
+<dd><p>Generate a billowing texture.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>w</strong> (<em>int</em>) – width of texture.</li>
-<li><strong>h</strong> (<em>int</em>) – height of texture.</li>
-<li><strong>colors</strong> (<em>list</em>) – list of rgb colors to cycle through.</li>
-<li><strong>scale</strong> (<em>int</em>) – distance in pixels for each color cycle.</li>
-<li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose appearance of gradient.</li>
+<li><strong>w</strong> (<em>int</em>) – Width of the texture.</li>
+<li><strong>h</strong> (<em>int</em>) – Height of the texture.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of rgb colors to cycle through.</li>
+<li><strong>scale</strong> (<em>int</em>) – Distance in pixels for each color cycle.</li>
+<li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose the appearance of the gradient.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL image object (i.e. not a dict).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A PIL image object (i.e. not a dict).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Image</p>
 </td>
 </tr>
 </tbody>
@@ -2364,12 +2494,15 @@ one shadow for the composite object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj</strong> (<em>dict</em><em>, </em><em>list</em>) – shape or (nested) list.</li>
-<li><strong>fltr</strong> (<em>dict</em>) – a filter.</li>
+<li><strong>obj</strong> (<em>dict|list</em>) – A shape or (nested) list.</li>
+<li><strong>fltr</strong> (<em>dict</em>) – A filter.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group with <cite>obj</cite> as members and filter applied to group.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with <cite>obj</cite> as members and filter applied to group.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2385,13 +2518,16 @@ one shadow for the composite object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>objects</strong> (<em>dict</em><em>, </em><em>list</em>) – shape or (nested) list of shapes.</li>
-<li><strong>bounds</strong> (<em>tuple</em>) – rectangle will be torn just inside these bounds.</li>
+<li><strong>objects</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – A rectangle will be torn just inside these bounds.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A shadow-filtered group containing a clipped group containing
-original shapes.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A shadow-filtered group containing a clipped group
+containing original shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2401,16 +2537,16 @@ original shapes.</p>
 <dl class="function">
 <dt id="algoraphics.textures.with_shadow">
 <code class="descclassname">algoraphics.textures.</code><code class="descname">with_shadow</code><span class="sig-paren">(</span><em>obj</em>, <em>stdev</em>, <em>darkness</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.with_shadow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add shadow to object.</p>
+<dd><p>Add shadow to an object.</p>
 <p>Like add_shadows() but returns a group with a single shadow filter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>object</strong> (<em>object</em>) – shape or list of objects (can be nested).</li>
-<li><strong>stdev</strong> (<em>number</em>) – standard deviation of shadow gradient.</li>
-<li><strong>darkness</strong> (<em>number</em>) – below one for lighter shadow, above one for darker.</li>
+<li><strong>object</strong> (<em>dict|list</em>) – A shape or list of objects (can be nested).</li>
+<li><strong>stdev</strong> (<em>float|int</em>) – Standard deviation of shadow gradient.</li>
+<li><strong>darkness</strong> (<em>float|int</em>) – A number below one for lighter shadow, above one for darker.</li>
 </ul>
 </td>
 </tr>
@@ -2437,6 +2573,8 @@ original shapes.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of line shapes.</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -2444,19 +2582,27 @@ original shapes.</p>
 <dl class="function">
 <dt id="algoraphics.tiling.delaunay_regions">
 <code class="descclassname">algoraphics.tiling.</code><code class="descname">delaunay_regions</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.delaunay_regions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find Delaunay regions for a set of points.</p>
+<dd><p>Find the Delaunay regions for a set of points.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – A list of points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of triangular polygon shapes.  Items do not correspond
-to input points because points on the periphery do not have
-finite regions.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of triangular polygon shapes.  Items do not
+correspond to input points because points on the periphery do
+not have finite regions.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.tiling.fill_ishihara_spots">
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>r_min=2</em>, <em>r_max=9</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
 </dd></dl>
 
 <dl class="function">
@@ -2468,15 +2614,18 @@ finite regions.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outlines</strong> (<em>list</em>) – list of region outline shapes.</li>
-<li><strong>min_level</strong> (<em>int</em>) – level of largest triangles (0 is bounding triangle).</li>
-<li><strong>max_level</strong> (<em>int</em>) – level of smallest triangles.</li>
-<li><strong>color1</strong> (<em>color</em>) – color for half of triangles. Can be a function.</li>
-<li><strong>color2</strong> (<em>color</em>) – color for opposing half of triangles. Can be a function but this half of triangles will all be one color because it is the background.</li>
+<li><strong>outlines</strong> (<em>list</em>) – A list of region outline shapes.</li>
+<li><strong>min_level</strong> (<em>int</em>) – The level of the largest triangles (0 is bounding triangle).</li>
+<li><strong>max_level</strong> (<em>int</em>) – The level of the smallest triangles.</li>
+<li><strong>color1</strong> (<em>color</em>) – The color for half of the triangles.  This can be a function.</li>
+<li><strong>color2</strong> (<em>color</em>) – The color for the opposing half of the triangles. This can be a function but this half of triangles will all be one color because it is the background.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A region dict with outline as clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with outline as clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2492,13 +2641,16 @@ finite regions.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>int</em>) – number of points to generate.</li>
-<li><strong>n_cand</strong> (<em>int</em>) – number of candidate points to generate for each output point. Higher numbers result in higher regularity.</li>
-<li><strong>bounds</strong> (<em>tuple</em>) – bounds tuple.</li>
+<li><strong>n</strong> (<em>int</em>) – Number of points to generate.</li>
+<li><strong>n_cand</strong> (<em>int</em>) – Number of candidate points to generate for each output point.  Higher numbers result in higher regularity.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – A bounds tuple.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2514,14 +2666,17 @@ finite regions.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tip</strong> (<em>point</em>) – tip of bounding triangle.</li>
-<li><strong>height</strong> (<em>number</em>) – height of bounding triangle (negative for upside-down triangle).</li>
-<li><strong>min_level</strong> (<em>int</em>) – level of largest triangles (0 is bounding triangle).</li>
-<li><strong>max_level</strong> (<em>int</em>) – level of smallest triangles.</li>
+<li><strong>tip</strong> (<em>point</em>) – The tip of the bounding triangle.</li>
+<li><strong>height</strong> (<em>float|int</em>) – The height of the bounding triangle (negative for upside-down triangle).</li>
+<li><strong>min_level</strong> (<em>int</em>) – The level of the largest triangles (0 is the bounding triangle).</li>
+<li><strong>max_level</strong> (<em>int</em>) – The level of the smallest triangles.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of triangle polygon shapes.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of triangle polygon shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2540,12 +2695,15 @@ finite regions.</td>
 <li><strong>w</strong> (<em>int</em>) – Width of the canvas.</li>
 <li><strong>h</strong> (<em>int</em>) – Height of the canvas.</li>
 <li><strong>tile_fun</strong> (<em>function</em>) – A function that accepts a list of points and returns a list of shapes.</li>
-<li><strong>tile_size</strong> (<em>number</em>) – The approximate area of each tile.</li>
+<li><strong>tile_size</strong> (<em>float|int</em>) – The approximate area of each tile.</li>
 <li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to mitchell_points.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of shapes.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2554,21 +2712,24 @@ finite regions.</td>
 
 <dl class="function">
 <dt id="algoraphics.tiling.tile_region">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_region</code><span class="sig-paren">(</span><em>outline</em>, <em>tile_fun</em>, <em>tile_size</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_region" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_region</code><span class="sig-paren">(</span><em>outline</em>, <em>tile_fun</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill region with (uncolored) tiles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict</em><em>, </em><em>list</em>) – The shape/s that will become the clip.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – The shape/s that will become the clip.</li>
 <li><strong>tile_fun</strong> (<em>function</em>) – A function that accepts list of points and returns a list of shapes.</li>
-<li><strong>tile_size</strong> (<em>number</em>) – The approximate area of each tile.</li>
+<li><strong>tile_size</strong> (<em>float|int</em>) – The approximate area of each tile.</li>
 <li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to mitchell_points.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group dict with clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -2578,7 +2739,7 @@ finite regions.</td>
 <dl class="function">
 <dt id="algoraphics.tiling.voronoi_edges">
 <code class="descclassname">algoraphics.tiling.</code><code class="descname">voronoi_edges</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.voronoi_edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find edges of Voronoi regions for a set of points.</p>
+<dd><p>Find the edges of Voronoi regions for a set of points.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2586,6 +2747,8 @@ finite regions.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – A list of points.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of line shapes.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
@@ -2599,11 +2762,13 @@ finite regions.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – list of points.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – A list of points.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of polygon shapes. Items do not correspond to input
-points because points on the periphery do not have finite
-regions.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of polygon shapes.  Items do not correspond to
+input points because points on the periphery do not have
+finite regions.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
@@ -2616,23 +2781,26 @@ regions.</td>
 <dl class="function">
 <dt id="algoraphics.trees.tree">
 <code class="descclassname">algoraphics.trees.</code><code class="descname">tree</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>l_min</em>, <em>l_max</em>, <em>theta</em>, <em>p</em>, <em>p_delta</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.trees.tree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate tree with randomly terminating branches.</p>
+<dd><p>Generate a tree with randomly terminating branches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>point</em>) – starting point.</li>
-<li><strong>direction</strong> (<em>number</em>) – starting direction (in degrees).</li>
-<li><strong>l_min</strong> (<em>number</em>) – minimum branch length.</li>
-<li><strong>l_max</strong> (<em>number</em>) – maximum branch length.</li>
-<li><strong>theta</strong> (<em>number</em>) – angle (in degrees) between sibling branches.</li>
-<li><strong>p</strong> (<em>float</em>) – starting probability that a given branch will split instead of terminating.</li>
-<li><strong>p_delta</strong> (<em>float</em>) – value subtracted from p cumulatively at each branching level.</li>
+<li><strong>start</strong> (<em>point</em>) – The starting point.</li>
+<li><strong>direction</strong> (<em>float|int</em>) – The starting direction (in degrees).</li>
+<li><strong>l_min</strong> (<em>float|int</em>) – Minimum branch length.</li>
+<li><strong>l_max</strong> (<em>float|int</em>) – Maximum branch length.</li>
+<li><strong>theta</strong> (<em>float|int</em>) – The angle (in degrees) between sibling branches.</li>
+<li><strong>p</strong> (<em>float</em>) – The starting probability that a given branch will split instead of terminating.</li>
+<li><strong>p_delta</strong> (<em>float</em>) – The value subtracted from p cumulatively at each branching level.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of line shapes.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of line shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2643,6 +2811,56 @@ regions.</td>
 <span class="target" id="module-algoraphics.wrapping_paper"></span><div class="section" id="wrapping-paper-py">
 <h2>wrapping_paper.py<a class="headerlink" href="#wrapping-paper-py" title="Permalink to this headline">¶</a></h2>
 <p>Fill a space with non-overlapping copies of doodles.</p>
+<dl class="function">
+<dt id="algoraphics.wrapping_paper.fill_wrapping_paper">
+<code class="descclassname">algoraphics.wrapping_paper.</code><code class="descname">fill_wrapping_paper</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing</em>, <em>doodles</em>, <em>rotate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.wrapping_paper.fill_wrapping_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region with a tiling of non-overlapping doodles.</p>
+<dl class="docutils">
+<dt>Argps:</dt>
+<dd>outline (dict|list): A shape or (nested) list of shapes that will become clip.
+spacing (float): Height/width of each grid cell.
+doodles (list): A list of doodle functions.
+rotate (bool): Place grid in a random rotated orientation.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A clipped group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.wrapping_paper.grid_wrapping_paper">
+<code class="descclassname">algoraphics.wrapping_paper.</code><code class="descname">grid_wrapping_paper</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em>, <em>spacing</em>, <em>start</em>, <em>doodles</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.wrapping_paper.grid_wrapping_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tiling of non-overlapping doodles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rows</strong> (<em>int</em>) – Number of rows to include.</li>
+<li><strong>cols</strong> (<em>int</em>) – Number of columns to include.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Height/width of each grid cell.</li>
+<li><strong>start</strong> (<em>tuple</em>) – Bottom left point of the grid.</li>
+<li><strong>doodles</strong> (<em>list</em>) – A list of doodle functions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of placed doodle objects.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="toctree-wrapper compound">
 </div>

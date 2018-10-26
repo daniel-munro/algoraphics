@@ -23,8 +23,9 @@ def char_points(char, start, h, spacing):
         sp (float|int): Distance between adjacent points.
 
     Returns:
-        A list of lists of points.  Each list of points corresponds to
-        a pen stroke (i.e. what can be drawn without lifting the pen).
+        list: A list of lists of points.  Each list of points
+        corresponds to a pen stroke (i.e. what can be drawn without
+        lifting the pen).
 
     """
     sp = spacing / float(h)  # used before scaling character to height h
@@ -696,124 +697,69 @@ def char_points(char, start, h, spacing):
     return points
 
 
-def rel_char_spacing(char):
+def _rel_char_spacing(char):
     """Get character's left and right spacing relative to line height."""
-    if char == 'A':
-        return 0.5, 0.5
-    elif char == 'B':
-        return 1, 0.75
-    elif char == 'C':
-        return 0.75, 0.5
-    elif char == 'D':
-        return 1, 0.75
-    elif char == 'E':
-        return 1, 0.5
-    elif char == 'F':
-        return 1, 0.5
-    elif char == 'G':
-        return 0.75, 0.75
-    elif char == 'H':
-        return 1, 1
-    elif char == 'I':
-        return 0.5, 0.5
-    elif char == 'J':
-        return 0.5, 1
-    elif char == 'K':
-        return 1, 0.5
-    elif char == 'L':
-        return 1, 0.5
-    elif char == 'M':
-        return 1, 1
-    elif char == 'N':
-        return 1, 1
-    elif char == 'O':
-        return 0.75, 0.75
-    elif char == 'P':
-        return 1, 0.75
-    elif char == 'Q':
-        return 0.75, 0.75
-    elif char == 'R':
-        return 1, 0.75
-    elif char == 'S':
-        return 0.75, 0.75
-    elif char == 'T':
-        return 0.5, 0.5
-    elif char == 'U':
-        return 1, 1
-    elif char == 'V':
-        return 0.5, 0.5
-    elif char == 'W':
-        return 0.5, 0.5
-    elif char == 'X':
-        return 0.5, 0.5
-    elif char == 'Y':
-        return 0.5, 0.5
-    elif char == 'Z':
-        return 0.5, 0.5
-    elif char == 'a':
-        return 0.5, 1
-    elif char == 'b':
-        return 1, 0.75
-    elif char == 'c':
-        return 0.75, 0.5
-    elif char == 'd':
-        return 0.75, 1
-    elif char == 'e':
-        return 0.75, 0.75
-    elif char == 'f':
-        return 0.5, 0.5
-    elif char == 'g':
-        return 0.75, 1
-    elif char == 'h':
-        return 1, 1
-    elif char == 'i':
-        return 0.5, 0.5
-    elif char == 'j':
-        return 0.25, 0.75
-    elif char == 'k':
-        return 1, 0.5
-    elif char == 'l':
-        return 1, 0.5
-    elif char == 'm':
-        return 1, 1
-    elif char == 'n':
-        return 1, 1
-    elif char == 'o':
-        return 0.75, 0.75
-    elif char == 'p':
-        return 1, 0.75
-    elif char == 'q':
-        return 0.75, 1
-    elif char == 'r':
-        return 1, 0.5
-    elif char == 's':
-        return 0.75, 0.75
-    elif char == 't':
-        return 0.5, 0.5
-    elif char == 'u':
-        return 1, 1
-    elif char == 'v':
-        return 0.5, 0.5
-    elif char == 'w':
-        return 0.5, 0.5
-    elif char == 'x':
-        return 0.5, 0.5
-    elif char == 'y':
-        return 0.5, 0.5
-    elif char == 'z':
-        return 0.5, 0.5
-    elif char == '9':
-        return 0.75, 0.75
-    elif char == '.':
-        return 0.5, 0.5
-    elif char == '!':
-        return 0.75, 0.75
-    elif char == "'":
-        return 0.5, 0.5
-    elif char == '/':
-        return 0.5, 0.5
-    elif char == ' ':
-        return 2, 2
+    spacing = {
+        'A': (0.5, 0.5),
+        'B': (1, 0.75),
+        'C': (0.75, 0.5),
+        'D': (1, 0.75),
+        'E': (1, 0.5),
+        'F': (1, 0.5),
+        'G': (0.75, 0.75),
+        'H': (1, 1),
+        'I': (0.5, 0.5),
+        'J': (0.5, 1),
+        'K': (1, 0.5),
+        'L': (1, 0.5),
+        'M': (1, 1),
+        'N': (1, 1),
+        'O': (0.75, 0.75),
+        'P': (1, 0.75),
+        'Q': (0.75, 0.75),
+        'R': (1, 0.75),
+        'S': (0.75, 0.75),
+        'T': (0.5, 0.5),
+        'U': (1, 1),
+        'V': (0.5, 0.5),
+        'W': (0.5, 0.5),
+        'X': (0.5, 0.5),
+        'Y': (0.5, 0.5),
+        'Z': (0.5, 0.5),
+        'a': (0.5, 1),
+        'b': (1, 0.75),
+        'c': (0.75, 0.5),
+        'd': (0.75, 1),
+        'e': (0.75, 0.75),
+        'f': (0.5, 0.5),
+        'g': (0.75, 1),
+        'h': (1, 1),
+        'i': (0.5, 0.5),
+        'j': (0.25, 0.75),
+        'k': (1, 0.5),
+        'l': (1, 0.5),
+        'm': (1, 1),
+        'n': (1, 1),
+        'o': (0.75, 0.75),
+        'p': (1, 0.75),
+        'q': (0.75, 1),
+        'r': (1, 0.5),
+        's': (0.75, 0.75),
+        't': (0.5, 0.5),
+        'u': (1, 1),
+        'v': (0.5, 0.5),
+        'w': (0.5, 0.5),
+        'x': (0.5, 0.5),
+        'y': (0.5, 0.5),
+        'z': (0.5, 0.5),
+        '9': (0.75, 0.75),
+        '.': (0.5, 0.5),
+        '!': (0.75, 0.75),
+        "'": (0.5, 0.5),
+        '/': (0.5, 0.5),
+        ' ': (2, 2)
+    }
+    return spacing[char]
 
 
 def text_points(text, height, pt_spacing, char_spacing=0.1, grouping='points'):
@@ -829,15 +775,15 @@ def text_points(text, height, pt_spacing, char_spacing=0.1, grouping='points'):
         grouping (str): 'points' to return list of points, 'strokes' to group by stroke.
 
     Returns:
-        Either a list of points or a list of lists of points in which
-        each list of points corresponds to a pen stroke (i.e. what can
-        be drawn without lifting the pin).
+        list: Either a list of points or a list of lists of points in
+        which each list of points corresponds to a pen stroke
+        (i.e. what can be drawn without lifting the pin).
 
     """
     strokes = []
     x = 0
     for char in text:
-        left_space, right_space = rel_char_spacing(char)
+        left_space, right_space = _rel_char_spacing(char)
 
         x += left_space * char_spacing * height
 
@@ -882,7 +828,7 @@ def splatter_text(text, height, spread, density, min_size, max_size, fill):
         fill (color): A fill color or function.
 
     Returns:
-        A list of circle shapes (in random order).
+        list: A list of circle shapes (in random order).
 
     """
     spacing = 1. / density
@@ -904,7 +850,8 @@ def double_dots_text(text, height, top_color='white', bottom_color='black'):
         bottom_color (color): The color for bottom (outer) splatters.
 
     Returns:
-        A list of two lists of circle shapes (inner lists are randomized).
+        list: A list of two lists of circle shapes (inner lists are
+        randomized).
 
     """
     # x = splatter_text(text, height, height / 15., 200. / height, height / 100., height / 15., bottom_color)
@@ -931,7 +878,7 @@ def hazy_text(text, height, spread, density, min_size, max_size, fill):
         fill (color): A fill color or function.
 
     Returns:
-        A list of circle shapes (in random order).
+        list: A list of circle shapes (in random order).
 
     """
     spacing = 1. / density
@@ -961,12 +908,12 @@ def squiggle_text(text, height, spread, density):
         density (float|int): Number of spline points per pixel.
 
     Returns:
-      A list of splines.
+        list: A list of splines.
 
     """
     spacing = 1. / density
     strokes = text_points(text, height, pt_spacing=spacing,
-                          char_spacing=0.15, grouping='strokes')
+                          char_spacing=0.2, grouping='strokes')
     for stroke in strokes:
         jitter_points(stroke, spread, type='uniform')
     splines = [dict(type='spline', points=stroke) for stroke in strokes]
@@ -986,7 +933,7 @@ def caption(text, x, y, align='right', color='#aaa'):
         color (color): The text fill color.
 
     Returns:
-        A text dict.
+        dict: A text shape.
 
     """
     t = dict(type='text', text=text, x=x, y=y, align=align, font_size=14)

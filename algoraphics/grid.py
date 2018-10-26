@@ -21,8 +21,8 @@ def grid_tree(rows, cols):
         cols (int): Number of cols in grid.
 
     Returns:
-        A 2D binary array with dimensions in sparse format indicating
-        which cells are connected.
+        numpy.ndarray: A 2D binary array with dimensions in sparse
+        format indicating which cells are connected.
 
     """
     right_edges = [((r, c), (r, c + 1)) for r in range(rows) for c in
@@ -45,7 +45,7 @@ def grid_tree_edges(rows, cols):
         cols (int): Number of cols in grid.
 
     Returns:
-        A list of ((r1, c1), (r2, c2)) coordinate tuple pairs.
+        list: A list of ((r1, c1), (r2, c2)) coordinate tuple pairs.
 
     """
     tree_mat = grid_tree(rows, cols)
@@ -62,7 +62,7 @@ def grid_tree_neighbors(rows, cols):
         cols (int): Number of cols in grid.
 
     Returns:
-        A 3D boolean array (rows x cols x [d?, r?, u?, l?]).
+        numpy.ndarray: A 3D boolean array (rows x cols x [d?, r?, u?, l?]).
 
     """
     def connected(coords1, coords2, edges):
@@ -91,7 +91,7 @@ def grid_tree_dists(rows, cols):
         cols (int): Number of cols in grid.
 
     Returns:
-        A 2D array of integers.
+        numpy.ndarray: A 2D array of integers.
 
     """
     tree_mat = grid_tree(rows, cols)

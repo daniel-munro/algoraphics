@@ -12,7 +12,7 @@ from .main import set_style, random_walk
 from .geom import distance, endpoint, rad, midpoint, move_toward
 
 
-def next_segment(p1, p2, l1, l2):
+def _next_segment(p1, p2, l1, l2):
     """Get next filament segment.
 
     Each segment is a trapezoid connected to adjacent segments along the
@@ -26,7 +26,7 @@ def next_segment(p1, p2, l1, l2):
         l2 (float|int): Length of side extending from p2.
 
     Returns:
-        A list of four points starting with p1 and going around
+        list: A list of four points starting with p1 and going around
         counter-clockwise.
 
     """
@@ -54,7 +54,7 @@ def filament(start, direction, width, l_min, l_max, segments, l_max_step=None):
         l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.
 
     Returns:
-        A list of polygons (the segments in order).
+        list: A list of polygons (the segments in order).
 
     """
     p1 = endpoint(start, rad(direction + 90), width / 2.)
@@ -69,9 +69,9 @@ def filament(start, direction, width, l_min, l_max, segments, l_max_step=None):
         l2 = random_walk(min_val=l_min, max_val=l_max,
                          max_step=l_max_step, n=segments)
 
-    x = [next_segment(p1, p2, l1[0], l2[0])]
+    x = [_next_segment(p1, p2, l1[0], l2[0])]
     for i in range(1, segments):
-        x.append(next_segment(x[-1][3], x[-1][2], l1[i], l2[i]))
+        x.append(_next_segment(x[-1][3], x[-1][2], l1[i], l2[i]))
 
     polygons = [dict(type='polygon', points=p) for p in x]
     set_style(polygons, 'stroke', 'match')
@@ -79,7 +79,7 @@ def filament(start, direction, width, l_min, l_max, segments, l_max_step=None):
     return polygons
 
 
-def next_tapered_segment(p1, p2, l1, l2, shrinkage):
+def _next_tapered_segment(p1, p2, l1, l2, shrinkage):
     """Get next tapered filament segment.
 
     Like tapered_segment, but the edge opposite p1-p2 shrinks for
@@ -94,8 +94,8 @@ def next_tapered_segment(p1, p2, l1, l2, shrinkage):
         shrinkage (float|int): Absolute decrease from starting to opposite edge.
 
     Returns:
-        A list of four (or three) points starting with p1 and going
-        around counter-clockwise.
+        list: A list of four (or three) points starting with p1 and
+        going around counter-clockwise.
 
     """
     s1_angle = math.atan2(p2[1] - p1[1], p2[0] - p1[0])
@@ -129,9 +129,11 @@ def tapered_filament(start, direction, width, l_min, l_max, segments,
         l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.
 
     Returns:
-        A list of polygons (the segments in order).
+        list: The ordered segment polygons.
 
     """
+    if l_max_step is None:
+        l_max_step = l_max - l_min
     shrinkage = float(width) / segments
 
     p1 = endpoint(start, rad(direction + 90), width / 2.)
@@ -141,7 +143,7 @@ def tapered_filament(start, direction, width, l_min, l_max, segments,
     l2 = random.uniform(l_min, l_max)
     prev_l1 = l1
     prev_l2 = l2
-    x = [next_tapered_segment(p1, p2, l1, l2, shrinkage)]
+    x = [_next_tapered_segment(p1, p2, l1, l2, shrinkage)]
     while len(x[-1]) == 4:
         scaling = distance(x[-1][3], x[-1][2]) / width
         # current_l_min = (l_min + l_max) / 2 - 0.5 * scaling * (l_max - l_min)
@@ -161,7 +163,7 @@ def tapered_filament(start, direction, width, l_min, l_max, segments,
             prev_l1 = l1
             prev_l2 = l2
 
-        x.append(next_tapered_segment(x[-1][3], x[-1][2], l1, l2, shrinkage))
+        x.append(_next_tapered_segment(x[-1][3], x[-1][2], l1, l2, shrinkage))
 
     polygons = [dict(type='polygon', points=p) for p in x]
     set_style(polygons, 'stroke', 'match')

@@ -35,7 +35,7 @@ def points_on_line(start, end, spacing):
         spacing (float|int): The approximate (max) distance between adjacent points.
 
     Returns:
-        A list of points.
+        list: A list of points.
 
     """
     n_points = math.ceil(distance(start, end) / spacing) + 1
@@ -76,7 +76,7 @@ def points_on_arc(center, radius, theta_start, theta_end, spacing):
         spacing (float|int): The approximate distance between adjacent points.
 
     Returns:
-        A list of points.
+        list: A list of points.
 
     """
     theta_start = rad(theta_start)
@@ -129,8 +129,8 @@ def get_nearest(points, point, index=False):
         index (bool): Whether to return the point or its index in the list.
 
     Returns:
-        If index is False, returns point, otherwise returns index of
-        point in list.
+        tuple|int: If index is False, returns point, otherwise returns
+        index of point in list.
 
     """
     nearest = 0
@@ -199,12 +199,12 @@ def rotated_point(point, pivot, angle):
     """Return the point resulting from rotating `point` around `pivot` point by `angle` (in radians).
 
     """
-    x = ((point[0] - pivot[0]) * math.cos(angle))
-    - ((point[1] - pivot[1]) * math.sin(angle))
-    + pivot[0]
-    y = ((point[1] - pivot[1]) * math.cos(angle))
-    + ((point[0] - pivot[0]) * math.sin(angle))
-    + pivot[1]
+    x = (((point[0] - pivot[0]) * math.cos(angle))
+         - ((point[1] - pivot[1]) * math.sin(angle))
+         + pivot[0])
+    y = (((point[1] - pivot[1]) * math.cos(angle))
+         + ((point[0] - pivot[0]) * math.sin(angle))
+         + pivot[1])
     return (x, y)
 
 
@@ -309,7 +309,7 @@ def line_to_polygon(points, width):
         width (float): Width of the path to be outlined.
 
     Returns:
-        A list of points.
+        list: A list of points.
 
     """
 

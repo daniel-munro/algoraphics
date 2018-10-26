@@ -23,7 +23,7 @@ def tree(start, direction, l_min, l_max, theta, p, p_delta):
         p_delta (float): The value subtracted from p cumulatively at each branching level.
 
     Returns:
-        A list of line shapes.
+        list: A list of line shapes.
 
     """
     angle = rad(direction)

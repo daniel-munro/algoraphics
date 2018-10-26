@@ -12,10 +12,20 @@ from .geom import interpolate, move_toward, rotate_and_move, jittered_points
 from .geom import is_clockwise, line_to_polygon, endpoint, rad
 
 
-def blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
+def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
     """Draw blow-paint shapes along an edge.
 
-    Draws toward the right when facing start to end).
+    Creates 'fingers' of paint along the edge, as if being blown along
+    the page perpindicular to the edge.  Draws toward the right when
+    facing start to end).
+
+    Args:
+        start (tuple): The starting point.
+        end (tuple): The ending point.
+        spacing (float): Average distance between paint fingers.
+        length (float): Average length of the paint fingers.
+        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
+        width (float): Average thickness of each finger.
 
     """
     locs = [start, end]
@@ -48,29 +58,70 @@ def blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
 
         pts.extend(pts_out)
         pts.extend(pts_in)
-    pts.append(end)
+        # Better without end point, since it is redundant with start
+        # point of the next edge in the shape:
+        # pts.append(end)
     return pts
 
 
 def blow_paint_area(points, spacing=20, length=40, len_dev=0.25, width=5):
+    """Draw a blow-paint effect around an area.
+
+    Creates 'fingers' of paint projecting from each edge, as if being
+    blown along the page perpindicular to the edge.
+
+    Args:
+        points (list): The vertices of the polygonal area.
+        spacing (float): Average distance between paint fingers.
+        length (float): Average length of the paint fingers.
+        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
+        width (float): Average thickness of each finger.
+
+    """
     if is_clockwise(points):
         points = list(reversed(points))
     points.append(points[0])
     pts = []
     for i in range(len(points) - 1):
-        pts.extend(blow_paint_edge(points[i], points[i + 1], spacing,
-                                   length, len_dev, width))
+        pts.extend(_blow_paint_edge(points[i], points[i + 1], spacing,
+                                    length, len_dev, width))
     return dict(type='spline', points=pts, circular=True, curvature=0.4)
 
 
 def blow_paint_line(points, line_width=10, spacing=20, length=20,
                     len_dev=0.33, width=5):
+    """Draw a blow-paint effect connecting a sequence of points.
+
+    Creates 'fingers' of paint projecting from each edge, as if being
+    blown along the page perpindicular to the edge (in both
+    directions).
+
+    Args:
+        points (list): The points to connect.
+        line_width (float): The thickness of the line (excluding the fingers).
+        spacing (float): Average distance between paint fingers.
+        length (float): Average length of the paint fingers.
+        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
+        width (float): Average thickness of each finger.
+
+    """
     pts = line_to_polygon(points, line_width)
     return blow_paint_area(pts, spacing, length, len_dev, width)
 
 
 def blow_paint_spot(point, length=10, len_dev=0.7, width=3):
-    le = 10                     # length of hexagon edge
+    """Draw a paint splatter.
+
+    Creates 'fingers' of paint projecting from a point.
+
+    Args:
+        point (tuple): The center of the splatter.
+        length (float): Average length of the paint fingers.
+        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
+        width (float): Average thickness of each finger.
+
+    """
+    le = 10                     # Length of hexagon edge.
     offset = np.random.uniform(0, 60)
     pts = [endpoint(point, rad(i * 60 + offset), le) for i in range(6)]
     return blow_paint_area(pts, le - 1, length, len_dev, width)

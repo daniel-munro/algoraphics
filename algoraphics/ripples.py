@@ -11,7 +11,7 @@ from .main import add_margin, markov_next, set_style
 from .geom import rotated_point, rad, endpoint, distance, Rtree
 
 
-def next_point(points, spacing, mode):
+def _next_point(points, spacing, mode):
     """Continue from last two elements of points."""
     last = points.points[-2:]
     if mode == 'r':
@@ -75,8 +75,8 @@ def next_point(points, spacing, mode):
 #     return None
 
 
-def scan_for_space(open_space, points, spacing):
-    # print('search...')
+def _scan_for_space(open_space, points, spacing):
+    """TODO"""
     while len(open_space) > 0:
         newpt = open_space.pop()
         neighbors = points.nearest(newpt, 6)
@@ -89,6 +89,7 @@ def scan_for_space(open_space, points, spacing):
 
 
 def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
+    """TODO"""
     if trans_probs is None:
         trans_probs = dict(s=dict(r=1), r=dict(r=1))
 
@@ -114,21 +115,21 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
     open_space = [(x, y) for x in xvals for y in yvals]
     np.random.shuffle(open_space)
 
-    start = scan_for_space(open_space, allpts, spacing)
+    start = _scan_for_space(open_space, allpts, spacing)
     pts = [start]
     allpts.add_point(start)
 
     mode = 's'
     more_space = True
     while more_space:
-        newpt = next_point(allpts, spacing, mode)
+        newpt = _next_point(allpts, spacing, mode)
         if newpt is not None:
             pts.append(newpt)
             allpts.add_point(newpt)
             mode = markov_next(mode, trans_probs)
         else:
             curves.append(pts)
-            new_start = scan_for_space(open_space, allpts, spacing)
+            new_start = _scan_for_space(open_space, allpts, spacing)
             if new_start is not None:
                 pts = [new_start]
                 allpts.add_point(new_start)

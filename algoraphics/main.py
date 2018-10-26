@@ -13,6 +13,7 @@ from PIL import Image
 
 from .geom import translated_point, rotated_point, scale_points, scaled_point
 from .geom import rad, distance
+from .paths import rectangle
 
 
 def random_walk(min_val, max_val, max_step, n, start=None):
@@ -28,7 +29,7 @@ def random_walk(min_val, max_val, max_step, n, start=None):
         start (number): The starting value.
 
     Returns:
-        A list of floats.
+        list: The generated sequence.
 
     """
     if start is None:
@@ -48,7 +49,7 @@ def shuffled(items):
         items (list): A list of items.
 
     Returns:
-        A new list with same objects as input but reordered.
+        list: A new list with same objects as input but reordered.
 
     """
     return random.sample(items, len(items))
@@ -63,7 +64,7 @@ def arith_seq(start, stop, length):
         length (int): The length of the the sequence.
 
     Returns:
-        A list of floats.
+        list: The generated sequence.
 
     """
     return [(float(x) / (length - 1)) * (stop - start) + start for x
@@ -79,7 +80,7 @@ def geom_seq(start, stop, length):
         length (int): Length of the sequence.
 
     Returns:
-        A list of floats.
+        list: The generated sequence.
 
     """
     r = (float(stop) / start) ** (1. / (length - 1))
@@ -100,8 +101,8 @@ def bounding_box(shapes):
         shapes (dict|list): One or more shapes.
 
     Returns:
-        A tuple containing min x, max x, min y, and max y coordinates
-        of input.
+        tuple: The min x, max x, min y, and max y coordinates of the
+        input.
 
     """
     if isinstance(shapes, list):
@@ -123,10 +124,6 @@ def bounding_box(shapes):
         c, r = shapes['c'], shapes['r']
         return (c[0] - r, c[0] + r, c[1] - r, c[1] + r)
 
-    elif shapes['type'] == 'rectangle':
-        start, w, h = shapes['start'], shapes['w'], shapes['h']
-        return (start[0], start[0] + w, start[1], start[1] + h)
-
     elif shapes['type'] == 'path':
         return bounding_box(dict(type='polygon', points=path_points(shapes)))
 
@@ -139,10 +136,10 @@ def rotated_bounding_box(shapes, angle):
         angle (float|int): The orientation of the bounding box in degrees.
 
     Returns:
-        A tuple containing min x, max x, min y, and max y coordinates
-        in rotated space.  Anything created using these coordinates
-        must then be rotated by the same angle around the origin to be
-        in the right place.
+        tuple: The min x, max x, min y, and max y coordinates in
+        rotated space.  Anything created using these coordinates must
+        then be rotated by the same angle around the origin to be in
+        the right place.
 
     """
     shapes = copy.deepcopy(shapes)
@@ -161,7 +158,7 @@ def add_margin(bounds, margin):
         margin (float|int): The width of the margin.
 
     Returns:
-        A bounds tuple that includes the margin on all sides.
+        tuple: Bounds that include the margin on all sides.
 
     """
     return (bounds[0] - margin, bounds[1] + margin,
@@ -190,8 +187,6 @@ def translate_shapes(shapes, dx, dy):
             pts[i] = translated_point(pts[i], dx, dy)
     elif shapes['type'] == 'circle':
         shapes['c'] = translated_point(shapes['c'], dx, dy)
-    elif shapes['type'] == 'rectangle':
-        shapes['start'] = translated_point(shapes['start'], dx, dy)
     elif shapes['type'] == 'line':
         shapes['p1'] = translated_point(shapes['p1'], dx, dy)
         shapes['p2'] = translated_point(shapes['p2'], dx, dy)
@@ -227,17 +222,6 @@ def rotate_shapes(shapes, angle, pivot=(0, 0)):
             pts[i] = rotated_point(pts[i], pivot, rad(angle))
     elif shapes['type'] == 'circle':
         shapes['c'] = rotated_point(shapes['c'], pivot, rad(angle))
-    elif shapes['type'] == 'rectangle':
-        start, w, h = shapes['start'], shapes['w'], shapes['h']
-        del shapes['start']
-        del shapes['w']
-        del shapes['h']
-        shapes['type'] = 'polygon'
-        p2 = (start[0] + w, start[1])
-        p3 = (start[0] + w, start[1] + h)
-        p4 = (start[0], start[1] + h)
-        shapes['points'] = [start, p2, p3, p4]
-        rotate_shapes(shapes, angle, pivot)
     elif shapes['type'] == 'line':
         shapes['p1'] = rotated_point(shapes['p1'], pivot, rad(angle))
         shapes['p2'] = rotated_point(shapes['p2'], pivot, rad(angle))
@@ -262,16 +246,6 @@ def scale_shapes(shapes, cx, cy=None):
     elif shapes['type'] == 'circle':
         shapes['c'] = scaled_point(shapes['c'], cx, cy)
         shapes['r'] *= abs(cx)
-    elif shapes['type'] == 'rectangle':
-        shapes['start'] = scaled_point(shapes['start'], cx, cy)
-        shapes['w'] *= abs(cx)
-        shapes['h'] *= abs(cy)
-        if cx < 0:
-            shapes['start'] = translated_point(shapes['start'],
-                                               -shapes['w'], 0)
-        if cy < 0:
-            shapes['start'] = translated_point(shapes['start'],
-                                               0, -shapes['h'])
     elif shapes['type'] == 'line':
         shapes['p1'] = scaled_point(shapes['p1'], cx, cy)
         shapes['p2'] = scaled_point(shapes['p2'], cx, cy)
@@ -378,7 +352,7 @@ def polygon_centroid(vertices):
         vertices (list): A list of vertex points.
 
     Returns:
-        A point.
+        tuple: A point.
 
     """
     return Polygon(vertices).centroid.coords[0]
@@ -391,7 +365,7 @@ def centroid(shape):
         shape (dict): A shape.
 
     Returns:
-        A point.
+        tuple: A point.
 
     """
     if 'points' in shape:
@@ -407,7 +381,7 @@ def polygon_area(vertices):
         vertices (list): The vertex points.
 
     Returns:
-        A float.
+        float: The area.
 
     """
     return Polygon(vertices).area
@@ -421,7 +395,7 @@ def sample_points_in_shape(shape, n):
         n (int): Number of points to sample.
 
     Returns:
-        A list of points.
+        list: The sampled points.
 
     """
     bound = bounding_box(shape)
@@ -467,12 +441,8 @@ def coverage(obj):
         return Polygon(pts)
     elif obj['type'] == 'circle':
         return Point(obj['c'][0], obj['c'][1]).buffer(obj['r'])
-    elif obj['type'] == 'rectangle':
-        s, w, h = (obj['start'], obj['w'], obj['h'])
-        return Polygon([s, (s[0] + w, s[1]), (s[0] + w, s[1] + h),
-                        (s[0], s[1] + h)])
     else:
-        print(obj['type'])
+        print("Can't get coverage for:", obj['type'])
 
 
 def keep_shapes_inside(shapes, boundary):
@@ -586,11 +556,12 @@ def background(fill, w, h, margin=0):
         margin (int): width of margin to include to avoid edge artifacts.
 
     Returns:
-        A filled rectangle shape covering the canvas.
+        tuple: A filled rectangular polygon covering the canvas.
 
     """
-    bg = dict(type='rectangle', start=(-margin, -margin),
-              w=w + margin, h=h + margin)
+    bg = rectangle(start=(-margin, -margin),
+                   w=w + 2 * margin,
+                   h=h + 2 * margin)
     set_style(bg, 'fill', fill)
     return bg
 
@@ -606,9 +577,7 @@ def region_background(region, color):
 
     """
     bounds = add_margin(bounding_box(region['clip']), 10)
-    w = bounds[1] - bounds[0]
-    h = bounds[3] - bounds[2]
-    bg = dict(type='rectangle', start=(bounds[0], bounds[2]), w=w, h=h)
+    bg = rectangle(bounds=bounds)
     set_style(bg, 'fill', color)
     if isinstance(region['members'], list):
         region['members'].insert(0, bg)
@@ -618,9 +587,7 @@ def region_background(region, color):
 
 def tint_region(region, color, opacity):
     bounds = add_margin(bounding_box(region['clip']), 10)
-    w = bounds[1] - bounds[0]
-    h = bounds[3] - bounds[2]
-    tint = dict(type='rectangle', start=(bounds[0], bounds[2]), w=w, h=h)
+    tint = rectangle(bounds=bounds)
     set_style(tint, 'fill', color)
     set_style(tint, 'opacity', opacity)
     if isinstance(region['members'], list):
@@ -657,7 +624,7 @@ def flatten(objects):
         objects (object): A nested list or a non-list.
 
     Returns:
-        A list of all non-list elements of input.
+        list: The non-list elements within the input.
 
     """
     out = []
@@ -670,6 +637,7 @@ def flatten(objects):
 
 
 def markov_next(state, trans_probs):
+    """TODO"""
     states = list(trans_probs[state].keys())
     probs = [trans_probs[state][s] for s in states]
     return np.random.choice(states, p=probs)
