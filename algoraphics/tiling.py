@@ -13,6 +13,8 @@ from .main import set_style, add_margin, bounding_box, geom_seq
 from .main import rotated_bounding_box, rotate_shapes, keep_shapes_inside
 from .main import region_background, keep_points_inside, sample_points_in_shape
 from .geom import Rtree, distance, midpoint
+from .paths import circle
+from .param import Param, Exponential, make_param, fixed_value
 
 
 def mitchell_points(n, n_cand, bounds):
@@ -217,19 +219,19 @@ def nested_triangles(tip, height, min_level, max_level):
     return triangles
 
 
-def fill_nested_triangles(outline, min_level, max_level, color1=None,
+def fill_nested_triangles(outline, min_level, max_level, color=None,
                           color2=None):
     """Fill region with nested triangle pattern.
 
     Args:
-        outlines (list): A list of region outline shapes.
+        outline (dict|list): A region outline shape.
         min_level (int): The level of the largest triangles (0 is bounding triangle).
         max_level (int): The level of the smallest triangles.
         color1 (color): The color for half of the triangles.  This can be a function.
         color2 (color): The color for the opposing half of the triangles. This can be a function but this half of triangles will all be one color because it is the background.
 
     Returns:
-        dict: A group with outline as clip.
+        dict: A group with the outline as clip.
 
     """
     rotation = np.random.uniform(0, 360)
@@ -248,21 +250,40 @@ def fill_nested_triangles(outline, min_level, max_level, color1=None,
     return region
 
 
-def fill_ishihara_spots(outline, r_min=2, r_max=9):
-    """TODO"""
+def fill_ishihara_spots(outline, spacing=10, radius=None):
+    """Fill a region with randomly sized spots.
+
+    The spots are reminiscent of Ishihara color blindness tests.
+    The spots are not completely non-overlapping, but overlaps are
+    somewhat avoided by spacing out their centers.
+
+    Args:
+        outline (dict|list): A region outline shape.
+        spacing (float): The approximate distance between the centers of neighboring spots.
+        radius (Param): The spot radius.  By default the radii range from `spacing` to `spacing` / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio < 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.
+
+    Returns:
+        list: A list of circle shapes.
+
+    """
+    spacing = fixed_value(spacing)
+    # radius2 = make_param(radius)
+    # sample = [radius2.value() for i in range(100)]
+    # r_mean = np.mean(sample)
     bounds = bounding_box(outline)
     bounds_area = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2])
-    n_points = int(bounds_area /
-                   (((r_min * 2) ** 2 + (r_max * 2) ** 2) / 3)) + 1
+    # n_points = int(bounds_area / (3.14 * r_mean ** 2)) + 1
+    n_points = int(bounds_area / spacing ** 2) + 1
     points = mitchell_points(n_points, 10, bounds)
     keep_points_inside(points, outline)
     if len(points) == 0:
         points = sample_points_in_shape(outline, 1)
-    if len(points) < 2:
-        radii = [(r_min + r_max) / 2]
+    if radius is None:
+        ratio = ((spacing / 5) / spacing) ** (1. / (len(points) - 1))
+        radius = Param(spacing, ratio=ratio)
     else:
-        radii = geom_seq(r_max, r_min, len(points))
-    return [dict(type='circle', c=points[i], r=radii[i]) for i in
+        radius = make_param(radius)
+    return [circle(c=points[i], r=radius.value()) for i in
             range(len(points))]
 
 

@@ -7,7 +7,7 @@ Create space-filling ripple effects.
 
 import numpy as np
 
-from .main import add_margin, markov_next, set_style
+from .main import add_margin, _markov_next, set_style
 from .geom import rotated_point, rad, endpoint, distance, Rtree
 
 
@@ -76,20 +76,54 @@ def _next_point(points, spacing, mode):
 
 
 def _scan_for_space(open_space, points, spacing):
-    """TODO"""
+    """Look for new starting point.
+
+    Since a new ripple needs to be drawn with spacing on either side,
+    there must be fewer than 6 existing points within 2 * spacing of
+    the new starting point.
+
+    Args:
+        open_space (list): List of randomly ordered coordinates that have not yet been looked at.
+        points (list): Existing ripple points.
+        spacing (float): Distance between ripples.
+
+    Returns:
+        Either an available starting point or None if there is none available.
+
+    """
     while len(open_space) > 0:
         newpt = open_space.pop()
         neighbors = points.nearest(newpt, 6)
         # <= 5 in vicinity still has space somewhere to go
         if distance(newpt, neighbors[-1]) >= spacing * 2:
             if distance(newpt, neighbors[0]) >= spacing:
-                # print('done')
                 return newpt
     return None
 
 
 def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
-    """TODO"""
+    """Fill the canvas with ripples.
+
+    The behavior of the ripples is determined by a first-order Markov
+    chain in which events correspond to points along splines.  The
+    states are 's', 'r', 'l', and 'x'.  At 's', the ripple begins in a
+    random direction.  At 'r', the ripple turns right sharply until
+    encountering a ripple or other barrier, and then follows along it.
+    Likewise with 'l' turning left.  At 'x', the ripple moves straight
+    forward +/- up to 60 degrees.  Higher state-changing transition
+    probabilities result in more erratic ripples.
+
+    Args:
+        w (int): Width of the canvas.
+        h (int): Height of the canvas.
+        spacing (float): Distance between ripples.
+        trans_probs (dict): A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).
+        existing_pts (list): An optional list of points that ripples will avoid.
+
+    Returns:
+        list: The ripple splines.
+
+    """
     if trans_probs is None:
         trans_probs = dict(s=dict(r=1), r=dict(r=1))
 
@@ -126,7 +160,7 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
         if newpt is not None:
             pts.append(newpt)
             allpts.add_point(newpt)
-            mode = markov_next(mode, trans_probs)
+            mode = _markov_next(mode, trans_probs)
         else:
             curves.append(pts)
             new_start = _scan_for_space(open_space, allpts, spacing)

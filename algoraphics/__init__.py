@@ -2,23 +2,22 @@
 
 """
 
-# from .main import *
-# from .geom import *
-# from .svg import *
+from .main import *
+from .param import *
+from .geom import *
+from .svg import *
 
-# from .color import *
-# from .filaments import *
-# from .grid import *
-# from .images import *
-# from .map import *
-# from .map_funs import *
-# from .mazes import *
-# from .paint import *
-# from .paths import *
-# from .ripples import *
-# from .space_filling import *
-# from .text import *
-# from .textures import *
-# from .tiling import *
-# from .trees import *
-# from .wrapping_paper import *
+from .color import *
+from .filaments import *
+from .grid import *
+from .images import *
+from .mazes import *
+from .paint import *
+from .paths import *
+from .ripples import *
+from .space_filling import *
+from .text import *
+from .textures import *
+from .tiling import *
+from .trees import *
+from .wrapping_paper import *

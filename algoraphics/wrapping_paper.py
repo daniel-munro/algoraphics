@@ -13,13 +13,66 @@ from .main import rotate_shapes, translate_shapes, scale_shapes, bounding_box
 from .main import rotated_bounding_box, keep_shapes_inside
 
 
-def _object_fits(grid, coords, footprint):
-    """Determine whether a footprint will fit at a location.
+class Doodle:
+    def __init__(self, function, footprint):
+        """Row 0 of the footprint should correspond to the top row of the doodle's footprint."""
+        self.function = function
+        # Reverse footprint so that row 0 is the bottom.
+        self.fp = np.array(footprint[::-1])
+        self.n_cells = np.sum(self.fp)
+        self.orientations = np.array([True] * 8)
+
+    def footprint(self, orientation=0):
+        """Get the doodle's footprint in a given orientation.
+
+        Args:
+           orientation (int): 0 to 7.
+
+        Returns:
+            numpy.ndarray: The oriented footprint.
+
+        """
+        # Rotate in the same direction as the shapes:
+        oriented = np.rot90(self.fp, -(orientation % 4))
+        if orientation > 3:
+            oriented = oriented.transpose()
+        return oriented
+
+    def oriented(self, orientation=0):
+        """Draw the doodle in a given orientation.
+
+        Args:
+            orientation (int): 0 to 7.
+
+        Returns:
+            The oriented doodle.
+
+        """
+        dim = self.fp.shape
+        x = self.function()
+        assert orientation in range(8)
+        rotate = orientation % 4
+        rotate_shapes(x, rotate * 90)
+        if rotate == 1:
+            translate_shapes(x, dim[0], 0)
+        elif rotate == 2:
+            translate_shapes(x, dim[1], dim[0])
+        elif rotate == 3:
+            translate_shapes(x, 0, dim[1])
+        if orientation > 3:
+            scale_shapes(x, 1, -1)
+            rotate_shapes(x, 90)
+        return x
+
+
+def _doodle_fits(grid, coords, footprint):
+    """Determine whether a doodle will fit at a location.
 
     Args:
         grid (numpy.ndarray): A boolean array of occupied locations.
         coords (tuple): The top left corner of the location to test.
-        footprint (numpy.ndarray): The object's footprint.
+        footprint (numpy.ndarray): The doodle's oriented footprint.
+
     Returns:
         bool: Whether the space is available for the footprint.
 
@@ -29,13 +82,13 @@ def _object_fits(grid, coords, footprint):
     return np.sum(np.logical_and(subgrid, footprint)) == 0
 
 
-def _add_object(grid, coords, footprint):
-    """Mark space at placed object as occupied.
+def _add_doodle(grid, coords, footprint):
+    """Mark the space where a doodle is placed as occupied.
 
     Args:
         grid (numpy.ndarray): A boolean array of occupied locations.
-        coords (tuple): The top left corner of the placed location.
-        footprint (numpy.ndarray): The object's footprint.
+        coords (tuple): The top left corner of the new doodle's location.
+        footprint (numpy.ndarray): The doodle's footprint.
 
     """
     subgrid = grid[coords[0]:(coords[0] + footprint.shape[0]),
@@ -56,34 +109,6 @@ def _next_cell(r, c, rows, cols):
     return (r, c)
 
 
-def _oriented_doodle(fun, rotate, flip):
-    """Get doodle in a given orientation.
-
-    Args:
-        fun (function): A doodle function.
-        rotate (int): Number of quarter-turns, 0 to 3.
-        flip (bool): Whether to reflect the doodle.
-
-    Returns:
-        The oriented doodle.
-
-    """
-    dim = fun(footprint=True).shape
-    x = fun()
-    assert rotate in range(4)
-    rotate_shapes(x, rotate * 90)
-    if rotate == 1:
-        translate_shapes(x, dim[0], 0)
-    elif rotate == 2:
-        translate_shapes(x, dim[1], dim[0])
-    elif rotate == 3:
-        translate_shapes(x, 0, dim[1])
-    if flip:
-        scale_shapes(x, 1, -1)
-        rotate_shapes(x, 90)
-    return x
-
-
 def grid_wrapping_paper(rows, cols, spacing, start, doodles):
     """Create a tiling of non-overlapping doodles.
 
@@ -99,45 +124,40 @@ def grid_wrapping_paper(rows, cols, spacing, start, doodles):
 
         """
     # Margin = extra cells to allow tiling to fill the desired grid.
-    margin = max([max(doodle(footprint=True).shape) for doodle in doodles]) - 1
+    margin = max([max(doodle.footprint().shape) for doodle in doodles]) - 1
     occupied = np.zeros((rows + 2 * margin, cols + 2 * margin), dtype=bool)
-    objects = [dict(fun=doodle,
-                    n_cells=np.sum(doodle(footprint=True)),
-                    orientations=np.array([True] * 8)) for doodle in doodles]
     shapes = []
 
-    while(np.sum(np.logical_not(occupied)) > 0 and len(objects) > 0):
-        # Choose from remaining objects weighted by size.
-        n_cells = [x['n_cells'] for x in objects]
+    while(np.sum(np.logical_not(occupied)) > 0 and len(doodles) > 0):
+        # Choose from remaining doodles weighted by size.
+        n_cells = [doodle.n_cells for doodle in doodles]
         weights = [x / float(sum(n_cells)) for x in n_cells]
-        o = np.random.choice(range(len(objects)), p=weights)
-        obj = objects[o]
+        o = np.random.choice(range(len(doodles)), p=weights)
+        doodle = doodles[o]
 
-        # Get footprint of randomly rotated/flipped object.
-        orientation = np.random.choice(np.where(obj['orientations'])[0])
-        oriented = np.rot90(obj['fun'](footprint=True), -(orientation % 4))
-        if orientation > 3:
-            oriented = oriented.transpose()
+        # Get footprint of randomly rotated/flipped doodle.
+        orientation = np.random.choice(np.where(doodle.orientations)[0])
+        oriented = doodle.footprint(orientation)
 
         # Move through grid to find open space for object.
-        r_start = random.randrange(margin + rows)
-        c_start = random.randrange(margin + cols)
+        r_start = np.random.choice(range(margin + rows))
+        c_start = np.random.choice(range(margin + cols))
         (r, c) = (r_start, c_start)
         while True:
-            if _object_fits(occupied, (r, c), oriented):
-                _add_object(occupied, (r, c), oriented)
-                shape = _oriented_doodle(obj['fun'],
-                                         rotate=orientation % 4,
-                                         flip=orientation > 3)
+            # If oriented doodle can be placed somewhere, place it.
+            if _doodle_fits(occupied, (r, c), oriented):
+                _add_doodle(occupied, (r, c), oriented)
+                shape = doodle.oriented(orientation)
                 translate_shapes(shape, c, r)
                 shapes.append(shape)
                 break
 
             (r, c) = _next_cell(r, c, margin + rows, margin + cols)
+            # If it couldn't be placed anywhere, check off that orientation.
             if (r, c) == (r_start, c_start):
-                obj['orientations'][orientation] = False
-                if not np.any(obj['orientations']):
-                    del objects[o]
+                doodle.orientations[orientation] = False
+                if not np.any(doodle.orientations):
+                    del doodles[o]
                 break
 
     translate_shapes(shapes, -margin, -margin)
@@ -150,10 +170,10 @@ def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     """Fill a region with a tiling of non-overlapping doodles.
 
     Argps:
-        outline (dict|list): A shape or (nested) list of shapes that will become clip.
+        outline (dict|list): A shape or (nested) list of shapes that will become the clip.
         spacing (float): Height/width of each grid cell.
-        doodles (list): A list of doodle functions.
-        rotate (bool): Place grid in a random rotated orientation.
+        doodles (list): A list of Doodle objects.
+        rotate (bool): Whether to place the grid in a random rotated orientation.
 
     Returns:
         dict: A clipped group.

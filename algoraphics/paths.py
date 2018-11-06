@@ -9,6 +9,7 @@ import math
 
 from .geom import rotated_point, angle_between, move_toward, distance, endpoint
 from .geom import rad
+from .param import fixed_value
 
 
 def polygon(points):
@@ -141,4 +142,6 @@ def rectangle(start=None, w=None, h=None, bounds=None):
 
 def circle(c, r):
     """TODO"""
+    c = fixed_value(c)
+    r = fixed_value(r)
     return dict(type='circle', c=c, r=r)

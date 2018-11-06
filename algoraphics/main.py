@@ -14,6 +14,8 @@ from PIL import Image
 from .geom import translated_point, rotated_point, scale_points, scaled_point
 from .geom import rad, distance
 from .paths import rectangle
+from .color import Color
+from .param import Param
 
 
 def random_walk(min_val, max_val, max_step, n, start=None):
@@ -611,7 +613,11 @@ def set_style(obj, attribute, value):
     else:
         if 'style' not in obj:
             obj['style'] = dict()
-        if callable(value):
+        if type(value) is Param:
+            obj['style'][attribute] = value.value()
+        elif type(value) is Color:
+            obj['style'][attribute] = value.hex()
+        elif callable(value):
             obj['style'][attribute] = value()
         else:
             obj['style'][attribute] = value
@@ -636,8 +642,17 @@ def flatten(objects):
     return out
 
 
-def markov_next(state, trans_probs):
-    """TODO"""
+def _markov_next(state, trans_probs):
+    """Get the next state in a first-order Markov chain.
+
+    Args:
+        state (str): The current state.
+        trans_probs (dict): A dictionary of dictionaries containing transition probabilities from one state (first key) to another (second key).
+
+    Returns:
+        str: The next state.
+
+    """
     states = list(trans_probs[state].keys())
     probs = [trans_probs[state][s] for s in states]
     return np.random.choice(states, p=probs)

@@ -10,25 +10,49 @@ import random
 import colorsys
 import matplotlib.colors
 
+from .param import fixed_value
+
 
 class Color:
-    """TODO"""
-    def __init__(self, hue=None, sat=None, li=None):
-        self.hue = hue
-        self.sat = sat
-        self.li = li
+    """Object to represent a color or distribution of colors."""
+    def __init__(self, hsl=None, hue=None, sat=None, li=None):
+        if hsl is None:
+            self.hsl = (hue, sat, li)
+        else:
+            self.hsl = hsl
+
+    # def hex(self):
+    #     return TODO
+    def hex(self):
+        return self.RGB()
+
+    def rgb(self):
+        hsl = tuple([fixed_value(x) for x in self.hsl])
+        return colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
+
+    def RGB(self):
+        r, g, b = self.rgb()
+        return (int(r * 255), int(g * 255), int(b * 255))
 
 
-def rgb_to_hsl(rgb):
-    """Convert RGB tuple to HSL tuple."""
-    h, l, s = colorsys.rgb_to_hls(rgb[0] / 255., rgb[1] / 255., rgb[2] / 255.)
-    return (h, s, l)
+def make_color(x):
+    if isinstance(x, Color):
+        return x
+    elif type(x) is tuple:
+        return Color(hsl=x)
+    # else:
+    #     TODO error
+
+# def rgb_to_hsl(rgb):
+#     """Convert RGB tuple to HSL tuple."""
+#     h, l, s = colorsys.rgb_to_hls(rgb[0] / 255., rgb[1] / 255., rgb[2] / 255.)
+#     return (h, s, l)
 
 
-def hsl_to_rgb(hsl):
-    """Convert HSL tuple to RGB tuple."""
-    r, g, b = colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
-    return (int(r * 255), int(g * 255), int(b * 255))
+# def hsl_to_rgb(hsl):
+#     """Convert HSL tuple to RGB tuple."""
+#     r, g, b = colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
+#     return (int(r * 255), int(g * 255), int(b * 255))
 
 
 def hex_to_rgb(hx):
@@ -44,32 +68,15 @@ def hex_to_hsl(hx):
     return rgb_to_hsl(hex_to_rgb(hx))
 
 
-def rgb_to_hsv(rgb):
-    """Convert matrix of RGB values to HSV."""
-    return matplotlib.colors.rgb_to_hsv(rgb / 255)
+def rgb_array_to_hsv(rgb):
+    """Convert matrix of rgb values to HSV."""
+    # return matplotlib.colors.rgb_to_hsv(rgb / 255)
+    return matplotlib.colors.rgb_to_hsv(rgb)
 
 
-def hsv_to_rgb(hsv):
-    """Convert matrix of HSV values to RGB."""
-    return (matplotlib.colors.hsv_to_rgb(hsv) * 255).astype('uint8')
-
-
-def rand_col_from_ranges(r, g, b):
-    """Select random color from possible RGB components.
-
-    Each argument is a number from 0 to 255 or a list of numbers to randomly
-    choose from, e.g. produced from range(40, 200).
-
-    Returns:
-        tuple: An RGB tuple.
-
-    """
-    result = []
-    for x in (r, g, b):
-        if type(x) not in (list, range):
-            x = [x]
-        result.append(random.choice(x))
-    return tuple(result)
+def hsv_array_to_rgb(hsv):
+    """Convert matrix of HSV values to rgb."""
+    return matplotlib.colors.hsv_to_rgb(hsv)
 
 
 def rand_col_nearby(color, hue_tol, sat_tol, light_tol):
@@ -163,43 +170,45 @@ def color_mixture(color1, color2, proportion=0.5, mode='rgb'):
         return (h, s, li)
 
 
-def map_to_gradient(values, colors, period, gradient_mode='rgb'):
-    """Map 2D array of values to cyclical color gradient.
+def map_colors_to_array(values, colors, period, gradient_mode='rgb'):
+    """Map 2D array of values to a cyclical color gradient.
 
-    Used when values are pixel distances, producing a cyclical color
-    gradient.  Outputs in RGB mode regardless of mode specified for
+    If values vary continuously in space, this produces a cyclical color
     gradient.
 
     Args:
-        values (numpy.ndarray): A 2D array.
-        colors (list): A list of RGB colors.
-        period (float|int): The range of values covered by gradient before it repeats.
-        gradient_mode (str): Either 'rgb' or 'hsl'. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.
+        values (numpy.ndarray): A 2D array.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).
+        colors (list): A list of Colors.
+        gradient_mode (str): Either 'rgb' or 'hsv' to indicate how the colors are interpolated.
 
     Returns:
-        numpy.ndarray: A 3D array of RGB values.
+        numpy.ndarray: A 3D array of RGB values (RGB mode because this is used for PIL images).
 
     """
-    if gradient_mode == 'hsl':
-        colors = [rgb_to_hsv(np.array([[c]]))[0, 0, :] for c in colors]
+    colors = np.array([color.rgb() for color in colors])
+    if gradient_mode == 'hsv':
+        colors = rgb_array_to_hsv(np.array([colors]))[0, :]
 
-    values = np.array(values) % period / period * len(colors)
+    # Get the two colors per pixel to be mixed:
     color1 = values.astype(int)
     color2 = ((values + 1) % len(colors)).astype(int)
     proportion = values % 1
-    c1 = np.array(colors)[color1]
-    c2 = np.array(colors)[color2]
+    c1 = colors[color1]
+    c2 = colors[color2]
+
     if gradient_mode == 'rgb':
+        # Weighted average for each of R, G, and B:
         out = c1 + proportion[:, :, np.newaxis] * (c2 - c1)
     else:
+        # For HSL, average hue should be in direction where hues are closer:
         h1 = c1[:, :, 0]
         h2 = c2[:, :, 0]
         h1[h2 - h1 > 0.5] += 1
         h2[h1 - h2 > 0.5] += 1
         h = (h1 + proportion * (h2 - h1)) % 1
+        # Weighted average for each of H, S, and L:
         out = c1 + proportion[:, :, np.newaxis] * (c2 - c1)
         out[:, :, 0] = h
-        out = hsv_to_rgb(out)
-
-    out = out.astype('uint8')
+        out = hsv_array_to_rgb(out)
+    out = (out * 255).astype('uint8')
     return out

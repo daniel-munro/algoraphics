@@ -372,12 +372,6 @@ input.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.main.markov_next">
-<code class="descclassname">algoraphics.main.</code><code class="descname">markov_next</code><span class="sig-paren">(</span><em>state</em>, <em>trans_probs</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.markov_next" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.main.path_points">
 <code class="descclassname">algoraphics.main.</code><code class="descname">path_points</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.path_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get skeleton points of path.</p>
@@ -663,8 +657,8 @@ the right place.</p>
 <p>Functions for working with colors.</p>
 <dl class="class">
 <dt id="algoraphics.color.Color">
-<em class="property">class </em><code class="descclassname">algoraphics.color.</code><code class="descname">Color</code><span class="sig-paren">(</span><em>hue=None</em>, <em>sat=None</em>, <em>li=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.Color" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
+<em class="property">class </em><code class="descclassname">algoraphics.color.</code><code class="descname">Color</code><span class="sig-paren">(</span><em>hsl=None</em>, <em>hue=None</em>, <em>sat=None</em>, <em>li=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object to represent a color or distribution of colors.</p>
 </dd></dl>
 
 <dl class="function">
@@ -750,59 +744,33 @@ Used to create color pairs for a mixture of light and dark colors.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.hsl_to_rgb">
-<code class="descclassname">algoraphics.color.</code><code class="descname">hsl_to_rgb</code><span class="sig-paren">(</span><em>hsl</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hsl_to_rgb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert HSL tuple to RGB tuple.</p>
+<dt id="algoraphics.color.hsv_array_to_rgb">
+<code class="descclassname">algoraphics.color.</code><code class="descname">hsv_array_to_rgb</code><span class="sig-paren">(</span><em>hsv</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hsv_array_to_rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert matrix of HSV values to rgb.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.hsv_to_rgb">
-<code class="descclassname">algoraphics.color.</code><code class="descname">hsv_to_rgb</code><span class="sig-paren">(</span><em>hsv</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hsv_to_rgb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert matrix of HSV values to RGB.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.color.map_to_gradient">
-<code class="descclassname">algoraphics.color.</code><code class="descname">map_to_gradient</code><span class="sig-paren">(</span><em>values</em>, <em>colors</em>, <em>period</em>, <em>gradient_mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.map_to_gradient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Map 2D array of values to cyclical color gradient.</p>
-<p>Used when values are pixel distances, producing a cyclical color
-gradient.  Outputs in RGB mode regardless of mode specified for
+<dt id="algoraphics.color.map_colors_to_array">
+<code class="descclassname">algoraphics.color.</code><code class="descname">map_colors_to_array</code><span class="sig-paren">(</span><em>values</em>, <em>colors</em>, <em>period</em>, <em>gradient_mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.map_colors_to_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map 2D array of values to a cyclical color gradient.</p>
+<p>If values vary continuously in space, this produces a cyclical color
 gradient.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>values</strong> (<em>numpy.ndarray</em>) – A 2D array.</li>
-<li><strong>colors</strong> (<em>list</em>) – A list of RGB colors.</li>
-<li><strong>period</strong> (<em>float|int</em>) – The range of values covered by gradient before it repeats.</li>
-<li><strong>gradient_mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsl’. This changes the appearance of the color gradient, but input and output colors are in RGB regardless.</li>
+<li><strong>values</strong> (<em>numpy.ndarray</em>) – A 2D array.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of Colors.</li>
+<li><strong>gradient_mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsv’ to indicate how the colors are interpolated.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 3D array of RGB values.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A 3D array of RGB values (RGB mode because this is used for PIL images).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.ndarray</p>
 </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.color.rand_col_from_ranges">
-<code class="descclassname">algoraphics.color.</code><code class="descname">rand_col_from_ranges</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rand_col_from_ranges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select random color from possible RGB components.</p>
-<p>Each argument is a number from 0 to 255 or a list of numbers to randomly
-choose from, e.g. produced from range(40, 200).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An RGB tuple.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -835,15 +803,9 @@ choose from, e.g. produced from range(40, 200).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.rgb_to_hsl">
-<code class="descclassname">algoraphics.color.</code><code class="descname">rgb_to_hsl</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rgb_to_hsl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert RGB tuple to HSL tuple.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.color.rgb_to_hsv">
-<code class="descclassname">algoraphics.color.</code><code class="descname">rgb_to_hsv</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rgb_to_hsv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert matrix of RGB values to HSV.</p>
+<dt id="algoraphics.color.rgb_array_to_hsv">
+<code class="descclassname">algoraphics.color.</code><code class="descname">rgb_array_to_hsv</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rgb_array_to_hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert matrix of rgb values to HSV.</p>
 </dd></dl>
 
 </div>
@@ -852,7 +814,7 @@ choose from, e.g. produced from range(40, 200).</p>
 <p>Create meandering segmented filaments.</p>
 <dl class="function">
 <dt id="algoraphics.filaments.filament">
-<code class="descclassname">algoraphics.filaments.</code><code class="descname">filament</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>l_min</em>, <em>l_max</em>, <em>segments</em>, <em>l_max_step=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.filaments.filament" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.filaments.</code><code class="descname">filament</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>seg_length</em>, <em>n_segments</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.filaments.filament" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a meandering segmented filament.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -860,45 +822,14 @@ choose from, e.g. produced from range(40, 200).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the filament.</li>
-<li><strong>direction</strong> (<em>number</em>) – The starting direction (in degrees) of the filament.</li>
+<li><strong>direction</strong> (<em>Param</em>) – The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.</li>
 <li><strong>width</strong> (<em>float|int</em>) – The width of the filament (at segment joining edges).</li>
-<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
-<li><strong>segments</strong> (<em>int</em>) – Number of segments in filament.</li>
-<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
+<li><strong>seg_length</strong> (<em>float|int</em>) – Average side length of each segment.</li>
+<li><strong>n_segments</strong> (<em>int</em>) – Number of segments in the filament.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of polygons (the segments in order).</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.filaments.tapered_filament">
-<code class="descclassname">algoraphics.filaments.</code><code class="descname">tapered_filament</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>l_min</em>, <em>l_max</em>, <em>segments</em>, <em>l_max_step=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.filaments.tapered_filament" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a meandering segmented filament that tapers to a point.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the filament.</li>
-<li><strong>direction</strong> (<em>float|int</em>) – The starting direction (in degrees) of filament.</li>
-<li><strong>width</strong> (<em>float|int</em>) – The width of filament (at segment joining edges).</li>
-<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
-<li><strong>segments</strong> (<em>int</em>) – Number of segments in filament.</li>
-<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ordered segment polygons.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -1992,7 +1923,36 @@ directions).</p>
 <dl class="function">
 <dt id="algoraphics.ripples.ripple_canvas">
 <code class="descclassname">algoraphics.ripples.</code><code class="descname">ripple_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>spacing</em>, <em>trans_probs=None</em>, <em>existing_pts=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.ripples.ripple_canvas" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
+<dd><p>Fill the canvas with ripples.</p>
+<p>The behavior of the ripples is determined by a first-order Markov
+chain in which events correspond to points along splines.  The
+states are ‘s’, ‘r’, ‘l’, and ‘x’.  At ‘s’, the ripple begins in a
+random direction.  At ‘r’, the ripple turns right sharply until
+encountering a ripple or other barrier, and then follows along it.
+Likewise with ‘l’ turning left.  At ‘x’, the ripple moves straight
+forward +/- up to 60 degrees.  Higher state-changing transition
+probabilities result in more erratic ripples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>w</strong> (<em>int</em>) – Width of the canvas.</li>
+<li><strong>h</strong> (<em>int</em>) – Height of the canvas.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Distance between ripples.</li>
+<li><strong>trans_probs</strong> (<em>dict</em>) – A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).</li>
+<li><strong>existing_pts</strong> (<em>list</em>) – An optional list of points that ripples will avoid.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ripple splines.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -2442,9 +2402,9 @@ one shadow for the composite object.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<em>dict|list</em>) – The object that will become the clip.</li>
-<li><strong>colors</strong> (<em>list</em>) – A list of rgb colors to cycle through.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of Colors to cycle through.</li>
 <li><strong>scale</strong> (<em>int</em>) – The distance in pixels for each color cycle.</li>
-<li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose appearance of gradient.</li>
+<li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to indicate how the gradient is interpolated.</li>
 </ul>
 </td>
 </tr>
@@ -2469,7 +2429,7 @@ one shadow for the composite object.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>w</strong> (<em>int</em>) – Width of the texture.</li>
 <li><strong>h</strong> (<em>int</em>) – Height of the texture.</li>
-<li><strong>colors</strong> (<em>list</em>) – A list of rgb colors to cycle through.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of Colors to cycle through.</li>
 <li><strong>scale</strong> (<em>int</em>) – Distance in pixels for each color cycle.</li>
 <li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose the appearance of the gradient.</li>
 </ul>
@@ -2601,20 +2561,42 @@ not have finite regions.</td>
 
 <dl class="function">
 <dt id="algoraphics.tiling.fill_ishihara_spots">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>r_min=2</em>, <em>r_max=9</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing=10</em>, <em>radius=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region with randomly sized spots.</p>
+<p>The spots are reminiscent of Ishihara color blindness tests.
+The spots are not completely non-overlapping, but overlaps are
+somewhat avoided by spacing out their centers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A region outline shape.</li>
+<li><strong>spacing</strong> (<em>float</em>) – The approximate distance between the centers of neighboring spots.</li>
+<li><strong>radius</strong> (<em>Param</em>) – The spot radius.  By default the radii range from <cite>spacing</cite> to <cite>spacing</cite> / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio &lt; 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of circle shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="algoraphics.tiling.fill_nested_triangles">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_nested_triangles</code><span class="sig-paren">(</span><em>outline</em>, <em>min_level</em>, <em>max_level</em>, <em>color1=None</em>, <em>color2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_nested_triangles" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_nested_triangles</code><span class="sig-paren">(</span><em>outline</em>, <em>min_level</em>, <em>max_level</em>, <em>color=None</em>, <em>color2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_nested_triangles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill region with nested triangle pattern.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outlines</strong> (<em>list</em>) – A list of region outline shapes.</li>
+<li><strong>outline</strong> (<em>dict|list</em>) – A region outline shape.</li>
 <li><strong>min_level</strong> (<em>int</em>) – The level of the largest triangles (0 is bounding triangle).</li>
 <li><strong>max_level</strong> (<em>int</em>) – The level of the smallest triangles.</li>
 <li><strong>color1</strong> (<em>color</em>) – The color for half of the triangles.  This can be a function.</li>
@@ -2622,7 +2604,7 @@ not have finite regions.</td>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with outline as clip.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with the outline as clip.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
@@ -2817,10 +2799,10 @@ finite regions.</td>
 <dd><p>Fill a region with a tiling of non-overlapping doodles.</p>
 <dl class="docutils">
 <dt>Argps:</dt>
-<dd>outline (dict|list): A shape or (nested) list of shapes that will become clip.
+<dd>outline (dict|list): A shape or (nested) list of shapes that will become the clip.
 spacing (float): Height/width of each grid cell.
-doodles (list): A list of doodle functions.
-rotate (bool): Place grid in a random rotated orientation.</dd>
+doodles (list): A list of Doodle objects.
+rotate (bool): Whether to place the grid in a random rotated orientation.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

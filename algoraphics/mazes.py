@@ -12,7 +12,6 @@ import copy
 from .main import rotate_path, translate_path, scale_path, bounding_box
 from .main import rotated_bounding_box, add_margin, rotate_shapes, set_style
 from .grid import grid_tree_neighbors
-from .color import rgb_to_hsl
 
 
 def _rotated_piece(path, times):
@@ -481,7 +480,7 @@ def fill_maze_hue_rotate(outline, spacing, style, color):
         dict: A group with clip.
 
     """
-    rotation = rgb_to_hsl(color)[0] * 90
+    rotation = color.hsl()[0] * 90
     # hsl = rgb_to_hsl(color)
     # rotation = (hsl[0] * hsl[1] ** 0.1 * (1 - abs(2 * hsl[2] - 1)) ** 0.1 * 90 + 45) % 90
     x = fill_maze(outline, spacing, style, rotation)

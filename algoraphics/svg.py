@@ -150,11 +150,11 @@ def write_style(style):
 
     """
     style = style.copy()  # keep objects intact for reuse.
-    if 'fill' in style and isinstance(style['fill'], tuple):
+    if 'fill' in style and type(style['fill']) is tuple:
         style['fill'] = ('rgb('
                          + ', '.join([str(x) for x in style['fill']])
                          + ')')
-    if 'stroke' in style and isinstance(style['stroke'], tuple):
+    if 'stroke' in style and type(style['stroke']) is tuple:
         style['stroke'] = ('rgb('
                            + ', '.join([str(x) for x in style['stroke']])
                            + ')')

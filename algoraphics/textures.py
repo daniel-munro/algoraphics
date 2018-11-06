@@ -8,9 +8,10 @@ Add textures and shadows to shapes.
 import random
 
 from .main import add_margin, bounding_box, random_walk
-from .color import map_to_gradient
+from .color import map_colors_to_array, make_color
 from .images import array_to_image
 from .grid import grid_tree_dists
+from .param import fixed_value
 
 
 def add_shadows(objects, stdev=10, darkness=0.5):
@@ -71,7 +72,7 @@ def billowing(w, h, colors, scale, gradient_mode='rgb'):
     Args:
         w (int): Width of the texture.
         h (int): Height of the texture.
-        colors (list): A list of rgb colors to cycle through.
+        colors (list): A list of Colors to cycle through.
         scale (int): Distance in pixels for each color cycle.
         gradient_mode (str): 'rgb' or 'hsl' to choose the appearance of the gradient.
 
@@ -80,7 +81,8 @@ def billowing(w, h, colors, scale, gradient_mode='rgb'):
 
     """
     dists = grid_tree_dists(rows=h, cols=w)
-    mat = map_to_gradient(dists, colors, scale, gradient_mode)
+    values = ((dists % scale) / scale) * len(colors)
+    mat = map_colors_to_array(values, colors, scale, gradient_mode)
     return array_to_image(mat)
 
 
@@ -89,14 +91,17 @@ def billow_region(outline, colors, scale=200, gradient_mode='rgb'):
 
     Args:
         outline (dict|list): The object that will become the clip.
-        colors (list): A list of rgb colors to cycle through.
+        colors (list): A list of Colors to cycle through.
         scale (int): The distance in pixels for each color cycle.
-        gradient_mode (str): 'rgb' or 'hsl' to choose appearance of gradient.
+        gradient_mode (str): 'rgb' or 'hsl' to indicate how the gradient is interpolated.
 
     Returns:
         dict: A group with clip.
 
     """
+    colors = [make_color(color) for color in colors]
+    scale = fixed_value(scale)
+    
     bound = add_margin(bounding_box(outline), 2)
     w = int(bound[1] - bound[0])
     h = int(bound[3] - bound[2])
