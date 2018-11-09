@@ -17,9 +17,7 @@ class Param:
             ratio (float|function|Param): Similar to delta, but is multiplied by, rather than added to, the previous value to get the next.
 
         """
-        if type(x) in (str, int, float):
-            self.value = lambda: x
-        elif delta is not None or ratio is not None:
+        if delta is not None or ratio is not None:
             if x is not None:
                 self.last = x
             elif min is not None and max is not None:
@@ -27,11 +25,16 @@ class Param:
         elif type(x) is list:
             self.values = x
             self.value = lambda: np.random.choice(self.values)
+            try:
+                self.mean = sum(x) / len(x)
+            except TypeError:
+                True
         elif callable(x):
             self.value = x
         else:
-            raise ValueError("For Param, min/max are only used for delta and"
-                             + " ratio bounds.")
+            self.value = lambda: x
+            self.mean = x
+
         if delta is not None:
             self.min = min
             self.max = max
@@ -70,6 +73,7 @@ class Uniform(Param):
     def __init__(self, min=0, max=1):
         self.min = min
         self.max = max
+        self.mean = (min + max) / 2
 
     def value(self):
         return np.random.uniform(self.min, self.max)

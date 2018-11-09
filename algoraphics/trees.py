@@ -8,31 +8,36 @@ Generate trees.
 import random
 
 from .geom import rad, endpoint
+from .param import fixed_value, make_param
 
 
-def tree(start, direction, l_min, l_max, theta, p, p_delta):
+def tree(start, direction, branch_length, theta, p):
     """Generate a tree with randomly terminating branches.
 
     Args:
-        start (point): The starting point.
+        start (tuple): The starting point.
         direction (float|int): The starting direction (in degrees).
-        l_min (float|int): Minimum branch length.
-        l_max (float|int): Maximum branch length.
-        theta (float|int): The angle (in degrees) between sibling branches.
-        p (float): The starting probability that a given branch will split instead of terminating.
-        p_delta (float): The value subtracted from p cumulatively at each branching level.
+        branch_length (Param): Branch length.
+        theta (Param): The angle (in degrees) between sibling branches.
+        p (float): The probability that a given branch will split instead of terminating.  Recommended to have a delta < 0 or ratio < 1 so that the tree is guaranteed to terminate.
 
     Returns:
         list: A list of line shapes.
 
     """
-    angle = rad(direction)
-    length = random.uniform(l_min, l_max)
-    end = endpoint(start, angle, length)
+    start = fixed_value(start)
+    direction = fixed_value(direction)
+    branch_length = make_param(branch_length)
+    theta = make_param(theta)
+    p = make_param(p)
+
+    length = branch_length.value()
+    end = endpoint(start, rad(direction), length)
     x = [dict(type='line', p1=start, p2=end)]
-    if random.random() < p:
-        x.extend(tree(end, direction + theta / 2., l_min, l_max,
-                      theta, p - p_delta, p_delta))
-        x.extend(tree(end, direction - theta / 2., l_min, l_max,
-                      theta, p - p_delta, p_delta))
+    if random.random() < p.value():
+        theta_this = theta.value()
+        x.extend(tree(end, direction + theta_this / 2, branch_length,
+                      theta, p))
+        x.extend(tree(end, direction - theta_this / 2, branch_length,
+                      theta, p))
     return x

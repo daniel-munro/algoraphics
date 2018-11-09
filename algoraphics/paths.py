@@ -9,10 +9,10 @@ import math
 
 from .geom import rotated_point, angle_between, move_toward, distance, endpoint
 from .geom import rad
-from .param import fixed_value
+from .param import fixed_value, make_param
 
 
-def polygon(points):
+def _polygon_path(points):
     """Generate path string for a polygon.
 
     Args:
@@ -29,7 +29,7 @@ def polygon(points):
     return output
 
 
-def spline(points, curvature=0.3, circular=False):
+def _spline_path(points, curvature=0.3, circular=False):
     """Generate path string for spline.
 
     Args:
@@ -72,7 +72,7 @@ def spline(points, curvature=0.3, circular=False):
     return path
 
 
-def write_path(d):
+def _write_path(d):
     """TODO"""
     def pnt(p):
         return str(p[0]) + ' ' + str(p[1])
@@ -99,6 +99,14 @@ def write_path(d):
     return ' '.join([write_path_comp(comp) for comp in d])
 
 
+def polygon(points):
+    return dict(type='polygon', points=points)
+
+
+def spline(points):
+    return dict(type='spline', points=points)
+
+
 def wave(start, direction, width, period, length):
     """Generate a wave spline.
 
@@ -113,21 +121,31 @@ def wave(start, direction, width, period, length):
         dict: A spline shape.
 
     """
+    start = fixed_value(start)
+    direction = fixed_value(direction)
+    width = fixed_value(width)
+    period = make_param(period)
+
     points = [endpoint(start, rad(direction + 90), width / 2.)]
     phase = 0
     ref_point = start
     while distance(start, points[-1]) < length:
         phase = (phase + 1) % 2
-        ref_point = endpoint(ref_point, rad(direction), period / 2.)
+        ref_point = endpoint(ref_point, rad(direction), period.value() / 2.)
         if phase == 0:
             points.append(endpoint(ref_point, rad(direction + 90), width / 2.))
         else:
             points.append(endpoint(ref_point, rad(direction - 90), width / 2.))
-    return dict(type='spline', points=points)
+    return spline(points=points)
 
 
 def rectangle(start=None, w=None, h=None, bounds=None):
     """TODO"""
+    start = (fixed_value(start[0]), fixed_value(start[1]))
+    w = fixed_value(w)
+    h = fixed_value(h)
+    bounds = tuple([fixed_value(b) for b in bounds])
+
     if start is not None:
         assert w is not None and h is not None
         pts = [start,

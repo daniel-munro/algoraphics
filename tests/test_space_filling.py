@@ -3,12 +3,7 @@ import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(script_dir, '..'))
-from algoraphics.space_filling import fill_region, filament_fill
-from algoraphics.main import set_style
-from algoraphics.color import rand_col_from_ranges
-from algoraphics.textures import add_shadows
-from algoraphics.paths import circle
-from algoraphics.svg import write_SVG
+import algoraphics as ag
 
 os.chdir(script_dir)
 
@@ -19,12 +14,16 @@ h = 400
 # Filament fill
 ######################################################################
 
-col = lambda: rand_col_from_ranges(255, range(50, 200), 50)
-outline = circle(c=(200, 200), r=100)
-filfun = filament_fill(col, width=15, l_min=7, l_max=20)
-x = fill_region(outline, filfun)
-add_shadows(x['members'])
+color = ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5))
+outline = ag.circle(c=(200, 200), r=100)
+dir_delta = ag.Uniform(min=-20, max=20)
+width = ag.Uniform(min=8, max=12)
+length = ag.Uniform(min=8, max=12)
+filfun = ag.filament_fill(direction_delta=dir_delta, width=width,
+                          seg_length=length, color=color)
+x = ag.fill_region(outline, filfun)
+ag.add_shadows(x['members'])
 
-write_SVG(x, w, h, 'svg/space_filling1.svg')
+ag.write_SVG(x, w, h, 'svg/space_filling1.svg')
 subprocess.run(['convert', 'svg/space_filling1.svg',
                 'png/space_filling1.png'])

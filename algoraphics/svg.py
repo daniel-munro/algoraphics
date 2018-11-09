@@ -5,14 +5,14 @@ write SVG files.
 
 """
 
-import os
 import random
 import string
 import subprocess
 
 from .main import flatten, scale_shapes, translate_shapes
-from .paths import write_path, spline
+from .paths import _write_path, _spline_path
 from .images import encode_image
+from .color import Color
 
 
 def _match_dict(dicts, d):
@@ -40,7 +40,7 @@ def write_object(obj, defs, filters):
         output = '<polygon points="' + points + '" '
 
     elif obj['type'] == 'path':
-        output = '<path d="' + write_path(obj['d']) + '" '
+        output = '<path d="' + _write_path(obj['d']) + '" '
         # if 'transform' in obj:
         #     output += 'transform="' + obj['transform'] + '" '
         if 'style' in obj and 'fill' not in obj['style']:
@@ -51,7 +51,7 @@ def write_object(obj, defs, filters):
             obj['curvature'] = 0.3
         if 'circular' not in obj:
             obj['circular'] = False
-        d = spline(obj['points'], obj['curvature'], obj['circular'])
+        d = _spline_path(obj['points'], obj['curvature'], obj['circular'])
         output = '<path d="' + d + '" '
         if 'style' in obj and 'fill' not in obj['style']:
             obj['style']['fill'] = 'none'
@@ -151,12 +151,14 @@ def write_style(style):
     """
     style = style.copy()  # keep objects intact for reuse.
     if 'fill' in style and type(style['fill']) is tuple:
+        RGB = Color(hsl=style['fill']).RGB()
         style['fill'] = ('rgb('
-                         + ', '.join([str(x) for x in style['fill']])
+                         + ', '.join([str(x) for x in RGB])
                          + ')')
     if 'stroke' in style and type(style['stroke']) is tuple:
+        RGB = Color(hsl=style['stroke']).RGB()
         style['stroke'] = ('rgb('
-                           + ', '.join([str(x) for x in style['stroke']])
+                           + ', '.join([str(x) for x in RGB])
                            + ')')
 
     if 'stroke' in style and style['stroke'] == 'match':

@@ -169,7 +169,7 @@ def grid_wrapping_paper(rows, cols, spacing, start, doodles):
 def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     """Fill a region with a tiling of non-overlapping doodles.
 
-    Argps:
+    Args:
         outline (dict|list): A shape or (nested) list of shapes that will become the clip.
         spacing (float): Height/width of each grid cell.
         doodles (list): A list of Doodle objects.

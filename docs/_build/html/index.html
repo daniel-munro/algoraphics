@@ -1835,52 +1835,9 @@ directions).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.paths.polygon">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate path string for a polygon.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>list</em>) – A list of points.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG path.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.paths.rectangle">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>TODO</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.paths.spline">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>curvature=0.3</em>, <em>circular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.spline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate path string for spline.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>list</em>) – A list of points.</li>
-<li><strong>curvature</strong> (<em>number</em>) – The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.</li>
-<li><strong>circular</strong> (<em>bool</em>) – If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An SVG path.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="function">
@@ -1910,12 +1867,6 @@ directions).</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="algoraphics.paths.write_path">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">write_path</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.write_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
-</dd></dl>
-
 </div>
 <span class="target" id="module-algoraphics.ripples"></span><div class="section" id="ripples-py">
 <h2>ripples.py<a class="headerlink" href="#ripples-py" title="Permalink to this headline">¶</a></h2>
@@ -1926,10 +1877,10 @@ directions).</p>
 <dd><p>Fill the canvas with ripples.</p>
 <p>The behavior of the ripples is determined by a first-order Markov
 chain in which events correspond to points along splines.  The
-states are ‘s’, ‘r’, ‘l’, and ‘x’.  At ‘s’, the ripple begins in a
-random direction.  At ‘r’, the ripple turns right sharply until
+states are ‘S’, ‘R’, ‘L’, and ‘X’.  At ‘S’, the ripple begins in a
+random direction.  At ‘R’, the ripple turns right sharply until
 encountering a ripple or other barrier, and then follows along it.
-Likewise with ‘l’ turning left.  At ‘x’, the ripple moves straight
+Likewise with ‘L’ turning left.  At ‘X’, the ripple moves straight
 forward +/- up to 60 degrees.  Higher state-changing transition
 probabilities result in more erratic ripples.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1961,18 +1912,17 @@ probabilities result in more erratic ripples.</p>
 <p>Fill regions by iteratively placing randomly generated objects.</p>
 <dl class="function">
 <dt id="algoraphics.space_filling.filament_fill">
-<code class="descclassname">algoraphics.space_filling.</code><code class="descname">filament_fill</code><span class="sig-paren">(</span><em>color_fun</em>, <em>width</em>, <em>l_min</em>, <em>l_max</em>, <em>l_max_step=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.space_filling.filament_fill" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.space_filling.</code><code class="descname">filament_fill</code><span class="sig-paren">(</span><em>direction_delta</em>, <em>width</em>, <em>seg_length</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.space_filling.filament_fill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate filament fill function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>color_fun</strong> (<em>function</em>) – Called for each segment to get fill color.</li>
+<li><strong>direction_delta</strong> (<em>Param</em>) – Parameter that will become the delta for the filament direction.</li>
 <li><strong>width</strong> (<em>float|int</em>) – Width of the filament.</li>
-<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of a segment.</li>
-<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of a segment.</li>
-<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by a random walk, and this will be the maximum step size.</li>
+<li><strong>seg_length</strong> (<em>float|int</em>) – Average side length of each segment.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.</li>
 </ul>
 </td>
 </tr>
@@ -1980,35 +1930,6 @@ probabilities result in more erratic ripples.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">function</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.space_filling.filament_fill_obj">
-<code class="descclassname">algoraphics.space_filling.</code><code class="descname">filament_fill_obj</code><span class="sig-paren">(</span><em>bounds</em>, <em>color_fun</em>, <em>width</em>, <em>l_min</em>, <em>l_max</em>, <em>l_max_step</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.space_filling.filament_fill_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate filament extending into bounds.</p>
-<p>Called indirectly by lambda function produced by filament_fill().</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bounds</strong> (<em>tuple</em>) – A bounds tuple.</li>
-<li><strong>color_fun</strong> (<em>function</em>) – Called for each segment to get fill color.</li>
-<li><strong>width</strong> (<em>float|int</em>) – Width of filament.</li>
-<li><strong>l_min</strong> (<em>float|int</em>) – Minimum side length of segment.</li>
-<li><strong>l_max</strong> (<em>float|int</em>) – Maximum side length of segment.</li>
-<li><strong>l_max_step</strong> (<em>float|int</em>) – If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ordered segment polygons.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
 </td>
 </tr>
 </tbody>
@@ -2762,20 +2683,18 @@ finite regions.</td>
 <p>Generate trees.</p>
 <dl class="function">
 <dt id="algoraphics.trees.tree">
-<code class="descclassname">algoraphics.trees.</code><code class="descname">tree</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>l_min</em>, <em>l_max</em>, <em>theta</em>, <em>p</em>, <em>p_delta</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.trees.tree" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.trees.</code><code class="descname">tree</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>branch_length</em>, <em>theta</em>, <em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.trees.tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a tree with randomly terminating branches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>point</em>) – The starting point.</li>
+<li><strong>start</strong> (<em>tuple</em>) – The starting point.</li>
 <li><strong>direction</strong> (<em>float|int</em>) – The starting direction (in degrees).</li>
-<li><strong>l_min</strong> (<em>float|int</em>) – Minimum branch length.</li>
-<li><strong>l_max</strong> (<em>float|int</em>) – Maximum branch length.</li>
-<li><strong>theta</strong> (<em>float|int</em>) – The angle (in degrees) between sibling branches.</li>
-<li><strong>p</strong> (<em>float</em>) – The starting probability that a given branch will split instead of terminating.</li>
-<li><strong>p_delta</strong> (<em>float</em>) – The value subtracted from p cumulatively at each branching level.</li>
+<li><strong>branch_length</strong> (<em>Param</em>) – Branch length.</li>
+<li><strong>theta</strong> (<em>Param</em>) – The angle (in degrees) between sibling branches.</li>
+<li><strong>p</strong> (<em>float</em>) – The probability that a given branch will split instead of terminating.  Recommended to have a delta &lt; 0 or ratio &lt; 1 so that the tree is guaranteed to terminate.</li>
 </ul>
 </td>
 </tr>
@@ -2797,20 +2716,23 @@ finite regions.</td>
 <dt id="algoraphics.wrapping_paper.fill_wrapping_paper">
 <code class="descclassname">algoraphics.wrapping_paper.</code><code class="descname">fill_wrapping_paper</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing</em>, <em>doodles</em>, <em>rotate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.wrapping_paper.fill_wrapping_paper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill a region with a tiling of non-overlapping doodles.</p>
-<dl class="docutils">
-<dt>Argps:</dt>
-<dd>outline (dict|list): A shape or (nested) list of shapes that will become the clip.
-spacing (float): Height/width of each grid cell.
-doodles (list): A list of Doodle objects.
-rotate (bool): Whether to place the grid in a random rotated orientation.</dd>
-</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A clipped group.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become the clip.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Height/width of each grid cell.</li>
+<li><strong>doodles</strong> (<em>list</em>) – A list of Doodle objects.</li>
+<li><strong>rotate</strong> (<em>bool</em>) – Whether to place the grid in a random rotated orientation.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A clipped group.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
 </tr>
 </tbody>
 </table>

@@ -12,6 +12,8 @@ from .main import add_margin, bounding_box, coverage, flatten, remove_hidden
 from .main import set_style
 from .geom import distance, rand_point_on_circle, deg
 from .filaments import filament
+from .param import Param, make_param
+from .color import make_color
 
 
 def fill_region(outline, object_fun, max_tries=None):
@@ -47,47 +49,51 @@ def fill_region(outline, object_fun, max_tries=None):
     return filled_region
 
 
-def filament_fill_obj(bounds, color_fun, width, l_min, l_max, l_max_step):
+def _filament_fill_obj(bounds, direction_delta, width, seg_length, color):
     """Generate filament extending into bounds.
 
     Called indirectly by lambda function produced by filament_fill().
 
     Args:
         bounds (tuple): A bounds tuple.
-        color_fun (function): Called for each segment to get fill color.
-        width (float|int): Width of filament.
-        l_min (float|int): Minimum side length of segment.
-        l_max (float|int): Maximum side length of segment.
-        l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by random walk, and this will be the maximum step size.
+        direction_delta (Param): Parameter that will become the delta for the filament direction.
+        width (float|int): Width of the filament.
+        seg_length (float|int): Average side length of each segment.
+        color (Color): Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
 
     Returns:
         list: The ordered segment polygons.
 
     """
+    direction_delta = make_param(direction_delta)
+    width = make_param(width)
+    seg_length = make_param(seg_length)
+    color = make_color(color)
+
     c = ((bounds[0] + bounds[1]) / 2., (bounds[2] + bounds[3]) / 2.)
     r = distance(c, (bounds[1], bounds[3]))
     start = rand_point_on_circle(c, r)
     angle = math.atan2(c[1] - start[1], c[0] - start[0])
-    direction = deg(angle) + random.uniform(-60, 60)
-    segments = int(2.2 * r / ((l_min + l_max) / 2.))
-    x = filament(start, direction, width, l_min, l_max, segments, l_max_step)
-    set_style(x, 'fill', color_fun)
+    dir_start = deg(angle) + random.uniform(-60, 60)
+    direction = Param(dir_start, delta=direction_delta)
+    n_segments = int(2.2 * r / seg_length.mean)
+    x = filament(start, direction, width, seg_length, n_segments)
+    set_style(x, 'fill', color)
     return x
 
 
-def filament_fill(color_fun, width, l_min, l_max, l_max_step=None):
+def filament_fill(direction_delta, width, seg_length, color):
     """Generate filament fill function.
 
     Args:
-        color_fun (function): Called for each segment to get fill color.
+        direction_delta (Param): Parameter that will become the delta for the filament direction.
         width (float|int): Width of the filament.
-        l_min (float|int): Minimum side length of a segment.
-        l_max (float|int): Maximum side length of a segment.
-        l_max_step (float|int): If not None, the edge lengths on each side of the filament will be determined by a random walk, and this will be the maximum step size.
+        seg_length (float|int): Average side length of each segment.
+        color (Color): Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
 
     Returns:
         function: A function used by fill_region().
 
     """
-    return lambda bounds: filament_fill_obj(bounds, color_fun, width,
-                                            l_min, l_max, l_max_step)
+    return lambda bounds: _filament_fill_obj(bounds, direction_delta,
+                                             width, seg_length, color)

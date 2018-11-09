@@ -9,28 +9,29 @@ import numpy as np
 
 from .main import add_margin, _markov_next, set_style
 from .geom import rotated_point, rad, endpoint, distance, Rtree
+from .param import fixed_value
 
 
 def _next_point(points, spacing, mode):
     """Continue from last two elements of points."""
     last = points.points[-2:]
-    if mode == 'r':
+    if mode == 'R':
         angle = 60
         angle_inc = 5
         stop_angle = 300
         newpt_fun = lambda ang: rotated_point(last[-2], last[-1], rad(ang))
-    elif mode == 'l':
+    elif mode == 'L':
         angle = 300
         angle_inc = -5
         stop_angle = 60
         newpt_fun = lambda ang: rotated_point(last[-2], last[-1], rad(ang))
-    elif mode == 's':
+    elif mode == 'S':
         angle = np.random.choice(range(360))
         direction = np.random.choice([-1, 1])
         angle_inc = direction * 1
         stop_angle = angle + direction * 359
         newpt_fun = lambda ang: endpoint(last[-1], angle, spacing)
-    elif mode == 'x':
+    elif mode == 'X':
         angle = np.random.choice(range(120, 241))
         direction = np.random.choice([-1, 1])
         angle_inc = direction * 1
@@ -106,10 +107,10 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
 
     The behavior of the ripples is determined by a first-order Markov
     chain in which events correspond to points along splines.  The
-    states are 's', 'r', 'l', and 'x'.  At 's', the ripple begins in a
-    random direction.  At 'r', the ripple turns right sharply until
+    states are 'S', 'R', 'L', and 'X'.  At 'S', the ripple begins in a
+    random direction.  At 'R', the ripple turns right sharply until
     encountering a ripple or other barrier, and then follows along it.
-    Likewise with 'l' turning left.  At 'x', the ripple moves straight
+    Likewise with 'L' turning left.  At 'X', the ripple moves straight
     forward +/- up to 60 degrees.  Higher state-changing transition
     probabilities result in more erratic ripples.
 
@@ -124,8 +125,11 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
         list: The ripple splines.
 
     """
+    w = fixed_value(w)
+    h = fixed_value(h)
+    spacing = fixed_value(spacing)
     if trans_probs is None:
-        trans_probs = dict(s=dict(r=1), r=dict(r=1))
+        trans_probs = dict(S=dict(R=1), R=dict(R=1))
 
     margin = 3
     bounds = add_margin((0, w, 0, h), margin)
@@ -153,7 +157,7 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
     pts = [start]
     allpts.add_point(start)
 
-    mode = 's'
+    mode = 'S'
     more_space = True
     while more_space:
         newpt = _next_point(allpts, spacing, mode)
@@ -167,7 +171,7 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
             if new_start is not None:
                 pts = [new_start]
                 allpts.add_point(new_start)
-                mode = 's'
+                mode = 'S'
             else:
                 more_space = False
 
