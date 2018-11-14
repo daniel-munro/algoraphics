@@ -4,12 +4,6 @@ import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(script_dir, '..'))
 import algoraphics as ag
-# from algoraphics.textures import add_shadows, billow_region, add_paper_texture
-# from algoraphics.textures import tear_paper_rect
-# from algoraphics.paths import rectangle, circle
-# from algoraphics.main import set_style
-# from algoraphics.color import rand_col_from_ranges
-# from algoraphics.svg import write_SVG
 
 os.chdir(script_dir)
 

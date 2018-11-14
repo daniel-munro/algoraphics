@@ -5,10 +5,6 @@ import numpy as np
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(script_dir, '..'))
 import algoraphics as ag
-# from algoraphics.wrapping_paper import fill_wrapping_paper
-# from algoraphics.paths import rectangle, circle
-# from algoraphics.main import set_style
-# from algoraphics.svg import write_SVG
 
 os.chdir(script_dir)
 

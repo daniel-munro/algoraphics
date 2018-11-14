@@ -15,16 +15,25 @@ from .param import fixed_value
 
 class Color:
     """Object to represent a color or distribution of colors."""
-    def __init__(self, hsl=None, hue=None, sat=None, li=None):
-        if hsl is None:
+    def __init__(self, hsl=None, hue=None, sat=None, li=None,
+                 rgb=None, RGB=None):
+        if hue is not None:
+            assert sat is not None and li is not None
             self.hsl = (hue, sat, li)
-        else:
+        elif hsl is not None:
             self.hsl = hsl
+        elif rgb is not None:
+            hue, li, sat = colorsys.rgb_to_hls(*rgb)
+            self.hsl = (hue, sat, li)
+        elif RGB is not None:
+            r, g, b = tuple([x / 255 for x in RGB])
+            hue, li, sat = colorsys.rgb_to_hls(r, g, b)
+            self.hsl = (hue, sat, li)
 
     # def hex(self):
     #     return TODO
     def hex(self):
-        return self.RGB()
+        return matplotlib.colors.to_hex(self.rgb())
 
     def rgb(self):
         hsl = tuple([fixed_value(x) for x in self.hsl])
@@ -55,17 +64,17 @@ def make_color(x):
 #     return (int(r * 255), int(g * 255), int(b * 255))
 
 
-def hex_to_rgb(hx):
-    """Convert hex color to RGB tuple."""
-    if len(hx) == 4:
-        hx = hx[0] + 2 * hx[1] + 2 * hx[2] + 2 * hx[3]
-    rgb = matplotlib.colors.hex2color(hx)
-    return tuple([int(255 * x) for x in rgb])
+# def hex_to_rgb(hx):
+#     """Convert hex color to RGB tuple."""
+#     if len(hx) == 4:
+#         hx = hx[0] + 2 * hx[1] + 2 * hx[2] + 2 * hx[3]
+#     rgb = matplotlib.colors.hex2color(hx)
+#     return tuple([int(255 * x) for x in rgb])
 
 
-def hex_to_hsl(hx):
-    """Convert hex color to HSL tuple."""
-    return rgb_to_hsl(hex_to_rgb(hx))
+# def hex_to_hsl(hx):
+#     """Convert hex color to HSL tuple."""
+#     return rgb_to_hsl(hex_to_rgb(hx))
 
 
 def rgb_array_to_hsv(rgb):
@@ -104,15 +113,18 @@ def rand_col_nearby(color, hue_tol, sat_tol, light_tol):
 def average_color(colors):
     """Find average of list of colors.
 
+    Currently, this finds the arithmetic mean in RGB color space.
+
     Args:
-        colors (list): A list of RGB tuples.
+        colors (list): A list of Color objects.
 
     Returns:
-        tuple: The average color.
+        Color: The average color.
 
     """
-    colors = np.array(colors)
-    return tuple([int(np.mean(colors[:, i])) for i in range(3)])
+    rgbs = [make_color(color).rgb() for color in colors]
+    rgb = tuple([np.mean(component) for component in zip(*rgbs)])
+    return Color(rgb=rgb)
 
 
 def contrasting_lightness(color, light_diff):
@@ -178,14 +190,14 @@ def map_colors_to_array(values, colors, period, gradient_mode='rgb'):
 
     Args:
         values (numpy.ndarray): A 2D array.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).
-        colors (list): A list of Colors.
+        colors (list): A list of Color objects.
         gradient_mode (str): Either 'rgb' or 'hsv' to indicate how the colors are interpolated.
 
     Returns:
         numpy.ndarray: A 3D array of RGB values (RGB mode because this is used for PIL images).
 
     """
-    colors = np.array([color.rgb() for color in colors])
+    colors = np.array([make_color(color).rgb() for color in colors])
     if gradient_mode == 'hsv':
         colors = rgb_array_to_hsv(np.array([colors]))[0, :]
 

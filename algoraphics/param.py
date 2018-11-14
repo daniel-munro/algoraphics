@@ -39,13 +39,13 @@ class Param:
             self.min = min
             self.max = max
             self.delta = delta
-            self.last = self.value()
+            # self.last = self.value()
             self.value = self.value_with_delta
         elif ratio is not None:
             self.min = min
             self.max = max
             self.ratio = ratio
-            self.last = self.value()
+            # self.last = self.value()
             self.value = self.value_with_ratio
 
     def value_with_delta(self):

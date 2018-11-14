@@ -144,7 +144,8 @@ def rectangle(start=None, w=None, h=None, bounds=None):
     start = (fixed_value(start[0]), fixed_value(start[1]))
     w = fixed_value(w)
     h = fixed_value(h)
-    bounds = tuple([fixed_value(b) for b in bounds])
+    if bounds is not None:
+        bounds = tuple([fixed_value(b) for b in bounds])
 
     if start is not None:
         assert w is not None and h is not None

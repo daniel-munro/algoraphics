@@ -17,8 +17,8 @@ from .param import fixed_value
 def add_shadows(objects, stdev=10, darkness=0.5):
     """Add shadows to objects.
 
-    Each item (nested or not) in objects is replaced with a group with
-    shadow filter. So items that are shapes will have their own
+    Each element (nested or not) of the list is replaced with a group
+    with shadow filter. So items that are shapes will have their own
     shadow, while an item that is a (nested) list of shapes will have
     one shadow for the composite object.
 
@@ -72,7 +72,7 @@ def billowing(w, h, colors, scale, gradient_mode='rgb'):
     Args:
         w (int): Width of the texture.
         h (int): Height of the texture.
-        colors (list): A list of Colors to cycle through.
+        colors (list): A list of Color objects to cycle through.
         scale (int): Distance in pixels for each color cycle.
         gradient_mode (str): 'rgb' or 'hsl' to choose the appearance of the gradient.
 
@@ -101,7 +101,7 @@ def billow_region(outline, colors, scale=200, gradient_mode='rgb'):
     """
     colors = [make_color(color) for color in colors]
     scale = fixed_value(scale)
-    
+
     bound = add_margin(bounding_box(outline), 2)
     w = int(bound[1] - bound[0])
     h = int(bound[3] - bound[2])

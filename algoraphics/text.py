@@ -759,7 +759,11 @@ def _rel_char_spacing(char):
         '/': (0.5, 0.5),
         ' ': (2, 2)
     }
-    return spacing[char]
+    if char in spacing:
+        return spacing[char]
+    else:
+        print(char, "isn't currently drawable.")
+        return (0.5, 0.5)
 
 
 def text_points(text, height, pt_spacing, char_spacing=0.1, grouping='points'):

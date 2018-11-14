@@ -19,7 +19,7 @@ from io import BytesIO
 from base64 import b64encode
 
 from .main import sample_points_in_shape, centroid, set_style
-from .color import average_color
+from .color import Color, make_color, average_color
 
 
 def open_image(path):
@@ -100,7 +100,7 @@ def sample_colors(image, points):
         points (list|tuple): A list of image coordinates, or a single coordinate.
 
     Returns:
-        list: A list of colors corresponding to `points`, or a single color if input is a single point.
+        list: A list of `Color` objects corresponding to `points`, or a single color if input is a single point.
 
     """
     if type(points) is tuple:
@@ -110,7 +110,7 @@ def sample_colors(image, points):
     points = [(max(0, p[0]), max(0, p[1])) for p in points]
     points = [(min(p[0], image.size[0] - 1), min(p[1], image.size[1] - 1))
               for p in points]
-    return [pixels[p[0], p[1]] for p in points]
+    return [Color(RGB=pixels[p[0], p[1]]) for p in points]
 
 
 def region_color(outline, image, n_points=10):
@@ -153,14 +153,15 @@ def color_distances(pixels, color):
 
     Args:
         pixels (numpy.ndarray): A 3D array corresponding to RGB pixels.
-        color (rgb): A reference color.
+        color (Color): A reference color.
 
     Returns:
         numpy.ndarray: A 2D array of distances between 0 and 1.
 
     """
+    rgb = make_color(color).rgb()
     x = np.zeros_like(pixels)
-    x[:, :] = color
+    x[:, :] = rgb
     # kL>1 puts less emphasis on lightness
     return deltaE_ciede2000(rgb2lab(pixels), rgb2lab(x), kL=2) / 100.
 

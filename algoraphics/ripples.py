@@ -49,33 +49,6 @@ def _next_point(points, spacing, mode):
             angle += angle_inc
 
 
-# def scan_for_space(bounds, points, spacing):
-#     precision = 5
-#     xvals = np.arange(bounds[0], bounds[1], precision)
-#     yvals = np.arange(bounds[2], bounds[3], precision)
-#     for x in np.random.permutation(xvals):
-#         for y in np.random.permutation(yvals):
-#             neighbors = [p for p in points if distance((x, y), p) <= spacing * 2]
-#             if len(neighbors) <= 5:  # <= 5 still has space somewhere to go
-#                 too_close = [p for p in neighbors if distance((x, y), p) <= spacing]
-#                 if len(too_close) == 0:
-#                     return (x, y)
-#     return None
-
-
-# def scan_for_space(open_space, points, spacing):
-#     print('search...')
-#     while len(open_space) > 0:
-#         newpt = open_space.pop()
-#         neighbors = [p for p in points if distance(newpt, p) <= spacing * 2]
-#         if len(neighbors) <= 5:  # <= 5 still has space somewhere to go
-#             too_close = [p for p in neighbors if distance(newpt, p) <= spacing]
-#             if len(too_close) == 0:
-#                 print('done')
-#                 return newpt
-#     return None
-
-
 def _scan_for_space(open_space, points, spacing):
     """Look for new starting point.
 
