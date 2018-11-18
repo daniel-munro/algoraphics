@@ -659,7 +659,7 @@ the right place.</p>
 <p>Functions for working with colors.</p>
 <dl class="class">
 <dt id="algoraphics.color.Color">
-<em class="property">class </em><code class="descclassname">algoraphics.color.</code><code class="descname">Color</code><span class="sig-paren">(</span><em>hsl=None</em>, <em>hue=None</em>, <em>sat=None</em>, <em>li=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.Color" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">algoraphics.color.</code><code class="descname">Color</code><span class="sig-paren">(</span><em>hsl=None</em>, <em>hue=None</em>, <em>sat=None</em>, <em>li=None</em>, <em>rgb=None</em>, <em>RGB=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.Color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object to represent a color or distribution of colors.</p>
 </dd></dl>
 
@@ -667,15 +667,16 @@ the right place.</p>
 <dt id="algoraphics.color.average_color">
 <code class="descclassname">algoraphics.color.</code><code class="descname">average_color</code><span class="sig-paren">(</span><em>colors</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.average_color" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find average of list of colors.</p>
+<p>Currently, this finds the arithmetic mean in RGB color space.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colors</strong> (<em>list</em>) – A list of RGB tuples.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colors</strong> (<em>list</em>) – A list of Color objects.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The average color.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color">Color</a></td>
 </tr>
 </tbody>
 </table>
@@ -734,18 +735,6 @@ Used to create color pairs for a mixture of light and dark colors.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.hex_to_hsl">
-<code class="descclassname">algoraphics.color.</code><code class="descname">hex_to_hsl</code><span class="sig-paren">(</span><em>hx</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hex_to_hsl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert hex color to HSL tuple.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.color.hex_to_rgb">
-<code class="descclassname">algoraphics.color.</code><code class="descname">hex_to_rgb</code><span class="sig-paren">(</span><em>hx</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hex_to_rgb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert hex color to RGB tuple.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.color.hsv_array_to_rgb">
 <code class="descclassname">algoraphics.color.</code><code class="descname">hsv_array_to_rgb</code><span class="sig-paren">(</span><em>hsv</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.hsv_array_to_rgb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert matrix of HSV values to rgb.</p>
@@ -763,7 +752,7 @@ gradient.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>values</strong> (<em>numpy.ndarray</em>) – A 2D array.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).</li>
-<li><strong>colors</strong> (<em>list</em>) – A list of Colors.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of Color objects.</li>
 <li><strong>gradient_mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsv’ to indicate how the colors are interpolated.</li>
 </ul>
 </td>
@@ -1282,7 +1271,7 @@ cyclical color gradient to create a billowing effect.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pixels</strong> (<em>numpy.ndarray</em>) – A 3D array corresponding to RGB pixels.</li>
-<li><strong>color</strong> (<em>rgb</em>) – A reference color.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – A reference color.</li>
 </ul>
 </td>
 </tr>
@@ -1473,7 +1462,7 @@ scales down.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of colors corresponding to <cite>points</cite>, or a single color if input is a single point.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of <cite>Color</cite> objects corresponding to <cite>points</cite>, or a single color if input is a single point.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -1833,13 +1822,34 @@ directions).</p>
 <dl class="function">
 <dt id="algoraphics.paths.circle">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.circle" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
+<dd><p>Create a circle object.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="algoraphics.paths.rectangle">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.rectangle" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO</p>
+<dd><p>Create a rectangular polygon object.</p>
+<p>Provide either start + w + h or a bounds tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>point</em>) – Bottom left point of the rectangle (unless w or h is negative).</li>
+<li><strong>w</strong> (<em>float|int</em>) – Width of the rectangle.</li>
+<li><strong>h</strong> (<em>float|int</em>) – Height of the rectangle.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – The (x_min, x_max, y_min, y_max) of the rectangle.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A polygon shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -2352,7 +2362,7 @@ one shadow for the composite object.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>w</strong> (<em>int</em>) – Width of the texture.</li>
 <li><strong>h</strong> (<em>int</em>) – Height of the texture.</li>
-<li><strong>colors</strong> (<em>list</em>) – A list of Colors to cycle through.</li>
+<li><strong>colors</strong> (<em>list</em>) – A list of Color objects to cycle through.</li>
 <li><strong>scale</strong> (<em>int</em>) – Distance in pixels for each color cycle.</li>
 <li><strong>gradient_mode</strong> (<em>str</em>) – ‘rgb’ or ‘hsl’ to choose the appearance of the gradient.</li>
 </ul>
@@ -2590,7 +2600,7 @@ somewhat avoided by spacing out their centers.</p>
 
 <dl class="function">
 <dt id="algoraphics.tiling.tile_canvas">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>tile_fun</em>, <em>tile_size</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_canvas" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>tile_fun</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_canvas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill canvas with (uncolored) tiles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

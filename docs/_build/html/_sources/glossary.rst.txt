@@ -6,5 +6,28 @@ term (up to a line of text)
 
    and can even consist of multiple paragraphs
 
-next term
-   Description.
+shape
+
+collection
+
+doodle
+
+region
+
+outline
+
+segment? (image)
+
+image
+
+parameter
+
+point
+
+bounds
+
+margin
+
+path
+
+style

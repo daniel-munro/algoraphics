@@ -140,7 +140,20 @@ def wave(start, direction, width, period, length):
 
 
 def rectangle(start=None, w=None, h=None, bounds=None):
-    """TODO"""
+    """Create a rectangular polygon object.
+
+    Provide either start + w + h or a bounds tuple.
+
+    Args:
+        start (point): Bottom left point of the rectangle (unless w or h is negative).
+        w (float|int): Width of the rectangle.
+        h (float|int): Height of the rectangle.
+        bounds (tuple): The (x_min, x_max, y_min, y_max) of the rectangle.
+
+    Returns:
+        dict: A polygon shape.
+
+    """
     start = (fixed_value(start[0]), fixed_value(start[1]))
     w = fixed_value(w)
     h = fixed_value(h)
@@ -160,7 +173,7 @@ def rectangle(start=None, w=None, h=None, bounds=None):
 
 
 def circle(c, r):
-    """TODO"""
-    c = fixed_value(c)
+    """Create a circle object."""
+    c = (fixed_value(c[0]), fixed_value(c[1]))
     r = fixed_value(r)
     return dict(type='circle', c=c, r=r)

@@ -9,12 +9,12 @@ import math
 import numpy as np
 from scipy import spatial
 
-from .main import set_style, add_margin, bounding_box, geom_seq
+from .main import set_style, add_margin, bounding_box
 from .main import rotated_bounding_box, rotate_shapes, keep_shapes_inside
 from .main import region_background, keep_points_inside, sample_points_in_shape
 from .geom import Rtree, distance, midpoint
 from .paths import circle
-from .param import Param, Exponential, make_param, fixed_value
+from .param import Param, make_param, fixed_value
 
 
 def mitchell_points(n, n_cand, bounds):
@@ -158,7 +158,7 @@ def tile_region(outline, tile_fun, tile_size=500, regularity=10):
     return dict(type='group', clip=outline, members=tiles)
 
 
-def tile_canvas(w, h, tile_fun, tile_size, regularity=10):
+def tile_canvas(w, h, tile_fun, tile_size=500, regularity=10):
     """Fill canvas with (uncolored) tiles.
 
     Args:
