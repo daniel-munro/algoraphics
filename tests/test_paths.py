@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 import numpy as np
@@ -21,8 +20,8 @@ for d in (1 + np.arange(n_waves)) / n_waves:
     wav = ag.wave(start=(200, 200), direction=d * 360, width=d * 20,
                   period=1 + d * 30, length=1 + d * 180)
     ag.set_style(wav, 'stroke', (d, 1, 0.5))
-    ag.set_style(wav, 'stroke_width', d * 2)
+    ag.set_style(wav, 'stroke-width', d * 2)
     x.append(wav)
 
 ag.write_SVG(x, w, h, 'svg/paths1.svg')
-subprocess.run(['convert', 'svg/paths1.svg', 'png/paths1.png'])
+ag.to_PNG('svg/paths1.svg', 'png/paths1.png')

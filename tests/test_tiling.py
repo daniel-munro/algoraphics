@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -23,7 +22,7 @@ colors2 = ag.Color(hue=ag.Param(min=0.6, max=0.8), sat=0.7,
 x = ag.tile_region(outline, ag.voronoi_regions, tile_size=500)
 ag.set_style(x['members'], 'fill', colors1)
 ag.write_SVG(x, w, h, 'svg/tiling1.svg')
-subprocess.run(['convert', 'svg/tiling1.svg', 'png/tiling1.png'])
+ag.to_PNG('svg/tiling1.svg', 'png/tiling1.png')
 
 
 ######################################################################
@@ -33,7 +32,7 @@ subprocess.run(['convert', 'svg/tiling1.svg', 'png/tiling1.png'])
 x = ag.tile_region(outline, ag.delaunay_regions, tile_size=500)
 ag.set_style(x['members'], 'fill', colors1)
 ag.write_SVG(x, w, h, 'svg/tiling2.svg')
-subprocess.run(['convert', 'svg/tiling2.svg', 'png/tiling2.png'])
+ag.to_PNG('svg/tiling2.svg', 'png/tiling2.png')
 
 
 ######################################################################
@@ -44,7 +43,7 @@ x = ag.tile_region(outline, ag.voronoi_edges, tile_size=1000)
 ag.set_style(x['members'], 'stroke', colors2)
 ag.set_style(x['members'], 'stroke_width', 2)
 ag.write_SVG(x, w, h, 'svg/tiling3.svg')
-subprocess.run(['convert', 'svg/tiling3.svg', 'png/tiling3.png'])
+ag.to_PNG('svg/tiling3.svg', 'png/tiling3.png')
 
 
 ######################################################################
@@ -55,7 +54,7 @@ x = ag.tile_region(outline, ag.delaunay_edges, tile_size=1000)
 ag.set_style(x['members'], 'stroke', colors2)
 ag.set_style(x['members'], 'stroke_width', 2)
 ag.write_SVG(x, w, h, 'svg/tiling4.svg')
-subprocess.run(['convert', 'svg/tiling4.svg', 'png/tiling4.png'])
+ag.to_PNG('svg/tiling4.svg', 'png/tiling4.png')
 
 
 ######################################################################
@@ -64,7 +63,7 @@ subprocess.run(['convert', 'svg/tiling4.svg', 'png/tiling4.png'])
 
 x = ag.fill_nested_triangles(outline, min_level=2, max_level=5, color=colors1)
 ag.write_SVG(x, w, h, 'svg/tiling5.svg')
-subprocess.run(['convert', 'svg/tiling5.svg', 'png/tiling5.png'])
+ag.to_PNG('svg/tiling5.svg', 'png/tiling5.png')
 
 
 ######################################################################
@@ -74,4 +73,4 @@ subprocess.run(['convert', 'svg/tiling5.svg', 'png/tiling5.png'])
 x = ag.fill_ishihara_spots(outline)
 ag.set_style(x, 'fill', colors2)
 ag.write_SVG(x, w, h, 'svg/tiling6.svg')
-subprocess.run(['convert', 'svg/tiling6.svg', 'png/tiling6.png'])
+ag.to_PNG('svg/tiling6.svg', 'png/tiling6.png')

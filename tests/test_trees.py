@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -23,4 +22,4 @@ ag.set_style(x, 'stroke', ag.Color(hue=ag.Normal(0.12, stdev=0.05),
                                    sat=ag.Uniform(0.4, 0.7),
                                    li=0.3))
 ag.write_SVG(x, w, h, 'svg/trees1.svg')
-subprocess.run(['convert', 'svg/trees1.svg', 'png/trees1.png'])
+ag.to_PNG('svg/trees1.svg', 'png/trees1.png')

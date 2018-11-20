@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +33,7 @@ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
 x.append(y)
 
 ag.write_SVG(x, w, h, 'svg/text1.svg')
-subprocess.run(['convert', 'svg/text1.svg', 'png/text1.png'])
+ag.to_PNG('svg/text1.svg', 'png/text1.png')
 
 
 ######################################################################
@@ -58,7 +57,7 @@ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
 x.append(y)
 
 ag.write_SVG(x, w, h, 'svg/text2.svg')
-subprocess.run(['convert', 'svg/text2.svg', 'png/text2.png'])
+ag.to_PNG('svg/text2.svg', 'png/text2.png')
 
 
 ######################################################################
@@ -78,7 +77,7 @@ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
 x.append(y)
 
 ag.write_SVG(x, w, h, 'svg/text3.svg')
-subprocess.run(['convert', 'svg/text3.svg', 'png/text3.png'])
+ag.to_PNG('svg/text3.svg', 'png/text3.png')
 
 
 ######################################################################
@@ -96,7 +95,7 @@ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
 x.append(y)
 
 ag.write_SVG(x, w, h, 'svg/text4.svg')
-subprocess.run(['convert', 'svg/text4.svg', 'png/text4.png'])
+ag.to_PNG('svg/text4.svg', 'png/text4.png')
 
 
 ######################################################################
@@ -105,4 +104,4 @@ subprocess.run(['convert', 'svg/text4.svg', 'png/text4.png'])
 
 x = ag.caption("SVG text.", x=w-20, y=20)
 ag.write_SVG(x, w, h, 'svg/text5.svg')
-subprocess.run(['convert', 'svg/text5.svg', 'png/text5.png'])
+ag.to_PNG('svg/text5.svg', 'png/text5.png')

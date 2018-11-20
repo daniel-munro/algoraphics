@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +35,7 @@ x = [path, circles]
 # one behind it.
 ag.add_shadows(x, stdev=20, darkness=0.5)
 ag.write_SVG(x, w, h, 'svg/textures1.svg')
-subprocess.run(['convert', 'svg/textures1.svg', 'png/textures1.png'])
+ag.to_PNG('svg/textures1.svg', 'png/textures1.png')
 
 
 ######################################################################
@@ -52,7 +51,7 @@ colors = [(0, 1, 0.3), (0.6, 1, 0.3)]
 y = ag.billow_region(outline, colors, scale=400, gradient_mode='hsv')
 
 ag.write_SVG([x, y], w, h, 'svg/textures2.svg')
-subprocess.run(['convert', 'svg/textures2.svg', 'png/textures2.png'])
+ag.to_PNG('svg/textures2.svg', 'png/textures2.png')
 
 
 ######################################################################
@@ -67,4 +66,4 @@ ag.add_paper_texture(x)
 x = ag.tear_paper_rect(x, (60, 340, 60, 340))
 
 ag.write_SVG(x, w, h, 'svg/textures3.svg')
-subprocess.run(['convert', 'svg/textures3.svg', 'png/textures3.png'])
+ag.to_PNG('svg/textures3.svg', 'png/textures3.png')

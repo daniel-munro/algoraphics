@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -30,4 +29,4 @@ z = ag.blow_paint_spot((350, 350), length=20)
 ag.set_style(z, 'stroke', 'blue')
 
 ag.write_SVG([x1, x2, y, z], w, h, 'svg/paint1.svg')
-subprocess.run(['convert', 'svg/paint1.svg', 'png/paint1.png'])
+ag.to_PNG('svg/paint1.svg', 'png/paint1.png')

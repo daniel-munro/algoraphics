@@ -1826,6 +1826,18 @@ directions).</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.paths.line">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">line</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a line object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paths.polygon">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a polygon object.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.paths.rectangle">
 <code class="descclassname">algoraphics.paths.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a rectangular polygon object.</p>
@@ -1850,6 +1862,12 @@ directions).</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.paths.spline">
+<code class="descclassname">algoraphics.paths.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a spline object.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1977,6 +1995,24 @@ probabilities result in more erratic ripples.</p>
 <span class="target" id="module-algoraphics.svg"></span><div class="section" id="svg-py">
 <h2>svg.py<a class="headerlink" href="#svg-py" title="Permalink to this headline">¶</a></h2>
 <p>write SVG files.</p>
+<dl class="function">
+<dt id="algoraphics.svg.to_PNG">
+<code class="descclassname">algoraphics.svg.</code><code class="descname">to_PNG</code><span class="sig-paren">(</span><em>infile</em>, <em>outfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.to_PNG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert and SVG file to a PNG image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>infile</strong> (<em>str</em>) – The SVG file name.</li>
+<li><strong>outfile</strong> (<em>str</em>) – The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with ‘.png’.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="algoraphics.svg.write_SVG">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">write_SVG</code><span class="sig-paren">(</span><em>objects</em>, <em>w</em>, <em>h</em>, <em>file_name</em>, <em>optimize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_SVG" title="Permalink to this definition">¶</a></dt>

@@ -22,6 +22,10 @@ class Param:
                 self.last = x
             elif min is not None and max is not None:
                 self.last = np.random.uniform(min, max)
+            else:
+                self.last = 0 if delta is not None else 1
+                # raise TypeError("For a Param with delta or ratio, provide "
+                #                 + "starting value or min and max.")
         elif type(x) is list:
             self.values = x
             self.value = lambda: np.random.choice(self.values)

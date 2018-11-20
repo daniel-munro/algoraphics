@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,5 +24,4 @@ x = ag.fill_region(outline, filfun)
 ag.add_shadows(x['members'])
 
 ag.write_SVG(x, w, h, 'svg/space_filling1.svg')
-subprocess.run(['convert', 'svg/space_filling1.svg',
-                'png/space_filling1.png'])
+ag.to_PNG('svg/space_filling1.svg', 'png/space_filling1.png')

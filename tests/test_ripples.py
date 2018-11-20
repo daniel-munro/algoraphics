@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +18,7 @@ circ = ag.points_on_arc(center=(200, 200), radius=100, theta_start=0,
 x = ag.ripple_canvas(w, h, spacing=10, existing_pts=circ)
 
 ag.write_SVG(x, w, h, 'svg/ripples1.svg')
-subprocess.run(['convert', 'svg/ripples1.svg', 'png/ripples1.png'])
+ag.to_PNG('svg/ripples1.svg', 'png/ripples1.png')
 
 
 ######################################################################
@@ -36,4 +35,4 @@ x = ag.ripple_canvas(w, h, spacing=10, trans_probs=trans_probs,
                      existing_pts=circ)
 
 ag.write_SVG(x, w, h, 'svg/ripples2.svg')
-subprocess.run(['convert', 'svg/ripples2.svg', 'png/ripples2.png'])
+ag.to_PNG('svg/ripples2.svg', 'png/ripples2.png')

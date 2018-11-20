@@ -100,10 +100,12 @@ def _write_path(d):
 
 
 def polygon(points):
+    """Create a polygon object."""
     return dict(type='polygon', points=points)
 
 
 def spline(points):
+    """Create a spline object."""
     return dict(type='spline', points=points)
 
 
@@ -137,6 +139,13 @@ def wave(start, direction, width, period, length):
         else:
             points.append(endpoint(ref_point, rad(direction - 90), width / 2.))
     return spline(points=points)
+
+
+def line(p1, p2):
+    """Create a line object."""
+    p1 = (fixed_value(p1[0]), fixed_value(p1[1]))
+    p2 = (fixed_value(p2[0]), fixed_value(p2[1]))
+    return dict(type='line', p1=p1, p2=p2)
 
 
 def rectangle(start=None, w=None, h=None, bounds=None):

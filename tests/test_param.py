@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +21,7 @@ x = [ag.circle(center, radius) for i in range(100)]
 ag.set_style(x, 'fill', color)
 
 ag.write_SVG(x, w, h, 'svg/param1.svg')
-subprocess.run(['convert', 'svg/param1.svg', 'png/param1.png'])
+ag.to_PNG('svg/param1.svg', 'png/param1.png')
 
 
 ######################################################################
@@ -37,7 +36,7 @@ x = [ag.circle(center, radius) for i in range(100)]
 ag.set_style(x, 'fill', color)
 
 ag.write_SVG(x, w, h, 'svg/param2.svg')
-subprocess.run(['convert', 'svg/param2.svg', 'png/param2.png'])
+ag.to_PNG('svg/param2.svg', 'png/param2.png')
 
 
 ######################################################################
@@ -52,4 +51,43 @@ x = [ag.circle(center, radius) for i in range(100)]
 ag.set_style(x, 'fill', color)
 
 ag.write_SVG(x, w, h, 'svg/param3.svg')
-subprocess.run(['convert', 'svg/param3.svg', 'png/param3.png'])
+ag.to_PNG('svg/param3.svg', 'png/param3.png')
+
+
+######################################################################
+# Nested deltas
+######################################################################
+
+w, h = 400, 200
+x = []
+
+p2y = ag.Param(170, delta=-0.25)
+x.append([ag.line((i * 4, 170), (i * 4, p2y)) for i in range(100)])
+
+p2y = ag.Param(100, min=70, max=130, delta=ag.Uniform(-5, 5))
+x.append([ag.line((i * 4, 100), (i * 4, p2y)) for i in range(100)])
+
+p2y = ag.Param(30, min=0, max=60,
+               delta=ag.Param(0, min=-2, max=2, delta=ag.Uniform(-2, 2)))
+x.append([ag.line((i * 4, 30), (i * 4, p2y)) for i in range(100)])
+
+ag.set_style(x, 'stroke', 'black')
+ag.set_style(x, 'stroke-width', 2)
+
+ag.write_SVG(x, w, h, 'svg/param4.svg')
+ag.to_PNG('svg/param4.svg', 'png/param4.png')
+
+
+######################################################################
+# List param
+######################################################################
+
+w, h = 400, 200
+center = (ag.Uniform(10, w - 10), ag.Uniform(10, h - 10))
+radius = ag.Uniform(5, 15)
+color = ag.Param(['blue', 'blue', 'blue', 'red'])
+x = [ag.circle(center, radius) for i in range(100)]
+ag.set_style(x, 'fill', color)
+
+ag.write_SVG(x, w, h, 'svg/param5.svg')
+ag.to_PNG('svg/param5.svg', 'png/param5.png')

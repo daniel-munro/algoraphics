@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +17,7 @@ x = ag.tile_canvas(w, h, ag.voronoi_regions, tile_size=100)
 ag.fill_shapes_from_image(x, image)
 
 ag.write_SVG(x, w, h, 'svg/images1.svg')
-subprocess.run(['convert', 'svg/images1.svg', 'png/images1.png'])
+ag.to_PNG('svg/images1.svg', 'png/images1.png')
 
 
 ######################################################################
@@ -35,7 +34,7 @@ for outline in x:
 ag.add_paper_texture(x)
 
 ag.write_SVG(x, w, h, 'svg/images2.svg')
-subprocess.run(['convert', 'svg/images2.svg', 'png/images2.png'])
+ag.to_PNG('svg/images2.svg', 'png/images2.png')
 
 
 ######################################################################

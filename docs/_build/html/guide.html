@@ -85,7 +85,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#canvas">Canvas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#objects">Objects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#styles">Styles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#parameters-and-randomness">Parameters and randomness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#colors">Colors</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#output">Output</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
@@ -93,6 +93,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#patterns">Patterns</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#filaments">Filaments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mazes">Mazes</a></li>
 </ul>
 </li>
 </ul>
@@ -174,7 +175,7 @@ corresponding code example with:</p>
 </div>
 <p>and appending this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span><span class="o">.</span><span class="n">write_SVG</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="s1">&#39;test.svg&#39;</span><span class="p">)</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s1">&#39;convert&#39;</span><span class="p">,</span> <span class="s1">&#39;test.svg&#39;</span><span class="p">,</span> <span class="s1">&#39;test.png&#39;</span><span class="p">])</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">to_PNG</span><span class="p">(</span><span class="s1">&#39;test.svg&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="components">
@@ -245,8 +246,8 @@ and returns a polygon defined by its four corners.</p>
 <p>SVG attributes are used to style shapes and are stored as a dictionary
 in each shape’s <cite>style</cite> attribute.</p>
 </div>
-<div class="section" id="parameters-and-randomness">
-<h3>Parameters and randomness<a class="headerlink" href="#parameters-and-randomness" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <p>Many algoraphics functions accept abstract parameters that specify a
 distributiopn to randomly sample from.  This makes it easy to
 incorporate subtle or not-so-subtle randomness into the graphics.  It
@@ -285,20 +286,41 @@ different patterns.</p>
 <p>Parameter object classes for random distributions like Uniform,
 Normal, and Exponential are memoryless.  A parameter can instead have
 a delta attribute, whose value is added to the last value to get the
-next one each time the parameter value is accessed.</p>
-<p>[example]</p>
+next one each time the parameter value is accessed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">170</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+
+<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">130</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+
+<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+               <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke-width&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/param4.png" src="_images/param4.png" />
 <p>The delta attribute can itself be a parameter, which can allow for
-object attributes to be generated as a random walk.</p>
-<p>[example]</p>
+object attributes to be generated as a random walk (middle row of
+lines above).</p>
 <p>If the delta parameter has its own delta attribute, second-order
-changes are produced.</p>
-<p>[example]</p>
+changes are produced (bottom row of lines above).</p>
 <p>Parameters can have a ratio attribute instead of delta, which works
 the same way but multiplies, rather than adds, <code class="docutils literal notranslate"><span class="pre">ratio</span></code> by the last
 value.</p>
 <p>A parameter can also be defined with a list of values, which will be
-uniformly randomly sampled.</p>
-<p>[example, show how duplicate elements can be used in place of weights.]</p>
+uniformly randomly sampled:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span>
+<span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">10</span><span class="p">),</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">([</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/param5.png" src="_images/param5.png" />
 <p>Finally, a parameter can be defined with an arbitrary function, which
 will be called with no arguments to generate values.</p>
 <p>Note that once an object is generated, its parameters are generally
@@ -313,10 +335,14 @@ distribution from which colors will be sampled.</p>
 <p>[example: objects colored using parameterized Color]</p>
 <p>Color values can be defined and retrieved using other color
 specifications.</p>
+<p>Shape color attributes like <cite>fill</cite> and <cite>stroke</cite> can be set with a
+string, which will be used as-is in the SVG file.  This will work for
+hex codes, named colors, etc.</p>
 </div>
 <div class="section" id="output">
 <h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
-<p>Shapes are represented with types that correspond to SVG objects or
+<p>Objects are written to an SVG file using the <cite>write_SVG</cite> function.
+Shapes are represented with types that correspond to SVG objects or
 specific forms of them.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -361,7 +387,8 @@ specific forms of them.</p>
 <p>(how different things are represented in SVG)</p>
 <p>By default, the SVG code is optimized using <cite>svgo</cite>, but this can be
 skipped for more readable SVG code, e.g. for debugging.</p>
-<p>(how to get PNG)</p>
+<p>SVG files can then be converted to PNG files using the <cite>to_PNG</cite>
+function.</p>
 </div>
 <div class="section" id="images">
 <h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
@@ -433,6 +460,46 @@ curves:</p>
 </pre></div>
 </div>
 <img alt="_images/filaments3.png" src="_images/filaments3.png" />
+</div>
+<div class="section" id="mazes">
+<h3>Mazes<a class="headerlink" href="#mazes" title="Permalink to this headline">¶</a></h3>
+<p>These patterns resemble mazes, but are actually random spanning trees:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Straight</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/mazes1.png" src="_images/mazes1.png" />
+<p>The maze style is defined by an instance of a subclass of
+<cite>Maze_Style</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Jagged</span><span class="p">(</span><span class="n">min_w</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">max_w</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/mazes2.png" src="_images/mazes2.png" />
+<p>Each style defines the appearance of five maze components that each
+occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
+cell contains a rotation and/or reflection of one of these components:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Pipes</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.6</span><span class="p">))</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/mazes3.png" src="_images/mazes3.png" />
+<p>The grid can be rotated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Round</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+                 <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/mazes4.png" src="_images/mazes4.png" />
+<p>Custom styles can be used by creating a new subclass of <cite>Maze_Style</cite>.</p>
 </div>
 </div>
 </div>

@@ -8,6 +8,7 @@ write SVG files.
 import random
 import string
 import subprocess
+import os
 
 from .main import flatten, scale_shapes, translate_shapes
 from .paths import _write_path, _spline_path
@@ -167,9 +168,13 @@ def write_style(style):
         else:
             del style['stroke']
 
-    style = [(prop.replace("_", "-"), value) for prop, value in style.items()]
-
-    return ';'.join([prop + ':' + str(value) for prop, value in style])
+    # Originally I used '_' in place of '-' so that style could be
+    # set with dict(), but I don't think it's work the confusion.  if
+    # not using set_style, the dictionary could always be set with
+    # {}.
+    # style = [(prop.replace("_", "-"), value) for prop, value in style.items()]
+    # return ';'.join([prop + ':' + str(value) for prop, value in style])
+    return ';'.join([prop + ':' + str(value) for prop, value in style.items()])
 
 
 def write_filters(filters):
@@ -300,6 +305,20 @@ def write_SVG(objects, w, h, file_name, optimize=True):
             # '--disable=collapseGroups',
             '--input=' + file_name
         ])
+
+
+def to_PNG(infile, outfile=None):
+    """Convert and SVG file to a PNG image.
+
+    Args:
+        infile (str): The SVG file name.
+        outfile (str): The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with '.png'.
+
+    """
+    if outfile is None:
+        inbase = os.path.splitext(infile)[0]
+        outfile = inbase + '.png'
+    subprocess.run(['convert', infile, outfile])
 
 
 def write_frames(fun, n, w, h, file_name):

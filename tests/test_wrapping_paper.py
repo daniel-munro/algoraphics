@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 import numpy as np
@@ -7,6 +6,13 @@ sys.path.insert(0, os.path.join(script_dir, '..'))
 import algoraphics as ag
 
 os.chdir(script_dir)
+
+w = 400
+h = 400
+
+######################################################################
+# Wrapping paper-style object tiling
+######################################################################
 
 
 def doodle1_fun():
@@ -34,14 +40,6 @@ doodle1 = ag.Doodle(doodle1_fun, footprint=np.array([[True]]))
 doodle2 = ag.Doodle(doodle2_fun, footprint=np.array([[True, True]]))
 doodle3 = ag.Doodle(doodle3_fun, footprint=np.array([[True, True, True],
                                                      [False, True, False]]))
-
-w = 400
-h = 400
-
-######################################################################
-# Wrapping paper-style object tiling
-######################################################################
-
 doodles = [doodle1, doodle2, doodle3]
 
 outline = ag.circle(c=(200, 200), r=180)
@@ -49,5 +47,4 @@ outline = ag.circle(c=(200, 200), r=180)
 x = ag.fill_wrapping_paper(outline, 30, doodles, rotate=True)
 
 ag.write_SVG(x, w, h, 'svg/wrapping_paper1.svg')
-subprocess.run(['convert', 'svg/wrapping_paper1.svg',
-                'png/wrapping_paper.png'])
+ag.to_PNG('svg/wrapping_paper1.svg', 'png/wrapping_paper.png')

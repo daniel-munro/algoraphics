@@ -11,7 +11,7 @@ corresponding code example with::
 and appending this::
 
  ag.write_SVG(x, w, h, 'test.svg')
- subprocess.run(['convert', 'test.svg', 'test.png'])
+ ag.to_PNG('test.svg')
 
 
 Components
@@ -61,8 +61,8 @@ Styles
 SVG attributes are used to style shapes and are stored as a dictionary
 in each shape's `style` attribute.
 
-Parameters and randomness
--------------------------
+Parameters
+----------
 
 Many algoraphics functions accept abstract parameters that specify a
 distributiopn to randomly sample from.  This makes it easy to
@@ -106,28 +106,45 @@ or this::
 Parameter object classes for random distributions like Uniform,
 Normal, and Exponential are memoryless.  A parameter can instead have
 a delta attribute, whose value is added to the last value to get the
-next one each time the parameter value is accessed.
+next one each time the parameter value is accessed::
 
-[example]
+ p2y = ag.Param(170, delta=-0.25)
+ x.append([ag.line((i * 4, 170), (i * 4, p2y)) for i in range(100)])
+
+ p2y = ag.Param(100, min=70, max=130, delta=ag.Uniform(-5, 5))
+ x.append([ag.line((i * 4, 100), (i * 4, p2y)) for i in range(100)])
+ 
+ p2y = ag.Param(30, min=0, max=60,
+                delta=ag.Param(0, min=-2, max=2, delta=ag.Uniform(-2, 2)))
+ x.append([ag.line((i * 4, 30), (i * 4, p2y)) for i in range(100)])
+ 
+ ag.set_style(x, 'stroke', 'black')
+ ag.set_style(x, 'stroke-width', 2)
+
+.. image:: ../tests/png/param4.png
 
 The delta attribute can itself be a parameter, which can allow for
-object attributes to be generated as a random walk.
-
-[example]
+object attributes to be generated as a random walk (middle row of
+lines above).
 
 If the delta parameter has its own delta attribute, second-order
-changes are produced.
-
-[example]
+changes are produced (bottom row of lines above).
 
 Parameters can have a ratio attribute instead of delta, which works
 the same way but multiplies, rather than adds, ``ratio`` by the last
 value.
 
 A parameter can also be defined with a list of values, which will be
-uniformly randomly sampled.
+uniformly randomly sampled::
 
-[example, show how duplicate elements can be used in place of weights.]
+ w, h = 400, 200
+ center = (ag.Uniform(10, w - 10), ag.Uniform(10, h - 10))
+ radius = ag.Uniform(5, 15)
+ color = ag.Param(['blue', 'blue', 'blue', 'red'])
+ x = [ag.circle(center, radius) for i in range(100)]
+ ag.set_style(x, 'fill', color)
+
+.. image:: ../tests/png/param5.png
 
 Finally, a parameter can be defined with an arbitrary function, which
 will be called with no arguments to generate values.
@@ -149,10 +166,15 @@ distribution from which colors will be sampled.
 Color values can be defined and retrieved using other color
 specifications.
 
+Shape color attributes like `fill` and `stroke` can be set with a
+string, which will be used as-is in the SVG file.  This will work for
+hex codes, named colors, etc.
+
 
 Output
 ------
 
+Objects are written to an SVG file using the `write_SVG` function.
 Shapes are represented with types that correspond to SVG objects or
 specific forms of them.
 
@@ -175,7 +197,8 @@ text         text
 By default, the SVG code is optimized using `svgo`, but this can be
 skipped for more readable SVG code, e.g. for debugging.
 
-(how to get PNG)
+SVG files can then be converted to PNG files using the `to_PNG`
+function.
 
 
 Images
@@ -257,3 +280,48 @@ A width parameter with decreasing delta or ratio produces a tentacle::
 
 .. image:: ../tests/png/filaments3.png
 
+
+Mazes
+-----
+
+These patterns resemble mazes, but are actually random spanning trees::
+
+ outline = ag.rectangle(bounds=(0, w, 0, h))
+ x = ag.fill_maze(outline, spacing=20,
+                  style=ag.Maze_Style_Straight(rel_thickness=0.2))
+ ag.set_style(x['members'], 'fill', 'blue')
+
+.. image:: ../tests/png/mazes1.png
+
+The maze style is defined by an instance of a subclass of
+`Maze_Style`::
+
+ outline = ag.rectangle(bounds=(0, w, 0, h))
+ x = ag.fill_maze(outline, spacing=20,
+                  style=ag.Maze_Style_Jagged(min_w=0.2, max_w=0.8))
+ ag.set_style(x['members'], 'fill', 'blue')
+
+.. image:: ../tests/png/mazes2.png
+
+Each style defines the appearance of five maze components that each
+occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
+cell contains a rotation and/or reflection of one of these components::
+
+ outline = ag.rectangle(bounds=(0, w, 0, h))
+ x = ag.fill_maze(outline, spacing=20,
+                  style=ag.Maze_Style_Pipes(rel_thickness=0.6))
+ ag.set_style(x['members'], 'fill', 'blue')
+
+.. image:: ../tests/png/mazes3.png
+
+The grid can be rotated::
+
+ outline = ag.rectangle(bounds=(0, w, 0, h))
+ x = ag.fill_maze(outline, spacing=20,
+                  style=ag.Maze_Style_Round(rel_thickness=0.3),
+                  rotation=45)
+ ag.set_style(x['members'], 'fill', 'blue')
+
+.. image:: ../tests/png/mazes4.png
+
+Custom styles can be used by creating a new subclass of `Maze_Style`.

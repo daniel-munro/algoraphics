@@ -1,4 +1,3 @@
-import subprocess
 import os
 import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +26,7 @@ x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
 ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
 
 ag.write_SVG(x, w, h, 'svg/filaments1.svg')
-subprocess.run(['convert', 'svg/filaments1.svg', 'png/filaments1.png'])
+ag.to_PNG('svg/filaments1.svg', 'png/filaments1.png')
 
 
 ######################################################################
@@ -46,8 +45,8 @@ ag.set_style(x, 'fill',
              ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
 # ag.set_style(y, 'fill', ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.35, max=0.55))))
 
-ag.write_SVG(x, w, h, "svg/filaments2.svg")
-subprocess.run(['convert', 'svg/filaments2.svg', 'png/filaments2.png'])
+ag.write_SVG(x, w, h, 'svg/filaments2.svg')
+ag.to_PNG('svg/filaments2.svg', 'png/filaments2.png')
 
 
 ######################################################################
@@ -71,8 +70,8 @@ x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
 ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0.6, max=0.75), 1, 0.5)))
 # ag.set_style(y, 'fill', ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
 
-ag.write_SVG(x, w, h, "svg/filaments3.svg")
-subprocess.run(['convert', 'svg/filaments3.svg', 'png/filaments3.png'])
+ag.write_SVG(x, w, h, 'svg/filaments3.svg')
+ag.to_PNG('svg/filaments3.svg', 'png/filaments3.png')
 
 
 ######################################################################
@@ -97,5 +96,5 @@ ag.set_style(x, 'fill',
              ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
 # ag.set_style(y, 'fill', ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.35, max=0.55))))
 
-ag.write_SVG(x, w, h, "svg/filaments4.svg")
-subprocess.run(['convert', 'svg/filaments4.svg', 'png/filaments4.png'])
+ag.write_SVG(x, w, h, 'svg/filaments4.svg')
+ag.to_PNG('svg/filaments4.svg', 'png/filaments4.png')
