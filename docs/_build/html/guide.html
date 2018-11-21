@@ -91,9 +91,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#patterns">Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structures">Structures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#filaments">Filaments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#blow-paint">Blow paint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trees">Trees</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fills">Fills</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tiling">Tiling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mazes">Mazes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#billowing">Billowing</a></li>
 </ul>
 </li>
 </ul>
@@ -421,8 +428,8 @@ too large:</p>
 <p>[example: regions filled with pattern.]</p>
 </div>
 </div>
-<div class="section" id="patterns">
-<h2>Patterns<a class="headerlink" href="#patterns" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="filaments">
 <h3>Filaments<a class="headerlink" href="#filaments" title="Permalink to this headline">¶</a></h3>
 <p>Filaments made of quadrilateral segments can be generated:</p>
@@ -435,7 +442,7 @@ too large:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hsl</span><span class="o">=</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)))</span>
 </pre></div>
 </div>
-<img alt="_images/filaments1.png" src="_images/filaments1.png" />
+<img alt="_images/structures1.png" src="_images/structures1.png" />
 <p>The direction parameter’s delta or ratio attribute allows the filament
 to move in different directions.  Nested deltas produce smooth
 curves:</p>
@@ -447,19 +454,32 @@ curves:</p>
              <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hsl</span><span class="o">=</span><span class="p">(</span><span class="mf">0.33</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.35</span><span class="p">))))</span>
 </pre></div>
 </div>
-<img alt="_images/filaments2.png" src="_images/filaments2.png" />
-<p>A width parameter with decreasing delta or ratio produces a tentacle:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span>
+<img alt="_images/structures2.png" src="_images/structures2.png" />
+<p>A tentacle is a convenience wrapper for a filament with steadily
+decreasing segment width and length to come to a point at a specified
+total length:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                   <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">)))</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">360</span><span class="p">)[::</span><span class="mi">10</span><span class="p">]]</span>
-<span class="n">n_seg</span> <span class="o">=</span> <span class="mi">30</span>
-<span class="n">width</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mi">10</span><span class="o">/</span><span class="n">n_seg</span><span class="p">)</span>
-<span class="n">length</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mi">5</span><span class="o">/</span><span class="n">n_seg</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">filament</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-                 <span class="n">seg_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">n_segments</span><span class="o">=</span><span class="n">n_seg</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">tentacle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">h</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">length</span><span class="o">=</span><span class="mi">225</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                 <span class="n">seg_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">]</span>
+
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hsl</span><span class="o">=</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.75</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)))</span>
 </pre></div>
 </div>
-<img alt="_images/filaments3.png" src="_images/filaments3.png" />
+<img alt="_images/structures3.png" src="_images/structures3.png" />
+</div>
+<div class="section" id="blow-paint">
+<h3>Blow paint<a class="headerlink" href="#blow-paint" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="trees">
+<h3>Trees<a class="headerlink" href="#trees" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="fills">
+<h2>Fills<a class="headerlink" href="#fills" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tiling">
+<h3>Tiling<a class="headerlink" href="#tiling" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="mazes">
 <h3>Mazes<a class="headerlink" href="#mazes" title="Permalink to this headline">¶</a></h3>
@@ -470,7 +490,7 @@ curves:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/mazes1.png" src="_images/mazes1.png" />
+<img alt="_images/grid1.png" src="_images/grid1.png" />
 <p>The maze style is defined by an instance of a subclass of
 <cite>Maze_Style</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
@@ -479,7 +499,7 @@ curves:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/mazes2.png" src="_images/mazes2.png" />
+<img alt="_images/grid2.png" src="_images/grid2.png" />
 <p>Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
 cell contains a rotation and/or reflection of one of these components:</p>
@@ -489,7 +509,7 @@ cell contains a rotation and/or reflection of one of these components:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/mazes3.png" src="_images/mazes3.png" />
+<img alt="_images/grid3.png" src="_images/grid3.png" />
 <p>The grid can be rotated:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -498,8 +518,11 @@ cell contains a rotation and/or reflection of one of these components:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/mazes4.png" src="_images/mazes4.png" />
+<img alt="_images/grid4.png" src="_images/grid4.png" />
 <p>Custom styles can be used by creating a new subclass of <cite>Maze_Style</cite>.</p>
+</div>
+<div class="section" id="billowing">
+<h3>Billowing<a class="headerlink" href="#billowing" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>

@@ -10,7 +10,8 @@ import string
 import subprocess
 import os
 
-from .main import flatten, scale_shapes, translate_shapes
+from .main import flatten, set_style
+from .shapes import scale_shapes, translate_shapes
 from .paths import _write_path, _spline_path
 from .images import encode_image
 from .color import Color
@@ -42,10 +43,10 @@ def write_object(obj, defs, filters):
 
     elif obj['type'] == 'path':
         output = '<path d="' + _write_path(obj['d']) + '" '
-        # if 'transform' in obj:
-        #     output += 'transform="' + obj['transform'] + '" '
-        if 'style' in obj and 'fill' not in obj['style']:
-            obj['style']['fill'] = 'none'
+        if 'style' not in obj or 'fill' not in obj['style']:
+            set_style(obj, 'fill', 'none')
+            if 'stroke' not in obj['style']:
+                set_style(obj, 'stroke', 'black')
 
     elif obj['type'] == 'spline':
         if 'curvature' not in obj:
@@ -54,8 +55,10 @@ def write_object(obj, defs, filters):
             obj['circular'] = False
         d = _spline_path(obj['points'], obj['curvature'], obj['circular'])
         output = '<path d="' + d + '" '
-        if 'style' in obj and 'fill' not in obj['style']:
-            obj['style']['fill'] = 'none'
+        if 'style' not in obj or 'fill' not in obj['style']:
+            set_style(obj, 'fill', 'none')
+            if 'stroke' not in obj['style']:
+                set_style(obj, 'stroke', 'black')
 
     elif obj['type'] == 'circle':
         output = ('<circle cx="' + str(obj['c'][0]) + '" cy="'
@@ -65,10 +68,14 @@ def write_object(obj, defs, filters):
         output = ('<line x1="' + str(obj['p1'][0]) + '" y1="'
                   + str(obj['p1'][1]) + '" x2="' + str(obj['p2'][0])
                   + '" y2="' + str(obj['p2'][1]) + '" ')
+        if 'style' not in obj or 'stroke' not in obj['style']:
+            set_style(obj, 'stroke', 'black')
 
     elif obj['type'] == 'polyline':
         points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in obj['points']])
         output = '<polyline points="' + points + '" fill="none" '
+        if 'style' not in obj or 'stroke' not in obj['style']:
+            set_style(obj, 'stroke', 'black')
 
     elif obj['type'] == 'text':
         align = obj['align']
@@ -81,10 +88,8 @@ def write_object(obj, defs, filters):
         output = '<text x="' + str(obj['x']) + '" y="' + str(obj['y']) + '" '
         output += 'text-anchor="' + text_anchor + '" '
         output += 'font-size="' + str(obj['font_size']) + '" '
-        # output += 'transform="translate(0, ' + str(2 * obj['y']) + ') scale(1, -1)" '
 
     elif obj['type'] == 'image':
-        # output = '<image x="' + str(obj['x']) + '" y="' + str(obj['y']) + '" width="' + str(obj['width']) + '" height="' + str(obj['height']) + '" xlink:href="' + obj['ref'] + '"'
         output = '<image '
         if 'w' not in obj:
             obj['w'] = obj['image'].width
@@ -104,8 +109,6 @@ def write_object(obj, defs, filters):
         if 'clip' in obj:
             clip_id = ''.join([random.choice(string.ascii_letters) for
                                i in range(8)])
-            # if not isinstance(obj['clip'], list):
-            #     obj['clip'] = [obj['clip']]
             clip = '<clipPath id="' + clip_id + '">\n'
             clip += ''.join([write_object(o, defs, filters) for o in
                              flatten(obj['clip'])])
@@ -126,8 +129,6 @@ def write_object(obj, defs, filters):
 
     if obj['type'] == 'group':
         output += '>\n'
-        # if not isinstance(obj['members'], list):
-        #     obj['members'] = [obj['members']]
         output += ''.join([write_object(o, defs, filters) for o in
                            flatten(obj['members'])])
         output += '</g>\n'

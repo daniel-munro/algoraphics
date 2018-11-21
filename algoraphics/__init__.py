@@ -2,22 +2,18 @@
 
 """
 
-from .main import *
-from .param import *
-from .geom import *
-from .svg import *
-
 from .color import *
-from .filaments import *
+from .fill import *
+from .geom import *
 from .grid import *
 from .images import *
-from .mazes import *
-from .paint import *
+from .main import *
+from .param import *
 from .paths import *
 from .ripples import *
-from .space_filling import *
+from .shapes import *
+from .structures import *
+from .svg import *
 from .text import *
 from .textures import *
 from .tiling import *
-from .trees import *
-from .wrapping_paper import *

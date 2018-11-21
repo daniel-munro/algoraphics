@@ -9,11 +9,11 @@ import math
 import numpy as np
 from scipy import spatial
 
-from .main import set_style, add_margin, bounding_box
-from .main import rotated_bounding_box, rotate_shapes, keep_shapes_inside
-from .main import region_background, keep_points_inside, sample_points_in_shape
+from .main import set_style, add_margin, bounding_box, region_background
+from .shapes import rotated_bounding_box, rotate_shapes, keep_shapes_inside
+from .shapes import keep_points_inside, circle
+from .shapes import sample_points_in_shape
 from .geom import Rtree, distance, midpoint
-from .paths import circle
 from .param import Param, make_param, fixed_value
 
 
@@ -72,7 +72,7 @@ def voronoi_regions(points):
                vor.regions if -1 not in region and len(region) > 0]
     polygons = [dict(type='polygon', points=region) for region in regions]
     set_style(polygons, 'stroke', 'match')
-    set_style(polygons, 'stroke_width', 0.3)
+    set_style(polygons, 'stroke-width', 0.3)
     return polygons
 
 
@@ -109,7 +109,7 @@ def delaunay_regions(points):
     regions = [[points[i] for i in region] for region in tri.simplices]
     polygons = [dict(type='polygon', points=region) for region in regions]
     set_style(polygons, 'stroke', 'match')
-    set_style(polygons, 'stroke_width', 1)
+    set_style(polygons, 'stroke-width', 1)
     return polygons
 
 
@@ -227,8 +227,8 @@ def fill_nested_triangles(outline, min_level, max_level, color=None,
         outline (dict|list): A region outline shape.
         min_level (int): The level of the largest triangles (0 is bounding triangle).
         max_level (int): The level of the smallest triangles.
-        color1 (color): The color for half of the triangles.  This can be a function.
-        color2 (color): The color for the opposing half of the triangles. This can be a function but this half of triangles will all be one color because it is the background.
+        color1 (Color): The color/s for half of the triangles.
+        color2 (Color): The color for the opposing half of the triangles.  This half of triangles will all be one color because it is the background.
 
     Returns:
         dict: A group with the outline as clip.
@@ -243,8 +243,8 @@ def fill_nested_triangles(outline, min_level, max_level, color=None,
     rotate_shapes(triangles, rotation)
     keep_shapes_inside(triangles, outline)
     region = dict(type='group', clip=outline, members=triangles)
-    if color1 is not None:
-        set_style(region['members'], 'fill', color1)
+    if color is not None:
+        set_style(region['members'], 'fill', color)
     if color2 is not None:
         region_background(region, color2)
     return region

@@ -36,6 +36,9 @@ class Param:
         elif callable(x):
             self.value = x
         else:
+            if min is not None and max is not None:
+                raise ValueError("Use min/max only with delta/ratio, or pass "
+                                 + "to Uniform.")
             self.value = lambda: x
             self.mean = x
 

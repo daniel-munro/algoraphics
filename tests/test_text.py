@@ -51,7 +51,7 @@ y = ag.double_dots_text('UVWXYZ', height=40, top_color='#FF8888',
 ag.reposition(y, (w / 2., h - 150), 'center', 'top')
 x.append(y)
 
-y = ag.double_dots_text(".!?:;'/", height=40, top_color='#FF8888',
+y = ag.double_dots_text(".,!?:;'\"/", height=40, top_color='#FF8888',
                         bottom_color='#555555')
 ag.reposition(y, (w / 2., h - 250), 'center', 'top')
 x.append(y)

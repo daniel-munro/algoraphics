@@ -314,15 +314,15 @@ def line_to_polygon(points, width):
     """
 
     pts = []
-    end1 = rotate_and_move(points[0], points[1], -math.pi / 2, width / 2.)
-    end2 = rotate_and_move(points[-1], points[-2], math.pi / 2, width / 2.)
-    end3 = rotate_and_move(points[-1], points[-2], -math.pi / 2, width / 2.)
-    end4 = rotate_and_move(points[0], points[1], math.pi / 2, width / 2.)
+    end1 = rotate_and_move(points[0], points[1], -math.pi / 2, width / 2)
+    end2 = rotate_and_move(points[-1], points[-2], math.pi / 2, width / 2)
+    end3 = rotate_and_move(points[-1], points[-2], -math.pi / 2, width / 2)
+    end4 = rotate_and_move(points[0], points[1], math.pi / 2, width / 2)
     pts.append(end1)
     for i in range(1, len(points) - 1):
         angle = angle_between(points[i - 1], points[i], points[i + 1])
         if angle > rad(10) or angle < -rad(10):
-            dist = (width / 2.) / math.sin(angle / 2)
+            dist = (width / 2) / math.sin(angle / 2)
         else:
             print(angle)
             dist = 0

@@ -236,8 +236,8 @@ Fill functions can be applied and passed representative colors.
 [example: regions filled with pattern.]
 
 
-Patterns
-========
+Structures
+==========
 
 Filaments
 ---------
@@ -252,7 +252,7 @@ Filaments made of quadrilateral segments can be generated::
                   seg_length=length, n_segments=20) for d in dirs]
  ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
 
-.. image:: ../tests/png/filaments1.png
+.. image:: ../tests/png/structures1.png
 
 The direction parameter's delta or ratio attribute allows the filament
 to move in different directions.  Nested deltas produce smooth
@@ -265,20 +265,37 @@ curves::
  ag.set_style(x, 'fill',
               ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
 
-.. image:: ../tests/png/filaments2.png
+.. image:: ../tests/png/structures2.png
 
-A width parameter with decreasing delta or ratio produces a tentacle::
-	   
- dirs = [ag.Param(d, delta=ag.Uniform(min=-30, max=30))
+A tentacle is a convenience wrapper for a filament with steadily
+decreasing segment width and length to come to a point at a specified
+total length::
+
+ dirs = [ag.Param(d, delta=ag.Param(0, min=-20, max=20,
+                                    delta=ag.Uniform(min=-30, max=30)))
          for d in range(360)[::10]]
- n_seg = 30
- width = ag.Param(10, delta=-10/n_seg)
- length = ag.Param(10, delta=-5/n_seg)
- x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
-                  seg_length=length, n_segments=n_seg) for d in dirs]
+ x = [ag.tentacle(start=(w/2, h/2), length=225, direction=d, width=15,
+                  seg_length=10) for d in dirs]
+ 
  ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0.6, max=0.75), 1, 0.5)))
 
-.. image:: ../tests/png/filaments3.png
+.. image:: ../tests/png/structures3.png
+
+
+Blow paint
+----------
+
+
+Trees
+-----
+
+
+Fills
+=====
+
+
+Tiling
+------
 
 
 Mazes
@@ -291,7 +308,7 @@ These patterns resemble mazes, but are actually random spanning trees::
                   style=ag.Maze_Style_Straight(rel_thickness=0.2))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/mazes1.png
+.. image:: ../tests/png/grid1.png
 
 The maze style is defined by an instance of a subclass of
 `Maze_Style`::
@@ -301,7 +318,7 @@ The maze style is defined by an instance of a subclass of
                   style=ag.Maze_Style_Jagged(min_w=0.2, max_w=0.8))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/mazes2.png
+.. image:: ../tests/png/grid2.png
 
 Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
@@ -312,7 +329,7 @@ cell contains a rotation and/or reflection of one of these components::
                   style=ag.Maze_Style_Pipes(rel_thickness=0.6))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/mazes3.png
+.. image:: ../tests/png/grid3.png
 
 The grid can be rotated::
 
@@ -322,6 +339,12 @@ The grid can be rotated::
                   rotation=45)
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/mazes4.png
+.. image:: ../tests/png/grid4.png
 
 Custom styles can be used by creating a new subclass of `Maze_Style`.
+
+
+Billowing
+---------
+
+

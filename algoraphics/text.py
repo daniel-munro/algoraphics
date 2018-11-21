@@ -10,7 +10,7 @@ import random
 
 from .main import shuffled, geom_seq, set_style
 from .geom import points_on_line, points_on_arc, scale_points, translate_points
-from .geom import horizontal_range, jitter_points, endpoint
+from .geom import horizontal_range, jitter_points, endpoint, deg, rotated_point
 
 
 def char_points(char, start, h, spacing):
@@ -667,6 +667,78 @@ def char_points(char, start, h, spacing):
         x.extend(points_on_line(p3, p4, sp))
         points.append(x)
 
+    elif char == '0':
+        r = 0.25
+        p1 = (0, 1 - r)
+        p2 = (0, r)
+        c1 = (r, r)
+        p3 = (2 * r, r)
+        p4 = (2 * r, 1 - r)
+        c2 = (r, 1 - r)
+
+        x = points_on_line(p1, p2, sp)
+        x.extend(points_on_arc(c1, r, 180, 360, sp))
+        x.extend(points_on_line(p3, p4, sp))
+        x.extend(points_on_arc(c2, r, 0, 180, sp))
+        points.append(x)
+
+    elif char == '1':
+        r = 0.2
+        x = points_on_arc((0, 1), r, 270, 360, sp)
+        x.extend(points_on_line((r, 1), (r, 0), sp))
+        points.append(x)
+
+    elif char == '2':
+        x = points_on_arc((0.25, 0.75), 0.25, 180, 0, sp)
+        # Angle between (0, 0), (0.5, 0.75), and center:
+        theta1 = math.atan(3/2)
+        # Angle between (0, 0), center, and (0.5, 0.75):
+        theta2 = math.pi - 2 * theta1
+        d = math.sqrt(0.5**2 + 0.75**2)
+        r = d * math.sin(theta1) / math.sin(theta2)
+        c = (0.5 - r, 0.75)
+        x.extend(points_on_arc(c, r, 0, deg(-theta2), sp))
+        x.extend(points_on_line((0, 0), (0.5, 0), sp))
+        points.append(x)
+
+    elif char == '3':
+        x = points_on_arc((0.25, 0.75), 0.25, 180, -90, sp)
+        x.extend(points_on_arc((0.25, 0.25), 0.25, 90, -180, sp))
+        points.append(x)
+
+    elif char == '4':
+        x = points_on_line((0.5, 0), (0.5, 1), sp)
+        x.extend(points_on_line((0.5, 1), (0, 1/3), sp))
+        x.extend(points_on_line((0, 1/3), (2/3, 1/3), sp))
+        points.append(x)
+
+    elif char == '5':
+        x = points_on_line((2/3, 1), (0, 1), sp)
+        x.extend(points_on_line((0, 1), (0, 2/3), sp))
+        x.extend(points_on_line((0, 2/3), (1/3, 2/3), sp))
+        x.extend(points_on_arc((1/3, 1/3), 1/3, 90, -180, sp))
+        points.append(x)
+
+    elif char == '6':
+        x = points_on_arc((2/3, 1/3), 2/3, 90, 180, sp)
+        x.extend(points_on_arc((1/3, 1/3), 1/3, -180, 180, sp))
+        points.append(x)
+
+    elif char == '7':
+        x = points_on_line((0, 1), (2/3, 1), sp)
+        # x.extend(points_on_line((2/3, 1), (0, 0), sp))
+        cx = 2/3 + 1
+        r = math.sqrt(2)
+        # theta = 180 - deg(math.acos(4/5))
+        theta = 180 - deg(math.acos(1 / r))
+        x.extend(points_on_arc((cx, 0), r, theta, 180, sp))
+        points.append(x)
+
+    elif char == '8':
+        x = points_on_arc((0.25, 0.75), 0.25, -90, 270, sp)
+        x.extend(points_on_arc((0.25, 0.25), 0.25, 90, -270, sp))
+        points.append(x)
+
     elif char == '9':
         x = points_on_arc((0, 2/3), 2/3, 270, 360, sp)
         x.extend(points_on_arc((1/3, 2/3), 1/3, 0, 360, sp))
@@ -677,16 +749,43 @@ def char_points(char, start, h, spacing):
 
         points.append(points_on_arc((r, r), r, 0, 360, sp))
 
+    elif char == ',':
+        points.append(points_on_line((0.2, 0.1), (0, -0.1), sp))
+
     elif char == '!':
         r = 0.05
 
         points.append(points_on_arc((r, r), r, 0, 360, sp))
         points.append(points_on_line((r, 0.3), (r, 1), sp))
 
+    elif char == '?':
+        x = points_on_arc((0.25, 0.75), 0.25, 180, -90, sp)
+        x.extend(points_on_line((0.25, 0.5), (0.25, 0.3), sp))
+        points.append(x)
+
+        r = 0.05
+        points.append(points_on_arc((0.25, r), r, 0, 360, sp))
+
+    elif char == ':':
+        r = 0.05
+
+        points.append(points_on_arc((r, 0.7), r, 0, 360, sp))
+        points.append(points_on_arc((r, r), r, 0, 360, sp))
+
+    elif char == ';':
+        r = 0.05
+
+        points.append(points_on_arc((r, 0.7), r, 0, 360, sp))
+        points.append(points_on_line((0.2, 0.1), (0, -0.1), sp))
+
     elif char == "'":
         p1 = (0, 1)
         p2 = (0, 0.9)
         points.append(points_on_line(p1, p2, sp))
+
+    elif char == '"':
+        points.append(points_on_line((0, 1), (0, 0.9), sp))
+        points.append(points_on_line((0.2, 1), (0.2, 0.9), sp))
 
     elif char == '/':
         points.append(points_on_line((0, 0), (0.5, 1), sp))
@@ -752,10 +851,24 @@ def _rel_char_spacing(char):
         'x': (0.5, 0.5),
         'y': (0.5, 0.5),
         'z': (0.5, 0.5),
+        '0': (0.75, 0.75),
+        '1': (0.5, 1),
+        '2': (0.5, 0.75),
+        '3': (0.5, 0.75),
+        '4': (0.5, 0.5),
+        '5': (1, 0.75),
+        '6': (0.75, 0.75),
+        '7': (0.5, 0.5),
+        '8': (0.75, 0.75),
         '9': (0.75, 0.75),
         '.': (0.5, 0.5),
+        ',': (0.5, 0.5),
         '!': (0.75, 0.75),
+        '?': (0.5, 0.75),
+        ':': (0.5, 0.5),
+        ';': (0.5, 0.5),
         "'": (0.5, 0.5),
+        '"': (0.5, 0.5),
         '/': (0.5, 0.5),
         ' ': (2, 2)
     }

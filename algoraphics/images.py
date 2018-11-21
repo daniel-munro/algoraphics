@@ -18,7 +18,8 @@ from skimage.filters import gaussian
 from io import BytesIO
 from base64 import b64encode
 
-from .main import sample_points_in_shape, centroid, set_style
+from .main import set_style
+from .shapes import sample_points_in_shape, centroid
 from .color import Color, make_color, average_color
 
 

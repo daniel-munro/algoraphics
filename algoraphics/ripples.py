@@ -7,7 +7,7 @@ Create space-filling ripple effects.
 
 import numpy as np
 
-from .main import add_margin, _markov_next, set_style
+from .main import _markov_next, set_style, add_margin
 from .geom import rotated_point, rad, endpoint, distance, Rtree
 from .param import fixed_value
 

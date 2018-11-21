@@ -7,9 +7,8 @@ Generate path strings.
 
 import math
 
-from .geom import rotated_point, angle_between, move_toward, distance, endpoint
-from .geom import rad
-from .param import fixed_value, make_param
+from .geom import translated_point, rotated_point, scaled_point, angle_between
+from .geom import move_toward, distance, rad
 
 
 def _polygon_path(points):
@@ -99,90 +98,58 @@ def _write_path(d):
     return ' '.join([write_path_comp(comp) for comp in d])
 
 
-def polygon(points):
-    """Create a polygon object."""
-    return dict(type='polygon', points=points)
+def path_points(path):
+    """Get skeleton points of path.
 
-
-def spline(points):
-    """Create a spline object."""
-    return dict(type='spline', points=points)
-
-
-def wave(start, direction, width, period, length):
-    """Generate a wave spline.
-
-    Args:
-        start (point): Starting point of the wave.
-        direction (float|int): Direction (in degrees) of the wave.
-        width (float|int): The total amplitude of the wave from peak to trough.
-        period (float|int): Period of the wave.
-        length (float|int): End-to-end length of the wave.
-
-    Returns:
-        dict: A spline shape.
+    Useful for finding an approximate bounding box for a path.
 
     """
-    start = fixed_value(start)
-    direction = fixed_value(direction)
-    width = fixed_value(width)
-    period = make_param(period)
-
-    points = [endpoint(start, rad(direction + 90), width / 2.)]
-    phase = 0
-    ref_point = start
-    while distance(start, points[-1]) < length:
-        phase = (phase + 1) % 2
-        ref_point = endpoint(ref_point, rad(direction), period.value() / 2.)
-        if phase == 0:
-            points.append(endpoint(ref_point, rad(direction + 90), width / 2.))
-        else:
-            points.append(endpoint(ref_point, rad(direction - 90), width / 2.))
-    return spline(points=points)
+    pts = []
+    for cmd in path['d']:
+        if 'to' in cmd:
+            pts.append(cmd['to'])
+    return pts
 
 
-def line(p1, p2):
-    """Create a line object."""
-    p1 = (fixed_value(p1[0]), fixed_value(p1[1]))
-    p2 = (fixed_value(p2[0]), fixed_value(p2[1]))
-    return dict(type='line', p1=p1, p2=p2)
+def translate_path(path, dx, dy):
+    """TODO"""
+    for comp in path:
+        if comp['command'] in ['M', 'L', 'A']:
+            comp['to'] = translated_point(comp['to'], dx, dy)
+        elif comp['command'] == 'C':
+            comp['c1'] = translated_point(comp['c1'], dx, dy)
+            comp['c2'] = translated_point(comp['c2'], dx, dy)
+            comp['to'] = translated_point(comp['to'], dx, dy)
 
 
-def rectangle(start=None, w=None, h=None, bounds=None):
-    """Create a rectangular polygon object.
-
-    Provide either start + w + h or a bounds tuple.
-
-    Args:
-        start (point): Bottom left point of the rectangle (unless w or h is negative).
-        w (float|int): Width of the rectangle.
-        h (float|int): Height of the rectangle.
-        bounds (tuple): The (x_min, x_max, y_min, y_max) of the rectangle.
-
-    Returns:
-        dict: A polygon shape.
-
-    """
-    start = (fixed_value(start[0]), fixed_value(start[1]))
-    w = fixed_value(w)
-    h = fixed_value(h)
-    if bounds is not None:
-        bounds = tuple([fixed_value(b) for b in bounds])
-
-    if start is not None:
-        assert w is not None and h is not None
-        pts = [start,
-               (start[0] + w, start[1]),
-               (start[0] + w, start[1] + h),
-               (start[0], start[1] + h)]
-    else:
-        pts = [(bounds[0], bounds[2]), (bounds[1], bounds[2]),
-               (bounds[1], bounds[3]), (bounds[0], bounds[3])]
-    return dict(type='polygon', points=pts)
+def rotate_path(path, angle, pivot=(0, 0)):
+    """TODO"""
+    for comp in path:
+        if comp['command'] in ['M', 'L']:
+            comp['to'] = rotated_point(comp['to'], pivot, rad(angle))
+        elif comp['command'] == 'C':
+            comp['c1'] = rotated_point(comp['c1'], pivot, rad(angle))
+            comp['c2'] = rotated_point(comp['c2'], pivot, rad(angle))
+            comp['to'] = rotated_point(comp['to'], pivot, rad(angle))
+        elif comp['command'] == 'A':
+            # for now I'm using a single r instead of rx and ry
+            # if comp['rx'] != comp['ry']:
+                # comp['rotation'] = (comp['rotation'] + angle) % 360
+            comp['to'] = rotated_point(comp['to'], pivot, rad(angle))
 
 
-def circle(c, r):
-    """Create a circle object."""
-    c = (fixed_value(c[0]), fixed_value(c[1]))
-    r = fixed_value(r)
-    return dict(type='circle', c=c, r=r)
+def scale_path(path, cx, cy=None):
+    """Resize path by a factor (radii currently scale by cx)."""
+    cy = cx if cy is None else cy
+    for comp in path:
+        if comp['command'] in ['M', 'L']:
+            comp['to'] = scaled_point(comp['to'], cx, cy)
+        elif comp['command'] == 'C':
+            comp['c1'] = scaled_point(comp['c1'], cx, cy)
+            comp['c2'] = scaled_point(comp['c2'], cx, cy)
+            comp['to'] = scaled_point(comp['to'], cx, cy)
+        elif comp['command'] == 'A':
+            comp['r'] *= abs(cx)
+            if cx * cy < 0:
+                comp['positive'] = not comp['positive']
+            comp['to'] = scaled_point(comp['to'], cx, cy)

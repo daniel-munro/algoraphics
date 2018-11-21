@@ -30,8 +30,6 @@ class Color:
             hue, li, sat = colorsys.rgb_to_hls(r, g, b)
             self.hsl = (hue, sat, li)
 
-    # def hex(self):
-    #     return TODO
     def hex(self):
         return matplotlib.colors.to_hex(self.rgb())
 
