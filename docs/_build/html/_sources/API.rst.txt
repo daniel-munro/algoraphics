@@ -1,13 +1,10 @@
 API
 ===
 
-.. automodule:: algoraphics.main
-   :members:
-
 .. automodule:: algoraphics.color
    :members:
 
-.. automodule:: algoraphics.filaments
+.. automodule:: algoraphics.fill
    :members:
 
 .. automodule:: algoraphics.geom
@@ -19,10 +16,10 @@ API
 .. automodule:: algoraphics.images
    :members:
 
-.. automodule:: algoraphics.mazes
+.. automodule:: algoraphics.main
    :members:
 
-.. automodule:: algoraphics.paint
+.. automodule:: algoraphics.param
    :members:
 
 .. automodule:: algoraphics.paths
@@ -31,7 +28,10 @@ API
 .. automodule:: algoraphics.ripples
    :members:
 
-.. automodule:: algoraphics.space_filling
+.. automodule:: algoraphics.shapes
+   :members:
+
+.. automodule:: algoraphics.structures
    :members:
 
 .. automodule:: algoraphics.svg
@@ -44,10 +44,4 @@ API
    :members:
 
 .. automodule:: algoraphics.tiling
-   :members:
-
-.. automodule:: algoraphics.trees
-   :members:
-
-.. automodule:: algoraphics.wrapping_paper
    :members:

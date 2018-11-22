@@ -92,6 +92,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#text">Text</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#filaments">Filaments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#blow-paint">Blow paint</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#trees">Trees</a></li>
@@ -100,9 +101,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#fills">Fills</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#tiling">Tiling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mazes">Mazes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#billowing">Billowing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doodles">Doodles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-fills">Other fills</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#effects">Effects</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
@@ -242,6 +245,9 @@ ignored).</p>
 </tr>
 </tbody>
 </table>
+<p>Objects can be stored in nested lists without affecting their
+rendering.  The purpose of groups is to apply things like clipping and
+shadows to a collection of shapes.</p>
 <p>Convenience functions like <cite>circle</cite> exist that simply return a
 dictionary.  Functions also exist to define shapes in alternative ways
 for convenience.  For example, the <cite>rectangle</cite> function accepts a
@@ -304,7 +310,6 @@ next one each time the parameter value is accessed:</p>
                <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
 
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke-width&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -338,8 +343,15 @@ static.</p>
 <p>Colors are represented as objects of the Color class.  They are
 generally defined in the HSL (hue, saturation, lightness) color space.
 If these are supplied as Param objects, the objects represents a
-distribution from which colors will be sampled.</p>
-<p>[example: objects colored using parameterized Color]</p>
+distribution from which colors will be sampled:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                 <span class="n">li</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_ishihara_spots</span><span class="p">(</span><span class="n">outline</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/fill3.png" src="_images/fill3.png" />
 <p>Color values can be defined and retrieved using other color
 specifications.</p>
 <p>Shape color attributes like <cite>fill</cite> and <cite>stroke</cite> can be set with a
@@ -391,7 +403,9 @@ specific forms of them.</p>
 </tr>
 </tbody>
 </table>
-<p>(how different things are represented in SVG)</p>
+<p>SVG-rendered effects like shadows and paper texture applied to objects
+become references to SVG filters, which are defined at the beginning
+of the SVG file.</p>
 <p>By default, the SVG code is optimized using <cite>svgo</cite>, but this can be
 skipped for more readable SVG code, e.g. for debugging.</p>
 <p>SVG files can then be converted to PNG files using the <cite>to_PNG</cite>
@@ -424,12 +438,107 @@ too large:</p>
 </pre></div>
 </div>
 <img alt="_images/images2.png" src="_images/images2.png" />
-<p>Fill functions can be applied and passed representative colors.</p>
-<p>[example: regions filled with pattern.]</p>
+<p>Fill functions can be applied and passed representative colors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">open_image</span><span class="p">(</span><span class="s2">&quot;test_images.jpg&quot;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">image_regions</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">smoothness</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">outline</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">region_color</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+    <span class="n">maze</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Pipes</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze_hue_rotate</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">maze</span><span class="p">,</span>
+                                   <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">region_background</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ag</span><span class="o">.</span><span class="n">contrasting_lightness</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">light_diff</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">add_paper_texture</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/images3.png" src="_images/images3.png" />
 </div>
 </div>
 <div class="section" id="structures">
 <h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="text">
+<h3>Text<a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
+<p>Text can be created and stylized.  Characters are generated as nested
+lists of points (one list per continuous pen stroke) along their
+form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;ABCDEFG&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;HIJKLM&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;0123456789&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/text1.png" src="_images/text1.png" />
+<p>These points can then be manipulated in many ways:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s1">&#39;NOPQRST&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s1">&#39;UVWXYZ&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">top_color</span><span class="o">=</span><span class="s1">&#39;#FF8888&#39;</span><span class="p">,</span>
+                        <span class="n">bottom_color</span><span class="o">=</span><span class="s1">&#39;#555555&#39;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s2">&quot;.,!?:;&#39;</span><span class="se">\&quot;</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">top_color</span><span class="o">=</span><span class="s1">&#39;#FF8888&#39;</span><span class="p">,</span>
+                        <span class="n">bottom_color</span><span class="o">=</span><span class="s1">&#39;#555555&#39;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/text2.png" src="_images/text2.png" />
+<p>Currently only the characters displayed in these examples are
+provided, though additional ones can be added on request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">hazy_text</span><span class="p">(</span><span class="s1">&#39;abcdefg&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">min_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">hazy_text</span><span class="p">(</span><span class="s1">&#39;hijklm&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">min_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/text3.png" src="_images/text3.png" />
+<p>Since generated points are grouped by continuous pen strokes, points
+within each list can be joined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">squiggle_text</span><span class="p">(</span><span class="s1">&#39;nopqrst&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">squiggle_text</span><span class="p">(</span><span class="s1">&#39;uvwxyz&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/text4.png" src="_images/text4.png" />
+<p>Actual SVG text can also be produced:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">100</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">&quot;SVG text.&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">w</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/text5.png" src="_images/text5.png" />
+</div>
 <div class="section" id="filaments">
 <h3>Filaments<a class="headerlink" href="#filaments" title="Permalink to this headline">¶</a></h3>
 <p>Filaments made of quadrilateral segments can be generated:</p>
@@ -471,15 +580,82 @@ total length:</p>
 </div>
 <div class="section" id="blow-paint">
 <h3>Blow paint<a class="headerlink" href="#blow-paint" title="Permalink to this headline">¶</a></h3>
+<p>Blow painting effects (i.e., droplets of paint blown outward from an
+object) can be created for 0D, 1D, and 2D objects:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pts1</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">70</span><span class="p">),</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">130</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">60</span><span class="p">)]</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">blow_paint_area</span><span class="p">(</span><span class="n">pts1</span><span class="p">)</span>
+
+<span class="n">pts2</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">)]</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">blow_paint_area</span><span class="p">(</span><span class="n">pts2</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">len_dev</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+
+<span class="n">pts3</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">350</span><span class="p">),</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">)]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">blow_paint_line</span><span class="p">(</span><span class="n">pts3</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                       <span class="n">len_dev</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">blow_paint_spot</span><span class="p">((</span><span class="mi">350</span><span class="p">,</span> <span class="mi">350</span><span class="p">),</span> <span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="s1">&#39;stroke&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/structures4.png" src="_images/structures4.png" />
 </div>
 <div class="section" id="trees">
 <h3>Trees<a class="headerlink" href="#trees" title="Permalink to this headline">¶</a></h3>
+<p>Trees with randomly bifurcating branches can be generated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">tree</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+             <span class="n">branch_length</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+             <span class="n">theta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+             <span class="n">p</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mf">0.08</span><span class="p">))</span>
+     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">360</span><span class="p">)[::</span><span class="mi">20</span><span class="p">]]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke&#39;</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.05</span><span class="p">),</span>
+                                   <span class="n">sat</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
+                                   <span class="n">li</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="_images/structures5.png" src="_images/structures5.png" />
 </div>
 </div>
 <div class="section" id="fills">
 <h2>Fills<a class="headerlink" href="#fills" title="Permalink to this headline">¶</a></h2>
+<p>These functions fill a region with structures and patterns.</p>
 <div class="section" id="tiling">
 <h3>Tiling<a class="headerlink" href="#tiling" title="Permalink to this headline">¶</a></h3>
+<p>These functions divide a region’s area into tiles.</p>
+<p>Random polygonal (i.e. Voronoi) tiles can be generated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tile_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">voronoi_regions</span><span class="p">,</span> <span class="n">tile_size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/tiling1.png" src="_images/tiling1.png" />
+<p>Random triangular (i.e. Delaunay) tiles can be generated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tile_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">delaunay_regions</span><span class="p">,</span> <span class="n">tile_size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/tiling2.png" src="_images/tiling2.png" />
+<p>The edges between polygonal or triangular tiles can be created instead:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                  <span class="n">li</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tile_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">voronoi_edges</span><span class="p">,</span> <span class="n">tile_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;stroke&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;stroke-width&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/tiling3.png" src="_images/tiling3.png" />
+<p>Nested equilateral triangles can be created, with the level of nesting
+random but specifiable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_nested_triangles</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">min_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_level</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/tiling5.png" src="_images/tiling5.png" />
 </div>
 <div class="section" id="mazes">
 <h3>Mazes<a class="headerlink" href="#mazes" title="Permalink to this headline">¶</a></h3>
@@ -521,9 +697,102 @@ cell contains a rotation and/or reflection of one of these components:</p>
 <img alt="_images/grid4.png" src="_images/grid4.png" />
 <p>Custom styles can be used by creating a new subclass of <cite>Maze_Style</cite>.</p>
 </div>
-<div class="section" id="billowing">
-<h3>Billowing<a class="headerlink" href="#billowing" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="doodles">
+<h3>Doodles<a class="headerlink" href="#doodles" title="Permalink to this headline">¶</a></h3>
+<p>Small arbitrary objects, a.k.a. doodles, can be tiled to fill a
+region, creating a wrapping paper-type pattern.  The ‘footprint’, or
+shape of grid cells occupied, for each doodle is used to place
+different doodles in random orientations to fill a grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">doodle1_fun</span><span class="p">():</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.45</span><span class="p">)</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span>
+
+<span class="k">def</span> <span class="nf">doodle2_fun</span><span class="p">():</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.45</span><span class="p">),</span>
+         <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.45</span><span class="p">),</span>
+         <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.45</span><span class="p">)]</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span>
+
+<span class="k">def</span> <span class="nf">doodle3_fun</span><span class="p">():</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span> <span class="n">w</span><span class="o">=</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.6</span><span class="p">),</span>
+         <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">w</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">1.6</span><span class="p">)]</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span>
+
+<span class="n">doodle1</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Doodle</span><span class="p">(</span><span class="n">doodle1_fun</span><span class="p">,</span> <span class="n">footprint</span><span class="o">=</span><span class="p">[[</span><span class="kc">True</span><span class="p">]])</span>
+<span class="n">doodle2</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Doodle</span><span class="p">(</span><span class="n">doodle2_fun</span><span class="p">,</span> <span class="n">footprint</span><span class="o">=</span><span class="p">[[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]])</span>
+<span class="n">doodle3</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Doodle</span><span class="p">(</span><span class="n">doodle3_fun</span><span class="p">,</span> <span class="n">footprint</span><span class="o">=</span><span class="p">[[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span>
+                                            <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]])</span>
+<span class="n">doodles</span> <span class="o">=</span> <span class="p">[</span><span class="n">doodle1</span><span class="p">,</span> <span class="n">doodle2</span><span class="p">,</span> <span class="n">doodle3</span><span class="p">]</span>
+<span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_wrapping_paper</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">doodles</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
 </div>
+<img alt="_images/fill2.png" src="_images/fill2.png" />
+<p>Each doodle is defined by creating a Doodle instance with a generating
+function and footprint specification.  This allows each doodle to vary
+in appearance as long as it conforms to the footprint.</p>
+</div>
+<div class="section" id="other-fills">
+<h3>Other fills<a class="headerlink" href="#other-fills" title="Permalink to this headline">¶</a></h3>
+<p>Ripples can fill the canvas while avoiding specified points:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">circ</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">points_on_arc</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">theta_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">theta_end</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">ripple_canvas</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">existing_pts</span><span class="o">=</span><span class="n">circ</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/ripples1.png" src="_images/ripples1.png" />
+<p>They are generated by a Markov chain telling them when to follow a
+boundary on the left, on the right, or to change direction.  The
+transition probabilities for the Markov chain can be specified to
+alter the appearance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trans_probs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">S</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                   <span class="n">R</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">R</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="mf">0.05</span><span class="p">),</span>
+                   <span class="n">L</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="mf">0.05</span><span class="p">),</span>
+                   <span class="n">X</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">R</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="n">circ</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">points_on_arc</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">radius</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">theta_start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">theta_end</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">ripple_canvas</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">trans_probs</span><span class="o">=</span><span class="n">trans_probs</span><span class="p">,</span>
+                     <span class="n">existing_pts</span><span class="o">=</span><span class="n">circ</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/ripples2.png" src="_images/ripples2.png" />
+<p>A billowing texture is produced by generating a random spanning tree
+across a grid of pixels, and then moving through the tree and coloring
+them with a cyclical color gradient:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">billow_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">gradient_mode</span><span class="o">=</span><span class="s1">&#39;rgb&#39;</span><span class="p">)</span>
+
+<span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">280</span><span class="p">,</span> <span class="mi">280</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">billow_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">gradient_mode</span><span class="o">=</span><span class="s1">&#39;hsv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/textures2.png" src="_images/textures2.png" />
+<p>Objects like filaments can be filled using a generic function that
+generates random instances of the object and places them until the
+region is filled:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hsl</span><span class="o">=</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">dir_delta</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">length</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">filfun</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">filament_fill</span><span class="p">(</span><span class="n">direction_delta</span><span class="o">=</span><span class="n">dir_delta</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                          <span class="n">seg_length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_region</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">filfun</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">add_shadows</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="_images/fill1.png" src="_images/fill1.png" />
+</div>
+</div>
+<div class="section" id="effects">
+<h2>Effects<a class="headerlink" href="#effects" title="Permalink to this headline">¶</a></h2>
+<p>[shadows]</p>
+<p>[paper texture, torn paper edge]</p>
 </div>
 </div>
 

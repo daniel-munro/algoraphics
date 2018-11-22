@@ -30,11 +30,14 @@ class Color:
             hue, li, sat = colorsys.rgb_to_hls(r, g, b)
             self.hsl = (hue, sat, li)
 
+    def value(self):
+        return tuple([fixed_value(x) for x in self.hsl])
+
     def hex(self):
         return matplotlib.colors.to_hex(self.rgb())
 
     def rgb(self):
-        hsl = tuple([fixed_value(x) for x in self.hsl])
+        hsl = self.value()
         return colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
 
     def RGB(self):
@@ -86,26 +89,26 @@ def hsv_array_to_rgb(hsv):
     return matplotlib.colors.hsv_to_rgb(hsv)
 
 
-def rand_col_nearby(color, hue_tol, sat_tol, light_tol):
-    """Select random color within range of reference color.
+# def rand_col_nearby(color, hue_tol, sat_tol, light_tol):
+#     """Select random color within range of reference color.
 
-    Args:
-        color (tuple): An RGB tuple.
-        hue_tol (float): Maximum hue deviation, usually 0 to 0.5.
-        sat_tol (float): Maximum saturation deviation, usually 0 to 1.
-        light_tol (float): Maximum lightness deviation, usually 0 to 1.
+#     Args:
+#         color (tuple): An RGB tuple.
+#         hue_tol (float): Maximum hue deviation, usually 0 to 0.5.
+#         sat_tol (float): Maximum saturation deviation, usually 0 to 1.
+#         light_tol (float): Maximum lightness deviation, usually 0 to 1.
 
-    Returns:
-        tuple: An RGB tuple.
+#     Returns:
+#         tuple: An RGB tuple.
 
-    """
-    hue, sat, li = rgb_to_hsl(color)
-    hue = random.uniform(hue - hue_tol, hue + hue_tol) % 1
-    sat = random.uniform(sat - sat_tol, sat + sat_tol)
-    sat = max(0, min(sat, 1))
-    li = random.uniform(li - light_tol, li + light_tol)
-    li = max(0, min(li, 1))
-    return hsl_to_rgb((hue, sat, li))
+#     """
+#     hue, sat, li = rgb_to_hsl(color)
+#     hue = random.uniform(hue - hue_tol, hue + hue_tol) % 1
+#     sat = random.uniform(sat - sat_tol, sat + sat_tol)
+#     sat = max(0, min(sat, 1))
+#     li = random.uniform(li - light_tol, li + light_tol)
+#     li = max(0, min(li, 1))
+#     return hsl_to_rgb((hue, sat, li))
 
 
 def average_color(colors):
@@ -139,45 +142,45 @@ def contrasting_lightness(color, light_diff):
         tuple: An RGB tuple.
 
     """
-    hsl = rgb_to_hsl(color)
+    hsl = make_color(color).value()
     if hsl[2] < 0.5:
         new_light = min(hsl[2] + light_diff, 1.)
     else:
         new_light = max(hsl[2] - light_diff, 0.)
     new_hsl = (hsl[0], hsl[1], new_light)
-    return hsl_to_rgb(new_hsl)
+    return Color(hsl=new_hsl)
 
 
-def color_mixture(color1, color2, proportion=0.5, mode='rgb'):
-    """Get mixture of two colors at specified proportion.
+# def color_mixture(color1, color2, proportion=0.5, mode='rgb'):
+#     """Get mixture of two colors at specified proportion.
 
-    Args:
-        color1 (tuple): An RGB or HSL tuple.
-        color2 (tuple): An RGB or HSL tuple, must match type of color1.
-        proportion (float): Fraction of mixture coming from color2.
-        mode (str): Either 'rgb' or 'hsl'.
+#     Args:
+#         color1 (tuple): An RGB or HSL tuple.
+#         color2 (tuple): An RGB or HSL tuple, must match type of color1.
+#         proportion (float): Fraction of mixture coming from color2.
+#         mode (str): Either 'rgb' or 'hsl'.
 
-    Returns:
-        tuple: An RGB or HSL tuple.
+#     Returns:
+#         tuple: An RGB or HSL tuple.
 
-    """
-    if mode == 'rgb':
-        r = color1[0] + int(proportion * (color2[0] - color1[0]))
-        g = color1[1] + int(proportion * (color2[1] - color1[1]))
-        b = color1[2] + int(proportion * (color2[2] - color1[2]))
-        return (r, g, b)
+#     """
+#     if mode == 'rgb':
+#         r = color1[0] + int(proportion * (color2[0] - color1[0]))
+#         g = color1[1] + int(proportion * (color2[1] - color1[1]))
+#         b = color1[2] + int(proportion * (color2[2] - color1[2]))
+#         return (r, g, b)
 
-    elif mode == 'hsl':
-        h1 = color1[0]
-        h2 = color2[0]
-        if h2 - h1 > 0.5:
-            h1 += 1
-        elif h1 - h2 > 0.5:
-            h2 += 1
-        h = (h1 + proportion * (h2 - h1)) % 1
-        s = color1[1] + proportion * (color2[1] - color1[1])
-        li = color1[2] + proportion * (color2[2] - color1[2])
-        return (h, s, li)
+#     elif mode == 'hsl':
+#         h1 = color1[0]
+#         h2 = color2[0]
+#         if h2 - h1 > 0.5:
+#             h1 += 1
+#         elif h1 - h2 > 0.5:
+#             h2 += 1
+#         h = (h1 + proportion * (h2 - h1)) % 1
+#         s = color1[1] + proportion * (color2[1] - color1[1])
+#         li = color1[2] + proportion * (color2[2] - color1[2])
+#         return (h, s, li)
 
 
 def map_colors_to_array(values, colors, period, gradient_mode='rgb'):

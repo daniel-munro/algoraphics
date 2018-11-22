@@ -82,13 +82,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#main-py">main.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#color-py">color.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fill-py">fill.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#geom-py">geom.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#grid-py">grid.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#images-py">images.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#main-py">main.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#param-py">param.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#paths-py">paths.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ripples-py">ripples.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shapes-py">shapes.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#forms-py">forms.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#svg-py">svg.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#text-py">text.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#textures-py">textures.py</a></li>
@@ -160,239 +164,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-algoraphics.main">
-<span id="api"></span><h1>API<a class="headerlink" href="#module-algoraphics.main" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="main-py">
-<h2>main.py<a class="headerlink" href="#main-py" title="Permalink to this headline">¶</a></h2>
-<p>General functions for creating graphics.</p>
-<dl class="function">
-<dt id="algoraphics.main.add_margin">
-<code class="descclassname">algoraphics.main.</code><code class="descname">add_margin</code><span class="sig-paren">(</span><em>bounds</em>, <em>margin</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.add_margin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add margin to bounds.</p>
-<p>A convenience function used when generating objects to avoid
-issues at the edges of the region or canvas.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bounds</strong> (<em>tuple</em>) – A tuple of min x, max x, min y, and max y.</li>
-<li><strong>margin</strong> (<em>float|int</em>) – The width of the margin.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Bounds that include the margin on all sides.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.arith_seq">
-<code class="descclassname">algoraphics.main.</code><code class="descname">arith_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.arith_seq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an arithmetic sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>float</em>) – The first value in the sequence.</li>
-<li><strong>stop</strong> (<em>float</em>) – The last value in the sequence.</li>
-<li><strong>length</strong> (<em>int</em>) – The length of the the sequence.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.background">
-<code class="descclassname">algoraphics.main.</code><code class="descname">background</code><span class="sig-paren">(</span><em>fill</em>, <em>w</em>, <em>h</em>, <em>margin=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.background" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a background color for the canvas.</p>
-<p>See region_background to set background for a specific region.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fill</strong> (<em>color</em>) – The background color.</li>
-<li><strong>w</strong> (<em>int</em>) – width of canvas.</li>
-<li><strong>h</strong> (<em>int</em>) – height of canvas.</li>
-<li><strong>margin</strong> (<em>int</em>) – width of margin to include to avoid edge artifacts.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A filled rectangular polygon covering the canvas.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.flatten">
-<code class="descclassname">algoraphics.main.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.flatten" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a flattened list from a nested list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (<em>object</em>) – A nested list or a non-list.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The non-list elements within the input.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.geom_seq">
-<code class="descclassname">algoraphics.main.</code><code class="descname">geom_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.geom_seq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate geometric sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<em>float</em>) – The first value in the sequence.</li>
-<li><strong>stop</strong> (<em>float</em>) – The last value in the sequence.</li>
-<li><strong>length</strong> (<em>int</em>) – Length of the sequence.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.random_walk">
-<code class="descclassname">algoraphics.main.</code><code class="descname">random_walk</code><span class="sig-paren">(</span><em>min_val</em>, <em>max_val</em>, <em>max_step</em>, <em>n</em>, <em>start=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.random_walk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a random walk sequence.</p>
-<p>Steps are sampled from a uniform random distribution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>min_val</strong> (<em>float</em>) – Values will not fall below this value.</li>
-<li><strong>max_val</strong> (<em>float</em>) – Values will not fall above this value.</li>
-<li><strong>max_step</strong> (<em>flot</em>) – Maximum magnitude of each step.</li>
-<li><strong>n</strong> (<em>int</em>) – Length of the sequence.</li>
-<li><strong>start</strong> (<em>number</em>) – The starting value.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.region_background">
-<code class="descclassname">algoraphics.main.</code><code class="descname">region_background</code><span class="sig-paren">(</span><em>region</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.region_background" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add background color to clipped region.</p>
-<p>Adds a filled rectangle to the beginning of the region’s members.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>region</strong> (<em>dict</em>) – A clipped group object.</li>
-<li><strong>color</strong> (<em>color|function</em>) – A color or function to apply to the region.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.reorder_objects">
-<code class="descclassname">algoraphics.main.</code><code class="descname">reorder_objects</code><span class="sig-paren">(</span><em>objects</em>, <em>by='random'</em>, <em>w=None</em>, <em>h=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.reorder_objects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reorder objects in list.</p>
-<p>Used to change order in which objects are drawn.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<em>list</em>) – A list whose items are shapes or lists.</li>
-<li><strong>by</strong> (<em>str</em>) – ‘random’ to shuffle objects.  ‘out to in’ to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.</li>
-<li><strong>w</strong> (<em>float|int</em>) – Canvas width, used to get center when by=’out to in’.</li>
-<li><strong>h</strong> (<em>float|int</em>) – Canvas height, used to get center when by=’out to in’.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.set_style">
-<code class="descclassname">algoraphics.main.</code><code class="descname">set_style</code><span class="sig-paren">(</span><em>obj</em>, <em>attribute</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.set_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set style attribute of one or more shapes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>obj</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes.</li>
-<li><strong>attribute</strong> (<em>str</em>) – Name of the style attribute.</li>
-<li><strong>value</strong> (<em>str|number|function</em>) – either a single value or a function that returns values when called with no arguments.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.shuffled">
-<code class="descclassname">algoraphics.main.</code><code class="descname">shuffled</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.shuffled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create shuffled version of a list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<em>list</em>) – A list of items.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new list with same objects as input but reordered.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<span class="target" id="module-algoraphics.color"></span><div class="section" id="color-py">
+  <div class="section" id="module-algoraphics.color">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-algoraphics.color" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="color-py">
 <h2>color.py<a class="headerlink" href="#color-py" title="Permalink to this headline">¶</a></h2>
 <p>Functions for working with colors.</p>
 <dl class="class">
@@ -415,32 +189,6 @@ issues at the edges of the region or canvas.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The average color.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color">Color</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.color.color_mixture">
-<code class="descclassname">algoraphics.color.</code><code class="descname">color_mixture</code><span class="sig-paren">(</span><em>color1</em>, <em>color2</em>, <em>proportion=0.5</em>, <em>mode='rgb'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.color_mixture" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get mixture of two colors at specified proportion.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>color1</strong> (<em>tuple</em>) – An RGB or HSL tuple.</li>
-<li><strong>color2</strong> (<em>tuple</em>) – An RGB or HSL tuple, must match type of color1.</li>
-<li><strong>proportion</strong> (<em>float</em>) – Fraction of mixture coming from color2.</li>
-<li><strong>mode</strong> (<em>str</em>) – Either ‘rgb’ or ‘hsl’.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An RGB or HSL tuple.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
-</td>
 </tr>
 </tbody>
 </table>
@@ -506,25 +254,35 @@ gradient.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.rand_col_nearby">
-<code class="descclassname">algoraphics.color.</code><code class="descname">rand_col_nearby</code><span class="sig-paren">(</span><em>color</em>, <em>hue_tol</em>, <em>sat_tol</em>, <em>light_tol</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rand_col_nearby" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select random color within range of reference color.</p>
+<dt id="algoraphics.color.rgb_array_to_hsv">
+<code class="descclassname">algoraphics.color.</code><code class="descname">rgb_array_to_hsv</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rgb_array_to_hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert matrix of rgb values to HSV.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algoraphics.fill"></span><div class="section" id="fill-py">
+<h2>fill.py<a class="headerlink" href="#fill-py" title="Permalink to this headline">¶</a></h2>
+<p>Fill regions with objects in various ways.</p>
+<dl class="function">
+<dt id="algoraphics.fill.filament_fill">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">filament_fill</code><span class="sig-paren">(</span><em>direction_delta</em>, <em>width</em>, <em>seg_length</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.filament_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate filament fill function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>color</strong> (<em>tuple</em>) – An RGB tuple.</li>
-<li><strong>hue_tol</strong> (<em>float</em>) – Maximum hue deviation, usually 0 to 0.5.</li>
-<li><strong>sat_tol</strong> (<em>float</em>) – Maximum saturation deviation, usually 0 to 1.</li>
-<li><strong>light_tol</strong> (<em>float</em>) – Maximum lightness deviation, usually 0 to 1.</li>
+<li><strong>direction_delta</strong> (<em>Param</em>) – Parameter that will become the delta for the filament direction.</li>
+<li><strong>width</strong> (<em>float|int</em>) – Width of the filament.</li>
+<li><strong>seg_length</strong> (<em>float|int</em>) – Average side length of each segment.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An RGB tuple.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A function used by fill_region().</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">function</p>
 </td>
 </tr>
 </tbody>
@@ -532,9 +290,109 @@ gradient.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.color.rgb_array_to_hsv">
-<code class="descclassname">algoraphics.color.</code><code class="descname">rgb_array_to_hsv</code><span class="sig-paren">(</span><em>rgb</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.color.rgb_array_to_hsv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert matrix of rgb values to HSV.</p>
+<dt id="algoraphics.fill.fill_ishihara_spots">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing=10</em>, <em>radius=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region with randomly sized spots.</p>
+<p>The spots are reminiscent of Ishihara color blindness tests.
+The spots are not completely non-overlapping, but overlaps are
+somewhat avoided by spacing out their centers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A region outline shape.</li>
+<li><strong>spacing</strong> (<em>float</em>) – The approximate distance between the centers of neighboring spots.</li>
+<li><strong>radius</strong> (<em>Param</em>) – The spot radius.  By default the radii range from <cite>spacing</cite> to <cite>spacing</cite> / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio &lt; 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of circle shapes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.fill.fill_region">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region by iteratively placing randomly generated objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become clip.</li>
+<li><strong>object_fun</strong> (<em>function</em>) – A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
+<li><strong>max_tries</strong> (<em>int</em>) – If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.fill.fill_wrapping_paper">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_wrapping_paper</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing</em>, <em>doodles</em>, <em>rotate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_wrapping_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region with a tiling of non-overlapping doodles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become the clip.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Height/width of each grid cell.</li>
+<li><strong>doodles</strong> (<em>list</em>) – A list of Doodle objects.</li>
+<li><strong>rotate</strong> (<em>bool</em>) – Whether to place the grid in a random rotated orientation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A clipped group.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.fill.grid_wrapping_paper">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">grid_wrapping_paper</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em>, <em>spacing</em>, <em>start</em>, <em>doodles</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.grid_wrapping_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tiling of non-overlapping doodles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rows</strong> (<em>int</em>) – Number of rows to include.</li>
+<li><strong>cols</strong> (<em>int</em>) – Number of columns to include.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Height/width of each grid cell.</li>
+<li><strong>start</strong> (<em>tuple</em>) – Bottom left point of the grid.</li>
+<li><strong>doodles</strong> (<em>list</em>) – A list of doodle functions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of placed doodle objects.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -946,7 +804,7 @@ different color.</p>
 <li><strong>outline</strong> (<em>dict|list</em>) – The shape/s that will become the clip.</li>
 <li><strong>spacing</strong> (<em>float|int</em>) – The cell width of the grid.</li>
 <li><strong>style</strong> (<a class="reference internal" href="#algoraphics.grid.Maze_Style" title="algoraphics.grid.Maze_Style"><em>Maze_Style</em></a>) – An object specifying how the maze path is to be drawn.</li>
-<li><strong>color</strong> (<em>color</em>) – The fill color for the maze.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – The fill color for the maze.</li>
 </ul>
 </td>
 </tr>
@@ -1446,6 +1304,240 @@ right and then bottom to top.</p>
 </dd></dl>
 
 </div>
+<span class="target" id="module-algoraphics.main"></span><div class="section" id="main-py">
+<h2>main.py<a class="headerlink" href="#main-py" title="Permalink to this headline">¶</a></h2>
+<p>General functions for creating graphics.</p>
+<dl class="function">
+<dt id="algoraphics.main.add_margin">
+<code class="descclassname">algoraphics.main.</code><code class="descname">add_margin</code><span class="sig-paren">(</span><em>bounds</em>, <em>margin</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.add_margin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add margin to bounds.</p>
+<p>A convenience function used when generating objects to avoid
+issues at the edges of the region or canvas.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bounds</strong> (<em>tuple</em>) – A tuple of min x, max x, min y, and max y.</li>
+<li><strong>margin</strong> (<em>float|int</em>) – The width of the margin.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Bounds that include the margin on all sides.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.arith_seq">
+<code class="descclassname">algoraphics.main.</code><code class="descname">arith_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.arith_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an arithmetic sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>float</em>) – The first value in the sequence.</li>
+<li><strong>stop</strong> (<em>float</em>) – The last value in the sequence.</li>
+<li><strong>length</strong> (<em>int</em>) – The length of the the sequence.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.background">
+<code class="descclassname">algoraphics.main.</code><code class="descname">background</code><span class="sig-paren">(</span><em>fill</em>, <em>w</em>, <em>h</em>, <em>margin=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a background color for the canvas.</p>
+<p>See region_background to set background for a specific region.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fill</strong> (<em>color</em>) – The background color.</li>
+<li><strong>w</strong> (<em>int</em>) – width of canvas.</li>
+<li><strong>h</strong> (<em>int</em>) – height of canvas.</li>
+<li><strong>margin</strong> (<em>int</em>) – width of margin to include to avoid edge artifacts.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A filled rectangular polygon covering the canvas.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.flatten">
+<code class="descclassname">algoraphics.main.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a flattened list from a nested list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (<em>object</em>) – A nested list or a non-list.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The non-list elements within the input.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.geom_seq">
+<code class="descclassname">algoraphics.main.</code><code class="descname">geom_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.geom_seq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate geometric sequence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>float</em>) – The first value in the sequence.</li>
+<li><strong>stop</strong> (<em>float</em>) – The last value in the sequence.</li>
+<li><strong>length</strong> (<em>int</em>) – Length of the sequence.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.random_walk">
+<code class="descclassname">algoraphics.main.</code><code class="descname">random_walk</code><span class="sig-paren">(</span><em>min_val</em>, <em>max_val</em>, <em>max_step</em>, <em>n</em>, <em>start=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.random_walk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random walk sequence.</p>
+<p>Steps are sampled from a uniform random distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_val</strong> (<em>float</em>) – Values will not fall below this value.</li>
+<li><strong>max_val</strong> (<em>float</em>) – Values will not fall above this value.</li>
+<li><strong>max_step</strong> (<em>flot</em>) – Maximum magnitude of each step.</li>
+<li><strong>n</strong> (<em>int</em>) – Length of the sequence.</li>
+<li><strong>start</strong> (<em>number</em>) – The starting value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated sequence.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.region_background">
+<code class="descclassname">algoraphics.main.</code><code class="descname">region_background</code><span class="sig-paren">(</span><em>region</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.region_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add background color to clipped region.</p>
+<p>Adds a filled rectangle to the beginning of the region’s members.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>region</strong> (<em>dict</em>) – A clipped group object.</li>
+<li><strong>color</strong> (<em>color|function</em>) – A color or function to apply to the region.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.reorder_objects">
+<code class="descclassname">algoraphics.main.</code><code class="descname">reorder_objects</code><span class="sig-paren">(</span><em>objects</em>, <em>by='random'</em>, <em>w=None</em>, <em>h=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.reorder_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reorder objects in list.</p>
+<p>Used to change order in which objects are drawn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>objects</strong> (<em>list</em>) – A list whose items are shapes or lists.</li>
+<li><strong>by</strong> (<em>str</em>) – ‘random’ to shuffle objects.  ‘out to in’ to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.</li>
+<li><strong>w</strong> (<em>float|int</em>) – Canvas width, used to get center when by=’out to in’.</li>
+<li><strong>h</strong> (<em>float|int</em>) – Canvas height, used to get center when by=’out to in’.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.set_style">
+<code class="descclassname">algoraphics.main.</code><code class="descname">set_style</code><span class="sig-paren">(</span><em>obj</em>, <em>attribute</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.set_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set style attribute of one or more shapes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes.</li>
+<li><strong>attribute</strong> (<em>str</em>) – Name of the style attribute.</li>
+<li><strong>value</strong> (<em>str|number|function</em>) – either a single value or a function that returns values when called with no arguments.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.main.shuffled">
+<code class="descclassname">algoraphics.main.</code><code class="descname">shuffled</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.shuffled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create shuffled version of a list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items</strong> (<em>list</em>) – A list of items.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new list with same objects as input but reordered.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algoraphics.param"></span><div class="section" id="param-py">
+<h2>param.py<a class="headerlink" href="#param-py" title="Permalink to this headline">¶</a></h2>
+<p>Define parameter objects that incorporate randomness.</p>
+</div>
 <span class="target" id="module-algoraphics.paths"></span><div class="section" id="paths-py">
 <h2>paths.py<a class="headerlink" href="#paths-py" title="Permalink to this headline">¶</a></h2>
 <p>Generate path strings.</p>
@@ -1504,6 +1596,486 @@ probabilities result in more erratic ripples.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The ripple splines.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algoraphics.shapes"></span><div class="section" id="shapes-py">
+<h2>shapes.py<a class="headerlink" href="#shapes-py" title="Permalink to this headline">¶</a></h2>
+<p>Create and manipulate shapes.</p>
+<dl class="function">
+<dt id="algoraphics.shapes.bounding_box">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">bounding_box</code><span class="sig-paren">(</span><em>shapes</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find bounding box of shape or shape collection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The min x, max x, min y, and max y coordinates of the
+input.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.centroid">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">centroid</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the centroid of a shape.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<em>dict</em>) – A shape.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A point.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.circle">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a circle object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.coverage">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">coverage</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create shapely object.</p>
+<p>Used to calculate area/coverage.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.keep_points_inside">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">keep_points_inside</code><span class="sig-paren">(</span><em>points</em>, <em>boundary</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.keep_points_inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep points that lie within a boundary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<em>list</em>) – A list of points.</li>
+<li><strong>boundary</strong> (<em>dict|list</em>) – One or more shapes giving the boundary.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.keep_shapes_inside">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">keep_shapes_inside</code><span class="sig-paren">(</span><em>shapes</em>, <em>boundary</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.keep_shapes_inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove shapes from (nested) list if they lie entirely outside the boundary.</p>
+<p>Used to optimize SVG file without altering appearance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shapes</strong> (<em>list</em>) – A list of shapes.</li>
+<li><strong>boundary</strong> (<em>dict|list</em>) – One or more shapes giving the boundary.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.line">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">line</code><span class="sig-paren">(</span><em>p1=None</em>, <em>p2=None</em>, <em>points=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a line or polyline object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p1</strong> (<em>point</em>) – The starting point.</li>
+<li><strong>p2</strong> (<em>point</em>) – The ending point.</li>
+<li><strong>points</strong> (<em>list</em>) – If a list of points is provided, a polyline is created.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A line or polyline shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.polygon">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a polygon object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.polygon_area">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">polygon_area</code><span class="sig-paren">(</span><em>vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.polygon_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the area of a polygon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertices</strong> (<em>list</em>) – The vertex points.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The area.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.rectangle">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a rectangular polygon object.</p>
+<p>Provide either start + w + h or a bounds tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>point</em>) – Bottom left point of the rectangle (unless w or h is negative).</li>
+<li><strong>w</strong> (<em>float|int</em>) – Width of the rectangle.</li>
+<li><strong>h</strong> (<em>float|int</em>) – Height of the rectangle.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – The (x_min, x_max, y_min, y_max) of the rectangle.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A polygon shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.remove_hidden">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">remove_hidden</code><span class="sig-paren">(</span><em>shapes</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.remove_hidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove shapes from (nested) list if they are entirely covered.</p>
+<p>Used to optimize SVG file without altering appearance, e.g. when
+randomly placing objects to fill a region.  Ignores opacity when
+determining overlap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shapes</strong> (<em>list</em>) – A list of shapes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.reposition">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">reposition</code><span class="sig-paren">(</span><em>shapes</em>, <em>position</em>, <em>h_align='left'</em>, <em>v_align='bottom'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.reposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Align one or more shapes to a reference point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>poisition</strong> (<em>tuple</em>) – reference point.</li>
+<li><strong>h_align</strong> (<em>str</em>) – ‘left’ to move left bound to reference point.  ‘center’ to horizontally center object around reference point.  ‘right’ to move right bound to reference point.</li>
+<li><strong>v_align</strong> (<em>str</em>) – ‘bottom’ to move lower bound to reference point.  ‘middle’ to vertically center object around reference point.  ‘top’ to move upper bound to reference point.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.rotate_shapes">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">rotate_shapes</code><span class="sig-paren">(</span><em>shapes</em>, <em>angle</em>, <em>pivot=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.rotate_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate one or more shapes around a point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>angle</strong> (<em>float|int</em>) – The angle of rotation in degrees.</li>
+<li><strong>pivot</strong> (<em>tuple</em>) – The rotation pivot point.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.rotated_bounding_box">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">rotated_bounding_box</code><span class="sig-paren">(</span><em>shapes</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.rotated_bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the rotated bounding box of a shape or shape collection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shapes</strong> (<em>dict|list</em>) – One or more shapes.</li>
+<li><strong>angle</strong> (<em>float|int</em>) – The orientation of the bounding box in degrees.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The min x, max x, min y, and max y coordinates in
+rotated space.  Anything created using these coordinates must
+then be rotated by the same angle around the origin to be in
+the right place.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.sample_points_in_shape">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">sample_points_in_shape</code><span class="sig-paren">(</span><em>shape</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.sample_points_in_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample random points inside a shape.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> (<em>dict</em>) – A shape (currently works for polygons and splines).</li>
+<li><strong>n</strong> (<em>int</em>) – Number of points to sample.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sampled points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.spline">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a spline object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.translate_shapes">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">translate_shapes</code><span class="sig-paren">(</span><em>shapes</em>, <em>dx</em>, <em>dy</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.translate_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift the location of one or more shapes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shapes</strong> (<em>list|dict</em>) – One or more shapes.</li>
+<li><strong>dx</strong> (<em>float|int</em>) – Horizontal shift.</li>
+<li><strong>dy</strong> (<em>float|int</em>) – Vertical shift.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.shapes.wave">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">wave</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>period</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.wave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a wave spline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>point</em>) – Starting point of the wave.</li>
+<li><strong>direction</strong> (<em>float|int</em>) – Direction (in degrees) of the wave.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The total amplitude of the wave from peak to trough.</li>
+<li><strong>period</strong> (<em>float|int</em>) – Period of the wave.</li>
+<li><strong>length</strong> (<em>float|int</em>) – End-to-end length of the wave.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spline shape.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-algoraphics.structures"></span><div class="section" id="forms-py">
+<h2>forms.py<a class="headerlink" href="#forms-py" title="Permalink to this headline">¶</a></h2>
+<p>Create forms such as filaments and trees.</p>
+<dl class="function">
+<dt id="algoraphics.structures.blow_paint_area">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">blow_paint_area</code><span class="sig-paren">(</span><em>points</em>, <em>spacing=20</em>, <em>length=40</em>, <em>len_dev=0.25</em>, <em>width=5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.blow_paint_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a blow-paint effect around an area.</p>
+<p>Creates ‘fingers’ of paint projecting from each edge, as if being
+blown along the page perpindicular to the edge.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<em>list</em>) – The vertices of the polygonal area.</li>
+<li><strong>spacing</strong> (<em>float</em>) – Average distance between paint fingers.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.blow_paint_line">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">blow_paint_line</code><span class="sig-paren">(</span><em>points</em>, <em>line_width=10</em>, <em>spacing=20</em>, <em>length=20</em>, <em>len_dev=0.33</em>, <em>width=5</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.blow_paint_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a blow-paint effect connecting a sequence of points.</p>
+<p>Creates ‘fingers’ of paint projecting from each edge, as if being
+blown along the page perpindicular to the edge (in both
+directions).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<em>list</em>) – The points to connect.</li>
+<li><strong>line_width</strong> (<em>float</em>) – The thickness of the line (excluding the fingers).</li>
+<li><strong>spacing</strong> (<em>float</em>) – Average distance between paint fingers.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.blow_paint_spot">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">blow_paint_spot</code><span class="sig-paren">(</span><em>point</em>, <em>length=10</em>, <em>len_dev=0.7</em>, <em>width=3</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.blow_paint_spot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a paint splatter.</p>
+<p>Creates ‘fingers’ of paint projecting from a point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>point</strong> (<em>tuple</em>) – The center of the splatter.</li>
+<li><strong>length</strong> (<em>float</em>) – Average length of the paint fingers.</li>
+<li><strong>len_dev</strong> (<em>float</em>) – The standard deviation of finger lengths relative to <cite>length</cite> (so it should be less than 1).</li>
+<li><strong>width</strong> (<em>float</em>) – Average thickness of each finger.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.filament">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">filament</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>seg_length</em>, <em>n_segments</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.filament" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a meandering segmented filament.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the filament.</li>
+<li><strong>direction</strong> (<em>Param</em>) – The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The width of the filament (at segment joining edges).</li>
+<li><strong>seg_length</strong> (<em>float|int</em>) – Average side length of each segment.</li>
+<li><strong>n_segments</strong> (<em>int</em>) – Number of segments in the filament.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of polygons (the segments from start to end).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.tentacle">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">tentacle</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>length</em>, <em>width</em>, <em>seg_length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.tentacle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a filament that tapers to a point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>point</em>) – The midpoint of first edge of the tentacle.</li>
+<li><strong>direction</strong> (<em>Param</em>) – The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.</li>
+<li><strong>length</strong> (<em>float|int</em>) – Approximate length of the tentacle.</li>
+<li><strong>width</strong> (<em>float|int</em>) – The starting width of the tentacle.</li>
+<li><strong>seg_length</strong> (<em>float|int</em>) – Average starting length of each segment.  They will shrink toward to the tip.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of polygons (the segments from base to tip).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.tree">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">tree</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>branch_length</em>, <em>theta</em>, <em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a tree with randomly terminating branches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<em>tuple</em>) – The starting point.</li>
+<li><strong>direction</strong> (<em>float|int</em>) – The starting direction (in degrees).</li>
+<li><strong>branch_length</strong> (<em>Param</em>) – Branch length.</li>
+<li><strong>theta</strong> (<em>Param</em>) – The angle (in degrees) between sibling branches.</li>
+<li><strong>p</strong> (<em>float</em>) – The probability that a given branch will split instead of terminating.  Recommended to have a delta &lt; 0 or ratio &lt; 1 so that the tree is guaranteed to terminate.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of line shapes.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -2045,34 +2617,6 @@ correspond to input points because points on the periphery do
 not have finite regions.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.tiling.fill_ishihara_spots">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing=10</em>, <em>radius=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill a region with randomly sized spots.</p>
-<p>The spots are reminiscent of Ishihara color blindness tests.
-The spots are not completely non-overlapping, but overlaps are
-somewhat avoided by spacing out their centers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict|list</em>) – A region outline shape.</li>
-<li><strong>spacing</strong> (<em>float</em>) – The approximate distance between the centers of neighboring spots.</li>
-<li><strong>radius</strong> (<em>Param</em>) – The spot radius.  By default the radii range from <cite>spacing</cite> to <cite>spacing</cite> / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio &lt; 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of circle shapes.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
 </tr>
 </tbody>
 </table>

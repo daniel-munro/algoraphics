@@ -40,3 +40,19 @@ ag.to_PNG('svg/images2.svg', 'png/images2.png')
 ######################################################################
 # TODO: test rand_col_nearby and contrasting_lightness
 ######################################################################
+
+image = ag.open_image("test_images.jpg")
+ag.resize_image(image, 800, None)
+w, h = image.size
+x = ag.image_regions(image, smoothness=3)
+for i, outline in enumerate(x):
+    color = ag.region_color(outline, image)
+    maze = ag.Maze_Style_Pipes(rel_thickness=0.6)
+    x[i] = ag.fill_maze_hue_rotate(outline, spacing=5, style=maze,
+                                   color=color)
+    ag.region_background(x[i], ag.contrasting_lightness(color, light_diff=0.2))
+    ag.set_style(outline, 'fill', color)
+ag.add_paper_texture(x)
+
+ag.write_SVG(x, w, h, 'svg/images3.svg')
+ag.to_PNG('svg/images3.svg', 'png/images3.png')

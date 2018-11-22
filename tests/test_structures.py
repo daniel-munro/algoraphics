@@ -137,5 +137,6 @@ x = [ag.tree((200, 200), direction=d,
 ag.set_style(x, 'stroke', ag.Color(hue=ag.Normal(0.12, stdev=0.05),
                                    sat=ag.Uniform(0.4, 0.7),
                                    li=0.3))
+
 ag.write_SVG(x, w, h, 'svg/structures5.svg')
 ag.to_PNG('svg/structures5.svg', 'png/structures5.png')

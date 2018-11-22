@@ -49,6 +49,10 @@ spline    points (list), curvature (float), circular (bool)
 text      text (str), x (float), y (float), align (str), font_size (float)
 ========  ================================================================
 
+Objects can be stored in nested lists without affecting their
+rendering.  The purpose of groups is to apply things like clipping and
+shadows to a collection of shapes.
+
 Convenience functions like `circle` exist that simply return a
 dictionary.  Functions also exist to define shapes in alternative ways
 for convenience.  For example, the `rectangle` function accepts a
@@ -118,7 +122,6 @@ next one each time the parameter value is accessed::
                 delta=ag.Param(0, min=-2, max=2, delta=ag.Uniform(-2, 2)))
  x.append([ag.line((i * 4, 30), (i * 4, p2y)) for i in range(100)])
  
- ag.set_style(x, 'stroke', 'black')
  ag.set_style(x, 'stroke-width', 2)
 
 .. image:: ../tests/png/param4.png
@@ -159,9 +162,15 @@ Colors
 Colors are represented as objects of the Color class.  They are
 generally defined in the HSL (hue, saturation, lightness) color space.
 If these are supplied as Param objects, the objects represents a
-distribution from which colors will be sampled.
+distribution from which colors will be sampled::
 
-[example: objects colored using parameterized Color]
+ outline = ag.circle(c=(200, 200), r=150)
+ color = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7,
+                  li=ag.Uniform(min=0.5, max=0.7))
+ x = ag.fill_ishihara_spots(outline)
+ ag.set_style(x, 'fill', color)
+
+.. image:: ../tests/png/fill3.png
 
 Color values can be defined and retrieved using other color
 specifications.
@@ -192,7 +201,9 @@ spline       path made of bezier curves
 text         text
 ===========  ==========================
 
-(how different things are represented in SVG)
+SVG-rendered effects like shadows and paper texture applied to objects
+become references to SVG filters, which are defined at the beginning
+of the SVG file.
 
 By default, the SVG code is optimized using `svgo`, but this can be
 skipped for more readable SVG code, e.g. for debugging.
@@ -231,13 +242,113 @@ too large::
 
 .. image:: ../tests/png/images2.png
 
-Fill functions can be applied and passed representative colors.
+Fill functions can be applied and passed representative colors::
 
-[example: regions filled with pattern.]
+ image = ag.open_image("test_images.jpg")
+ ag.resize_image(image, 800, None)
+ w, h = image.size
+ x = ag.image_regions(image, smoothness=3)
+ for i, outline in enumerate(x):
+     color = ag.region_color(outline, image)
+     maze = ag.Maze_Style_Pipes(rel_thickness=0.6)
+     x[i] = ag.fill_maze_hue_rotate(outline, spacing=5, style=maze,
+                                    color=color)
+     ag.region_background(x[i], ag.contrasting_lightness(color, light_diff=0.2))
+     ag.set_style(outline, 'fill', color)
+ ag.add_paper_texture(x)
+
+.. image:: ../tests/png/images3.png
 
 
 Structures
 ==========
+
+Text
+----
+
+Text can be created and stylized.  Characters are generated as nested
+lists of points (one list per continuous pen stroke) along their
+form::
+
+ x = []
+ color = ag.Color(hue=ag.Uniform(0, 0.15), sat=0.8, li=0.5)
+ 
+ y = ag.splatter_text('ABCDEFG', height=50, spread=2, density=2,
+                      min_size=1, max_size=3, fill=color)
+ ag.reposition(y, (w / 2., h - 50), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.splatter_text('HIJKLM', height=50, spread=2, density=2,
+                      min_size=1, max_size=3, fill=color)
+ ag.reposition(y, (w / 2., h - 150), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.splatter_text('0123456789', height=50, spread=2, density=2,
+                      min_size=1, max_size=3, fill=color)
+ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ x.append(y)
+
+.. image:: ../tests/png/text1.png
+
+These points can then be manipulated in many ways::
+
+ x = []
+ 
+ y = ag.double_dots_text('NOPQRST', height=40)
+ ag.reposition(y, (w / 2., h - 50), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.double_dots_text('UVWXYZ', height=40, top_color='#FF8888',
+                         bottom_color='#555555')
+ ag.reposition(y, (w / 2., h - 150), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.double_dots_text(".,!?:;'\"/", height=40, top_color='#FF8888',
+                         bottom_color='#555555')
+ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ x.append(y)
+
+.. image:: ../tests/png/text2.png
+
+Currently only the characters displayed in these examples are
+provided, though additional ones can be added on request::
+
+ x = []
+ 
+ y = ag.hazy_text('abcdefg', height=50, spread=10, density=3,
+                  min_size=0.5, max_size=2, fill='green')
+ ag.reposition(y, (w / 2., h - 100), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.hazy_text('hijklm', height=50, spread=10, density=3,
+                  min_size=0.5, max_size=2, fill='green')
+ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ x.append(y)
+
+.. image:: ../tests/png/text3.png
+
+Since generated points are grouped by continuous pen strokes, points
+within each list can be joined::
+
+ x = []
+ 
+ y = ag.squiggle_text('nopqrst', height=60, spread=10, density=1)
+ ag.reposition(y, (w / 2., h - 100), 'center', 'top')
+ x.append(y)
+ 
+ y = ag.squiggle_text('uvwxyz', height=60, spread=10, density=1)
+ ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ x.append(y)
+
+.. image:: ../tests/png/text4.png
+
+Actual SVG text can also be produced::
+
+ w, h = 400, 100
+ x = ag.caption("SVG text.", x=w-20, y=20)
+
+.. image:: ../tests/png/text5.png
+
 
 Filaments
 ---------
@@ -285,17 +396,91 @@ total length::
 Blow paint
 ----------
 
+Blow painting effects (i.e., droplets of paint blown outward from an
+object) can be created for 0D, 1D, and 2D objects::
+
+ pts1 = [(50, 50), (50, 100), (100, 70), (150, 130), (200, 60)]
+ x1 = ag.blow_paint_area(pts1)
+ 
+ pts2 = [(250, 50), (350, 50), (300, 200)]
+ x2 = ag.blow_paint_area(pts2, spacing=20, length=20, len_dev=0.4, width=8)
+ ag.set_style(x2, 'fill', 'orange')
+ 
+ pts3 = [(50, 300), (100, 350), (200, 250), (300, 300)]
+ y = ag.blow_paint_line(pts3, line_width=8, spacing=15, length=30,
+                        len_dev=0.4, width=6)
+ ag.set_style(y, 'fill', 'red')
+ 
+ z = ag.blow_paint_spot((350, 350), length=20)
+ ag.set_style(z, 'stroke', 'blue')
+
+.. image:: ../tests/png/structures4.png
+
 
 Trees
 -----
+
+Trees with randomly bifurcating branches can be generated::
+
+ x = [ag.tree((200, 200), direction=d,
+              branch_length=ag.Uniform(min=8, max=20),
+              theta=ag.Uniform(min=15, max=20),
+              p=ag.Param(1, delta=-0.08))
+      for d in range(360)[::20]]
+ ag.set_style(x, 'stroke', ag.Color(hue=ag.Normal(0.12, stdev=0.05),
+                                    sat=ag.Uniform(0.4, 0.7),
+                                    li=0.3))
+
+.. image:: ../tests/png/structures5.png
 
 
 Fills
 =====
 
+These functions fill a region with structures and patterns.
 
 Tiling
 ------
+
+These functions divide a region's area into tiles.
+
+Random polygonal (i.e. Voronoi) tiles can be generated::
+
+ outline = ag.circle(c=(200, 200), r=150)
+ colors = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
+ x = ag.tile_region(outline, ag.voronoi_regions, tile_size=500)
+ ag.set_style(x['members'], 'fill', colors)
+
+.. image:: ../tests/png/tiling1.png
+
+Random triangular (i.e. Delaunay) tiles can be generated::
+
+ outline = ag.circle(c=(200, 200), r=150)
+ colors = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
+ x = ag.tile_region(outline, ag.delaunay_regions, tile_size=500)
+ ag.set_style(x['members'], 'fill', colors)
+
+.. image:: ../tests/png/tiling2.png
+
+The edges between polygonal or triangular tiles can be created instead::
+
+ outline = ag.circle(c=(200, 200), r=150)
+ colors = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7,
+                   li=ag.Uniform(min=0.5, max=0.7))
+ x = ag.tile_region(outline, ag.voronoi_edges, tile_size=1000)
+ ag.set_style(x['members'], 'stroke', colors)
+ ag.set_style(x['members'], 'stroke-width', 2)
+
+.. image:: ../tests/png/tiling3.png
+
+Nested equilateral triangles can be created, with the level of nesting
+random but specifiable::
+
+ outline = ag.circle(c=(200, 200), r=150)
+ color = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
+ x = ag.fill_nested_triangles(outline, min_level=2, max_level=5, color=color)
+
+.. image:: ../tests/png/tiling5.png
 
 
 Mazes
@@ -344,7 +529,108 @@ The grid can be rotated::
 Custom styles can be used by creating a new subclass of `Maze_Style`.
 
 
-Billowing
----------
+Doodles
+-------
+
+Small arbitrary objects, a.k.a. doodles, can be tiled to fill a
+region, creating a wrapping paper-type pattern.  The 'footprint', or
+shape of grid cells occupied, for each doodle is used to place
+different doodles in random orientations to fill a grid::
+
+ def doodle1_fun():
+     d = ag.circle(c=(0.5, 0.5), r=0.45)
+     ag.set_style(d, 'fill', 'green')
+     return d
+ 
+ def doodle2_fun():
+     d = [ag.circle(c=(0.5, 0.5), r=0.45),
+          ag.circle(c=(1, 0.5), r=0.45),
+          ag.circle(c=(1.5, 0.5), r=0.45)]
+     ag.set_style(d, 'fill', 'red')
+     return d
+ 
+ def doodle3_fun():
+     d = [ag.rectangle(start=(0.2, 1.2), w=2.6, h=0.6),
+          ag.rectangle(start=(1.2, 0.2), w=0.6, h=1.6)]
+     ag.set_style(d, 'fill', 'blue')
+     return d
+ 
+ doodle1 = ag.Doodle(doodle1_fun, footprint=[[True]])
+ doodle2 = ag.Doodle(doodle2_fun, footprint=[[True, True]])
+ doodle3 = ag.Doodle(doodle3_fun, footprint=[[True, True, True],
+                                             [False, True, False]])
+ doodles = [doodle1, doodle2, doodle3]
+ outline = ag.circle(c=(200, 200), r=180)
+ x = ag.fill_wrapping_paper(outline, 30, doodles, rotate=True)
+
+.. image:: ../tests/png/fill2.png
+
+Each doodle is defined by creating a Doodle instance with a generating
+function and footprint specification.  This allows each doodle to vary
+in appearance as long as it conforms to the footprint.
 
 
+Other fills
+-----------
+
+Ripples can fill the canvas while avoiding specified points::
+
+ circ = ag.points_on_arc(center=(200, 200), radius=100, theta_start=0,
+                         theta_end=360, spacing=10)
+ x = ag.ripple_canvas(w, h, spacing=10, existing_pts=circ)
+
+.. image:: ../tests/png/ripples1.png
+
+They are generated by a Markov chain telling them when to follow a
+boundary on the left, on the right, or to change direction.  The
+transition probabilities for the Markov chain can be specified to
+alter the appearance::
+
+ trans_probs = dict(S=dict(X=1),
+                    R=dict(R=0.9, L=0.05, X=0.05),
+                    L=dict(L=0.9, R=0.05, X=0.05),
+                    X=dict(R=0.5, L=0.5))
+ circ = ag.points_on_arc(center=(200, 200), radius=100, theta_start=0,
+                         theta_end=360, spacing=10)
+ x = ag.ripple_canvas(w, h, spacing=10, trans_probs=trans_probs,
+                      existing_pts=circ)
+
+.. image:: ../tests/png/ripples2.png
+
+A billowing texture is produced by generating a random spanning tree
+across a grid of pixels, and then moving through the tree and coloring
+them with a cyclical color gradient::
+
+ outline = ag.circle(c=(120, 120), r=100)
+ colors = [(0, 1, 0.3), (0.1, 1, 0.5), (0.2, 1, 0.5), (0.4, 1, 0.3)]
+ x = ag.billow_region(outline, colors, scale=200, gradient_mode='rgb')
+ 
+ outline = ag.circle(c=(280, 280), r=100)
+ colors = [(0, 1, 0.3), (0.6, 1, 0.3)]
+ y = ag.billow_region(outline, colors, scale=400, gradient_mode='hsv')
+
+.. image:: ../tests/png/textures2.png
+
+Objects like filaments can be filled using a generic function that
+generates random instances of the object and places them until the
+region is filled::
+
+ color = ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5))
+ outline = ag.circle(c=(200, 200), r=100)
+ dir_delta = ag.Uniform(min=-20, max=20)
+ width = ag.Uniform(min=8, max=12)
+ length = ag.Uniform(min=8, max=12)
+ filfun = ag.filament_fill(direction_delta=dir_delta, width=width,
+                           seg_length=length, color=color)
+ x = ag.fill_region(outline, filfun)
+ ag.add_shadows(x['members'])
+
+.. image:: ../tests/png/fill1.png
+
+
+Effects
+=======
+
+[shadows]
+
+[paper texture, torn paper edge]

@@ -9,12 +9,14 @@ import math
 import numpy as np
 
 from .main import set_style, add_margin, flatten
-from .shapes import bounding_box, coverage, remove_hidden
-from .shapes import rotated_bounding_box, keep_shapes_inside
+from .shapes import bounding_box, coverage, remove_hidden, keep_points_inside
+from .shapes import rotated_bounding_box, keep_shapes_inside, circle
 from .shapes import rotate_shapes, translate_shapes, scale_shapes
+from .shapes import sample_points_in_shape
 from .geom import distance, rand_point_on_circle, deg
 from .structures import filament
-from .param import Param, make_param
+from .tiling import mitchell_points
+from .param import Param, make_param, fixed_value
 from .color import make_color
 
 
@@ -284,3 +286,40 @@ def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     keep_shapes_inside(fill, outline)
 
     return dict(type='group', clip=outline, members=[fill])
+
+
+def fill_ishihara_spots(outline, spacing=10, radius=None):
+    """Fill a region with randomly sized spots.
+
+    The spots are reminiscent of Ishihara color blindness tests.
+    The spots are not completely non-overlapping, but overlaps are
+    somewhat avoided by spacing out their centers.
+
+    Args:
+        outline (dict|list): A region outline shape.
+        spacing (float): The approximate distance between the centers of neighboring spots.
+        radius (Param): The spot radius.  By default the radii range from `spacing` to `spacing` / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio < 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.
+
+    Returns:
+        list: A list of circle shapes.
+
+    """
+    spacing = fixed_value(spacing)
+    # radius2 = make_param(radius)
+    # sample = [radius2.value() for i in range(100)]
+    # r_mean = np.mean(sample)
+    bounds = bounding_box(outline)
+    bounds_area = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2])
+    # n_points = int(bounds_area / (3.14 * r_mean ** 2)) + 1
+    n_points = int(bounds_area / spacing ** 2) + 1
+    points = mitchell_points(n_points, 10, bounds)
+    keep_points_inside(points, outline)
+    if len(points) == 0:
+        points = sample_points_in_shape(outline, 1)
+    if radius is None:
+        ratio = ((spacing / 5) / spacing) ** (1. / (len(points) - 1))
+        radius = Param(spacing, ratio=ratio)
+    else:
+        radius = make_param(radius)
+    return [circle(c=points[i], r=radius.value()) for i in
+            range(len(points))]

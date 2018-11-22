@@ -65,3 +65,17 @@ x = ag.fill_wrapping_paper(outline, 30, doodles, rotate=True)
 
 ag.write_SVG(x, w, h, 'svg/fill2.svg')
 ag.to_PNG('svg/fill2.svg', 'png/fill2.png')
+
+
+######################################################################
+# Spot fill
+######################################################################
+
+outline = ag.circle(c=(200, 200), r=150)
+color = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7,
+                 li=ag.Uniform(min=0.5, max=0.7))
+x = ag.fill_ishihara_spots(outline)
+ag.set_style(x, 'fill', color)
+
+ag.write_SVG(x, w, h, 'svg/fill3.svg')
+ag.to_PNG('svg/fill3.svg', 'png/fill3.png')

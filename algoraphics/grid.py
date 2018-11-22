@@ -565,13 +565,13 @@ def fill_maze_hue_rotate(outline, spacing, style, color):
         outline (dict|list): The shape/s that will become the clip.
         spacing (float|int): The cell width of the grid.
         style (Maze_Style): An object specifying how the maze path is to be drawn.
-        color (color): The fill color for the maze.
+        color (Color): The fill color for the maze.
 
     Returns:
         dict: A group with clip.
 
     """
-    rotation = color.hsl()[0] * 90
+    rotation = color.value()[0] * 90
     # hsl = rgb_to_hsl(color)
     # rotation = (hsl[0] * hsl[1] ** 0.1 * (1 - abs(2 * hsl[2] - 1)) ** 0.1 * 90 + 45) % 90
     x = fill_maze(outline, spacing, style, rotation)

@@ -14,7 +14,6 @@ h = 400
 ######################################################################
 
 x = []
-
 color = ag.Color(hue=ag.Uniform(0, 0.15), sat=0.8, li=0.5)
 
 y = ag.splatter_text('ABCDEFG', height=50, spread=2, density=2,
@@ -102,6 +101,8 @@ ag.to_PNG('svg/text4.svg', 'png/text4.png')
 # Caption (SVG text)
 ######################################################################
 
+w, h = 400, 100
 x = ag.caption("SVG text.", x=w-20, y=20)
+
 ag.write_SVG(x, w, h, 'svg/text5.svg')
 ag.to_PNG('svg/text5.svg', 'png/text5.png')
