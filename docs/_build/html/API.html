@@ -290,8 +290,33 @@ gradient.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.fill.fill_ishihara_spots">
-<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_ishihara_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing=10</em>, <em>radius=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_ishihara_spots" title="Permalink to this definition">¶</a></dt>
+<dt id="algoraphics.fill.fill_region">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill a region by iteratively placing randomly generated objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become clip.</li>
+<li><strong>object_fun</strong> (<em>function</em>) – A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
+<li><strong>max_tries</strong> (<em>int</em>) – If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.fill.fill_spots">
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_spots</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing=10</em>, <em>radius=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_spots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill a region with randomly sized spots.</p>
 <p>The spots are reminiscent of Ishihara color blindness tests.
 The spots are not completely non-overlapping, but overlaps are
@@ -311,31 +336,6 @@ somewhat avoided by spacing out their centers.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.fill.fill_region">
-<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill a region by iteratively placing randomly generated objects.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<em>dict|list</em>) – A shape or (nested) list of shapes that will become clip.</li>
-<li><strong>object_fun</strong> (<em>function</em>) – A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
-<li><strong>max_tries</strong> (<em>int</em>) – If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A group with clip.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -1881,7 +1881,7 @@ the right place.</p>
 
 <dl class="function">
 <dt id="algoraphics.shapes.spline">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>curvature=0.3</em>, <em>circular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a spline object.</p>
 </dd></dl>
 
@@ -2129,24 +2129,6 @@ directions).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.svg.write_filters">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">write_filters</code><span class="sig-paren">(</span><em>filters</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_filters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an SVG representation of all filters used in graphic.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filters</strong> (<em>list</em>) – A list of filters.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG encoding.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.svg.write_frames">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">write_frames</code><span class="sig-paren">(</span><em>fun</em>, <em>n</em>, <em>w</em>, <em>h</em>, <em>file_name</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write multiple frames of randomized objects.</p>
@@ -2163,50 +2145,6 @@ directions).</p>
 <li><strong>file_name</strong> (<em>str</em>) – A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.</li>
 </ul>
 </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.svg.write_object">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">write_object</code><span class="sig-paren">(</span><em>obj</em>, <em>defs</em>, <em>filters</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate SVG representation of object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj</strong> (<em>dict</em>) – A shape, group, text, or image dictionary.</li>
-<li><strong>defs</strong> (<em>list</em>) – A list of strings used to collect SVG representations of all clip paths, filters, etc.</li>
-<li><strong>filters</strong> (<em>list</em>) – A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An SVG encoding.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.svg.write_style">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">write_style</code><span class="sig-paren">(</span><em>style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an SVG representation of an object’s style.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>style</strong> (<em>dict</em>) – A dictionary with attributes as keys. Underscores will be replaced with hyphens, which are not allowed in keys.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An SVG encoding which should be inserted between the
-quotes of style=”…”.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
@@ -2300,7 +2238,7 @@ randomized).</p>
 
 <dl class="function">
 <dt id="algoraphics.text.hazy_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">hazy_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>fill</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.hazy_text" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.text.</code><code class="descname">hazy_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.hazy_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate text with hazy dots effect.</p>
 <p>Similar to splatter text but dot size is inversely proportional to
 square root of deviation, and points are uniformly jittered.</p>
@@ -2315,7 +2253,7 @@ square root of deviation, and points are uniformly jittered.</p>
 <li><strong>density</strong> (<em>float|int</em>) – Number of dots per pixel.</li>
 <li><strong>min_size</strong> (<em>float|int</em>) – The smallest dot radius.</li>
 <li><strong>max_size</strong> (<em>float|int</em>) – The largest dot radius.</li>
-<li><strong>fill</strong> (<em>color</em>) – A fill color or function.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – A fill color or function.</li>
 </ul>
 </td>
 </tr>
@@ -2331,7 +2269,7 @@ square root of deviation, and points are uniformly jittered.</p>
 
 <dl class="function">
 <dt id="algoraphics.text.splatter_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">splatter_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>fill</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.splatter_text" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.text.</code><code class="descname">splatter_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.splatter_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate text with paint splatter appearance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2344,7 +2282,7 @@ square root of deviation, and points are uniformly jittered.</p>
 <li><strong>density</strong> (<em>float|int</em>) – Number of dots per pixel.</li>
 <li><strong>min_size</strong> (<em>float|int</em>) – The smallest dot radius.</li>
 <li><strong>max_size</strong> (<em>float|int</em>) – The largest dot radius.</li>
-<li><strong>fill</strong> (<em>color</em>) – A fill color or function.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><em>Color</em></a>) – A fill color or function.</li>
 </ul>
 </td>
 </tr>
@@ -2650,31 +2588,6 @@ not have finite regions.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.tiling.mitchell_points">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">mitchell_points</code><span class="sig-paren">(</span><em>n</em>, <em>n_cand</em>, <em>bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.mitchell_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate random but evenly-spaced points.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>int</em>) – Number of points to generate.</li>
-<li><strong>n_cand</strong> (<em>int</em>) – Number of candidate points to generate for each output point.  Higher numbers result in higher regularity.</li>
-<li><strong>bounds</strong> (<em>tuple</em>) – A bounds tuple.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated points.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.tiling.nested_triangles">
 <code class="descclassname">algoraphics.tiling.</code><code class="descname">nested_triangles</code><span class="sig-paren">(</span><em>tip</em>, <em>height</em>, <em>min_level</em>, <em>max_level</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.nested_triangles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate nested equilateral triangles.</p>
@@ -2701,8 +2614,34 @@ not have finite regions.</td>
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.tiling.spaced_points">
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">spaced_points</code><span class="sig-paren">(</span><em>n</em>, <em>n_cand</em>, <em>bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.spaced_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random but evenly-spaced points.</p>
+<p>Uses Mitchell’s best-candidate algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>int</em>) – Number of points to generate.</li>
+<li><strong>n_cand</strong> (<em>int</em>) – Number of candidate points to generate for each output point.  Higher numbers result in higher regularity.</li>
+<li><strong>bounds</strong> (<em>tuple</em>) – A bounds tuple.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The generated points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.tiling.tile_canvas">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>tile_fun</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_canvas" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_canvas</code><span class="sig-paren">(</span><em>w</em>, <em>h</em>, <em>shape='polygon'</em>, <em>edges=False</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_canvas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill canvas with (uncolored) tiles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2711,9 +2650,10 @@ not have finite regions.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>w</strong> (<em>int</em>) – Width of the canvas.</li>
 <li><strong>h</strong> (<em>int</em>) – Height of the canvas.</li>
-<li><strong>tile_fun</strong> (<em>function</em>) – A function that accepts a list of points and returns a list of shapes.</li>
+<li><strong>tile_shape</strong> (<em>str</em>) – Either ‘polygon’ for Voronoi tiling or ‘triangle’ for Delaunay tiling.</li>
+<li><strong>edges</strong> (<em>bool</em>) – Whether to return the edges around tiles as lines instead of the tiles themselves.</li>
 <li><strong>tile_size</strong> (<em>float|int</em>) – The approximate area of each tile.</li>
-<li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to mitchell_points.</li>
+<li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to spaced_points.</li>
 </ul>
 </td>
 </tr>
@@ -2729,17 +2669,18 @@ not have finite regions.</td>
 
 <dl class="function">
 <dt id="algoraphics.tiling.tile_region">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_region</code><span class="sig-paren">(</span><em>outline</em>, <em>tile_fun</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill region with (uncolored) tiles.</p>
+<code class="descclassname">algoraphics.tiling.</code><code class="descname">tile_region</code><span class="sig-paren">(</span><em>outline</em>, <em>shape='polygon'</em>, <em>edges=False</em>, <em>tile_size=500</em>, <em>regularity=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.tile_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill region with (uncolored) tiles or tile edges.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<em>dict|list</em>) – The shape/s that will become the clip.</li>
-<li><strong>tile_fun</strong> (<em>function</em>) – A function that accepts list of points and returns a list of shapes.</li>
+<li><strong>shape</strong> (<em>str</em>) – Either ‘polygon’ for Voronoi tiling or ‘triangle’ for Delaunay tiling.</li>
+<li><strong>edges</strong> (<em>bool</em>) – Whether to return the edges around tiles as lines instead of the tiles themselves.</li>
 <li><strong>tile_size</strong> (<em>float|int</em>) – The approximate area of each tile.</li>
-<li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to mitchell_points.</li>
+<li><strong>regularity</strong> (<em>int</em>) – A value of one or higher, passed to spaced_points.</li>
 </ul>
 </td>
 </tr>

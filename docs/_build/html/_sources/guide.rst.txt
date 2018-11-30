@@ -27,20 +27,20 @@ the bottom of the canvas with y increasing upward.  It also means that
 while the coordinate units are pixels, negative and non-integer values
 are allowed.
 
-Objects
--------
+Shapes
+------
 
-Visible objects are represented as dictionaries.  Their `type`
-attribute defines what is drawn and which other attributes will be
-accessed (though additional attributes can be supplied and will be
-ignored).
+Primitive visible objects are represented as dictionaries.  Their
+``type`` attribute defines what is drawn and which other attributes
+will be accessed (though additional attributes can be supplied and
+will be ignored).
 
 ========  ================================================================
 Object    Attributes
 ========  ================================================================
 circle    c (point), r (float)
 group     members (list), clip (list or dict)
-image     image (PIL Image), w (float), h (float), format (str)
+raster    image (PIL Image), w (float), h (float), format (str)
 line      p1 (point), p2 (point)
 path      d (list of command dicts)
 polygon   points (list)
@@ -49,27 +49,29 @@ spline    points (list), curvature (float), circular (bool)
 text      text (str), x (float), y (float), align (str), font_size (float)
 ========  ================================================================
 
-Objects can be stored in nested lists without affecting their
-rendering.  The purpose of groups is to apply things like clipping and
-shadows to a collection of shapes.
+:term:`Shapes<shape>` can be stored in nested lists without affecting
+their rendering.  The purpose of groups, on the other hand, is to
+apply things like clipping and shadows to a :term:`collection` of
+:term:`shapes<shape>`.
 
-Convenience functions like `circle` exist that simply return a
-dictionary.  Functions also exist to define shapes in alternative ways
-for convenience.  For example, the `rectangle` function accepts a
-starting point, width, and height, or just a set of x and y bounds,
-and returns a polygon defined by its four corners.
+Convenience functions like ``circle`` exist that simply return a
+dictionary.  Functions also exist to define :term:`shapes<shape>` in
+alternative ways for convenience.  For example, the ``rectangle``
+function accepts a starting :term:`point`, width, and height, or just
+a set of x and y bounds, and returns a polygon defined by its four
+corners.
 
 Styles
 ------
 
-SVG attributes are used to style shapes and are stored as a dictionary
-in each shape's `style` attribute.
+SVG attributes are used to style :term:`shapes<shape>` and are stored
+as a dictionary in each :term:`shape's<shape>` ``style`` attribute.
 
 Parameters
 ----------
 
 Many algoraphics functions accept abstract parameters that specify a
-distributiopn to randomly sample from.  This makes it easy to
+distribution to randomly sample from.  This makes it easy to
 incorporate subtle or not-so-subtle randomness into the graphics.  It
 also allows basic functions to be used in multiple ways to create
 different patterns.
@@ -107,10 +109,11 @@ or this::
 
 .. image:: ../tests/png/param3.png
 
-Parameter object classes for random distributions like Uniform,
-Normal, and Exponential are memoryless.  A parameter can instead have
-a delta attribute, whose value is added to the last value to get the
-next one each time the parameter value is accessed::
+:term:`Parameter<parameter>` classes for random distributions like
+``Uniform``, ``Normal``, and ``Exponential`` are memoryless.  A
+:term:`parameter` can instead have a delta attribute, whose value is
+added to the last value to get the next one each time the
+:term:`parameter` value is accessed::
 
  p2y = ag.Param(170, delta=-0.25)
  x.append([ag.line((i * 4, 170), (i * 4, p2y)) for i in range(100)])
@@ -126,19 +129,19 @@ next one each time the parameter value is accessed::
 
 .. image:: ../tests/png/param4.png
 
-The delta attribute can itself be a parameter, which can allow for
-object attributes to be generated as a random walk (middle row of
-lines above).
+The delta attribute can itself be a :term:`parameter`, which can allow
+for :term:`shape` attributes to be generated as a random walk (middle
+row of lines above).
 
-If the delta parameter has its own delta attribute, second-order
-changes are produced (bottom row of lines above).
+If the delta :term:`parameter` has its own delta attribute,
+second-order changes are produced (bottom row of lines above).
 
-Parameters can have a ratio attribute instead of delta, which works
-the same way but multiplies, rather than adds, ``ratio`` by the last
-value.
+:term:`Parameters<parameter>` can have a ratio attribute instead of
+delta, which works the same way but multiplies, rather than adds,
+``ratio`` to the last value.
 
-A parameter can also be defined with a list of values, which will be
-uniformly randomly sampled::
+A :term:`parameter` can also be defined with a list of values, which
+will be uniformly randomly sampled::
 
  w, h = 400, 200
  center = (ag.Uniform(10, w - 10), ag.Uniform(10, h - 10))
@@ -149,11 +152,11 @@ uniformly randomly sampled::
 
 .. image:: ../tests/png/param5.png
 
-Finally, a parameter can be defined with an arbitrary function, which
-will be called with no arguments to generate values.
+Finally, a :term:`parameter` can be defined with an arbitrary
+function, which will be called with no arguments to generate values.
 
-Note that once an object is generated, its parameters are generally
-static.
+Note that once a :term:`shape` is generated, its
+:term:`parameters<parameter>` are generally static.
 
 
 Colors
@@ -161,13 +164,13 @@ Colors
 
 Colors are represented as objects of the Color class.  They are
 generally defined in the HSL (hue, saturation, lightness) color space.
-If these are supplied as Param objects, the objects represents a
+If these are supplied as Param objects, the color object represents a
 distribution from which colors will be sampled::
 
  outline = ag.circle(c=(200, 200), r=150)
  color = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7,
                   li=ag.Uniform(min=0.5, max=0.7))
- x = ag.fill_ishihara_spots(outline)
+ x = ag.fill_spots(outline)
  ag.set_style(x, 'fill', color)
 
 .. image:: ../tests/png/fill3.png
@@ -175,24 +178,24 @@ distribution from which colors will be sampled::
 Color values can be defined and retrieved using other color
 specifications.
 
-Shape color attributes like `fill` and `stroke` can be set with a
-string, which will be used as-is in the SVG file.  This will work for
-hex codes, named colors, etc.
+:term:`Shape<shape>` color attributes like ``fill`` and ``stroke`` can
+be set with a string, which will be used as-is in the SVG file.  This
+will work for hex codes, named colors, etc.
 
 
 Output
 ------
 
-Objects are written to an SVG file using the `write_SVG` function.
-Shapes are represented with types that correspond to SVG objects or
-specific forms of them.
+:term:`Shapes<shape>` are written to an SVG file using the
+``write_SVG`` function.  Each type of :term:`shape` corresponds to a
+SVG object type or a specific form of one.
 
 ===========  ==========================
 algoraphics  SVG
 ===========  ==========================
 circle       circle
 group        g
-image        image
+raster       image
 line         line
 path         path
 polygon      polygon
@@ -205,31 +208,32 @@ SVG-rendered effects like shadows and paper texture applied to objects
 become references to SVG filters, which are defined at the beginning
 of the SVG file.
 
-By default, the SVG code is optimized using `svgo`, but this can be
+By default, the SVG code is optimized using ``svgo``, but this can be
 skipped for more readable SVG code, e.g. for debugging.
 
-SVG files can then be converted to PNG files using the `to_PNG`
+SVG files can then be converted to PNG files using the ``to_PNG``
 function.
 
 
 Images
 ------
 
-Images can be used as templates for use with patterns or textures.
-The simplest strategy is to sample colors from the image to color
-objects at corresponding locations::
+:term:`Images<image>` can be used as templates for use with patterns
+or textures.  The simplest strategy is to sample colors from the
+:term:`image` to color :term:`shapes<shape>` at corresponding
+locations::
 
  image = ag.open_image("test_images.jpg")
  ag.resize_image(image, 800, None)
  w, h = image.size
- x = ag.tile_canvas(w, h, ag.voronoi_regions, tile_size=100)
+ x = ag.tile_canvas(w, h, shape='polygon', tile_size=100)
  ag.fill_shapes_from_image(x, image)
 
 .. image:: ../tests/png/images1.png
 
-Images can also be segmented into regions that correspond to detected
-color boundaries with some smoothing, but are constrained to not be
-too large::
+:term:`Images<image>` can also be segmented into
+:term:`regions<region>` that correspond to detected color boundaries
+with some smoothing, but are constrained to not be too large::
 
  image = ag.open_image("test_images.jpg")
  ag.resize_image(image, 800, None)
@@ -267,45 +271,45 @@ Text
 ----
 
 Text can be created and stylized.  Characters are generated as nested
-lists of points (one list per continuous pen stroke) along their
-form::
+lists of :term:`points<point>` (one list per continuous pen stroke)
+along their form::
 
  x = []
  color = ag.Color(hue=ag.Uniform(0, 0.15), sat=0.8, li=0.5)
  
  y = ag.splatter_text('ABCDEFG', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, fill=color)
- ag.reposition(y, (w / 2., h - 50), 'center', 'top')
+                      min_size=1, max_size=3, color=color)
+ ag.reposition(y, (w / 2, h - 50), 'center', 'top')
  x.append(y)
  
  y = ag.splatter_text('HIJKLM', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, fill=color)
- ag.reposition(y, (w / 2., h - 150), 'center', 'top')
+                      min_size=1, max_size=3, color=color)
+ ag.reposition(y, (w / 2, h - 150), 'center', 'top')
  x.append(y)
  
  y = ag.splatter_text('0123456789', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, fill=color)
- ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+                      min_size=1, max_size=3, color=color)
+ ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
 .. image:: ../tests/png/text1.png
 
-These points can then be manipulated in many ways::
+These :term:`points<point>` can then be manipulated in many ways::
 
  x = []
  
  y = ag.double_dots_text('NOPQRST', height=40)
- ag.reposition(y, (w / 2., h - 50), 'center', 'top')
+ ag.reposition(y, (w / 2, h - 50), 'center', 'top')
  x.append(y)
  
  y = ag.double_dots_text('UVWXYZ', height=40, top_color='#FF8888',
                          bottom_color='#555555')
- ag.reposition(y, (w / 2., h - 150), 'center', 'top')
+ ag.reposition(y, (w / 2, h - 150), 'center', 'top')
  x.append(y)
  
  y = ag.double_dots_text(".,!?:;'\"/", height=40, top_color='#FF8888',
                          bottom_color='#555555')
- ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
 .. image:: ../tests/png/text2.png
@@ -316,28 +320,28 @@ provided, though additional ones can be added on request::
  x = []
  
  y = ag.hazy_text('abcdefg', height=50, spread=10, density=3,
-                  min_size=0.5, max_size=2, fill='green')
- ag.reposition(y, (w / 2., h - 100), 'center', 'top')
+                  min_size=0.5, max_size=2, color='green')
+ ag.reposition(y, (w / 2, h - 100), 'center', 'top')
  x.append(y)
  
  y = ag.hazy_text('hijklm', height=50, spread=10, density=3,
-                  min_size=0.5, max_size=2, fill='green')
- ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+                  min_size=0.5, max_size=2, color='green')
+ ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
 .. image:: ../tests/png/text3.png
 
-Since generated points are grouped by continuous pen strokes, points
-within each list can be joined::
+Since generated :term:`points<point>` are grouped by continuous pen
+strokes, :term:`points<point>` within each list can be joined::
 
  x = []
  
  y = ag.squiggle_text('nopqrst', height=60, spread=10, density=1)
- ag.reposition(y, (w / 2., h - 100), 'center', 'top')
+ ag.reposition(y, (w / 2, h - 100), 'center', 'top')
  x.append(y)
  
  y = ag.squiggle_text('uvwxyz', height=60, spread=10, density=1)
- ag.reposition(y, (w / 2., h - 250), 'center', 'top')
+ ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
 .. image:: ../tests/png/text4.png
@@ -365,9 +369,9 @@ Filaments made of quadrilateral segments can be generated::
 
 .. image:: ../tests/png/structures1.png
 
-The direction parameter's delta or ratio attribute allows the filament
-to move in different directions.  Nested deltas produce smooth
-curves::
+The direction :term:`parameter's<parameter>` delta or ratio attribute
+allows the filament to move in different directions.  Nested deltas
+produce smooth curves::
 
  direc = ag.Param(90, delta=ag.Param(0, min=-20, max=20,
                                      delta=ag.Uniform(min=-3, max=3)))
@@ -397,7 +401,7 @@ Blow paint
 ----------
 
 Blow painting effects (i.e., droplets of paint blown outward from an
-object) can be created for 0D, 1D, and 2D objects::
+object) can be created for 0D, 1D, and 2D forms::
 
  pts1 = [(50, 50), (50, 100), (100, 70), (150, 130), (200, 60)]
  x1 = ag.blow_paint_area(pts1)
@@ -437,18 +441,18 @@ Trees with randomly bifurcating branches can be generated::
 Fills
 =====
 
-These functions fill a region with structures and patterns.
+These functions fill a :term:`region` with structures and patterns.
 
 Tiling
 ------
 
-These functions divide a region's area into tiles.
+These functions divide a :term:`region's` area into tiles.
 
 Random polygonal (i.e. Voronoi) tiles can be generated::
 
  outline = ag.circle(c=(200, 200), r=150)
  colors = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
- x = ag.tile_region(outline, ag.voronoi_regions, tile_size=500)
+ x = ag.tile_region(outline, shape='polygon', tile_size=500)
  ag.set_style(x['members'], 'fill', colors)
 
 .. image:: ../tests/png/tiling1.png
@@ -457,7 +461,7 @@ Random triangular (i.e. Delaunay) tiles can be generated::
 
  outline = ag.circle(c=(200, 200), r=150)
  colors = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
- x = ag.tile_region(outline, ag.delaunay_regions, tile_size=500)
+ x = ag.tile_region(outline, shape='triangle', tile_size=500)
  ag.set_style(x['members'], 'fill', colors)
 
 .. image:: ../tests/png/tiling2.png
@@ -467,7 +471,7 @@ The edges between polygonal or triangular tiles can be created instead::
  outline = ag.circle(c=(200, 200), r=150)
  colors = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7,
                    li=ag.Uniform(min=0.5, max=0.7))
- x = ag.tile_region(outline, ag.voronoi_edges, tile_size=1000)
+ x = ag.tile_region(outline, shape='polygon', edges=True, tile_size=1000)
  ag.set_style(x['members'], 'stroke', colors)
  ag.set_style(x['members'], 'stroke-width', 2)
 
@@ -496,7 +500,7 @@ These patterns resemble mazes, but are actually random spanning trees::
 .. image:: ../tests/png/grid1.png
 
 The maze style is defined by an instance of a subclass of
-`Maze_Style`::
+``Maze_Style``::
 
  outline = ag.rectangle(bounds=(0, w, 0, h))
  x = ag.fill_maze(outline, spacing=20,
@@ -532,10 +536,11 @@ Custom styles can be used by creating a new subclass of `Maze_Style`.
 Doodles
 -------
 
-Small arbitrary objects, a.k.a. doodles, can be tiled to fill a
-region, creating a wrapping paper-type pattern.  The 'footprint', or
-shape of grid cells occupied, for each doodle is used to place
-different doodles in random orientations to fill a grid::
+Small arbitrary objects, a.k.a. :term:`doodles<doodle>`, can be tiled
+to fill a :term:`region`, creating a wrapping-paper-type pattern.  The
+'footprint', or shape of grid cells occupied, for each :term:`doodle`
+is used to place different :term:`doodles<doodle>` in random
+orientations to fill a grid::
 
  def doodle1_fun():
      d = ag.circle(c=(0.5, 0.5), r=0.45)
@@ -565,15 +570,17 @@ different doodles in random orientations to fill a grid::
 
 .. image:: ../tests/png/fill2.png
 
-Each doodle is defined by creating a Doodle instance with a generating
-function and footprint specification.  This allows each doodle to vary
-in appearance as long as it conforms to the footprint.
+Each :term:`doodle` is defined by creating a Doodle object that
+specifies a generating function and footprint.  This allows each
+:term:`doodle` to vary in appearance as long as it roughly conforms to
+the footprint.
 
 
 Other fills
 -----------
 
-Ripples can fill the canvas while avoiding specified points::
+Ripples can fill the canvas while avoiding specified
+:term:`points<point>`::
 
  circ = ag.points_on_arc(center=(200, 200), radius=100, theta_start=0,
                          theta_end=360, spacing=10)
@@ -611,9 +618,9 @@ them with a cyclical color gradient::
 
 .. image:: ../tests/png/textures2.png
 
-Objects like filaments can be filled using a generic function that
-generates random instances of the object and places them until the
-region is filled::
+A :term:`region` can be filled with structures such as filaments using
+a generic function that generates random instances of the structure
+and places them until the :term:`region` is filled::
 
  color = ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5))
  outline = ag.circle(c=(200, 200), r=100)
@@ -631,6 +638,38 @@ region is filled::
 Effects
 =======
 
-[shadows]
+Shadows can be added to :term:`shapes` or
+:term:`collections<collection>`::
 
-[paper texture, torn paper edge]
+ d = [dict(command='M', to=(50, 50)),
+      dict(command='L', to=(50, 350)),
+      dict(command='L', to=(350, 50)),
+      dict(command='L', to=(50, 50)),
+      dict(command='M', to=(70, 70)),
+      dict(command='L', to=(320, 70)),
+      dict(command='L', to=(70, 320)),
+      dict(command='L', to=(70, 70))]
+ path = dict(type='path', d=d)
+ ag.set_style(path, 'fill', "#55CC55")
+ 
+ centers = [(300, 250), (250, 300)]
+ circles = [ag.circle(c=c, r=50) for c in centers]
+ ag.set_style(circles[0], 'fill', "#FFDDDD")
+ ag.set_style(circles[1], 'fill', "#DDDDFF")
+ 
+ x = [path, circles]
+ ag.add_shadows(x, stdev=20, darkness=0.5)
+
+.. image:: ../tests/png/textures1.png
+
+Shapes or collections can be given a rough paper texture, and their
+edges can appear torn::
+	   
+ x = [ag.rectangle(start=(50, 50), w=300, h=300),
+      ag.circle(c=(200, 200), r=150)]
+ ag.set_style(x[0], 'fill', 'green')
+ ag.set_style(x[1], 'fill', '#FFCCCC')
+ ag.add_paper_texture(x)
+ x = ag.tear_paper_rect(x, (60, 340, 60, 340))
+
+.. image:: ../tests/png/textures3.png

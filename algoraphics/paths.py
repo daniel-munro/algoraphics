@@ -71,7 +71,7 @@ def _spline_path(points, curvature=0.3, circular=False):
     return path
 
 
-def _write_path(d):
+def _write_pathstring(d):
     """TODO"""
     def pnt(p):
         return str(p[0]) + ' ' + str(p[1])

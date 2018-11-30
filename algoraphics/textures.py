@@ -5,7 +5,7 @@ Add textures and shadows to shapes.
 
 """
 
-import random
+import numpy as np
 
 from .main import add_margin, bounding_box, random_walk
 from .color import map_colors_to_array, make_color
@@ -106,7 +106,7 @@ def billow_region(outline, colors, scale=200, gradient_mode='rgb'):
     w = int(bound[1] - bound[0])
     h = int(bound[3] - bound[2])
     billow = billowing(w, h, colors, scale, gradient_mode)
-    billow = dict(type='image', image=billow, x=bound[0], y=bound[2],
+    billow = dict(type='raster', image=billow, x=bound[0], y=bound[2],
                   format='PNG')
     return dict(type='group', clip=outline, members=[billow])
 
@@ -143,24 +143,25 @@ def tear_paper_rect(objects, bounds):
     e = 10
     d = 0.5
 
-    s1 = (bounds[0] + random.uniform(0, e), bounds[2] + random.uniform(0, e))
+    s1 = (bounds[0] + np.random.uniform(0, e),
+          bounds[2] + np.random.uniform(0, e))
     s = s1
     points = [s]
-    n = int((bounds[1] - s[0] - random.uniform(0, e)) / d)
+    n = int((bounds[1] - s[0] - np.random.uniform(0, e)) / d)
     x = [s[0] + d * i for i in range(n)]
     y = random_walk(min_val=bounds[2], max_val=bounds[2] + e,
                     max_step=0.5, n=n, start=s[1])
     points.extend(zip(x, y))
 
     s = points[-1]
-    n = int((bounds[3] - s[1] - random.uniform(0, e)) / d)
+    n = int((bounds[3] - s[1] - np.random.uniform(0, e)) / d)
     x = random_walk(min_val=bounds[1] - e, max_val=bounds[1],
                     max_step=0.5, n=n, start=s[0])
     y = [s[1] + d * i for i in range(n)]
     points.extend(zip(x, y))
 
     s = points[-1]
-    n = int((s[0] - bounds[0] - random.uniform(0, e)) / d)
+    n = int((s[0] - bounds[0] - np.random.uniform(0, e)) / d)
     x = [s[0] - d * i for i in range(n)]
     y = random_walk(min_val=bounds[3] - e, max_val=bounds[3],
                     max_step=0.5, n=n, start=s[1])

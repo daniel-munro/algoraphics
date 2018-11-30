@@ -6,7 +6,6 @@ Functions for working with colors.
 """
 
 import numpy as np
-import random
 import colorsys
 import matplotlib.colors
 

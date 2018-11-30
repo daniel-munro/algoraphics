@@ -148,25 +148,64 @@
             
   <div class="section" id="glossary">
 <h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>term (up to a line of text)</dt>
-<dd><p class="first">Definition of the term, which must be indented</p>
-<p class="last">and can even consist of multiple paragraphs</p>
-</dd>
+<dl class="glossary docutils">
+<dt id="term-bounds">bounds</dt>
+<dd>A tuple giving the minimum x, maximum x, minimum y, and maximum
+y coordinate of a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>, <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a>, or general
+rectangular space.</dd>
+<dt id="term-collection">collection</dt>
+<dd>A list containing <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a>, which can be nested in
+lists.</dd>
+<dt id="term-doodle">doodle</dt>
+<dd>An abstraction of a small drawing.  It can vary each time it is
+drawn.  A fill function can draw it in different orientations
+and locations to fill a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</dd>
+<dt id="term-image">image</dt>
+<dd>A PIL Image object specifying a grid of pixels.  These are
+usually used as templates, but can also be drawn using a
+<code class="docutils literal notranslate"><span class="pre">raster</span></code> <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>.</dd>
+<dt id="term-margin">margin</dt>
+<dd>The space added in all four directions to the <a class="reference internal" href="#term-bounds"><span class="xref std std-term">bounds</span></a> of
+some area to improve visual continuity.  For example, a tiling
+or other filling pattern should extend beyond the canvas or
+<a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a> edges to avoid edge artifacts or gaps.</dd>
+<dt id="term-outline">outline</dt>
+<dd>A <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> or <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a> specifying an area in
+which some function will draw.</dd>
+<dt id="term-parameter">parameter</dt>
+<dd>A specification for some attribute of a drawing.  A Param
+object, or one whose type inherits from Param, can represent
+the attribute so that the attribute can vary within the
+drawing, or so that multiple <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a> can be drawn
+without having to explicitly generate random values for each
+one.</dd>
+<dt id="term-path">path</dt>
+<dd>A representation of an SVG path.  It specifies a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>
+that can include disjoint lines, arcs, and Bezier curves.</dd>
+<dt id="term-point">point</dt>
+<dd>A tuple containing the x and y coordinates of a point in 2D
+space.  The units are pixels by default, but can be defined
+with floats.</dd>
+<dt id="term-region">region</dt>
+<dd>A drawing occupying a specified area.  It is generally
+represented as a group <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> clipped (i.e., contains
+the <code class="docutils literal notranslate"><span class="pre">clip</span></code> attribute) by an <a class="reference internal" href="#term-outline"><span class="xref std std-term">outline</span></a>.  It is often
+created using either a <a class="reference internal" href="#term-bounds"><span class="xref std std-term">bounds</span></a> specification or by
+segmenting an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a>.</dd>
+<dt id="term-segment">segment</dt>
+<dd>An area of an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a> that is contiguous and visually
+distinct and can form the basis of a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</dd>
+<dt id="term-shape">shape</dt>
+<dd>A visual object that is specified by a single SVG element.  It
+is represented by a dictionary with a <code class="docutils literal notranslate"><span class="pre">type</span></code> attribute
+specifying the type of shape, and other attributes defining its
+<a class="reference internal" href="#term-parameter"><span class="xref std std-term">parameters</span></a>.</dd>
+<dt id="term-style">style</dt>
+<dd>A visual attribute of a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> that is stored in a
+dictionary in the shape’s <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute.  It usually
+corresponds to an SVG attribute, and any SVG attribute can be
+specified.</dd>
 </dl>
-<p>shape</p>
-<p>collection</p>
-<p>doodle</p>
-<p>region</p>
-<p>outline</p>
-<p>segment? (image)</p>
-<p>image</p>
-<p>parameter</p>
-<p>point</p>
-<p>bounds</p>
-<p>margin</p>
-<p>path</p>
-<p>style</p>
 </div>
 
 

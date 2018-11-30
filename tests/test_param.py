@@ -70,7 +70,6 @@ x.append([ag.line((i * 4, 100), (i * 4, p2y)) for i in range(100)])
 p2y = ag.Param(30, min=0, max=60,
                delta=ag.Param(0, min=-2, max=2, delta=ag.Uniform(-2, 2)))
 x.append([ag.line((i * 4, 30), (i * 4, p2y)) for i in range(100)])
-
 ag.set_style(x, 'stroke-width', 2)
 
 ag.write_SVG(x, w, h, 'svg/param4.svg')

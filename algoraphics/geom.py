@@ -6,7 +6,7 @@ General functions involving points in 2D space.
 """
 
 import math
-import random
+import numpy as np
 import rtree
 
 
@@ -22,7 +22,7 @@ def deg(rad):
 
 def rand_point_on_circle(c, r):
     """Return random point on circle with center c and radius r."""
-    theta = random.uniform(-math.pi, math.pi)
+    theta = np.random.uniform(-math.pi, math.pi)
     return (c[0] + math.cos(theta) * r, c[1] + math.sin(theta) * r)
 
 
@@ -283,11 +283,11 @@ def jitter_points(points, deviation, type):
 
     """
     for i in range(len(points)):
-        angle = random.uniform(0, 2 * math.pi)
+        angle = np.random.uniform(0, 2 * math.pi)
         if type == 'gaussian':
-            dist = random.gauss(0, deviation)
+            dist = np.random.normal(0, deviation)
         elif type == 'uniform':
-            dist = random.uniform(0, deviation)
+            dist = np.random.uniform(0, deviation)
         points[i] = endpoint(points[i], angle, dist)
 
 

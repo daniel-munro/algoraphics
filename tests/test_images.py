@@ -13,7 +13,7 @@ os.chdir(script_dir)
 image = ag.open_image("test_images.jpg")
 ag.resize_image(image, 800, None)
 w, h = image.size
-x = ag.tile_canvas(w, h, ag.voronoi_regions, tile_size=100)
+x = ag.tile_canvas(w, h, shape='polygon', tile_size=100)
 ag.fill_shapes_from_image(x, image)
 
 ag.write_SVG(x, w, h, 'svg/images1.svg')

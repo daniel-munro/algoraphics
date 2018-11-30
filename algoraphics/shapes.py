@@ -14,7 +14,7 @@ from shapely.geometry import Polygon, Point
 from .geom import translated_point, rotated_point, scale_points, scaled_point
 from .geom import distance, endpoint, rad
 from .param import fixed_value, make_param
-from .paths import translate_path, rotate_path, scale_path
+from .paths import translate_path, rotate_path, scale_path, path_points
 
 
 def polygon(points):
@@ -22,9 +22,10 @@ def polygon(points):
     return dict(type='polygon', points=points)
 
 
-def spline(points):
+def spline(points, curvature=0.3, circular=False):
     """Create a spline object."""
-    return dict(type='spline', points=points)
+    return dict(type='spline', points=points, curvature=curvature,
+                circular=circular)
 
 
 def line(p1=None, p2=None, points=None):
@@ -131,7 +132,7 @@ def bounding_box(shapes):
         input.
 
     """
-    if isinstance(shapes, list):
+    if type(shapes) is list:
         b = list(zip(*[bounding_box(s) for s in shapes]))
         return (min(b[0]), max(b[1]), min(b[2]), max(b[3]))
 
@@ -203,7 +204,7 @@ def translate_shapes(shapes, dx, dy):
     elif shapes['type'] == 'text':
         shapes['x'] += dx
         shapes['y'] += dy
-    elif shapes['type'] == 'image':
+    elif shapes['type'] == 'raster':
         shapes['x'] += dx
         shapes['y'] += dy
 
@@ -259,7 +260,7 @@ def scale_shapes(shapes, cx, cy=None):
     elif shapes['type'] == 'text':
         shapes['x'] *= cx
         shapes['y'] *= cy
-    elif shapes['type'] == 'image':
+    elif shapes['type'] == 'raster':
         # note: image contents not scaled/flipped!
         shapes['x'] *= cx
         shapes['y'] *= cy

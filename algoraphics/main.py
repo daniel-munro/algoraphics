@@ -5,7 +5,6 @@ General functions for creating graphics.
 
 """
 
-import random
 import numpy as np
 
 from .geom import distance
@@ -75,11 +74,11 @@ def random_walk(min_val, max_val, max_step, n, start=None):
 
     """
     if start is None:
-        x = [random.uniform(min_val, max_val)]
+        x = [np.random.uniform(min_val, max_val)]
     else:
         x = [float(start)]
     for i in range(1, n):
-        val = x[-1] + random.uniform(-max_step, max_step)
+        val = x[-1] + np.random.uniform(-max_step, max_step)
         x.append(max(min_val, min(max_val, val)))
     return x
 
@@ -94,7 +93,7 @@ def shuffled(items):
         list: A new list with same objects as input but reordered.
 
     """
-    return random.sample(items, len(items))
+    return list(np.random.choice(items, len(items), replace=False))
 
 
 def arith_seq(start, stop, length):
@@ -142,10 +141,10 @@ def reorder_objects(objects, by='random', w=None, h=None):
 
     """
     if by == 'random':
-        random.shuffle(objects)
+        np.random.shuffle(objects)
 
     elif by == 'out to in':
-        center = (w / 2., h / 2.)
+        center = (w / 2, h / 2)
 
         def key_fun(obj):
             b = bounding_box(obj)

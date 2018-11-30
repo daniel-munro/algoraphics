@@ -34,6 +34,7 @@ x = [path, circles]
 # wholes, meaning the top circle should not project a shadow onto the
 # one behind it.
 ag.add_shadows(x, stdev=20, darkness=0.5)
+
 ag.write_SVG(x, w, h, 'svg/textures1.svg')
 ag.to_PNG('svg/textures1.svg', 'png/textures1.png')
 

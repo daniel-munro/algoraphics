@@ -15,7 +15,7 @@ from .shapes import rotate_shapes, translate_shapes, scale_shapes
 from .shapes import sample_points_in_shape
 from .geom import distance, rand_point_on_circle, deg
 from .structures import filament
-from .tiling import mitchell_points
+from .tiling import spaced_points
 from .param import Param, make_param, fixed_value
 from .color import make_color
 
@@ -288,7 +288,7 @@ def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     return dict(type='group', clip=outline, members=[fill])
 
 
-def fill_ishihara_spots(outline, spacing=10, radius=None):
+def fill_spots(outline, spacing=10, radius=None):
     """Fill a region with randomly sized spots.
 
     The spots are reminiscent of Ishihara color blindness tests.
@@ -312,7 +312,7 @@ def fill_ishihara_spots(outline, spacing=10, radius=None):
     bounds_area = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2])
     # n_points = int(bounds_area / (3.14 * r_mean ** 2)) + 1
     n_points = int(bounds_area / spacing ** 2) + 1
-    points = mitchell_points(n_points, 10, bounds)
+    points = spaced_points(n_points, 10, bounds)
     keep_points_inside(points, outline)
     if len(points) == 0:
         points = sample_points_in_shape(outline, 1)

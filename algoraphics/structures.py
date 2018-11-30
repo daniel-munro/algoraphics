@@ -12,6 +12,7 @@ from .main import set_style
 from .param import fixed_value, make_param
 from .geom import endpoint, rad, is_clockwise, interpolate, move_toward
 from .geom import rotate_and_move, jittered_points, line_to_polygon
+from .shapes import polygon, spline, line
 from .param import Param
 
 
@@ -66,7 +67,7 @@ def filament(start, direction, width, seg_length, n_segments):
     for i in range(n_segments):
         pts = [pt_pairs[i][0], pt_pairs[i][1],
                pt_pairs[i+1][1], pt_pairs[i+1][0]]
-        segments.append(dict(type='polygon', points=pts))
+        segments.append(polygon(points=pts))
 
     set_style(segments, 'stroke', 'match')
     set_style(segments, 'stroke-width', 0.3)
@@ -176,7 +177,7 @@ def blow_paint_area(points, spacing=20, length=40, len_dev=0.25, width=5):
     for i in range(len(points) - 1):
         pts.extend(_blow_paint_edge(points[i], points[i + 1], spacing,
                                     length, len_dev, width))
-    return dict(type='spline', points=pts, circular=True, curvature=0.4)
+    return spline(points=pts, circular=True, curvature=0.4)
 
 
 def blow_paint_line(points, line_width=10, spacing=20, length=20,
@@ -240,7 +241,7 @@ def tree(start, direction, branch_length, theta, p):
 
     length = branch_length.value()
     end = endpoint(start, rad(direction), length)
-    x = [dict(type='line', p1=start, p2=end)]
+    x = [line(p1=start, p2=end)]
     if np.random.random() < p.value():
         theta_this = theta.value()
         x.extend(tree(end, direction + theta_this / 2, branch_length,

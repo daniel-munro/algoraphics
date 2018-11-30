@@ -1,33 +1,73 @@
 Glossary
 ========
 
-term (up to a line of text)
-   Definition of the term, which must be indented
+.. glossary::
 
-   and can even consist of multiple paragraphs
+   bounds
+       A tuple giving the minimum x, maximum x, minimum y, and maximum
+       y coordinate of a :term:`shape`, :term:`collection`, or general
+       rectangular space.
 
-shape
+   collection
+       A list containing :term:`shapes<shape>`, which can be nested in
+       lists.
 
-collection
+   doodle
+       An abstraction of a small drawing.  It can vary each time it is
+       drawn.  A fill function can draw it in different orientations
+       and locations to fill a :term:`region`.
 
-doodle
+   image
+       A PIL Image object specifying a grid of pixels.  These are
+       usually used as templates, but can also be drawn using a
+       ``raster`` :term:`shape`.
 
-region
+   margin
+       The space added in all four directions to the :term:`bounds` of
+       some area to improve visual continuity.  For example, a tiling
+       or other filling pattern should extend beyond the canvas or
+       :term:`region` edges to avoid edge artifacts or gaps.
 
-outline
+   outline
+       A :term:`shape` or :term:`collection` specifying an area in
+       which some function will draw.
 
-segment? (image)
+   parameter
+       A specification for some attribute of a drawing.  A Param
+       object, or one whose type inherits from Param, can represent
+       the attribute so that the attribute can vary within the
+       drawing, or so that multiple :term:`shapes<shape>` can be drawn
+       without having to explicitly generate random values for each
+       one.
 
-image
+   path
+       A representation of an SVG path.  It specifies a :term:`shape`
+       that can include disjoint lines, arcs, and Bezier curves.
 
-parameter
+   point
+       A tuple containing the x and y coordinates of a point in 2D
+       space.  The units are pixels by default, but can be defined
+       with floats.
 
-point
+   region
+       A drawing occupying a specified area.  It is generally
+       represented as a group :term:`shape` clipped (i.e., contains
+       the ``clip`` attribute) by an :term:`outline`.  It is often
+       created using either a :term:`bounds` specification or by
+       segmenting an :term:`image`.
 
-bounds
+   segment
+       An area of an :term:`image` that is contiguous and visually
+       distinct and can form the basis of a :term:`region`.
 
-margin
+   shape
+       A visual object that is specified by a single SVG element.  It
+       is represented by a dictionary with a ``type`` attribute
+       specifying the type of shape, and other attributes defining its
+       :term:`parameters<parameter>`.
 
-path
-
-style
+   style
+       A visual attribute of a :term:`shape` that is stored in a
+       dictionary in the shape's ``style`` attribute.  It usually
+       corresponds to an SVG attribute, and any SVG attribute can be
+       specified.

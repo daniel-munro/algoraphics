@@ -11,11 +11,14 @@ from scipy import spatial
 
 from .main import set_style, add_margin, bounding_box, region_background
 from .shapes import rotated_bounding_box, rotate_shapes, keep_shapes_inside
+from .shapes import polygon
 from .geom import Rtree, distance, midpoint
 
 
-def mitchell_points(n, n_cand, bounds):
+def spaced_points(n, n_cand, bounds):
     """Generate random but evenly-spaced points.
+
+    Uses Mitchell's best-candidate algorithm.
 
     Args:
         n (int): Number of points to generate.
@@ -67,7 +70,7 @@ def voronoi_regions(points):
     vor = spatial.Voronoi(np.array(points))
     regions = [[tuple(vor.vertices[i]) for i in region] for region in
                vor.regions if -1 not in region and len(region) > 0]
-    polygons = [dict(type='polygon', points=region) for region in regions]
+    polygons = [polygon(points=region) for region in regions]
     set_style(polygons, 'stroke', 'match')
     set_style(polygons, 'stroke-width', 0.3)
     return polygons
@@ -133,14 +136,16 @@ def delaunay_edges(points):
     return [dict(type='line', p1=ed[0], p2=ed[1]) for ed in edges]
 
 
-def tile_region(outline, tile_fun, tile_size=500, regularity=10):
-    """Fill region with (uncolored) tiles.
+def tile_region(outline, shape='polygon', edges=False, tile_size=500,
+                regularity=10):
+    """Fill region with (uncolored) tiles or tile edges.
 
     Args:
         outline (dict|list): The shape/s that will become the clip.
-        tile_fun (function): A function that accepts list of points and returns a list of shapes.
+        shape (str): Either 'polygon' for Voronoi tiling or 'triangle' for Delaunay tiling.
+        edges (bool): Whether to return the edges around tiles as lines instead of the tiles themselves.
         tile_size (float|int): The approximate area of each tile.
-        regularity (int): A value of one or higher, passed to mitchell_points.
+        regularity (int): A value of one or higher, passed to spaced_points.
 
     Returns:
         dict: A group with clip.
@@ -150,20 +155,31 @@ def tile_region(outline, tile_fun, tile_size=500, regularity=10):
     w = bounds[1] - bounds[0]
     h = bounds[3] - bounds[2]
     n_points = int(float(w * h) / tile_size)
-    points = mitchell_points(n_points, regularity, bounds)
-    tiles = tile_fun(points)
+    points = spaced_points(n_points, regularity, bounds)
+    if shape == 'polygon' and not edges:
+        tiles = voronoi_regions(points)
+    elif shape == 'polygon' and edges:
+        tiles = voronoi_edges(points)
+    elif shape == 'triangle' and not edges:
+        tiles = delaunay_regions(points)
+    elif shape == 'triangle' and edges:
+        tiles = delaunay_edges(points)
+    else:
+        raise ValueError("Invalid tile specification.")
     return dict(type='group', clip=outline, members=tiles)
 
 
-def tile_canvas(w, h, tile_fun, tile_size=500, regularity=10):
+def tile_canvas(w, h, shape='polygon', edges=False, tile_size=500,
+                regularity=10):
     """Fill canvas with (uncolored) tiles.
 
     Args:
         w (int): Width of the canvas.
         h (int): Height of the canvas.
-        tile_fun (function): A function that accepts a list of points and returns a list of shapes.
+        tile_shape (str): Either 'polygon' for Voronoi tiling or 'triangle' for Delaunay tiling.
+        edges (bool): Whether to return the edges around tiles as lines instead of the tiles themselves.
         tile_size (float|int): The approximate area of each tile.
-        regularity (int): A value of one or higher, passed to mitchell_points.
+        regularity (int): A value of one or higher, passed to spaced_points.
 
     Returns:
         list: A list of shapes.
@@ -174,8 +190,18 @@ def tile_canvas(w, h, tile_fun, tile_size=500, regularity=10):
     w = bounds[1] - bounds[0]
     h = bounds[3] - bounds[2]
     n_points = int(float(w * h) / tile_size)
-    points = mitchell_points(n_points, regularity, bounds)
-    return tile_fun(points)
+    points = spaced_points(n_points, regularity, bounds)
+    if shape == 'polygon' and not edges:
+        tiles = voronoi_regions(points)
+    elif shape == 'polygon' and edges:
+        tiles = voronoi_edges(points)
+    elif shape == 'triangle' and not edges:
+        tiles = delaunay_regions(points)
+    elif shape == 'triangle' and edges:
+        tiles = delaunay_edges(points)
+    else:
+        raise ValueError("Invalid tile specification.")
+    return tiles
 
 
 def nested_triangles(tip, height, min_level, max_level):

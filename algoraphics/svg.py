@@ -5,14 +5,14 @@ write SVG files.
 
 """
 
-import random
+import numpy as np
 import string
 import subprocess
 import os
 
 from .main import flatten, set_style
 from .shapes import scale_shapes, translate_shapes
-from .paths import _write_path, _spline_path
+from .paths import _write_pathstring, _spline_path
 from .images import encode_image
 from .color import Color
 
@@ -25,11 +25,101 @@ def _match_dict(dicts, d):
     return None
 
 
-def write_object(obj, defs, filters):
-    """Generate SVG representation of object.
+def _write_path(shape, mods):
+    """Generate the SVG representation of a path shape."""
+    return '<path d="' + _write_pathstring(shape['d']) + '" ' + mods + '/>\n'
+
+
+def _write_polygon(shape, mods):
+    """Generate the SVG representation of a polygon."""
+    points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in
+                       shape['points']])
+    return '<polygon points="' + points + '" ' + mods + '/>\n'
+
+
+def _write_spline(shape, mods):
+    """Generate the SVG representation of a spline path."""
+    if 'curvature' not in shape:
+        shape['curvature'] = 0.3
+    if 'circular' not in shape:
+        shape['circular'] = False
+    d = _spline_path(shape['points'], shape['curvature'],
+                     shape['circular'])
+    return '<path d="' + d + '" ' + mods + '/>\n'
+
+
+def _write_circle(shape, mods):
+    """Generate the SVG representation of a circle."""
+    return ('<circle cx="' + str(shape['c'][0]) + '" cy="'
+            + str(shape['c'][1]) + '" r="' + str(shape['r']) + '" '
+            + mods + '/>\n')
+
+
+def _write_line(shape, mods):
+    """Generate the SVG representation of a line."""
+    return ('<line x1="' + str(shape['p1'][0]) + '" y1="'
+            + str(shape['p1'][1]) + '" x2="' + str(shape['p2'][0])
+            + '" y2="' + str(shape['p2'][1]) + '" ' + mods + '/>\n')
+
+
+def _write_polyline(shape, mods):
+    """Generate the SVG representation of a polyline."""
+    points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in
+                       shape['points']])
+    return '<polyline points="' + points + '" fill="none" ' + mods + '/>\n'
+
+
+def _write_text(shape, mods):
+    """Generate SVG text."""
+    anchors = dict(left='start', center='middle', right='end')
+    anchor = anchors[shape['align']]
+    return ('<text x="' + str(shape['x']) + '" y="' + str(shape['y'])
+            + '" ' + 'text-anchor="' + anchor + '" ' +
+            'font-size="' + str(shape['font_size']) + '" ' + mods +
+            '>' + shape['text'] + '</text>\n')
+
+
+def _write_raster(shape, mods):
+    """Generate the SVG representation of a raster image."""
+    output = '<image '
+    if 'w' not in shape:
+        shape['w'] = shape['image'].width
+    if 'h' not in shape:
+        shape['h'] = shape['image'].height
+    if 'x' in shape:
+        output += 'x="' + str(shape['x']) + '" '
+    if 'y' in shape:
+        output += 'y="' + str(shape['y']) + '" '
+    output += ('width="' + str(shape['w']) + '" height="' +
+               str(shape['h']) + '" xlink:href="' +
+               encode_image(shape['image'], shape['format']) + '" ' +
+               mods + '/>\n')
+    return output
+
+
+def _write_group(shape, mods, defs, filters):
+    """Generate an SVG group."""
+    output = '<g '
+    if 'clip' in shape:
+        clip_id = ''.join(np.random.choice(list(string.ascii_letters), 8))
+        clip = '<clipPath id="' + clip_id + '">\n'
+        clip += ''.join([_write_shape(o, defs, filters) for o in
+                         flatten(shape['clip'])])
+        clip += '</clipPath>\n'
+        defs.append(clip)
+        output += 'clip-path="url(#' + clip_id + ')" '
+    output += mods + '>\n'
+    output += ''.join([_write_shape(o, defs, filters) for o in
+                       flatten(shape['members'])])
+    output += '</g>\n'
+    return output
+
+
+def _write_shape(shape, defs, filters):
+    """Generate SVG representation of a shape.
 
     Args:
-        obj (dict): A shape, group, text, or image dictionary.
+        shape (dict): A geometric shape, group, text, or raster dictionary.
         defs (list): A list of strings used to collect SVG representations of all clip paths, filters, etc.
         filters (list): A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.
 
@@ -37,121 +127,54 @@ def write_object(obj, defs, filters):
         str: An SVG encoding.
 
     """
-    if obj['type'] == 'polygon':
-        points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in obj['points']])
-        output = '<polygon points="' + points + '" '
+    style_string = 'style="' + _write_style(shape) + '" '
 
-    elif obj['type'] == 'path':
-        output = '<path d="' + _write_path(obj['d']) + '" '
-        if 'style' not in obj or 'fill' not in obj['style']:
-            set_style(obj, 'fill', 'none')
-            if 'stroke' not in obj['style']:
-                set_style(obj, 'stroke', 'black')
-
-    elif obj['type'] == 'spline':
-        if 'curvature' not in obj:
-            obj['curvature'] = 0.3
-        if 'circular' not in obj:
-            obj['circular'] = False
-        d = _spline_path(obj['points'], obj['curvature'], obj['circular'])
-        output = '<path d="' + d + '" '
-        if 'style' not in obj or 'fill' not in obj['style']:
-            set_style(obj, 'fill', 'none')
-            if 'stroke' not in obj['style']:
-                set_style(obj, 'stroke', 'black')
-
-    elif obj['type'] == 'circle':
-        output = ('<circle cx="' + str(obj['c'][0]) + '" cy="'
-                  + str(obj['c'][1]) + '" r="' + str(obj['r']) + '" ')
-
-    elif obj['type'] == 'line':
-        output = ('<line x1="' + str(obj['p1'][0]) + '" y1="'
-                  + str(obj['p1'][1]) + '" x2="' + str(obj['p2'][0])
-                  + '" y2="' + str(obj['p2'][1]) + '" ')
-        if 'style' not in obj or 'stroke' not in obj['style']:
-            set_style(obj, 'stroke', 'black')
-
-    elif obj['type'] == 'polyline':
-        points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in obj['points']])
-        output = '<polyline points="' + points + '" fill="none" '
-        if 'style' not in obj or 'stroke' not in obj['style']:
-            set_style(obj, 'stroke', 'black')
-
-    elif obj['type'] == 'text':
-        align = obj['align']
-        if align == 'left':
-            text_anchor = 'start'
-        elif align == 'center':
-            text_anchor = 'middle'
-        elif align == 'right':
-            text_anchor = 'end'
-        output = '<text x="' + str(obj['x']) + '" y="' + str(obj['y']) + '" '
-        output += 'text-anchor="' + text_anchor + '" '
-        output += 'font-size="' + str(obj['font_size']) + '" '
-
-    elif obj['type'] == 'image':
-        output = '<image '
-        if 'w' not in obj:
-            obj['w'] = obj['image'].width
-        if 'h' not in obj:
-            obj['h'] = obj['image'].height
-        if 'x' in obj:
-            output += 'x="' + str(obj['x']) + '" '
-        if 'y' in obj:
-            output += 'y="' + str(obj['y']) + '" '
-        output += ('width="' + str(obj['w']) + '" height="' + str(obj['h'])
-                   + '" xlink:href="' +
-                   encode_image(obj['image'], obj['format']) + '"')
-
-    elif obj['type'] == 'group':
-        output = '<g '
-
-        if 'clip' in obj:
-            clip_id = ''.join([random.choice(string.ascii_letters) for
-                               i in range(8)])
-            clip = '<clipPath id="' + clip_id + '">\n'
-            clip += ''.join([write_object(o, defs, filters) for o in
-                             flatten(obj['clip'])])
-            clip += '</clipPath>\n'
-            defs.append(clip)
-            output += 'clip-path="url(#' + clip_id + ')" '
-
-    if 'style' in obj:
-        output += 'style="' + write_style(obj['style']) + '" '
-
-    if 'filter' in obj:
-        match = _match_dict(filters, obj['filter'])
+    if 'filter' in shape:
+        match = _match_dict(filters, shape['filter'])
         if match is None:
-            filters.append(obj['filter'])
+            filters.append(shape['filter'])
             match = len(filters) - 1
         filter_id = 'filter' + str(match)
-        output += 'filter="url(#' + filter_id + ')" '
-
-    if obj['type'] == 'group':
-        output += '>\n'
-        output += ''.join([write_object(o, defs, filters) for o in
-                           flatten(obj['members'])])
-        output += '</g>\n'
-    elif obj['type'] == 'text':
-        output += '>' + obj['text'] + '</text>\n'
+        filter_string = 'filter="url(#' + filter_id + ')" '
     else:
-        output += ' />\n'
+        filter_string = ''
+
+    mods = style_string + filter_string
+
+    draw_funs = dict(path=_write_path, polygon=_write_polygon,
+                     spline=_write_spline, circle=_write_circle,
+                     line=_write_line, polyline=_write_polyline,
+                     text=_write_text, raster=_write_raster)
+
+    if shape['type'] == 'group':
+        output = _write_group(shape, mods, defs, filters)
+    else:
+        output = draw_funs[shape['type']](shape, mods)
 
     return output
 
 
-def write_style(style):
-    """Generate an SVG representation of an object's style.
+def _write_style(shape):
+    """Generate an SVG representation of a shape's style.
 
     Args:
-        style (dict): A dictionary with attributes as keys. Underscores will be replaced with hyphens, which are not allowed in keys.
+        shape (dict): A geometric shape, group, text, or raster dictionary.
 
     Returns:
         str: An SVG encoding which should be inserted between the
         quotes of style="...".
 
     """
-    style = style.copy()  # keep objects intact for reuse.
+    if 'style' in shape:
+        style = shape['style'].copy()  # keep input dict intact for reuse.
+    else:
+        style = dict()
+    if shape['type'] in ('path', 'spline') and 'fill' not in style:
+        style['fill'] = 'none'
+        if 'stroke' not in style:
+            style['stroke'] = 'black'
+    if shape['type'] in ('line', 'polyline') and 'stroke' not in style:
+        style['stroke'] = 'black'
     if 'fill' in style and type(style['fill']) is tuple:
         RGB = Color(hsl=style['fill']).RGB()
         style['fill'] = ('rgb('
@@ -164,13 +187,15 @@ def write_style(style):
                            + ')')
 
     if 'stroke' in style and style['stroke'] == 'match':
+        # 'match' used to slightly expand filled shapes by setting the
+        # stroke to match the fill.  Useful to prevent gap artifacts.
         if 'fill' in style:
             style['stroke'] = style['fill']
         else:
             del style['stroke']
 
     # Originally I used '_' in place of '-' so that style could be
-    # set with dict(), but I don't think it's work the confusion.  if
+    # set with dict(), but I don't think it's worth the confusion.  if
     # not using set_style, the dictionary could always be set with
     # {}.
     # style = [(prop.replace("_", "-"), value) for prop, value in style.items()]
@@ -178,7 +203,7 @@ def write_style(style):
     return ';'.join([prop + ':' + str(value) for prop, value in style.items()])
 
 
-def write_filters(filters):
+def _write_filters(filters):
     """Generate an SVG representation of all filters used in graphic.
 
     Args:
@@ -194,38 +219,20 @@ def write_filters(filters):
         if fltr['type'] == 'shadow':
             f = '<filter id="filter' + str(i) + '" '
             f += 'x="-50%" y="-50%" width="200%" height="200%">\n'
-            # f += 'x="-' + str(3 * fltr['stdev']) + '" '
-            # f += 'y="-' + str(3 * fltr['stdev']) + '" '
-            # f += 'width="' + str(6 * fltr['stdev']) + '" '
-            # f += 'height="' + str(6 * fltr['stdev']) + '">\n'
+
             f += '<feGaussianBlur in="SourceAlpha" '
             f += 'stdDeviation="' + str(fltr['stdev']) + '" result="blur" />\n'
-            # f += '<feComponentTransfer><feFuncA type="linear" '
-            # f += 'slope="' + str(fltr['darkness']) + '" />'
-            # f += '</feComponentTransfer>\n'
 
-            # alt to feComponentTransfer:
             f += ('<feFlood flood-color="black" flood-opacity="'
                   + str(fltr['darkness']) + '" />\n')
             f += '<feComposite in2="blur" operator="in" />\n'
-            
+
             f += ('<feMerge>'
                   + '<feMergeNode /><feMergeNode in="SourceGraphic" />'
                   + '</feMerge>\n')
             f += '</filter>\n'
 
-        # if fltr['type'] == 'shadow':
-        #     f = '<filter id="filter' + str(i) + '">\n'
-        #     f += '<feDropShadow stdDeviation="' + str(fltr['stdev'])
-        #     f += '" dx="0" dy="0" />\n'
-        #     f += '</filter>\n'
-
         elif fltr['type'] == 'roughness':
-            # # f += '<feColorMatrix in="diffLight" type="luminanceToAlpha" result="diffLight2" />\n'
-            # f += '<feColorMatrix in="diffLight" type="matrix" values="0.3 0 0 0 0  0 0.3 0 0 0  0 0 0.3 0 0  1 0 0 0 0" result="diffLight2" />\n'
-            # f += '<feComponentTransfer in="diffLight2" result="diffLight3"><feFuncA type="table" tableValues="0.7 0.4 0 0.2 0.4" /></feComponentTransfer>\n'
-            # f += '<feComposite in2="SourceGraphic" in="diffLight3" operator="atop" />\n'
-
             f = '<filter id="filter' + str(i) + '">\n'
             f += ('<feTurbulence type="fractalNoise" baseFrequency="0.02" '
                   + 'numOctaves="5" result="noise" />\n')
@@ -282,10 +289,10 @@ def write_SVG(objects, w, h, file_name, optimize=True):
     scale_shapes(objects, 1, -1)
     translate_shapes(objects, 0, h)
 
-    objects = ''.join([write_object(obj, defs, filters) for obj in
+    objects = ''.join([_write_shape(obj, defs, filters) for obj in
                        flatten(objects)])
 
-    defs.extend(write_filters(filters))
+    defs.extend(_write_filters(filters))
     out += '<defs>\n' + ''.join(defs) + '</defs>\n'
 
     # flip y-axis so zero is at the bottom:
