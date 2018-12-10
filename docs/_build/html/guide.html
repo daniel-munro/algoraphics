@@ -625,7 +625,7 @@ object) can be created for 0D, 1D, and 2D forms:</p>
 <p>These functions fill a <a class="reference internal" href="glossary.html#term-region"><span class="xref std std-term">region</span></a> with structures and patterns.</p>
 <div class="section" id="tiling">
 <h3>Tiling<a class="headerlink" href="#tiling" title="Permalink to this headline">¶</a></h3>
-<p>These functions divide a <span class="xref std std-term">region’s</span> area into tiles.</p>
+<p>These functions divide a <a class="reference internal" href="glossary.html#term-region"><span class="xref std std-term">region’s</span></a> area into tiles.</p>
 <p>Random polygonal (i.e. Voronoi) tiles can be generated:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 <span class="n">colors</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
@@ -664,7 +664,7 @@ random but specifiable:</p>
 <div class="section" id="mazes">
 <h3>Mazes<a class="headerlink" href="#mazes" title="Permalink to this headline">¶</a></h3>
 <p>These patterns resemble mazes, but are actually random spanning trees:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                  <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Straight</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
@@ -673,7 +673,7 @@ random but specifiable:</p>
 <img alt="_images/grid1.png" src="_images/grid1.png" />
 <p>The maze style is defined by an instance of a subclass of
 <code class="docutils literal notranslate"><span class="pre">Maze_Style</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                  <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Jagged</span><span class="p">(</span><span class="n">min_w</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">max_w</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
@@ -683,7 +683,7 @@ random but specifiable:</p>
 <p>Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
 cell contains a rotation and/or reflection of one of these components:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                  <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Pipes</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.6</span><span class="p">))</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
@@ -691,7 +691,7 @@ cell contains a rotation and/or reflection of one of these components:</p>
 </div>
 <img alt="_images/grid3.png" src="_images/grid3.png" />
 <p>The grid can be rotated:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                  <span class="n">style</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Round</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
                  <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
@@ -798,7 +798,7 @@ and places them until the <a class="reference internal" href="glossary.html#term
 </div>
 <div class="section" id="effects">
 <h2>Effects<a class="headerlink" href="#effects" title="Permalink to this headline">¶</a></h2>
-<p>Shadows can be added to <span class="xref std std-term">shapes</span> or
+<p>Shadows can be added to <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a> or
 <a class="reference internal" href="glossary.html#term-collection"><span class="xref std std-term">collections</span></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
      <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">350</span><span class="p">)),</span>
@@ -855,7 +855,7 @@ edges can appear torn:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Dan Munro.
+        &copy; Copyright 2018, Dan Munro
 
     </p>
   </div>
@@ -874,21 +874,23 @@ edges can appear torn:</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
 
   
 

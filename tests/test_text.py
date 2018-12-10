@@ -102,7 +102,7 @@ ag.to_PNG('svg/text4.svg', 'png/text4.png')
 ######################################################################
 
 w, h = 400, 100
-x = ag.caption("SVG text.", x=w-20, y=20)
+x = ag.caption("SVG text.", anchor=(w-20, 20))
 
 ag.write_SVG(x, w, h, 'svg/text5.svg')
 ag.to_PNG('svg/text5.svg', 'png/text5.png')

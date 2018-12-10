@@ -446,7 +446,7 @@ These functions fill a :term:`region` with structures and patterns.
 Tiling
 ------
 
-These functions divide a :term:`region's` area into tiles.
+These functions divide a :term:`region's<region>` area into tiles.
 
 Random polygonal (i.e. Voronoi) tiles can be generated::
 
@@ -492,7 +492,7 @@ Mazes
 
 These patterns resemble mazes, but are actually random spanning trees::
 
- outline = ag.rectangle(bounds=(0, w, 0, h))
+ outline = ag.rectangle(bounds=(0, 0, w, h))
  x = ag.fill_maze(outline, spacing=20,
                   style=ag.Maze_Style_Straight(rel_thickness=0.2))
  ag.set_style(x['members'], 'fill', 'blue')
@@ -502,7 +502,7 @@ These patterns resemble mazes, but are actually random spanning trees::
 The maze style is defined by an instance of a subclass of
 ``Maze_Style``::
 
- outline = ag.rectangle(bounds=(0, w, 0, h))
+ outline = ag.rectangle(bounds=(0, 0, w, h))
  x = ag.fill_maze(outline, spacing=20,
                   style=ag.Maze_Style_Jagged(min_w=0.2, max_w=0.8))
  ag.set_style(x['members'], 'fill', 'blue')
@@ -513,7 +513,7 @@ Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
 cell contains a rotation and/or reflection of one of these components::
 
- outline = ag.rectangle(bounds=(0, w, 0, h))
+ outline = ag.rectangle(bounds=(0, 0, w, h))
  x = ag.fill_maze(outline, spacing=20,
                   style=ag.Maze_Style_Pipes(rel_thickness=0.6))
  ag.set_style(x['members'], 'fill', 'blue')
@@ -522,7 +522,7 @@ cell contains a rotation and/or reflection of one of these components::
 
 The grid can be rotated::
 
- outline = ag.rectangle(bounds=(0, w, 0, h))
+ outline = ag.rectangle(bounds=(0, 0, w, h))
  x = ag.fill_maze(outline, spacing=20,
                   style=ag.Maze_Style_Round(rel_thickness=0.3),
                   rotation=45)
@@ -638,7 +638,7 @@ and places them until the :term:`region` is filled::
 Effects
 =======
 
-Shadows can be added to :term:`shapes` or
+Shadows can be added to :term:`shapes<shape>` or
 :term:`collections<collection>`::
 
  d = [dict(command='M', to=(50, 50)),

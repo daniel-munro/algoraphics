@@ -7,6 +7,7 @@ Fill regions with objects in various ways.
 
 import math
 import numpy as np
+from typing import Union, Callable, Tuple, List, Sequence
 
 from .main import set_style, add_margin, flatten
 from .shapes import bounding_box, coverage, remove_hidden, keep_points_inside
@@ -17,19 +18,26 @@ from .geom import distance, rand_point_on_circle, deg
 from .structures import filament
 from .tiling import spaced_points
 from .param import Param, make_param, fixed_value
-from .color import make_color
+from .color import make_color, Color
+
+Number = Union[int, float]
+Point = Tuple[Number, Number]
+Bounds = Tuple[Number, Number, Number, Number]
+Collection = Union[dict, list]
 
 
-def fill_region(outline, object_fun, max_tries=None):
+def fill_region(outline: Collection,
+                object_fun: Callable[[Bounds], Collection],
+                max_tries: int = None) -> dict:
     """Fill a region by iteratively placing randomly generated objects.
 
     Args:
-        outline (dict|list): A shape or (nested) list of shapes that will become clip.
-        object_fun (function): A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args...): return lambda bounds: helper_fun(bounds, args...)
-        max_tries (int): If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.
+        outline: A shape or (nested) list of shapes that will become clip.
+        object_fun: A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args...): return lambda bounds: helper_fun(bounds, args...)
+        max_tries: If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.
 
     Returns:
-        dict: A group with clip.
+        A group with clip.
 
     """
     bounds = add_margin(bounding_box(outline), 10)
@@ -53,20 +61,21 @@ def fill_region(outline, object_fun, max_tries=None):
     return filled_region
 
 
-def _filament_fill_obj(bounds, direction_delta, width, seg_length, color):
+def _filament_fill_obj(bounds: Bounds, direction_delta: Param, width:
+                       Param, seg_length: Param, color: Color) -> List[dict]:
     """Generate filament extending into bounds.
 
     Called indirectly by lambda function produced by filament_fill().
 
     Args:
-        bounds (tuple): A bounds tuple.
-        direction_delta (Param): Parameter that will become the delta for the filament direction.
-        width (float|int): Width of the filament.
-        seg_length (float|int): Average side length of each segment.
-        color (Color): Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
+        bounds: A bounds tuple.
+        direction_delta: Parameter that will become the delta for the filament direction.
+        width: Width of the filament.
+        seg_length: Average side length of each segment.
+        color: Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
 
     Returns:
-        list: The ordered segment polygons.
+        The ordered segment polygons.
 
     """
     direction_delta = make_param(direction_delta)
@@ -74,8 +83,8 @@ def _filament_fill_obj(bounds, direction_delta, width, seg_length, color):
     seg_length = make_param(seg_length)
     color = make_color(color)
 
-    c = ((bounds[0] + bounds[1]) / 2., (bounds[2] + bounds[3]) / 2.)
-    r = distance(c, (bounds[1], bounds[3]))
+    c = ((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
+    r = distance(c, (bounds[2], bounds[3]))
     start = rand_point_on_circle(c, r)
     angle = math.atan2(c[1] - start[1], c[0] - start[0])
     dir_start = deg(angle) + np.random.uniform(-60, 60)
@@ -86,17 +95,18 @@ def _filament_fill_obj(bounds, direction_delta, width, seg_length, color):
     return x
 
 
-def filament_fill(direction_delta, width, seg_length, color):
+def filament_fill(direction_delta: Param, width: Number, seg_length:
+                  Number, color: Color) -> Callable[[Bounds], List[dict]]:
     """Generate filament fill function.
 
     Args:
-        direction_delta (Param): Parameter that will become the delta for the filament direction.
-        width (float|int): Width of the filament.
-        seg_length (float|int): Average side length of each segment.
-        color (Color): Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
+        direction_delta: Parameter that will become the delta for the filament direction.
+        width: Width of the filament.
+        seg_length: Average side length of each segment.
+        color: Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
 
     Returns:
-        function: A function used by fill_region().
+        A function used by fill_region().
 
     """
     return lambda bounds: _filament_fill_obj(bounds, direction_delta,
@@ -104,22 +114,29 @@ def filament_fill(direction_delta, width, seg_length, color):
 
 
 class Doodle:
-    def __init__(self, function, footprint):
-        """Row 0 of the footprint should correspond to the top row of the doodle's footprint."""
+    """A Doodle object is itself a generator of doodles.
+
+    Args:
+        function: A function that takes no arguments and returns a shape or collection.
+        footprint: A boolean 2D array whose cells indicate the shape (within a grid) occupied by the generated doodles (before being oriented).  Row 0 should correspond to the top row of the doodle's footprint.
+
+    """
+    def __init__(self, function: Callable[[], Collection], footprint:
+                 np.ndarray):
         self.function = function
         # Reverse footprint so that row 0 is the bottom.
         self.fp = np.array(footprint)[::-1]
         self.n_cells = np.sum(self.fp)
         self.orientations = np.array([True] * 8)
 
-    def footprint(self, orientation=0):
+    def footprint(self, orientation: int = 0) -> np.ndarray:
         """Get the doodle's footprint in a given orientation.
 
         Args:
-           orientation (int): 0 to 7.
+           orientation: 0 to 7.
 
         Returns:
-            numpy.ndarray: The oriented footprint.
+            The oriented footprint.
 
         """
         # Rotate in the same direction as the shapes:
@@ -128,11 +145,11 @@ class Doodle:
             oriented = oriented.transpose()
         return oriented
 
-    def oriented(self, orientation=0):
+    def oriented(self, orientation: int = 0) -> Collection:
         """Draw the doodle in a given orientation.
 
         Args:
-            orientation (int): 0 to 7.
+            orientation: 0 to 7.
 
         Returns:
             The oriented doodle.
@@ -155,16 +172,17 @@ class Doodle:
         return x
 
 
-def _doodle_fits(grid, coords, footprint):
+def _doodle_fits(grid: np.ndarray, coords: Point, footprint:
+                 np.ndarray) -> bool:
     """Determine whether a doodle will fit at a location.
 
     Args:
-        grid (numpy.ndarray): A boolean array of occupied locations.
-        coords (tuple): The top left corner of the location to test.
-        footprint (numpy.ndarray): The doodle's oriented footprint.
+        grid: A boolean array of occupied locations.
+        coords: The top left corner of the location to test.
+        footprint: The doodle's oriented footprint.
 
     Returns:
-        bool: Whether the space is available for the footprint.
+        Whether the space is available for the footprint.
 
     """
     subgrid = grid[coords[0]:(coords[0] + footprint.shape[0]),
@@ -172,13 +190,13 @@ def _doodle_fits(grid, coords, footprint):
     return np.sum(np.logical_and(subgrid, footprint)) == 0
 
 
-def _add_doodle(grid, coords, footprint):
+def _add_doodle(grid: np.ndarray, coords: Point, footprint: np.ndarray):
     """Mark the space where a doodle is placed as occupied.
 
     Args:
-        grid (numpy.ndarray): A boolean array of occupied locations.
-        coords (tuple): The top left corner of the new doodle's location.
-        footprint (numpy.ndarray): The doodle's footprint.
+        grid: A boolean array of occupied locations.
+        coords: The top left corner of the new doodle's location.
+        footprint: The doodle's footprint.
 
     """
     subgrid = grid[coords[0]:(coords[0] + footprint.shape[0]),
@@ -189,7 +207,7 @@ def _add_doodle(grid, coords, footprint):
 
 
 def _next_cell(r, c, rows, cols):
-    """Get next cell for iterating through the grid."""
+    """Get the next cell for iterating through the grid."""
     c += 1
     if c == cols:
         c = 0
@@ -199,18 +217,19 @@ def _next_cell(r, c, rows, cols):
     return (r, c)
 
 
-def grid_wrapping_paper(rows, cols, spacing, start, doodles):
+def grid_wrapping_paper(rows: int, cols: int, spacing: Number, start:
+                        Point, doodles: Sequence[Doodle]) -> List[Collection]:
     """Create a tiling of non-overlapping doodles.
 
     Args:
-        rows (int): Number of rows to include.
-        cols (int): Number of columns to include.
-        spacing (float): Height/width of each grid cell.
-        start (tuple): Bottom left point of the grid.
-        doodles (list): A list of doodle functions.
+        rows: Number of rows to include.
+        cols: Number of columns to include.
+        spacing: Height/width of each grid cell.
+        start: Bottom left point of the grid.
+        doodles: A list of Doodle objects.
 
     Returns:
-        list: A list of placed doodle objects.
+        A list of placed doodle collections.
 
         """
     # Margin = extra cells to allow tiling to fill the desired grid.
@@ -256,17 +275,18 @@ def grid_wrapping_paper(rows, cols, spacing, start, doodles):
     return shapes
 
 
-def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
+def fill_wrapping_paper(outline: Collection, spacing: Number, doodles:
+                        Sequence[Doodle], rotate: bool = True) -> dict:
     """Fill a region with a tiling of non-overlapping doodles.
 
     Args:
-        outline (dict|list): A shape or (nested) list of shapes that will become the clip.
-        spacing (float): Height/width of each grid cell.
-        doodles (list): A list of Doodle objects.
-        rotate (bool): Whether to place the grid in a random rotated orientation.
+        outline: A shape or (nested) list of shapes that will become the clip.
+        spacing: Height/width of each grid cell.
+        doodles: A list of Doodle objects.
+        rotate: Whether to place the grid in a random rotated orientation.
 
     Returns:
-        dict: A clipped group.
+        A clipped group.
 
     """
     if rotate:
@@ -275,9 +295,9 @@ def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     else:
         bounds = bounding_box(outline)
 
-    rows = int(math.ceil((bounds[3] - bounds[2]) / float(spacing)))
-    cols = int(math.ceil((bounds[1] - bounds[0]) / float(spacing)))
-    fill = grid_wrapping_paper(rows, cols, spacing, (bounds[0], bounds[2]),
+    rows = int(math.ceil((bounds[3] - bounds[1]) / spacing))
+    cols = int(math.ceil((bounds[2] - bounds[0]) / spacing))
+    fill = grid_wrapping_paper(rows, cols, spacing, (bounds[0], bounds[1]),
                                doodles)
 
     if rotate:
@@ -288,36 +308,33 @@ def fill_wrapping_paper(outline, spacing, doodles, rotate=True):
     return dict(type='group', clip=outline, members=[fill])
 
 
-def fill_spots(outline, spacing=10, radius=None):
+def fill_spots(outline: Collection, spacing: Number = 10, radius:
+               Param = None) -> List[dict]:
     """Fill a region with randomly sized spots.
 
-    The spots are reminiscent of Ishihara color blindness tests.
-    The spots are not completely non-overlapping, but overlaps are
+    The spots are reminiscent of Ishihara color blindness tests.  The
+    spots are not completely non-overlapping, but overlaps are
     somewhat avoided by spacing out their centers.
 
     Args:
-        outline (dict|list): A region outline shape.
-        spacing (float): The approximate distance between the centers of neighboring spots.
-        radius (Param): The spot radius.  By default the radii range from `spacing` to `spacing` / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio < 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.
+        outline: A region outline shape.
+        spacing: The approximate distance between the centers of neighboring spots.
+        radius: The spot radius.  By default the radii range from ``spacing`` to ``spacing`` / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio < 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.
 
     Returns:
-        list: A list of circle shapes.
+        A list of circle shapes.
 
     """
     spacing = fixed_value(spacing)
-    # radius2 = make_param(radius)
-    # sample = [radius2.value() for i in range(100)]
-    # r_mean = np.mean(sample)
     bounds = bounding_box(outline)
-    bounds_area = (bounds[1] - bounds[0]) * (bounds[3] - bounds[2])
-    # n_points = int(bounds_area / (3.14 * r_mean ** 2)) + 1
+    bounds_area = (bounds[2] - bounds[0]) * (bounds[3] - bounds[1])
     n_points = int(bounds_area / spacing ** 2) + 1
-    points = spaced_points(n_points, 10, bounds)
+    points = spaced_points(n_points, bounds, n_cand=10)
     keep_points_inside(points, outline)
     if len(points) == 0:
         points = sample_points_in_shape(outline, 1)
     if radius is None:
-        ratio = ((spacing / 5) / spacing) ** (1. / (len(points) - 1))
+        ratio = ((spacing / 5) / spacing) ** (1 / (len(points) - 1))
         radius = Param(spacing, ratio=ratio)
     else:
         radius = make_param(radius)

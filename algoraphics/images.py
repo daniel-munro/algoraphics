@@ -7,39 +7,46 @@ Generate graphics based on images.
 
 import numpy as np
 from PIL import Image
-
-from skimage.color import rgb2lab, deltaE_ciede2000
-from skimage.filters import sobel
-from skimage.morphology import watershed
+# from skimage.color import rgb2lab, deltaE_ciede2000
+# from skimage.filters import sobel
+# from skimage.morphology import watershed
 from skimage.measure import find_contours, approximate_polygon
 from skimage.segmentation import slic, find_boundaries
-from skimage.filters import gaussian
-
+# from skimage.filters import gaussian
 from io import BytesIO
 from base64 import b64encode
+from typing import Union, Tuple, Sequence
 
 from .main import set_style
-from .shapes import sample_points_in_shape, centroid
-from .color import Color, make_color, average_color
+from .shapes import sample_points_in_shape, centroid, spline
+from .color import Color, average_color
+
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
 
-def open_image(path):
-    """Load a PIL image from file."""
+def open_image(path: str) -> Image:
+    """Load a PIL image from file.
+
+    Args:
+        path: Path to the image file.
+
+    """
     image = Image.open(path).transpose(Image.FLIP_TOP_BOTTOM)
     return image.convert('RGB')  # remove transparency coordinate from PNGs
 
 
-def encode_image(image, frmt):
+def encode_image(image: Image, frmt: str) -> str:
     """Encode an image as a data string.
 
     Used to embed images in SVG.
 
     Args:
-        image (Image): A PIL image.
-        frmt (str): Either 'JPEG' or 'PNG'.
+        image: A PIL image.
+        frmt: Either 'JPEG' or 'PNG'.
 
     Returns:
-        str: The image encoding.
+        The image encoding.
 
     """
     formats = dict(JPEG='jpg', PNG='png')
@@ -49,15 +56,15 @@ def encode_image(image, frmt):
     return 'data:image/' + formats[frmt] + ';base64,' + data
 
 
-def array_to_image(array, scale=True):
+def array_to_image(array: np.ndarray, scale: bool = True) -> Image:
     """Create an image from a 2D or 3D array.
 
     Args:
-        array (numpy.ndarray): A numpy array: 2D for grayscale or 3D for RGB.
-        scale (bool): If True, values in 2D array will be scaled so that the highest values are 255 (white).
+        array: A numpy array: 2D for grayscale or 3D for RGB.
+        scale: If True, values in 2D array will be scaled so that the highest values are 255 (white).
 
     Returns:
-        Image: A PIL image in RGB mode.
+        A PIL image in RGB mode.
 
     """
     if scale and len(array.shape) == 2:
@@ -68,16 +75,16 @@ def array_to_image(array, scale=True):
         return Image.fromarray(array, mode='RGB')
 
 
-def resize_image(image, width, height):
+def resize_image(image: Image, width: int, height: int):
     """Downscale an image.
 
     Scales according to whichever of width or height is not None. Only
     scales down.
 
     Args:
-        image (Image): A PIL image.
-        width (int): The new width.  If None, scales according to height.
-        height (int): The new height.  If None, scales according to width.
+        image: A PIL image.
+        width: The new width.  If None, scales according to height.
+        height: The new height.  If None, scales according to width.
 
     """
     w, h = image.size
@@ -93,15 +100,18 @@ def resize_image(image, width, height):
     image.thumbnail((width, height))
 
 
-def sample_colors(image, points):
+def sample_colors(image: Image, points:
+                  Union[Point,
+                        Sequence[Point]]) -> Union[Color, Sequence[Color]]:
     """Sample colors from an image.
 
     Args:
-        image (Image): A PIL image.
-        points (list|tuple): A list of image coordinates, or a single coordinate.
+        image: A PIL image.
+        points: A list of image coordinates, or a single coordinate.
 
     Returns:
-        list: A list of `Color` objects corresponding to `points`, or a single color if input is a single point.
+        A list of colors corresponding to ``points``, or a single
+        color if input is a single point.
 
     """
     if type(points) is tuple:
@@ -111,26 +121,26 @@ def sample_colors(image, points):
     points = [(max(0, p[0]), max(0, p[1])) for p in points]
     points = [(min(p[0], image.size[0] - 1), min(p[1], image.size[1] - 1))
               for p in points]
-    return [Color(RGB=pixels[p[0], p[1]]) for p in points]
+    return [Color(RGB=pixels[int(p[0]), int(p[1])]) for p in points]
 
 
-def region_color(outline, image, n_points=10):
+def region_color(outline: dict, image: Image, n_points: int = 10) -> Color:
     """Find representative color for an image region.
 
     Args:
-        outline (shape): A shape corresponding to an image region to sample.
-        image (Image): A PIL image.
-        n_points (int): Number of points to sample.
+        outline: A shape corresponding to an image region to sample.
+        image: A PIL image.
+        n_points: Number of points to sample.
 
     Returns:
-        Color: The average color of the sampled image points.
+        The average color of the sampled image points.
 
     """
     points = sample_points_in_shape(outline, n_points)
     return average_color(sample_colors(image, points))
 
 
-def fill_shapes_from_image(shapes, image):
+def fill_shapes_from_image(shapes: Sequence[dict], image: Image):
     """Fill shapes according to their corresponding image region.
 
     Faster than region_color which samples points, but should only be
@@ -139,8 +149,8 @@ def fill_shapes_from_image(shapes, image):
     irregular.
 
     Args:
-        shapes (list): A list of shapes.
-        image (Image): A PIL image.
+        shapes: A list of shapes.
+        image: A PIL image.
 
     """
     centroids = [centroid(shape) for shape in shapes]
@@ -149,44 +159,27 @@ def fill_shapes_from_image(shapes, image):
         set_style(shapes[i], 'fill', colors[i])
 
 
-def color_distances(pixels, color):
-    """Get color distance from reference color for every pixel.
-
-    Args:
-        pixels (numpy.ndarray): A 3D array corresponding to RGB pixels.
-        color (Color): A reference color.
-
-    Returns:
-        numpy.ndarray: A 2D array of distances between 0 and 1.
-
-    """
-    rgb = make_color(color).rgb()
-    x = np.zeros_like(pixels)
-    x[:, :] = rgb
-    # kL>1 puts less emphasis on lightness
-    return deltaE_ciede2000(rgb2lab(pixels), rgb2lab(x), kL=2) / 100.
-
-
-def segment_image(image, n_segments=100, compactness=10, smoothness=0):
+def segment_image(image: Image, n_segments: int = 100, compactness:
+                  Number = 10, smoothness: Number = 0) -> np.ndarray:
     """Divide image into segments.
 
     Used by image_regions().
 
     Args:
-        image (Image): A PIL image.
-        n_segments (int): Approximate number of desired segments.
-        compactness (float): A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
-        smoothness (float): The width of gaussian smoothing applied before segmentation.
+        image: A PIL image.
+        n_segments: Approximate number of desired segments.
+        compactness: A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
+        smoothness: The width of gaussian smoothing applied before segmentation.
 
     Returns:
-        numpy.ndarray: A 2D array of integer segment labels.
+        A 2D array of integer segment labels.
 
     """
     return slic(np.array(image), n_segments, compactness,
                 sigma=smoothness, min_size_factor=0.1)
 
 
-def pad_array(pixels, margin=1):
+def pad_array(pixels: np.ndarray, margin: int = 1) -> np.ndarray:
     """Create a new pixel array with added padding.
 
     Adds additional rows and columns of zeros to four edges of matrix.
@@ -195,11 +188,11 @@ def pad_array(pixels, margin=1):
     other.
 
     Args:
-        pixels (numpy.ndarray): A 2D array of pixels.
-        margin (int): The width of padding on each side.
+        pixels: A 2D array of pixels.
+        margin: The width of padding on each side.
 
     Returns:
-        numpy.ndarray: A 2D array with 2 * `margin` added to both dimensions.
+        A 2D array with 2 * ``margin`` added to both dimensions.
 
     """
     for i in range(margin):
@@ -210,35 +203,22 @@ def pad_array(pixels, margin=1):
     return pixels
 
 
-# def segments_to_polygons(seg, simplify=None):
-#     """seg is 2d array, simplify is max distance from edge to actual boundary when reducing number of polygon points"""
-#     bound = find_boundaries(seg)
-#     bound[0, :] = 1
-#     bound[-1, :] = 1
-#     bound[:, 0] = 1
-#     bound[:, -1] = 1
-#
-#     polygons = find_contours(bound, 0.5)
-#     if simplify is not None:
-#         polygons = [approximate_polygon(polygon, simplify) for polygon in polygons]
-#     polygons = [list(polygon[:, ::-1]) for polygon in polygons]
-#     return [[tuple(p) for p in polygon] for polygon in polygons]
-
-
-def segments_to_shapes(seg, simplify=None, expand=1, curvature=0.2):
+def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
+                       expand: int = 1,
+                       curvature: float = 0.2) -> Sequence[dict]:
     """Convert an array of segment labels to spline shapes.
 
-    Used by image_regions().
+    Used by ``image_regions()``.
 
     Args:
-        seg (numpy.ndarray): A 2D array of segment labels.
-        simplify (float): Maximum distance from the edge of a simplified shape to the actual boundary when reducing number of points, or None for no simplification.
-        expand (int): Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
-        curvature (float): The degree of curvature for the splines.  Usually between zero and one.
+        seg: A 2D array of segment labels.
+        simplify: Maximum distance from the edge of a simplified shape to the actual boundary when reducing number of points, or None for no simplification.
+        expand: Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
+        curvature: The degree of curvature for the splines.  Usually between zero and one.
 
     Returns:
-        list: A list of spline shapes, generally in order from left to
-        right and then bottom to top.
+        A list of spline shapes, generally in order from left to right
+        and then bottom to top.
 
     """
     shapes = []
@@ -253,50 +233,70 @@ def segments_to_shapes(seg, simplify=None, expand=1, curvature=0.2):
             points = approximate_polygon(points, simplify)
         points = list(points[:, ::-1])
         points = [tuple(p) for p in points]
-        shapes.append(dict(type='spline', points=points,
-                           curvature=curvature, circular=True))
+        shapes.append(spline(points=points, curvature=curvature,
+                             circular=True))
     return shapes
 
 
-def image_regions(image, n_segments=100, compactness=10, smoothness=0,
-                  simplify=1, expand=2, curvature=0.2):
+def image_regions(image: Image, n_segments: int = 100, compactness:
+                  Number = 10, smoothness: Number = 0, simplify:
+                  Number = 1, expand: int = 2, curvature:
+                  float = 0.2) -> Sequence[dict]:
     """Get spline shapes corresponding to image regions.
 
     Args:
-        image (Image): A PIL image.
-        n_segments (int): Approximate number of desired segments.
-        compactness (float): A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
-        smoothness (float): The width of gaussian smoothing applied before segmentation.
-        simplify (float): Maximum distance from the edge of a simplified shape to its actual boundary when reducing the number of points, or None for no simplification.
-        expand (int): Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
-        curvature (float): The degree of curvature in spline.  Usually between zero and one.
+        image: A PIL image.
+        n_segments: Approximate number of desired segments.
+        compactness: A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
+        smoothness: The width of gaussian smoothing applied before segmentation.
+        simplify: Maximum distance from the edge of a simplified shape to its actual boundary when reducing the number of points, or None for no simplification.
+        expand: Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
+        curvature: The degree of curvature in spline.  Usually between zero and one.
 
     Returns:
-        list: A list of spline shapes, generally in order from left to
-        right and then bottom to top.
+        A list of spline shapes, generally in order from left to right
+        and then bottom to top.
 
     """
     seg = segment_image(image, n_segments, compactness, smoothness)
     return segments_to_shapes(seg, simplify, expand, curvature)
 
 
-def get_color_regions(image, color, smoothness=5, in_param=0.05,
-                      out_param=0.3):
-    """Get shapes corresponding to image regions matching a color."""
-    pixels = np.array(image)
-    pixels = color_distances(pixels, color)
-    pixels = gaussian(pixels, sigma=smoothness)
+# def color_distances(pixels, color):
+#     """Get color distance from reference color for every pixel.
 
-    edges = sobel(pixels)
+#     Args:
+#         pixels (numpy.ndarray): A 3D array corresponding to RGB pixels.
+#         color (Color): A reference color.
 
-    markers = np.zeros_like(pixels)
-    markers[pixels < in_param] = 1
-    markers[pixels > out_param] = 2
+#     Returns:
+#         numpy.ndarray: A 2D array of distances between 0 and 1.
 
-    segmentation = watershed(edges, markers)
+#     """
+#     rgb = make_color(color).rgb()
+#     x = np.zeros_like(pixels)
+#     x[:, :] = rgb
+#     # kL>1 puts less emphasis on lightness
+#     return deltaE_ciede2000(rgb2lab(pixels), rgb2lab(x), kL=2) / 100
 
-    regions = find_contours(segmentation, 1.5)
-    regions = [approximate_polygon(region, smoothness) for region in regions]
 
-    # TODO: sort regions by size
-    return [list(region[:, ::-1]) for region in regions]
+# def get_color_regions(image, color, smoothness=5, in_param=0.05,
+#                       out_param=0.3):
+#     """Get shapes corresponding to image regions matching a color."""
+#     pixels = np.array(image)
+#     pixels = color_distances(pixels, color)
+#     pixels = gaussian(pixels, sigma=smoothness)
+
+#     edges = sobel(pixels)
+
+#     markers = np.zeros_like(pixels)
+#     markers[pixels < in_param] = 1
+#     markers[pixels > out_param] = 2
+
+#     segmentation = watershed(edges, markers)
+
+#     regions = find_contours(segmentation, 1.5)
+#     regions = [approximate_polygon(region, smoothness) for region in regions]
+
+#     # TODO: sort regions by size
+#     return [list(region[:, ::-1]) for region in regions]

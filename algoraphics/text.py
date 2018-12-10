@@ -7,29 +7,34 @@ Generate text in the form of shapes or SVG text.
 
 import math
 import numpy as np
+from typing import Union, Tuple, List
 
 from .main import shuffled, geom_seq, set_style
 from .geom import points_on_line, points_on_arc, scale_points, translate_points
 from .geom import horizontal_range, jitter_points, endpoint, deg
 from .shapes import circle, spline
+from .color import Color
+
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
 
-def char_points(char, start, h, spacing):
+def char_points(char: str, start: Point, h: Number, spacing:
+                Number) -> List[List[Point]]:
     """Generate points along a character shape.
 
     Args:
-        char (str): A character.
-        start (tuple): The lower-left point of the character bounds.
-        h (float|int): The line height.
-        sp (float|int): Distance between adjacent points.
+        char: A character.
+        start: The lower-left point of the character bounds.
+        h: The line height.
+        spacing: Distance between adjacent points.
 
     Returns:
-        list: A list of lists of points.  Each list of points
-        corresponds to a pen stroke (i.e. what can be drawn without
-        lifting the pen).
+        A list of lists of points.  Each list of points corresponds to
+        a pen stroke (i.e. what can be drawn without lifting the pen).
 
     """
-    sp = spacing / float(h)  # used before scaling character to height h
+    sp = spacing / h      # Used before scaling character to height h.
     points = []
 
     if char == 'A':
@@ -797,7 +802,7 @@ def char_points(char, start, h, spacing):
     return points
 
 
-def _rel_char_spacing(char):
+def _rel_char_spacing(char: str) -> Tuple[Number, Number]:
     """Get character's left and right spacing relative to line height."""
     spacing = {
         'A': (0.5, 0.5),
@@ -880,22 +885,24 @@ def _rel_char_spacing(char):
         return (0.5, 0.5)
 
 
-def text_points(text, height, pt_spacing, char_spacing=0.1, grouping='points'):
+def text_points(text: str, height: Number, pt_spacing: Number, char_spacing:
+                Number = 0.1, grouping: str =
+                'points') -> Union[List[Point], List[List[Point]]]:
     """Generate points that spell out text.
 
     Text starts at (0, 0) and should be repositioned.
 
     Args:
-        text (str): The text.
-        height (float|int): Line height.
-        pt_spacing (float|int): Approximate distance between adjacent points.
-        char_spacing (number): Size of the largest space on either side of each character relative to line height.  This space is shrunk for certain characters depending on shape.
-        grouping (str): 'points' to return list of points, 'strokes' to group by stroke.
+        text: The text.
+        height: Line height.
+        pt_spacing: Approximate distance between adjacent points.
+        char_spacing: Size of the largest space on either side of each character relative to line height.  This space is shrunk for certain characters depending on shape.
+        grouping: 'points' to return list of points, 'strokes' to group by stroke.
 
     Returns:
-        list: Either a list of points or a list of lists of points in
-        which each list of points corresponds to a pen stroke
-        (i.e. what can be drawn without lifting the pin).
+        Either a list of points or a list of lists of points in which
+        each list of points corresponds to a pen stroke (i.e. what can
+        be drawn without lifting the pin).
 
     """
     strokes = []
@@ -926,27 +933,23 @@ def text_points(text, height, pt_spacing, char_spacing=0.1, grouping='points'):
 #         dx = position[0] - w / 2.
 #     translate_points(text, dx, position[1])
 
-# This version doesn't work for centering:
-# def position_text(text, position, align='left'):
-#     """assumes original position starts at (0, 0) and sets vertical position using base line."""
-#     bounds = bounding_box(text)
-#     reposition(text, (bounds[0] + position[0], bounds[2] + position[1]), align)
 
-
-def splatter_text(text, height, spread, density, min_size, max_size, color):
+def splatter_text(text: str, height: Number, spread: Number, density:
+                  Number, min_size: Number, max_size: Number, color:
+                  Color) -> List[dict]:
     """Generate text with paint splatter appearance.
 
     Args:
-        text (str): The text.
-        height (float|int): The line height.
-        spread (float|int): Standard deviation of point jittering.
-        density (float|int): Number of dots per pixel.
-        min_size (float|int): The smallest dot radius.
-        max_size (float|int): The largest dot radius.
-        color (Color): A fill color or function.
+        text: The text.
+        height: The line height.
+        spread: Standard deviation of point jittering.
+        density: Number of dots per pixel.
+        min_size: The smallest dot radius.
+        max_size: The largest dot radius.
+        color: A fill color or function.
 
     Returns:
-        list: A list of circle shapes (in random order).
+        A list of circle shapes (in random order).
 
     """
     spacing = 1. / density
@@ -958,45 +961,50 @@ def splatter_text(text, height, spread, density, min_size, max_size, color):
     return shuffled(x)
 
 
-def double_dots_text(text, height, top_color='white', bottom_color='black'):
+def double_dots_text(text: str, height: Number, top_color: Color =
+                     'white', bottom_color: Color =
+                     'black') -> List[List[dict]]:
     """Generate text with one splatter color over another.
 
     Args:
-        text (str): The text.
-        height (number): The line height.
-        top_color (color): The color for top (inner) splatters.
-        bottom_color (color): The color for bottom (outer) splatters.
+        text: The text.
+        height: The line height.
+        top_color: The color for top (inner) splatters.
+        bottom_color: The color for bottom (outer) splatters.
 
     Returns:
-        list: A list of two lists of circle shapes (inner lists are
+        A list of two lists of circle shapes (inner lists are
         randomized).
 
     """
-    # x = splatter_text(text, height, height / 15., 200. / height, height / 100., height / 15., bottom_color)
-    x = splatter_text(text, height, height / 10., 500. / height,
-                      height / 100., height / 15., bottom_color)
-    y = splatter_text(text, height, height / 30., 100. / height,
-                      height / 100., height / 25., top_color)
+    x = splatter_text(text, height, spread=height/10,
+                      density=500/height, min_size=height/100,
+                      max_size=height/15, color=bottom_color)
+    y = splatter_text(text, height, spread=height/30,
+                      density=100/height, min_size=height/100,
+                      max_size=height/25, color=top_color)
     return [x, y]
 
 
-def hazy_text(text, height, spread, density, min_size, max_size, color):
+def hazy_text(text: str, height: Number, spread: Number, density:
+              Number, min_size: Number, max_size: Number, color:
+              Color) -> List[dict]:
     """Generate text with hazy dots effect.
 
     Similar to splatter text but dot size is inversely proportional to
     square root of deviation, and points are uniformly jittered.
 
     Args:
-        text (str): The text.
-        height (float|int): The line height.
-        spread (float|int): Standard deviation of point jittering.
-        density (float|int): Number of dots per pixel.
-        min_size (float|int): The smallest dot radius.
-        max_size (float|int): The largest dot radius.
-        color (Color): A fill color or function.
+        text: The text.
+        height: The line height.
+        spread: Standard deviation of point jittering.
+        density: Number of dots per pixel.
+        min_size: The smallest dot radius.
+        max_size: The largest dot radius.
+        color: A fill color or function.
 
     Returns:
-        list: A list of circle shapes (in random order).
+        A list of circle shapes (in random order).
 
     """
     spacing = 1 / density
@@ -1016,20 +1024,21 @@ def hazy_text(text, height, spread, density, min_size, max_size, color):
     return shuffled(x)
 
 
-def squiggle_text(text, height, spread, density):
+def squiggle_text(text: str, height: Number, spread: Number, density:
+                  Number) -> List[dict]:
     """Generate squiggly line text.
 
     Args:
-        text (str): The text.
-        height (float|int): The line height.
-        spread (float|int): Maximum deviation of point jittering.
-        density (float|int): Number of spline points per pixel.
+        text: The text.
+        height: The line height.
+        spread: Maximum deviation of point jittering.
+        density: Number of spline points per pixel.
 
     Returns:
-        list: A list of splines.
+        A list of splines.
 
     """
-    spacing = 1. / density
+    spacing = 1 / density
     strokes = text_points(text, height, pt_spacing=spacing,
                           char_spacing=0.2, grouping='strokes')
     for stroke in strokes:
@@ -1040,20 +1049,22 @@ def squiggle_text(text, height, spread, density):
     return splines
 
 
-def caption(text, x, y, align='right', color='#aaa'):
+def caption(text: str, anchor: Point, align: str = 'right', color:
+            Color = '#aaa', font_size: Number = 14) -> dict:
     """Generate a caption.
 
     Args:
-        text (str): The text.
-        x (float|int): The reference x coordinate.
-        y (float|int): The reference y coordinate.
-        align (str): The alignment to reference point.  'left', 'center', or 'right'.
-        color (color): The text fill color.
+        text: The text.
+        anchor: The reference point.
+        align: The alignment to reference point: 'left', 'center', or 'right'.
+        color: The text fill color.
+        font_size: The font size.
 
     Returns:
-        dict: A text shape.
+        A text shape.
 
     """
-    t = dict(type='text', text=text, x=x, y=y, align=align, font_size=14)
+    t = dict(type='text', text=text, x=anchor[0], y=anchor[1],
+             align=align, font_size=font_size)
     set_style(t, 'fill', color)
     return t

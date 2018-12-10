@@ -8,34 +8,45 @@ General functions involving points in 2D space.
 import math
 import numpy as np
 import rtree
+from typing import Union, Tuple, Sequence
+
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
 
-def rad(deg):
+def rad(deg: Number) -> float:
     """Convert degrees to radians."""
     return deg * 2 * math.pi / 360
 
 
-def deg(rad):
+def deg(rad: Number) -> float:
     """Convert radians to degrees."""
     return rad / (2 * math.pi) * 360
 
 
-def rand_point_on_circle(c, r):
-    """Return random point on circle with center c and radius r."""
+def rand_point_on_circle(c: Point, r: Number) -> Point:
+    """Return random point on a circle.
+
+    Args:
+        c: The center.
+        r: The radius.
+
+    """
     theta = np.random.uniform(-math.pi, math.pi)
     return (c[0] + math.cos(theta) * r, c[1] + math.sin(theta) * r)
 
 
-def points_on_line(start, end, spacing):
+def points_on_line(start: Point, end: Point,
+                   spacing: Number) -> Sequence[Point]:
     """Generate points along a line.
 
     Args:
-        start (point): The first point.
-        end (point): The last point.
-        spacing (float|int): The approximate (max) distance between adjacent points.
+        start: The first point.
+        end: The last point.
+        spacing: The approximate (max) distance between adjacent points.
 
     Returns:
-        list: A list of points.
+        A list of points.
 
     """
     n_points = math.ceil(distance(start, end) / spacing) + 1
@@ -48,15 +59,15 @@ def points_on_line(start, end, spacing):
     return list(zip(x, y))
 
 
-def interpolate(points, spacing):
+def interpolate(points: Sequence[Point], spacing: Number):
     """Insert interpolated points.
 
     Insert equally-spaced, linearly interpolated points into list such
     that consecutive points are no more than 'spacing' distance apart.
 
     Args:
-        points (list): A list of points.
-        spacing (float|int): Maximum distance between adjacent points.
+        points: A list of points.
+        spacing: Maximum distance between adjacent points.
 
     """
     for i in reversed(range(1, len(points))):
@@ -65,72 +76,104 @@ def interpolate(points, spacing):
             points[i:i] = newpts
 
 
-def points_on_arc(center, radius, theta_start, theta_end, spacing):
+def points_on_arc(center: Point, radius: Number, theta_start: Number,
+                  theta_end: Number, spacing: Number) -> Sequence[Point]:
     """Generate points along an arc.
 
     Args:
-        center (point): The center of the arc.
-        radius (float|int): The radius of the arc.
-        theta_start (float|int): The starting position in degrees.
-        theta_end (float|int): The ending position in degrees.
-        spacing (float|int): The approximate distance between adjacent points.
+        center: The center of the arc.
+        radius: The radius of the arc.
+        theta_start: The starting position in degrees.
+        theta_end: The ending position in degrees.
+        spacing: The approximate distance between adjacent points.
 
     Returns:
-        list: A list of points.
+        A list of points.
 
     """
     theta_start = rad(theta_start)
     theta_end = rad(theta_end)
     theta = float(theta_end - theta_start)
-
     n_points = int(abs(theta) * radius / spacing) + 1
-
-    theta_p = [theta_start + i * theta / (n_points - 1) for i in range(n_points)]
+    theta_p = [theta_start + i * theta / (n_points - 1) for i in
+               range(n_points)]
     return [endpoint(center, t, radius) for t in theta_p]
 
 
-def endpoint(start, angle, distance):
-    """Return a point some distance from a starting point in the direction (in radians) of angle."""
+def endpoint(start: Point, angle: Number, distance: Number) -> Point:
+    """
+    Args:
+        start: Starting point.
+        angle: Direction from starting point in radians.
+        distance: Distance from starting point.
+
+    Returns:
+        A point ``distance`` from ``start`` in the direction ``angle``.
+
+    """
     x = start[0] + math.cos(angle) * distance
     y = start[1] + math.sin(angle) * distance
     return (x, y)
 
 
-def move_toward(start, target, distance):
-    """Return a point some distance from a starting point in the direction of a target
-point."""
+def move_toward(start: Point, target: Point, distance: Number) -> Point:
+    """
+    Args:
+        start: Starting point.
+        target: Point to indicate direction from starting point to move.
+        distance: Distance from starting point to returned point.
+
+    Returns:
+        A point ``distance`` from ``start`` in the direction of ``target``.
+
+    """
     angle = math.atan2(target[1] - start[1], target[0] - start[0])
     return endpoint(start, angle, distance)
 
 
 def rotate_and_move(start, ref, angle, distance):
-    """Get a point some distance from a starting point in a direction relative to another point.
+    """Combine ``rotated_point`` and ``move_toward`` for convenience.
 
-    Combines rotated_point and move_toward.
+    Args:
+        start: Starting point.
+        ref: A reference point.
+        angle: The angle to rotate ``ref`` around start.
+        distance: The distance to move from ``start``.
+
+    Returns:
+        A point ``distance`` from ``start`` in the ``angle`` direction
+        relative to ``ref``.
 
     """
     x = rotated_point(ref, start, angle)
     return move_toward(start, x, distance)
 
 
-def distance(p1, p2):
-    """Return the distance between two points."""
+def distance(p1: Point, p2: Point) -> float:
+    """Get the distance between two points.
+
+    Args:
+        p1: First point.
+        p2: Second point.
+
+    """
     dx = p1[0] - p2[0]
     dy = p1[1] - p2[1]
     return math.sqrt(dx * dx + dy * dy)
 
 
-def get_nearest(points, point, index=False):
+def get_nearest(points: Sequence[Point], point: Point, index: bool =
+                False) -> Union[Point, int]:
     """Find the nearest point in a list to a target point.
 
     Args:
-        points (list): A list of points.
-        point (point): The target point.
-        index (bool): Whether to return the point or its index in the list.
+        points: A list of points.
+        point: The target point.
+        index: Whether to return the point or its index in the list.
 
     Returns:
-        tuple|int: If index is False, returns point, otherwise returns
-        index of point in list.
+        If index is False, returns point, otherwise returns index of
+        point in list.
 
     """
     nearest = 0
@@ -144,8 +187,13 @@ def get_nearest(points, point, index=False):
 
 
 class Rtree:
-    """TODO"""
-    def __init__(self, points=None):
+    """An object to efficiently query a field of points.
+
+    Args:
+        points: Starting points.
+
+    """
+    def __init__(self, points: Sequence[Point] = None):
         if points is None:
             points = []
         self.idx = rtree.index.Index()
@@ -154,16 +202,42 @@ class Rtree:
         for p in points:
             self.add_point(p)
 
-    def add_point(self, point):
+    def add_point(self, point: Point):
+        """Add a point to the collection.
+
+        Args:
+            point: The new point.
+
+        """
         self.idx.add(self.size, point)
         self.points.append(point)
         self.size += 1
 
-    def add_points(self, points):
+    def add_points(self, points: Sequence[Point]):
+        """Add points to the collection.
+
+        Args:
+            points: The new points.
+
+        """
         for point in points:
             self.add_point(point)
 
-    def nearest(self, point, n=1, index=False):
+    def nearest(self, point: Point, n: int = 1, index: bool =
+                False) -> Union[Sequence[Point], Point]:
+        """Get the nearest point or points to a query point.
+
+        Args:
+            point: A query point.
+            n: Number of nearest points to return.
+            index: Whether to return the nearets points' indices instead of the points themselves.
+
+        Returns:
+
+        If ``n`` is 1, the nearest point, otherwise a list of nearest
+        points.
+
+        """
         a = list(self.idx.nearest(point, n))
         if not index:
             a = [self.points[x] for x in a]
@@ -172,15 +246,26 @@ class Rtree:
         return a
 
 
-def midpoint(p1, p2):
-    """Return the midpoint between two points."""
+def midpoint(p1: Point, p2: Point) -> Point:
+    """Get the midpoint between two points.
+
+    Args:
+        p1: A point.
+        p2: Another point.
+
+    """
     return (p1[0] + p2[0]) / 2., (p1[1] + p2[1]) / 2.
 
 
-def angle_between(p1, p2, p3):
-    """Return the angle (in radians) between segment p2->p1 and p2->p3.
+def angle_between(p1: Point, p2: Point, p3: Point) -> float:
+    """Get the angle (in radians) between segment p2->p1 and p2->p3.
 
     The angle can be negative.
+
+    Args:
+        p1: The first endpoint.
+        p2: The point where the angle is calculated.
+        p3: The other endpoint.
 
     """
     dir1 = math.atan2(p1[1] - p2[1], p1[0] - p2[0])
@@ -188,15 +273,19 @@ def angle_between(p1, p2, p3):
     return dir2 - dir1
 
 
-def translated_point(point, dx, dy):
-    """Return the point resulting from translating `point` by `dx` and `dy`.
+def translated_point(point: Point, dx: Number, dy: Number) -> Point:
+    """Get a translated point.
+
+    Args:
+        dx: The horizontal translation.
+        dy: The vertical translation.
 
     """
     return (point[0] + dx, point[1] + dy)
 
 
 def rotated_point(point, pivot, angle):
-    """Return the point resulting from rotating `point` around `pivot` point by `angle` (in radians).
+    """Get the point resulting from rotating `point` around `pivot` point by `angle` (in radians).
 
     """
     x = (((point[0] - pivot[0]) * math.cos(angle))
@@ -208,46 +297,56 @@ def rotated_point(point, pivot, angle):
     return (x, y)
 
 
-def scaled_point(point, cx, cy=None):
-    """Return the new location of `point` after scaling coordinates.
+def scaled_point(point: Point, cx: Number, cy: Number = None) -> Point:
+    """Get the new location of ``point`` after scaling coordinates.
 
     Provide either one scaling factor or cx and cy.
+
+    Args:
+        cx: Either the scaling factor, or if ``cy`` is also provided, the horizontal scaling factor.
+        cy: The vertical scaling factor.
 
     """
     cy = cx if cy is None else cy
     return (point[0] * cx, point[1] * cy)
 
 
-def in_box(point, x_min, x_max, y_min, y_max):
-    """Determine if a point lies within the specified bounds."""
-    in_bounds = (x_min < point[0] and point[0] < x_max and
-                 y_min < point[1] and point[1] < y_max)
-    return in_bounds
+# def in_box(point, x_min, x_max, y_min, y_max):
+#     """Determine if a point lies within the specified bounds."""
+#     in_bounds = (x_min < point[0] and point[0] < x_max and
+#                  y_min < point[1] and point[1] < y_max)
+#     return in_bounds
 
 
-def in_ellipse(point, x_min, x_max, y_min, y_max):
-    """Determine if a point lies within an ellipse with the specified bounds."""
-    c = (x_min + x_max) / 2., (y_min + y_max) / 2.
-    r_x = c[0] - x_min
-    r_y = c[1] - y_min
-    return ((point[0] - c[0]) / r_x) ** 2 + ((point[1] - c[1]) / r_y) ** 2 < 1
+# def in_ellipse(point, x_min, x_max, y_min, y_max):
+#     """Determine if a point lies within an ellipse with the specified bounds."""
+#     c = (x_min + x_max) / 2., (y_min + y_max) / 2.
+#     r_x = c[0] - x_min
+#     r_y = c[1] - y_min
+#     return ((point[0] - c[0]) / r_x) ** 2 + ((point[1] - c[1]) / r_y) ** 2 < 1
 
 
-def horizontal_range(points):
-    """Return the magnitude of the horizontal range of a list of points."""
+def horizontal_range(points: Sequence[Point]) -> Number:
+    """Get the magnitude of the horizontal range of a list of points.
+
+    Args:
+        points: A list of points.
+
+    """
     if len(points) == 0:
         return 0
     else:
         return max([x[0] for x in points]) - min([x[0] for x in points])
 
 
-def translate_points(points, dx, dy):
+def translate_points(points: Sequence[Union[Point, Sequence]], dx:
+                     Number, dy: Number):
     """Shift the location of points.
 
     Args:
-        points (list): A list of points, which can be nested.
-        dx (float): movement in x direction.
-        dy (float): movement in y direction.
+        points: A list of points, which can be nested.
+        dx: Horizontal change.
+        dy: Vertical change.
 
     """
     for i in range(len(points)):
@@ -257,13 +356,14 @@ def translate_points(points, dx, dy):
             points[i] = translated_point(points[i], dx, dy)
 
 
-def scale_points(points, cx, cy=None):
+def scale_points(points: Sequence[Union[Point, Sequence]], cx: Number,
+                 cy: Number = None):
     """Scale the coordinates of points.
 
     Args:
-        points (list): A list of points, which can be nested.
-        cx (float|int): The horizontal scale factor.
-        cy (float|int): The vertical scale factor. If omitted, y-coordinates will be scaled by cx.
+        points: A list of points, which can be nested.
+        cx: The horizontal scale factor.
+        cy: The vertical scale factor. If omitted, y-coordinates will be scaled by cx.
 
     """
     for i in range(len(points)):
@@ -273,13 +373,13 @@ def scale_points(points, cx, cy=None):
             points[i] = scaled_point(points[i], cx, cy)
 
 
-def jitter_points(points, deviation, type):
+def jitter_points(points: Sequence[Point], deviation: Number, type: str):
     """Add noise to the locations of points.
 
     Args:
-        points (list): A list of points.
-        deviation (float|int): For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.
-        type (str): The type of noise, 'gaussian' or 'uniform'.
+        points: A list of points.
+        deviation: For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.
+        type: The type of noise, 'gaussian' or 'uniform'.
 
     """
     for i in range(len(points)):
@@ -291,25 +391,36 @@ def jitter_points(points, deviation, type):
         points[i] = endpoint(points[i], angle, dist)
 
 
-def jittered_points(points, deviation, type):
-    """Like jitter_points but returns jittered points, not affecting the original list."""
+def jittered_points(points: Sequence[Point], deviation: Number, type:
+                    str) -> Sequence[Point]:
+    """Get noisy copy of points.
+
+    Like jitter_points but returns jittered points, not affecting the
+    original list.
+
+    Args:
+        points: A list of points.
+        deviation: For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.
+        type: The type of noise, 'gaussian' or 'uniform'.
+
+    """
     x = points[:]
     jitter_points(x, deviation, type)
     return x
 
 
-def line_to_polygon(points, width):
+def line_to_polygon(points: Sequence[Point], width: Number) -> Sequence[Point]:
     """Convert a sequence of points to a path outline.
 
     Imagining the points were connected with a stroke with positive
     width, the outline of the stroke is returned.
 
     Args:
-        points (list): A list of line points.
-        width (float): Width of the path to be outlined.
+        points: A list of line points.
+        width: Width of the path to be outlined.
 
     Returns:
-        list: A list of points.
+        A list of points.
 
     """
 
@@ -335,10 +446,13 @@ def line_to_polygon(points, width):
     return pts
 
 
-def is_clockwise(points):
+def is_clockwise(points: Sequence[Point]) -> bool:
     """Determine if a set of polygon points goes in clockwise or counterclockwise direction.
 
     If edges cross, it gives the more prominent direction.
+
+    Args:
+        points: A list of polygon vertices.
 
     """
     p = points + [points[0]]

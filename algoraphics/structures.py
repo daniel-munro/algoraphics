@@ -7,6 +7,7 @@ Create forms such as filaments and trees.
 
 import math
 import numpy as np
+from typing import Union, Tuple, Sequence, List
 
 from .main import set_style
 from .param import fixed_value, make_param
@@ -15,19 +16,23 @@ from .geom import rotate_and_move, jittered_points, line_to_polygon
 from .shapes import polygon, spline, line
 from .param import Param
 
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
-def filament(start, direction, width, seg_length, n_segments):
+
+def filament(start: Point, direction: Param, width: Param, seg_length:
+             Param, n_segments: int) -> List[dict]:
     """Generate a meandering segmented filament.
 
     Args:
-        start (point): The midpoint of first edge of the filament.
-        direction (Param): The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
-        width (float|int): The width of the filament (at segment joining edges).
-        seg_length (float|int): Average side length of each segment.
-        n_segments (int): Number of segments in the filament.
+        start: The midpoint of first edge of the filament.
+        direction: The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
+        width: The width of the filament (at segment joining edges).
+        seg_length: Average side length of each segment.
+        n_segments: Number of segments in the filament.
 
     Returns:
-        list: A list of polygons (the segments from start to end).
+        A list of polygons (the segments from start to end).
 
     """
     start = fixed_value(start)
@@ -79,18 +84,19 @@ def filament(start, direction, width, seg_length, n_segments):
     return segments
 
 
-def tentacle(start, direction, length, width, seg_length):
+def tentacle(start: Point, direction: Param, length: Number, width:
+             Param, seg_length: Number) -> List[dict]:
     """Generate a filament that tapers to a point.
 
     Args:
-        start (point): The midpoint of first edge of the tentacle.
-        direction (Param): The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
-        length (float|int): Approximate length of the tentacle.
-        width (float|int): The starting width of the tentacle.
-        seg_length (float|int): Average starting length of each segment.  They will shrink toward to the tip.
+        start: The midpoint of first edge of the tentacle.
+        direction: The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
+        length: Approximate length of the tentacle.
+        width: The starting width of the tentacle.
+        seg_length: Average starting length of each segment.  They will shrink toward to the tip.
 
     Returns:
-        list: A list of polygons (the segments from base to tip).
+        A list of polygons (the segments from base to tip).
 
     """
     width = fixed_value(width)
@@ -104,7 +110,9 @@ def tentacle(start, direction, length, width, seg_length):
     return filament(start, direction, width, seg_length, n_segments)
 
 
-def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
+def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
+                     length: Number = 40, len_dev: float = 0.25,
+                     width: Number = 5) -> List[Point]:
     """Draw blow-paint shapes along an edge.
 
     Creates 'fingers' of paint along the edge, as if being blown along
@@ -112,12 +120,15 @@ def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
     facing start to end).
 
     Args:
-        start (tuple): The starting point.
-        end (tuple): The ending point.
-        spacing (float): Average distance between paint fingers.
-        length (float): Average length of the paint fingers.
-        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
-        width (float): Average thickness of each finger.
+        start: The starting point.
+        end: The ending point.
+        spacing: Average distance between paint fingers.
+        length: Average length of the paint fingers.
+        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        width: Average thickness of each finger.
+
+    Returns:
+        A list of points to be connected in a spline.
 
     """
     locs = [start, end]
@@ -136,8 +147,8 @@ def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
         # spread base and bulb:
         pts_out[0] = move_toward(pts_out[0], start, width / 2)
         pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], math.pi / 2,
-                                      width / 6.)
-        pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3., 'uniform')
+                                      width / 6)
+        pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3, 'uniform')
 
         p3 = move_toward(loc, end, width / 2)
         p4 = rotate_and_move(p3, loc, math.pi / 2, le)
@@ -146,7 +157,7 @@ def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
         pts_in[-1] = move_toward(pts_in[-1], end, width / 2)
         pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -math.pi / 2,
                                     width / 6)
-        pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3., 'uniform')
+        pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3, 'uniform')
 
         pts.extend(pts_out)
         pts.extend(pts_in)
@@ -156,18 +167,20 @@ def _blow_paint_edge(start, end, spacing=20, length=40, len_dev=0.25, width=5):
     return pts
 
 
-def blow_paint_area(points, spacing=20, length=40, len_dev=0.25, width=5):
+def blow_paint_area(points: Sequence[Point], spacing: Number = 20,
+                    length: Number = 40, len_dev: float = 0.25,
+                    width: Number = 5) -> dict:
     """Draw a blow-paint effect around an area.
 
     Creates 'fingers' of paint projecting from each edge, as if being
     blown along the page perpindicular to the edge.
 
     Args:
-        points (list): The vertices of the polygonal area.
-        spacing (float): Average distance between paint fingers.
-        length (float): Average length of the paint fingers.
-        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
-        width (float): Average thickness of each finger.
+        points: The vertices of the polygonal area.
+        spacing: Average distance between paint fingers.
+        length: Average length of the paint fingers.
+        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        width: Average thickness of each finger.
 
     """
     if is_clockwise(points):
@@ -180,8 +193,9 @@ def blow_paint_area(points, spacing=20, length=40, len_dev=0.25, width=5):
     return spline(points=pts, circular=True, curvature=0.4)
 
 
-def blow_paint_line(points, line_width=10, spacing=20, length=20,
-                    len_dev=0.33, width=5):
+def blow_paint_line(points: Sequence[Point], line_width: Number = 10,
+                    spacing: Number = 20, length: Number = 20,
+                    len_dev: float = 0.33, width: Number = 5) -> dict:
     """Draw a blow-paint effect connecting a sequence of points.
 
     Creates 'fingers' of paint projecting from each edge, as if being
@@ -189,28 +203,29 @@ def blow_paint_line(points, line_width=10, spacing=20, length=20,
     directions).
 
     Args:
-        points (list): The points to connect.
-        line_width (float): The thickness of the line (excluding the fingers).
-        spacing (float): Average distance between paint fingers.
-        length (float): Average length of the paint fingers.
-        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
-        width (float): Average thickness of each finger.
+        points: The points to connect.
+        line_width: The thickness of the line (excluding the fingers).
+        spacing: Average distance between paint fingers.
+        length: Average length of the paint fingers.
+        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        width: Average thickness of each finger.
 
     """
     pts = line_to_polygon(points, line_width)
     return blow_paint_area(pts, spacing, length, len_dev, width)
 
 
-def blow_paint_spot(point, length=10, len_dev=0.7, width=3):
+def blow_paint_spot(point: Point, length: Number = 10, len_dev: float
+                    = 0.7, width: Number = 3) -> dict:
     """Draw a paint splatter.
 
     Creates 'fingers' of paint projecting from a point.
 
     Args:
-        point (tuple): The center of the splatter.
-        length (float): Average length of the paint fingers.
-        len_dev (float): The standard deviation of finger lengths relative to `length` (so it should be less than 1).
-        width (float): Average thickness of each finger.
+        point: The center of the splatter.
+        length: Average length of the paint fingers.
+        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        width: Average thickness of each finger.
 
     """
     le = 10                     # Length of hexagon edge.
@@ -219,18 +234,19 @@ def blow_paint_spot(point, length=10, len_dev=0.7, width=3):
     return blow_paint_area(pts, le - 1, length, len_dev, width)
 
 
-def tree(start, direction, branch_length, theta, p):
+def tree(start: Point, direction: Number, branch_length: Param, theta:
+         Param, p: Param) -> List[dict]:
     """Generate a tree with randomly terminating branches.
 
     Args:
-        start (tuple): The starting point.
-        direction (float|int): The starting direction (in degrees).
-        branch_length (Param): Branch length.
-        theta (Param): The angle (in degrees) between sibling branches.
-        p (float): The probability that a given branch will split instead of terminating.  Recommended to have a delta < 0 or ratio < 1 so that the tree is guaranteed to terminate.
+        start: The starting point.
+        direction: The starting direction (in degrees).
+        branch_length: Branch length.
+        theta: The angle (in degrees) between sibling branches.
+        p: The probability that a given branch will split instead of terminating.  Recommended to have a delta < 0 or ratio < 1 so that the tree is guaranteed to terminate.
 
     Returns:
-        list: A list of line shapes.
+        A list of line shapes.
 
     """
     start = fixed_value(start)

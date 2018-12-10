@@ -4,7 +4,7 @@ Glossary
 .. glossary::
 
    bounds
-       A tuple giving the minimum x, maximum x, minimum y, and maximum
+       A tuple giving the minimum x, minimum y, maximum x, and maximum
        y coordinate of a :term:`shape`, :term:`collection`, or general
        rectangular space.
 

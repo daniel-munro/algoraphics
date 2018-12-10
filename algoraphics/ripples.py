@@ -6,14 +6,20 @@ Create space-filling ripple effects.
 """
 
 import numpy as np
+from typing import Union, Tuple, Dict, List, Sequence
 
 from .main import _markov_next, set_style, add_margin
 from .geom import rotated_point, rad, endpoint, distance, Rtree
 from .param import fixed_value
+from .shapes import spline
+
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
 
-def _next_point(points, spacing, mode):
-    """Continue from last two elements of points."""
+def _next_point(points: Rtree, spacing: Number,
+                mode: str) -> Union[Point, None]:
+    """Continue from last two elements of ``points``."""
     last = points.points[-2:]
     if mode == 'R':
         angle = 60
@@ -49,17 +55,18 @@ def _next_point(points, spacing, mode):
             angle += angle_inc
 
 
-def _scan_for_space(open_space, points, spacing):
+def _scan_for_space(open_space: Sequence[Point], points:
+                    Sequence[Point], spacing: Number) -> Union[Point, None]:
     """Look for new starting point.
 
     Since a new ripple needs to be drawn with spacing on either side,
-    there must be fewer than 6 existing points within 2 * spacing of
-    the new starting point.
+    there must be fewer than 6 existing points within 2 * ``spacing``
+    of the new starting point.
 
     Args:
-        open_space (list): List of randomly ordered coordinates that have not yet been looked at.
-        points (list): Existing ripple points.
-        spacing (float): Distance between ripples.
+        open_space: List of randomly ordered coordinates that have not yet been looked at.
+        points: Existing ripple points.
+        spacing: Distance between ripples.
 
     Returns:
         Either an available starting point or None if there is none available.
@@ -75,7 +82,9 @@ def _scan_for_space(open_space, points, spacing):
     return None
 
 
-def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
+def ripple_canvas(w: Number, h: Number, spacing: Number,
+                  trans_probs: Dict[str, Dict[str, float]] = None,
+                  existing_pts: Sequence[Point] = None) -> List[dict]:
     """Fill the canvas with ripples.
 
     The behavior of the ripples is determined by a first-order Markov
@@ -88,14 +97,14 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
     probabilities result in more erratic ripples.
 
     Args:
-        w (int): Width of the canvas.
-        h (int): Height of the canvas.
-        spacing (float): Distance between ripples.
-        trans_probs (dict): A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).
-        existing_pts (list): An optional list of points that ripples will avoid.
+        w: Width of the canvas.
+        h: Height of the canvas.
+        spacing: Distance between ripples.
+        trans_probs: A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).
+        existing_pts: An optional list of points that ripples will avoid.
 
     Returns:
-        list: The ripple splines.
+        The ripple splines.
 
     """
     w = fixed_value(w)
@@ -105,24 +114,24 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
         trans_probs = dict(S=dict(R=1), R=dict(R=1))
 
     margin = 3
-    bounds = add_margin((0, w, 0, h), margin)
+    bounds = add_margin((0, 0, w, h), margin)
 
     curves = []  # list of list of points that will become paths
     allpts = Rtree(existing_pts)  # for finding neighbors
 
-    pts = [(x, bounds[2]) for x in np.arange(bounds[0], bounds[1], spacing)]
-    pts.extend([(bounds[1], y) for y in
-                np.arange(bounds[2], bounds[3], spacing)])
+    pts = [(x, bounds[1]) for x in np.arange(bounds[0], bounds[2], spacing)]
+    pts.extend([(bounds[2], y) for y in
+                np.arange(bounds[1], bounds[3], spacing)])
     pts.extend([(x, bounds[3]) for x in
-                np.arange(bounds[1], bounds[0], -spacing)])
+                np.arange(bounds[2], bounds[0], -spacing)])
     pts.extend([(bounds[0], y) for y in
-                np.arange(bounds[3], bounds[2], -spacing)])
+                np.arange(bounds[3], bounds[1], -spacing)])
     curves.append(pts)
     allpts.add_points(pts)
 
     precision = 5
-    xvals = np.arange(bounds[0], bounds[1], precision)
-    yvals = np.arange(bounds[2], bounds[3], precision)
+    xvals = np.arange(bounds[0], bounds[2], precision)
+    yvals = np.arange(bounds[1], bounds[3], precision)
     open_space = [(x, y) for x in xvals for y in yvals]
     np.random.shuffle(open_space)
 
@@ -148,7 +157,7 @@ def ripple_canvas(w, h, spacing, trans_probs=None, existing_pts=None):
             else:
                 more_space = False
 
-    paths = [dict(type='spline', points=p) for p in curves]
+    paths = [spline(points=p) for p in curves]
     set_style(paths, 'fill', 'none')
     set_style(paths, 'stroke', 'black')
     return paths

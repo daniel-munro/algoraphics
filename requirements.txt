@@ -1,15 +1,7 @@
-math
-os
-io
-base64
 numpy
 scipy
 scikit-image
-colorsys
 matplotlib
 rtree
-copy
 Pillow
 shapely
-subprocess
-string

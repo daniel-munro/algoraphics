@@ -6,19 +6,23 @@ Generate path strings.
 """
 
 import math
+from typing import Sequence, Union, Tuple, List
 
 from .geom import translated_point, rotated_point, scaled_point, angle_between
 from .geom import move_toward, distance, rad
 
+Number = Union[int, float]
+Point = Tuple[Number, Number]
 
-def _polygon_path(points):
+
+def _polygon_path(points: Sequence[Point]) -> str:
     """Generate path string for a polygon.
 
     Args:
-        points (list): A list of points.
+        points: A list of points.
 
     Returns:
-        str: An SVG path.
+        An SVG path.
 
     """
     output = 'M' + str(points[0][0]) + ' ' + str(points[0][1]) + ' '
@@ -28,16 +32,17 @@ def _polygon_path(points):
     return output
 
 
-def _spline_path(points, curvature=0.3, circular=False):
+def _spline_path(points: Sequence[Point], curvature: float = 0.3,
+                 circular: bool = False) -> str:
     """Generate path string for spline.
 
     Args:
-        points (list): A list of points.
-        curvature (number): The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.
-        circular (bool): If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
+        points: A list of points.
+        curvature: The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.
+        circular: If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
 
     Returns:
-        str: An SVG path.
+        An SVG path.
 
     """
     if circular:
@@ -71,8 +76,8 @@ def _spline_path(points, curvature=0.3, circular=False):
     return path
 
 
-def _write_pathstring(d):
-    """TODO"""
+def _write_pathstring(d: Sequence[dict]) -> str:
+    """Convert a list of path command dicts to a string."""
     def pnt(p):
         return str(p[0]) + ' ' + str(p[1])
 
@@ -98,10 +103,16 @@ def _write_pathstring(d):
     return ' '.join([write_path_comp(comp) for comp in d])
 
 
-def path_points(path):
-    """Get skeleton points of path.
+def path_points(path: Sequence[dict]) -> List[Point]:
+    """Get skeleton points of a path.
 
     Useful for finding an approximate bounding box for a path.
+
+    Args:
+        path: A list of path command dicts.
+
+    Returns:
+        A list of points used in the path (excluding control points).
 
     """
     pts = []
@@ -111,8 +122,15 @@ def path_points(path):
     return pts
 
 
-def translate_path(path, dx, dy):
-    """TODO"""
+def translate_path(path: Sequence[dict], dx: Number, dy: Number):
+    """Move a path in space.
+
+    Args:
+        path: A list of path command dicts.
+        dx: Horizontal change.
+        dy: Vertical change.
+
+    """
     for comp in path:
         if comp['command'] in ['M', 'L', 'A']:
             comp['to'] = translated_point(comp['to'], dx, dy)
@@ -122,8 +140,15 @@ def translate_path(path, dx, dy):
             comp['to'] = translated_point(comp['to'], dx, dy)
 
 
-def rotate_path(path, angle, pivot=(0, 0)):
-    """TODO"""
+def rotate_path(path: Sequence[dict], angle: Number, pivot: Point = (0, 0)):
+    """Rotate a path.
+
+    Args:
+        path: A list of path command dicts.
+        angle: Amount (in degrees) of rotation.
+        pivot: Pivot point.
+
+    """
     for comp in path:
         if comp['command'] in ['M', 'L']:
             comp['to'] = rotated_point(comp['to'], pivot, rad(angle))
@@ -139,7 +164,14 @@ def rotate_path(path, angle, pivot=(0, 0)):
 
 
 def scale_path(path, cx, cy=None):
-    """Resize path by a factor (radii currently scale by cx)."""
+    """Resize a path (radii currently scale by cx).
+
+    Args:
+        path: A list of path command dicts.
+        cx: Horizontal scale factor.
+        cy: Vertical scale factor.  If missing, ``cx`` will be used.
+
+    """
     cy = cx if cy is None else cy
     for comp in path:
         if comp['command'] in ['M', 'L']:

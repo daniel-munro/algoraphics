@@ -9,35 +9,64 @@ Create and manipulate shapes.
 import numpy as np
 import copy
 from PIL import Image
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, GeometryCollection
+from shapely.geometry import Point as SPoint
+from typing import Sequence, Tuple, Union, List
 
 from .geom import translated_point, rotated_point, scale_points, scaled_point
 from .geom import distance, endpoint, rad
 from .param import fixed_value, make_param
 from .paths import translate_path, rotate_path, scale_path, path_points
 
+Number = Union[int, float]
+Point = Tuple[Number, Number]
+Bounds = Tuple[Number, Number, Number, Number]
+Collection = Union[list, dict]
 
-def polygon(points):
-    """Create a polygon object."""
+
+def polygon(points: Sequence[Point]) -> dict:
+    """Create a polygon shape.
+
+    Args:
+        points: A list of polygon vertices.
+
+    Returns:
+        A polygon shape.
+
+    """
     return dict(type='polygon', points=points)
 
 
-def spline(points, curvature=0.3, circular=False):
-    """Create a spline object."""
+def spline(points: Sequence[Point], curvature: Number = 0.3, circular:
+           bool = False) -> dict:
+    """Create a spline shape.
+
+    Args:
+        points: A list of points.
+        curvature: The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.
+        circular: If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
+
+    Returns:
+        A spline shape.
+
+    """
     return dict(type='spline', points=points, curvature=curvature,
                 circular=circular)
 
 
-def line(p1=None, p2=None, points=None):
-    """Create a line or polyline object.
+def line(p1: Point = None, p2: Point = None, points: Sequence[Point] =
+         None) -> dict:
+    """Create a line or polyline shape.
+
+    Supply either ``p1`` and ``p2`` for a line or ``points`` for a polyline.
 
     Args:
-        p1 (point): The starting point.
-        p2 (point): The ending point.
-        points (list): If a list of points is provided, a polyline is created.
+        p1: The starting point.
+        p2: The ending point.
+        points: If a list of points is provided, a polyline is created.
 
     Returns:
-        dict: A line or polyline shape.
+        A line or polyline shape.
 
     """
     if points is not None:
@@ -48,19 +77,20 @@ def line(p1=None, p2=None, points=None):
         return dict(type='line', p1=p1, p2=p2)
 
 
-def rectangle(start=None, w=None, h=None, bounds=None):
-    """Create a rectangular polygon object.
+def rectangle(start: Point = None, w: Number = None, h: Number = None,
+              bounds: Bounds = None) -> dict:
+    """Create a rectangular polygon shape.
 
     Provide either start + w + h or a bounds tuple.
 
     Args:
-        start (point): Bottom left point of the rectangle (unless w or h is negative).
-        w (float|int): Width of the rectangle.
-        h (float|int): Height of the rectangle.
-        bounds (tuple): The (x_min, x_max, y_min, y_max) of the rectangle.
+        start: Bottom left point of the rectangle (unless w or h is negative).
+        w: Width of the rectangle.
+        h: Height of the rectangle.
+        bounds: The (x_min, y_min, x_max, y_max) of the rectangle.
 
     Returns:
-        dict: A polygon shape.
+        A polygon shape.
 
     """
     if start is not None:
@@ -77,30 +107,40 @@ def rectangle(start=None, w=None, h=None, bounds=None):
                (start[0] + w, start[1] + h),
                (start[0], start[1] + h)]
     else:
-        pts = [(bounds[0], bounds[2]), (bounds[1], bounds[2]),
-               (bounds[1], bounds[3]), (bounds[0], bounds[3])]
+        pts = [(bounds[0], bounds[1]), (bounds[2], bounds[1]),
+               (bounds[2], bounds[3]), (bounds[0], bounds[3])]
     return dict(type='polygon', points=pts)
 
 
-def circle(c, r):
-    """Create a circle object."""
+def circle(c: Point, r: Number) -> dict:
+    """Create a circle shape.
+
+    Args:
+        c: The circle's center.
+        r: The circle's radius.
+
+    Returns:
+        A circle shape.
+
+    """
     c = (fixed_value(c[0]), fixed_value(c[1]))
     r = fixed_value(r)
     return dict(type='circle', c=c, r=r)
 
 
-def wave(start, direction, width, period, length):
+def wave(start: Point, direction: Number, width: Number, period:
+         Number, length: Number) -> dict:
     """Generate a wave spline.
 
     Args:
-        start (point): Starting point of the wave.
-        direction (float|int): Direction (in degrees) of the wave.
-        width (float|int): The total amplitude of the wave from peak to trough.
-        period (float|int): Period of the wave.
-        length (float|int): End-to-end length of the wave.
+        start: Starting point of the wave.
+        direction: Direction (in degrees) of the wave.
+        width: The total amplitude of the wave from peak to trough.
+        period: Period of the wave.
+        length: End-to-end length of the wave.
 
     Returns:
-        dict: A spline shape.
+        A spline shape.
 
     """
     start = fixed_value(start)
@@ -108,33 +148,32 @@ def wave(start, direction, width, period, length):
     width = fixed_value(width)
     period = make_param(period)
 
-    points = [endpoint(start, rad(direction + 90), width / 2.)]
+    points = [endpoint(start, rad(direction + 90), width / 2)]
     phase = 0
     ref_point = start
     while distance(start, points[-1]) < length:
         phase = (phase + 1) % 2
-        ref_point = endpoint(ref_point, rad(direction), period.value() / 2.)
+        ref_point = endpoint(ref_point, rad(direction), period.value() / 2)
         if phase == 0:
-            points.append(endpoint(ref_point, rad(direction + 90), width / 2.))
+            points.append(endpoint(ref_point, rad(direction + 90), width / 2))
         else:
-            points.append(endpoint(ref_point, rad(direction - 90), width / 2.))
+            points.append(endpoint(ref_point, rad(direction - 90), width / 2))
     return spline(points=points)
 
 
-def bounding_box(shapes):
-    """Find bounding box of shape or shape collection.
+def bounding_box(shapes: Collection) -> Bounds:
+    """Find the bounding box of a shape or shape collection.
 
     Args:
-        shapes (dict|list): One or more shapes.
+        shapes: One or more shapes.
 
     Returns:
-        tuple: The min x, max x, min y, and max y coordinates of the
-        input.
+        The min x, max x, min y, and max y coordinates of the input.
 
     """
     if type(shapes) is list:
         b = list(zip(*[bounding_box(s) for s in shapes]))
-        return (min(b[0]), max(b[1]), min(b[2]), max(b[3]))
+        return (min(b[0]), min(b[1]), max(b[2]), max(b[3]))
 
     elif shapes['type'] == 'group':
         if 'clip' in shapes:
@@ -145,28 +184,28 @@ def bounding_box(shapes):
     elif 'points' in shapes:
         x = [p[0] for p in shapes['points']]
         y = [p[1] for p in shapes['points']]
-        return min(x), max(x), min(y), max(y)
+        return (min(x), min(y), max(x), max(y))
 
     elif shapes['type'] == 'circle':
         c, r = shapes['c'], shapes['r']
-        return (c[0] - r, c[0] + r, c[1] - r, c[1] + r)
+        return (c[0] - r, c[1] - r, c[0] + r, c[1] + r)
 
     elif shapes['type'] == 'path':
         return bounding_box(polygon(points=path_points(shapes)))
 
 
-def rotated_bounding_box(shapes, angle):
+def rotated_bounding_box(shapes: Collection, angle: Number) -> Bounds:
     """Find the rotated bounding box of a shape or shape collection.
 
     Args:
-        shapes (dict|list): One or more shapes.
-        angle (float|int): The orientation of the bounding box in degrees.
+        shapes: One or more shapes.
+        angle: The orientation of the bounding box in degrees.
 
     Returns:
-        tuple: The min x, max x, min y, and max y coordinates in
-        rotated space.  Anything created using these coordinates must
-        then be rotated by the same angle around the origin to be in
-        the right place.
+        The min x, max x, min y, and max y coordinates in rotated
+        space.  Anything created using these coordinates must then be
+        rotated by the same angle around the origin to be in the right
+        place.
 
     """
     shapes = copy.deepcopy(shapes)
@@ -174,13 +213,13 @@ def rotated_bounding_box(shapes, angle):
     return bounding_box(shapes)
 
 
-def translate_shapes(shapes, dx, dy):
+def translate_shapes(shapes: Collection, dx: Number, dy: Number):
     """Shift the location of one or more shapes.
 
     Args:
-        shapes (list|dict): One or more shapes.
-        dx (float|int): Horizontal shift.
-        dy (float|int): Vertical shift.
+        shapes: One or more shapes.
+        dx: The horizontal shift.
+        dy: The vertical shift.
 
     """
     if isinstance(shapes, list):
@@ -209,13 +248,14 @@ def translate_shapes(shapes, dx, dy):
         shapes['y'] += dy
 
 
-def rotate_shapes(shapes, angle, pivot=(0, 0)):
+def rotate_shapes(shapes: Collection, angle: Number, pivot: Point =
+                  (0, 0)):
     """Rotate one or more shapes around a point.
 
     Args:
-        shapes (dict|list): One or more shapes.
-        angle (float|int): The angle of rotation in degrees.
-        pivot (tuple): The rotation pivot point.
+        shapes: One or more shapes.
+        angle: The angle of rotation in degrees.
+        pivot: The rotation pivot point.
 
     """
     if isinstance(shapes, list):
@@ -238,7 +278,15 @@ def rotate_shapes(shapes, angle, pivot=(0, 0)):
         rotate_path(shapes['d'], angle, pivot)
 
 
-def scale_shapes(shapes, cx, cy=None):
+def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
+    """Scale one or more shapes.
+
+    Args:
+        shapes: One or more shapes.
+        cx: The horizontal scaling factor.
+        cy: The vertical scaling factor.  If missing, ``cx`` will be used.
+
+    """
     cy = cx if cy is None else cy
     if isinstance(shapes, list):
         for shape in shapes:
@@ -280,17 +328,18 @@ def scale_shapes(shapes, cx, cy=None):
             shapes['y'] -= shapes['h']
 
 
-def reposition(shapes, position, h_align='left', v_align='bottom'):
+def reposition(shapes: Collection, position: Point, h_align: str =
+               'left', v_align: str = 'bottom'):
     """Align one or more shapes to a reference point.
 
     Args:
-        shapes (dict|list): One or more shapes.
-        poisition (tuple): reference point.
-        h_align (str): 'left' to move left bound to reference point.  'center' to horizontally center object around reference point.  'right' to move right bound to reference point.
-        v_align (str): 'bottom' to move lower bound to reference point.  'middle' to vertically center object around reference point.  'top' to move upper bound to reference point.
+        shapes: One or more shapes.
+        poisition: The reference point.
+        h_align: 'left' to move left bound to reference point.  'center' to horizontally center object around reference point.  'right' to move right bound to reference point.
+        v_align: 'bottom' to move lower bound to reference point.  'middle' to vertically center object around reference point.  'top' to move upper bound to reference point.
 
     """
-    x_min, x_max, y_min, y_max = bounding_box(shapes)
+    x_min, y_min, x_max, y_max = bounding_box(shapes)
 
     if h_align == 'left':
         dx = position[0] - x_min
@@ -309,10 +358,17 @@ def reposition(shapes, position, h_align='left', v_align='bottom'):
     translate_shapes(shapes, dx, dy)
 
 
-def coverage(obj):
-    """Create shapely object.
+def coverage(obj: Collection) -> Union[Polygon, SPoint, GeometryCollection]:
+    """Create a shapely object.
 
     Used to calculate area/coverage.
+
+    Args:
+        obj: One or more shapes.
+
+    Returns:
+        A shapely object representing the union of coverage for all
+        input shapes.
 
     """
     if isinstance(obj, list):
@@ -326,19 +382,19 @@ def coverage(obj):
         pts = path_points(obj)
         return Polygon(pts)
     elif obj['type'] == 'circle':
-        return Point(obj['c'][0], obj['c'][1]).buffer(obj['r'])
+        return SPoint(obj['c'][0], obj['c'][1]).buffer(obj['r'])
     else:
         print("Can't get coverage for:", obj['type'])
 
 
-def keep_shapes_inside(shapes, boundary):
+def keep_shapes_inside(shapes: Sequence[Collection], boundary: Collection):
     """Remove shapes from (nested) list if they lie entirely outside the boundary.
 
-    Used to optimize SVG file without altering appearance.
+    Used to optimize SVG file without altering the appearance.
 
     Args:
-        shapes (list): A list of shapes.
-        boundary (dict|list): One or more shapes giving the boundary.
+        shapes: A list of shapes.
+        boundary: One or more shapes giving the boundary.
 
     """
     # Reverse so deleting items doesn't affect loop:
@@ -354,14 +410,14 @@ def keep_shapes_inside(shapes, boundary):
                 del shapes[i]
 
 
-def centroid(shape):
+def centroid(shape: dict) -> Point:
     """Find the centroid of a shape.
 
     Args:
-        shape (dict): A shape.
+        shape: A shape.
 
     Returns:
-        tuple: A point.
+        A point.
 
     """
     if 'points' in shape:
@@ -370,57 +426,57 @@ def centroid(shape):
         return shape['c']
 
 
-def polygon_area(vertices):
+def polygon_area(vertices: Sequence[Point]) -> float:
     """Find the area of a polygon.
 
     Args:
-        vertices (list): The vertex points.
+        vertices: The vertex points.
 
     Returns:
-        float: The area.
+        The area.
 
     """
     return Polygon(vertices).area
 
 
-def sample_points_in_shape(shape, n):
+def sample_points_in_shape(shape: dict, n: int) -> List[Point]:
     """Sample random points inside a shape.
 
     Args:
-        shape (dict): A shape (currently works for polygons and splines).
-        n (int): Number of points to sample.
+        shape: A shape (currently works for polygons and splines).
+        n: Number of points to sample.
 
     Returns:
-        list: The sampled points.
+        The sampled points.
 
     """
     bound = bounding_box(shape)
     points = []
     for i in range(n):
         while True:
-            p = (np.random.uniform(bound[0], bound[1]),
-                 np.random.uniform(bound[2], bound[3]))
-            if Point(p[0], p[1]).within(Polygon(shape['points'])):
+            p = (np.random.uniform(bound[0], bound[2]),
+                 np.random.uniform(bound[1], bound[3]))
+            if SPoint(p[0], p[1]).within(Polygon(shape['points'])):
                 points.append(p)
                 break
     return points
 
 
-def keep_points_inside(points, boundary):
+def keep_points_inside(points: Sequence[Point], boundary: Collection):
     """Keep points that lie within a boundary.
 
     Args:
-        points (list): A list of points.
-        boundary (dict|list): One or more shapes giving the boundary.
+        points: A list of points.
+        boundary: One or more shapes giving the boundary.
 
     """
     # reverse so deleting items doesn't affect loop
     for i, point in reversed(list(enumerate(points))):
-        if not coverage(boundary).intersects(Point(point)):
+        if not coverage(boundary).intersects(SPoint(point)):
             del points[i]
 
 
-def remove_hidden(shapes):
+def remove_hidden(shapes: Sequence[Collection]):
     """Remove shapes from (nested) list if they are entirely covered.
 
     Used to optimize SVG file without altering appearance, e.g. when
@@ -428,7 +484,7 @@ def remove_hidden(shapes):
     determining overlap.
 
     Args:
-        shapes (list): A list of shapes.
+        shapes: A list of shapes.
 
     """
     def process_list(l, cover):
@@ -447,6 +503,6 @@ def remove_hidden(shapes):
                     cover[0] = cover[0].union(shape)
 
     # Pass list to recursive calls so coverage updates:
-    cover = [Point((0, 0))]
+    cover = [SPoint((0, 0))]
     # Pack in list because 'shapes' can be single group:
     process_list([shapes], cover)

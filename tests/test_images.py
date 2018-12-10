@@ -21,7 +21,7 @@ ag.to_PNG('svg/images1.svg', 'png/images1.png')
 
 
 ######################################################################
-# Image segments colored from image
+# Image segments colored from image and textured
 ######################################################################
 
 image = ag.open_image("test_images.jpg")
@@ -38,7 +38,7 @@ ag.to_PNG('svg/images2.svg', 'png/images2.png')
 
 
 ######################################################################
-# TODO: test rand_col_nearby and contrasting_lightness
+# Image segments with pattern fill
 ######################################################################
 
 image = ag.open_image("test_images.jpg")

@@ -64,7 +64,7 @@ x = [ag.rectangle(start=(50, 50), w=300, h=300),
 ag.set_style(x[0], 'fill', 'green')
 ag.set_style(x[1], 'fill', '#FFCCCC')
 ag.add_paper_texture(x)
-x = ag.tear_paper_rect(x, (60, 340, 60, 340))
+x = ag.tear_paper_rect(x, (60, 60, 340, 340))
 
 ag.write_SVG(x, w, h, 'svg/textures3.svg')
 ag.to_PNG('svg/textures3.svg', 'png/textures3.png')

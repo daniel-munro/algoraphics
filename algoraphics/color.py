@@ -8,14 +8,32 @@ Functions for working with colors.
 import numpy as np
 import colorsys
 import matplotlib.colors
+from typing import Union, Tuple, Sequence
 
 from .param import fixed_value
 
 
 class Color:
-    """Object to represent a color or distribution of colors."""
-    def __init__(self, hsl=None, hue=None, sat=None, li=None,
-                 rgb=None, RGB=None):
+    """Object to represent a color or distribution of colors.
+
+    Define using any of an hsl tuple, separate
+    hue/saturation/lightness arguments, an rgb tuple (0 to 1), or an
+    RGB tuple (integers 0 to 255).  Any component can be a Param
+    object.
+
+    Args:
+        hsl: The hsl specification, where each component is between 0 and 1.
+        hue: The hue specification from 0 to 1.  sat and li must also be provided.
+        sat: The saturation specification from 0 to 1.
+        li: The lightness specification from 0 to 1.
+        rgb: The red/green/blue components, each ranging from 0 to 1.
+        RGB: The red/green/blue components, each ranging from 0 to 255.
+
+    """
+    def __init__(self, hsl: Tuple[float, float, float] = None, hue:
+                 float = None, sat: float = None, li: float = None,
+                 rgb: Tuple[float, float, float] = None, RGB:
+                 Tuple[int, int, int] = None):
         if hue is not None:
             assert sat is not None and li is not None
             self.hsl = (hue, sat, li)
@@ -29,22 +47,43 @@ class Color:
             hue, li, sat = colorsys.rgb_to_hls(r, g, b)
             self.hsl = (hue, sat, li)
 
-    def value(self):
+    def value(self) -> Tuple[float, float, float]:
+        """Get the color's hsl specification.
+
+        Returns one fixed specification if the color is parameterized.
+
+        """
         return tuple([fixed_value(x) for x in self.hsl])
 
-    def hex(self):
+    def hex(self) -> str:
+        """Get the color's hsl specification.
+
+        Returns one fixed specification if the color is parameterized.
+
+        """
         return matplotlib.colors.to_hex(self.rgb())
 
-    def rgb(self):
+    def rgb(self) -> Tuple[float, float, float]:
+        """Get the color's rgb specification.
+
+        Returns one fixed specification if the color is parameterized.
+
+        """
         hsl = self.value()
         return colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
 
-    def RGB(self):
+    def RGB(self) -> Tuple[int, int, int]:
+        """Get the color's RGB specification.
+
+        Returns one fixed specification if the color is parameterized.
+
+        """
         r, g, b = self.rgb()
         return (int(r * 255), int(g * 255), int(b * 255))
 
 
-def make_color(x):
+def make_color(x: Union[Color, Tuple[float, float, float]]) -> Color:
+    """Convert to a color object if a tuple is provided."""
     if isinstance(x, Color):
         return x
     elif type(x) is tuple:
@@ -77,14 +116,28 @@ def make_color(x):
 #     return rgb_to_hsl(hex_to_rgb(hx))
 
 
-def rgb_array_to_hsv(rgb):
-    """Convert matrix of rgb values to HSV."""
+def rgb_array_to_hsv(rgb: np.ndarray) -> np.ndarray:
+    """Convert matrix of rgb values to HSV.
+
+    Args:
+        rgb: An array of rgb colors.
+
+    Returns:
+        An array of HSV colors.
+    """
     # return matplotlib.colors.rgb_to_hsv(rgb / 255)
     return matplotlib.colors.rgb_to_hsv(rgb)
 
 
-def hsv_array_to_rgb(hsv):
-    """Convert matrix of HSV values to rgb."""
+def hsv_array_to_rgb(hsv: np.ndarray) -> np.ndarray:
+    """Convert matrix of HSV values to rgb.
+
+    Args:
+        hsv: An array of HSV colors.
+
+    Returns:
+        An array of rgb colors.
+    """
     return matplotlib.colors.hsv_to_rgb(hsv)
 
 
@@ -110,16 +163,16 @@ def hsv_array_to_rgb(hsv):
 #     return hsl_to_rgb((hue, sat, li))
 
 
-def average_color(colors):
+def average_color(colors: Sequence[Color]) -> Color:
     """Find average of list of colors.
 
     Currently, this finds the arithmetic mean in RGB color space.
 
     Args:
-        colors (list): A list of Color objects.
+        colors: A list of Color objects.
 
     Returns:
-        Color: The average color.
+        The average color.
 
     """
     rgbs = [make_color(color).rgb() for color in colors]
@@ -127,18 +180,18 @@ def average_color(colors):
     return Color(rgb=rgb)
 
 
-def contrasting_lightness(color, light_diff):
+def contrasting_lightness(color: Color, light_diff: float) -> Color:
     """Get color with contrasting lightness to reference color.
 
     Color is lighter if original lightness is < 0.5 and darker otherwise.
     Used to create color pairs for a mixture of light and dark colors.
 
     Args:
-        color (tuple): An RGB tuple.
-        light_diff (float): Magnitude of difference in lightness, between 0 and 1.
+        color: A color.
+        light_diff: Magnitude of difference in lightness, between 0 and 1.
 
     Returns:
-        tuple: An RGB tuple.
+        The contrasting color.
 
     """
     hsl = make_color(color).value()
@@ -182,19 +235,20 @@ def contrasting_lightness(color, light_diff):
 #         return (h, s, li)
 
 
-def map_colors_to_array(values, colors, period, gradient_mode='rgb'):
+def map_colors_to_array(values: np.ndarray, colors: Sequence[Color],
+                        gradient_mode: str = 'rgb') -> np.ndarray:
     """Map 2D array of values to a cyclical color gradient.
 
     If values vary continuously in space, this produces a cyclical color
     gradient.
 
     Args:
-        values (numpy.ndarray): A 2D array.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).
-        colors (list): A list of Color objects.
-        gradient_mode (str): Either 'rgb' or 'hsv' to indicate how the colors are interpolated.
+        values: A 2D array of floats.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).
+        colors: A list of Color objects.
+        gradient_mode: Either 'rgb' or 'hsv' to indicate how the colors are interpolated.
 
     Returns:
-        numpy.ndarray: A 3D array of RGB values (RGB mode because this is used for PIL images).
+        A 3D array of RGB values (RGB mode because this is used for PIL images).
 
     """
     colors = np.array([make_color(color).rgb() for color in colors])

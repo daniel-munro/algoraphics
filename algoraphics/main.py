@@ -6,20 +6,26 @@ General functions for creating graphics.
 """
 
 import numpy as np
+from typing import Union, Callable, Any, Sequence, Dict, Tuple
 
 from .geom import distance
 from .shapes import rectangle, bounding_box
 from .param import Param
 from .color import Color
 
+Number = Union[int, float]
+Collection = Union[dict, list]
+Bounds = Tuple[Number, Number, Number, Number]
 
-def set_style(obj, attribute, value):
+
+def set_style(obj: Collection, attribute: str,
+              value: Union[str, Number, Param, Color, Callable]):
     """Set style attribute of one or more shapes.
 
     Args:
-        obj (dict|list): A shape or (nested) list of shapes.
-        attribute (str): Name of the style attribute.
-        value (str|number|function): either a single value or a function that returns values when called with no arguments.
+        obj: A shape or (nested) list of shapes.
+        attribute: Name of the style attribute.
+        value: Either a single value, Color, Param, or a function that returns values when called with no arguments.
 
     """
     if isinstance(obj, list):
@@ -28,7 +34,7 @@ def set_style(obj, attribute, value):
     else:
         if 'style' not in obj:
             obj['style'] = dict()
-        if type(value) is Param:
+        if isinstance(value, Param):
             obj['style'][attribute] = value.value()
         elif type(value) is Color:
             obj['style'][attribute] = value.hex()
@@ -38,14 +44,14 @@ def set_style(obj, attribute, value):
             obj['style'][attribute] = value
 
 
-def flatten(objects):
+def flatten(objects: Any) -> list:
     """Create a flattened list from a nested list.
 
     Args:
-        objects (object): A nested list or a non-list.
+        objects: A nested list or a non-list.
 
     Returns:
-        list: The non-list elements within the input.
+        The non-list elements within the input.
 
     """
     out = []
@@ -57,20 +63,21 @@ def flatten(objects):
     return out
 
 
-def random_walk(min_val, max_val, max_step, n, start=None):
+def random_walk(min_val: Number, max_val: Number, max_step: Number, n:
+                int, start: Number = None) -> list:
     """Generate a random walk sequence.
 
     Steps are sampled from a uniform random distribution.
 
     Args:
-        min_val (float): Values will not fall below this value.
-        max_val (float): Values will not fall above this value.
-        max_step (flot): Maximum magnitude of each step.
-        n (int): Length of the sequence.
-        start (number): The starting value.
+        min_val: Values will not fall below this value.
+        max_val: Values will not fall above this value.
+        max_step: Maximum magnitude of each step.
+        n: Length of the sequence.
+        start: The starting value.
 
     Returns:
-        list: The generated sequence.
+        The generated sequence.
 
     """
     if start is None:
@@ -83,61 +90,62 @@ def random_walk(min_val, max_val, max_step, n, start=None):
     return x
 
 
-def shuffled(items):
+def shuffled(items: Sequence) -> list:
     """Create shuffled version of a list.
 
     Args:
-        items (list): A list of items.
+        items: A list of items.
 
     Returns:
-        list: A new list with same objects as input but reordered.
+        A new list with same objects as input but reordered.
 
     """
     return list(np.random.choice(items, len(items), replace=False))
 
 
-def arith_seq(start, stop, length):
+def arith_seq(start: Number, stop: Number, length: int) -> list:
     """Generate an arithmetic sequence.
 
     Args:
-        start (float): The first value in the sequence.
-        stop (float): The last value in the sequence.
-        length (int): The length of the the sequence.
+        start: The first value in the sequence.
+        stop: The last value in the sequence.
+        length: The length of the the sequence.
 
     Returns:
-        list: The generated sequence.
+        The generated sequence.
 
     """
     return [(float(x) / (length - 1)) * (stop - start) + start for x
             in range(length)]
 
 
-def geom_seq(start, stop, length):
+def geom_seq(start: Number, stop: Number, length: int) -> list:
     """Generate geometric sequence.
 
     Args:
-        start (float): The first value in the sequence.
-        stop (float): The last value in the sequence.
-        length (int): Length of the sequence.
+        start: The first value in the sequence.
+        stop: The last value in the sequence.
+        length: Length of the sequence.
 
     Returns:
-        list: The generated sequence.
+        The generated sequence.
 
     """
     r = (float(stop) / start) ** (1. / (length - 1))
     return [start * (r ** i) for i in range(length)]
 
 
-def reorder_objects(objects, by='random', w=None, h=None):
+def reorder_objects(objects: Sequence[Collection], by: str = 'random',
+                    w: Number = None, h: Number = None):
     """Reorder objects in list.
 
     Used to change order in which objects are drawn.
 
     Args:
-        objects (list): A list whose items are shapes or lists.
-        by (str): 'random' to shuffle objects.  'out to in' to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.
-        w (float|int): Canvas width, used to get center when by='out to in'.
-        h (float|int): Canvas height, used to get center when by='out to in'.
+        objects: A list whose items are shapes or lists.
+        by: 'random' to shuffle objects.  'out to in' to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.
+        w: Canvas width, used to get center when by='out to in'.
+        h: Canvas height, used to get center when by='out to in'.
 
     """
     if by == 'random':
@@ -158,52 +166,52 @@ def reorder_objects(objects, by='random', w=None, h=None):
         objects.sort(key=key_fun, reverse=True)
 
 
-def add_margin(bounds, margin):
+def add_margin(bounds: Bounds, margin: Number) -> Bounds:
     """Add margin to bounds.
 
     A convenience function used when generating objects to avoid
     issues at the edges of the region or canvas.
 
     Args:
-        bounds (tuple): A tuple of min x, max x, min y, and max y.
-        margin (float|int): The width of the margin.
+        bounds: A tuple of min x, min y, max x, and max y.
+        margin: The width of the margin.
 
     Returns:
-        tuple: Bounds that include the margin on all sides.
+        Bounds that include the margin on all sides.
 
     """
-    return (bounds[0] - margin, bounds[1] + margin,
-            bounds[2] - margin, bounds[3] + margin)
+    return (bounds[0] - margin, bounds[1] - margin,
+            bounds[2] + margin, bounds[3] + margin)
 
 
-def background(fill, w, h, margin=0):
+def background(fill: Color, w: Number, h: Number, margin: Number = 1) -> dict:
     """Create a background color for the canvas.
 
     See region_background to set background for a specific region.
 
     Args:
-        fill (color): The background color.
-        w (int): width of canvas.
-        h (int): height of canvas.
-        margin (int): width of margin to include to avoid edge artifacts.
+        fill: The background color.
+        w: width of canvas.
+        h: height of canvas.
+        margin: width of margin to include to avoid edge artifacts.
 
     Returns:
-        tuple: A filled rectangular polygon covering the canvas.
+        A filled rectangular polygon covering the canvas.
 
     """
-    bg = rectangle(bounds=(-margin, w + margin, -margin, h + margin))
+    bg = rectangle(bounds=(-margin, -margin, w + margin, h + margin))
     set_style(bg, 'fill', fill)
     return bg
 
 
-def region_background(region, color):
-    """Add background color to clipped region.
+def region_background(region: dict, color: Color):
+    """Add background color to a clipped region.
 
     Adds a filled rectangle to the beginning of the region's members.
 
     Args:
-        region (dict): A clipped group object.
-        color (color|function): A color or function to apply to the region.
+        region: A clipped group shape.
+        color: A color to apply to the region.
 
     """
     bounds = add_margin(bounding_box(region['clip']), 10)
@@ -215,7 +223,15 @@ def region_background(region, color):
         region['members'] = [bg, region['members']]
 
 
-def tint_region(region, color, opacity):
+def tint_region(region: dict, color: Color, opacity: float):
+    """Add color tint to a clipped region.
+
+    Args:
+        region: A clipped group shape.
+        color: The tint color.
+        opacity: The degree of tinting from 0 to 1.
+
+    """
     bounds = add_margin(bounding_box(region['clip']), 10)
     tint = rectangle(bounds=bounds)
     set_style(tint, 'fill', color)
@@ -226,15 +242,15 @@ def tint_region(region, color, opacity):
         region['members'] = [region['members'], tint]
 
 
-def _markov_next(state, trans_probs):
+def _markov_next(state: str, trans_probs: Dict[str, Dict[str, float]]) -> str:
     """Get the next state in a first-order Markov chain.
 
     Args:
-        state (str): The current state.
-        trans_probs (dict): A dictionary of dictionaries containing transition probabilities from one state (first key) to another (second key).
+        state: The current state.
+        trans_probs: A dictionary of dictionaries containing transition probabilities from one state (first key) to another (second key).
 
     Returns:
-        str: The next state.
+        The next state.
 
     """
     states = list(trans_probs[state].keys())

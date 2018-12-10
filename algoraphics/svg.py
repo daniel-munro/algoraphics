@@ -9,35 +9,38 @@ import numpy as np
 import string
 import subprocess
 import os
+from typing import Union, Sequence, Callable
 
-from .main import flatten, set_style
+from .main import flatten
 from .shapes import scale_shapes, translate_shapes
 from .paths import _write_pathstring, _spline_path
 from .images import encode_image
 from .color import Color
 
+Number = Union[int, float]
 
-def _match_dict(dicts, d):
-    """Return index of dictionary in `dicts` matching `d`, or None if no match."""
+
+def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
+    """Return index of dictionary in ``dicts`` matching ``d``, or None if no match."""
     for i in range(len(dicts)):
         if dicts[i] == d:
             return i
     return None
 
 
-def _write_path(shape, mods):
+def _write_path(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a path shape."""
     return '<path d="' + _write_pathstring(shape['d']) + '" ' + mods + '/>\n'
 
 
-def _write_polygon(shape, mods):
+def _write_polygon(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a polygon."""
     points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in
                        shape['points']])
     return '<polygon points="' + points + '" ' + mods + '/>\n'
 
 
-def _write_spline(shape, mods):
+def _write_spline(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a spline path."""
     if 'curvature' not in shape:
         shape['curvature'] = 0.3
@@ -48,38 +51,38 @@ def _write_spline(shape, mods):
     return '<path d="' + d + '" ' + mods + '/>\n'
 
 
-def _write_circle(shape, mods):
+def _write_circle(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a circle."""
     return ('<circle cx="' + str(shape['c'][0]) + '" cy="'
             + str(shape['c'][1]) + '" r="' + str(shape['r']) + '" '
             + mods + '/>\n')
 
 
-def _write_line(shape, mods):
+def _write_line(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a line."""
     return ('<line x1="' + str(shape['p1'][0]) + '" y1="'
             + str(shape['p1'][1]) + '" x2="' + str(shape['p2'][0])
             + '" y2="' + str(shape['p2'][1]) + '" ' + mods + '/>\n')
 
 
-def _write_polyline(shape, mods):
+def _write_polyline(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a polyline."""
     points = ' '.join([str(x[0]) + ',' + str(x[1]) for x in
                        shape['points']])
     return '<polyline points="' + points + '" fill="none" ' + mods + '/>\n'
 
 
-def _write_text(shape, mods):
+def _write_text(shape: dict, mods: str) -> str:
     """Generate SVG text."""
     anchors = dict(left='start', center='middle', right='end')
     anchor = anchors[shape['align']]
     return ('<text x="' + str(shape['x']) + '" y="' + str(shape['y'])
-            + '" ' + 'text-anchor="' + anchor + '" ' +
-            'font-size="' + str(shape['font_size']) + '" ' + mods +
-            '>' + shape['text'] + '</text>\n')
+            + '" ' + 'text-anchor="' + anchor + '" ' + 'font-size="' +
+            str(shape['font_size']) + '" ' + mods + '>' +
+            shape['text'] + '</text>\n')
 
 
-def _write_raster(shape, mods):
+def _write_raster(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a raster image."""
     output = '<image '
     if 'w' not in shape:
@@ -97,7 +100,8 @@ def _write_raster(shape, mods):
     return output
 
 
-def _write_group(shape, mods, defs, filters):
+def _write_group(shape: dict, mods: str, defs: Sequence[str], filters:
+                 Sequence[dict]) -> str:
     """Generate an SVG group."""
     output = '<g '
     if 'clip' in shape:
@@ -115,16 +119,17 @@ def _write_group(shape, mods, defs, filters):
     return output
 
 
-def _write_shape(shape, defs, filters):
+def _write_shape(shape: dict, defs: Sequence[str], filters:
+                 Sequence[dict]) -> str:
     """Generate SVG representation of a shape.
 
     Args:
-        shape (dict): A geometric shape, group, text, or raster dictionary.
-        defs (list): A list of strings used to collect SVG representations of all clip paths, filters, etc.
-        filters (list): A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.
+        shape: A geometric shape, group, text, or raster dictionary.
+        defs: A list of strings used to collect SVG representations of all clip paths, filters, etc.
+        filters: A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.
 
     Returns:
-        str: An SVG encoding.
+        An SVG encoding.
 
     """
     style_string = 'style="' + _write_style(shape) + '" '
@@ -154,15 +159,15 @@ def _write_shape(shape, defs, filters):
     return output
 
 
-def _write_style(shape):
+def _write_style(shape: dict) -> str:
     """Generate an SVG representation of a shape's style.
 
     Args:
-        shape (dict): A geometric shape, group, text, or raster dictionary.
+        shape: A geometric shape, group, text, or raster dictionary.
 
     Returns:
-        str: An SVG encoding which should be inserted between the
-        quotes of style="...".
+        An SVG encoding which should be inserted between the quotes of
+        style="...".
 
     """
     if 'style' in shape:
@@ -203,14 +208,14 @@ def _write_style(shape):
     return ';'.join([prop + ':' + str(value) for prop, value in style.items()])
 
 
-def _write_filters(filters):
+def _write_filters(filters: Sequence[dict]) -> str:
     """Generate an SVG representation of all filters used in graphic.
 
     Args:
-        filters (list): A list of filters.
+        filters: A list of filters.
 
     Returns:
-        str: An SVG encoding.
+        An SVG encoding.
 
     """
     fltrs = []
@@ -268,17 +273,18 @@ def _write_filters(filters):
     return fltrs
 
 
-def write_SVG(objects, w, h, file_name, optimize=True):
+def write_SVG(objects: Union[list, dict], w: Number, h: Number,
+              file_name: str, optimize: bool = True):
     """Write an SVG file for a collection of objects.
 
     Args:
-        objects (dict|list): A (nested) collection of objects.  Placed onto the canvas in order after flattening.
-        w (int): Width of canvas.
-        h (int): Height of canvas.
-        file_name (str): The file name to write to.
-        optimize (bool): Whether to optimize the SVG file using svgo.
+        objects: A (nested) collection of objects.  Placed onto the canvas in order after flattening.
+        w: Width of canvas.
+        h: Height of canvas.
+        file_name: The file name to write to.
+        optimize: Whether to optimize the SVG file using svgo.
 
-        """
+    """
     defs = []
     filters = []
     out = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" '
@@ -303,10 +309,6 @@ def write_SVG(objects, w, h, file_name, optimize=True):
 
     open(file_name, 'w').write(out)
     if optimize:
-        # TODO: change to subprocess.run().
-        # os.system('svgo --quiet --precision=2 '
-        #           + '--config=/home/dan/coding/graphics/algoraphics/scripts/'
-        #           + 'svgo_config.txt -i ' + file_name)
         subprocess.run([
             'svgo', '--quiet', '--precision=2',
             # '--config=/home/dan/coding/graphics/algoraphics/scripts/svgo_config.txt',
@@ -315,12 +317,12 @@ def write_SVG(objects, w, h, file_name, optimize=True):
         ])
 
 
-def to_PNG(infile, outfile=None):
+def to_PNG(infile: str, outfile: str = None):
     """Convert and SVG file to a PNG image.
 
     Args:
-        infile (str): The SVG file name.
-        outfile (str): The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with '.png'.
+        infile: The SVG file name.
+        outfile: The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with '.png'.
 
     """
     if outfile is None:
@@ -329,17 +331,18 @@ def to_PNG(infile, outfile=None):
     subprocess.run(['convert', infile, outfile])
 
 
-def write_frames(fun, n, w, h, file_name):
+def write_frames(fun: Callable, n: int, w: Number, h: Number,
+                 file_name: str):
     """Write multiple frames of randomized objects.
 
     Frames can then be combined into an animated GIF.
 
     Args:
-        fun (function): A function called with no arguments that returns an SVG object collection.
-        n (int): Number of frames to generate.
-        w (int): Width of the canvas.
-        h (int): Height of the canvas.
-        file_name (str): A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.
+        fun: A function called with no arguments that returns an SVG object collection.
+        n: Number of frames to generate.
+        w: Width of the canvas.
+        h: Height of the canvas.
+        file_name: A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.
 
     """
     for i in range(n):

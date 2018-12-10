@@ -1,4 +1,4 @@
-"""A library for creating graphics that use algorithms and randomness.
+"""A library for creating graphics using algorithms and randomness.
 
 """
 
