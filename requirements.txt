@@ -3,8 +3,7 @@ scipy
 Shapely
 Rtree
 numpy
-scikit_image
+scikit-image
 Pillow
-skimage
 typing
 sphinx_autodoc_typehints
