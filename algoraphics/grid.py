@@ -29,8 +29,8 @@ def grid_tree(rows: int, cols: int) -> np.ndarray:
     other grids.
 
     Args:
-        rows (int): Number of rows in the grid.
-        cols (int): Number of columns in the grid.
+        rows: Number of rows in the grid.
+        cols: Number of columns in the grid.
 
     Returns:
         A 2D binary array in sparse format with dimensions (num. grid
@@ -71,8 +71,8 @@ def grid_tree_neighbors(rows: int, cols: int) -> np.ndarray:
     """Generate a random spanning tree for a grid and return neighbor array.
 
     Args:
-        rows (int): Number of rows in grid.
-        cols (int): Number of cols in grid.
+        rows: Number of rows in grid.
+        cols: Number of cols in grid.
 
     Returns:
         A 3D boolean array (rows x cols x [d?, r?, u?, l?]).  The
@@ -413,7 +413,7 @@ class Maze_Style_Jagged(Maze_Style):
 
 def _new_coords(prev_coords: Tuple[int, int], direction:
                 int) -> Tuple[int, int]:
-    """Get grid coordinates after moving one step from ``prev_coords`` in ``direction``.
+    """Get new grid coordinates after moving one step.
 
     Args:
         prev_coords: The starting (r, c) coordinates.
@@ -472,12 +472,13 @@ def _translate_cell(path: Union[Sequence[dict], Tuple[Sequence[dict], ...]],
 
 def _process_neighbor(coords: Tuple[int, int], direc: int,
                       neighbor_mat: np.ndarray, style: Maze_Style) -> list:
-    """Call draw_cell() on neighboring cell.
+    """Call ``draw_cell()`` on neighboring cell.
 
     Args:
         coords: The current (r, c) coordinates.
         direc: Direction of neighbor to process (0=d, 1=r, 2=u, 3=l).
-        neighbor_mat: A boolean array with dimensions (rows, cols, 4) indicating if neighboring cells are connected.
+        neighbor_mat: A boolean array with dimensions (rows, cols, 4)
+          indicating if neighboring cells are connected.
         style: An object specifying how the maze path is to be drawn.
 
     Returns:
@@ -494,8 +495,11 @@ def _draw_cell(coords: Tuple[int, int], dir_from: int, neighbor_mat:
 
     Args:
         coords: The current (r, c) coordinates.
-        dir_from: Direction from which cell was entered (returned subtree will include the remaining connected directions).
-        neighbor_mat: boolean array with dimensions (rows, cols, 4) indicating if neighboring cells are connected.
+
+        dir_from: Direction from which cell was entered (returned
+          subtree will include the remaining connected directions).
+        neighbor_mat: boolean array with dimensions (rows, cols, 4)
+          indicating if neighboring cells are connected.
         style: An object specifying how the maze path is to be drawn.
 
     Returns:

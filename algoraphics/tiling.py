@@ -30,7 +30,8 @@ def spaced_points(n: int, bounds: Bounds, n_cand: int = 10) -> List[Point]:
     Args:
         n: Number of points to generate.
         bounds: A bounds tuple.
-        n_cand: Number of candidate points to generate for each output point.  Higher numbers result in higher regularity.
+        n_cand: Number of candidate points to generate for each output
+          point.  Higher numbers result in higher regularity.
 
     Returns:
         The generated points.
@@ -150,10 +151,12 @@ def tile_region(outline: Collection, shape: str = 'polygon', edges:
 
     Args:
         outline: The shape/s that will become the clip.
-        shape: Either 'polygon' for Voronoi tiling or 'triangle' for Delaunay tiling.
-        edges: Whether to return the edges around tiles as lines instead of the tiles themselves.
+        shape: Either 'polygon' for Voronoi tiling or 'triangle' for
+          Delaunay tiling.
+        edges: Whether to return the edges around tiles as lines
+          instead of the tiles themselves.
         tile_size: The approximate area of each tile.
-        regularity: A value of one or higher, passed to ``spaced_points``.
+        regularity: A value of one or higher, passed to ``spaced_points()``.
 
     Returns:
         A group with clip.
@@ -185,8 +188,10 @@ def tile_canvas(w: Number, h: Number, shape: str = 'polygon', edges:
     Args:
         w: Width of the canvas.
         h: Height of the canvas.
-        tile_shape: Either 'polygon' for Voronoi tiling or 'triangle' for Delaunay tiling.
-        edges: Whether to return the edges around tiles as lines instead of the tiles themselves.
+        tile_shape: Either 'polygon' for Voronoi tiling or 'triangle'
+          for Delaunay tiling.
+        edges: Whether to return the edges around tiles as lines
+          instead of the tiles themselves.
         tile_size: The approximate area of each tile.
         regularity: A value of one or higher, passed to ``spaced_points``.
 
@@ -219,8 +224,10 @@ def nested_triangles(tip: Point, height: Number, min_level: int,
 
     Args:
         tip: The tip of the bounding triangle.
-        height: The height of the bounding triangle (negative for upside-down triangle).
-        min_level: The level of the largest triangles (0 is the bounding triangle).
+        height: The height of the bounding triangle (negative for
+          upside-down triangle).
+        min_level: The level of the largest triangles (0 is the
+          bounding triangle).
         max_level: The level of the smallest triangles.
 
     Returns:
@@ -257,7 +264,9 @@ def fill_nested_triangles(outline: Collection, min_level: int,
         min_level: The level of the largest triangles (0 is bounding triangle).
         max_level: The level of the smallest triangles.
         color1: The color/s for half of the triangles.
-        color2: The color for the opposing half of the triangles.  This half of triangles will all be one color because it is the background.
+        color2: The color for the opposing half of the triangles.
+          This half of triangles will all be one color because it is
+          the background.
 
     Returns:
         A group with the outline as clip.

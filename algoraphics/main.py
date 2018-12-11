@@ -25,7 +25,8 @@ def set_style(obj: Collection, attribute: str,
     Args:
         obj: A shape or (nested) list of shapes.
         attribute: Name of the style attribute.
-        value: Either a single value, Color, Param, or a function that returns values when called with no arguments.
+        value: Either a single value, Color, Param, or a function that
+          returns values when called with no arguments.
 
     """
     if isinstance(obj, list):
@@ -143,7 +144,11 @@ def reorder_objects(objects: Sequence[Collection], by: str = 'random',
 
     Args:
         objects: A list whose items are shapes or lists.
-        by: 'random' to shuffle objects.  'out to in' to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.
+        by: 'random' to shuffle objects.  'out to in' to arrange
+          objects closer to the center on top of (later in list) those
+          further from the center.  Distance is determined by furthest
+          corner of bounding box so that smaller objects tend to be
+          arranged on top of larger ones that surround them.
         w: Canvas width, used to get center when by='out to in'.
         h: Canvas height, used to get center when by='out to in'.
 
@@ -187,7 +192,7 @@ def add_margin(bounds: Bounds, margin: Number) -> Bounds:
 def background(fill: Color, w: Number, h: Number, margin: Number = 1) -> dict:
     """Create a background color for the canvas.
 
-    See region_background to set background for a specific region.
+    See ``region_background()`` to set background for a specific region.
 
     Args:
         fill: The background color.
@@ -247,7 +252,9 @@ def _markov_next(state: str, trans_probs: Dict[str, Dict[str, float]]) -> str:
 
     Args:
         state: The current state.
-        trans_probs: A dictionary of dictionaries containing transition probabilities from one state (first key) to another (second key).
+        trans_probs: A dictionary of dictionaries containing
+          transition probabilities from one state (first key) to
+          another (second key).
 
     Returns:
         The next state.

@@ -64,7 +64,8 @@ def _scan_for_space(open_space: Sequence[Point], points:
     of the new starting point.
 
     Args:
-        open_space: List of randomly ordered coordinates that have not yet been looked at.
+        open_space: List of randomly ordered coordinates that have not
+          yet been looked at.
         points: Existing ripple points.
         spacing: Distance between ripples.
 
@@ -100,7 +101,9 @@ def ripple_canvas(w: Number, h: Number, spacing: Number,
         w: Width of the canvas.
         h: Height of the canvas.
         spacing: Distance between ripples.
-        trans_probs: A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).
+        trans_probs: A dictionary of dictionaries containing Markov
+          chain transition probabilities from one state (first key) to
+          another (second key).
         existing_pts: An optional list of points that ripples will avoid.
 
     Returns:

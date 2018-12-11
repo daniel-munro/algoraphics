@@ -43,9 +43,12 @@ def spline(points: Sequence[Point], curvature: Number = 0.3, circular:
 
     Args:
         points: A list of points.
-        curvature: The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.
-        circular: If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
-
+        curvature: The distance to the control point relative to the
+          distance to the adjacent point. Usually between zero and
+          one.
+        circular: If False, spline ends reasonably at the first and
+          last points.  If True, the ends of the spline will connect
+          smoothly.
     Returns:
         A spline shape.
 
@@ -335,8 +338,12 @@ def reposition(shapes: Collection, position: Point, h_align: str =
     Args:
         shapes: One or more shapes.
         poisition: The reference point.
-        h_align: 'left' to move left bound to reference point.  'center' to horizontally center object around reference point.  'right' to move right bound to reference point.
-        v_align: 'bottom' to move lower bound to reference point.  'middle' to vertically center object around reference point.  'top' to move upper bound to reference point.
+        h_align: 'left' to move left bound to reference point.
+          'center' to horizontally center object around reference
+          point.  'right' to move right bound to reference point.
+        v_align: 'bottom' to move lower bound to reference point.
+          'middle' to vertically center object around reference point.
+          'top' to move upper bound to reference point.
 
     """
     x_min, y_min, x_max, y_max = bounding_box(shapes)
@@ -388,12 +395,12 @@ def coverage(obj: Collection) -> Union[Polygon, SPoint, GeometryCollection]:
 
 
 def keep_shapes_inside(shapes: Sequence[Collection], boundary: Collection):
-    """Remove shapes from (nested) list if they lie entirely outside the boundary.
+    """Remove shapes if they lie entirely outside the boundary.
 
     Used to optimize SVG file without altering the appearance.
 
     Args:
-        shapes: A list of shapes.
+        shapes: A list of shapes, which can be nested.
         boundary: One or more shapes giving the boundary.
 
     """

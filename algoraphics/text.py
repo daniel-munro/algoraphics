@@ -896,8 +896,11 @@ def text_points(text: str, height: Number, pt_spacing: Number, char_spacing:
         text: The text.
         height: Line height.
         pt_spacing: Approximate distance between adjacent points.
-        char_spacing: Size of the largest space on either side of each character relative to line height.  This space is shrunk for certain characters depending on shape.
-        grouping: 'points' to return list of points, 'strokes' to group by stroke.
+        char_spacing: Size of the largest space on either side of each
+          character relative to line height.  This space is shrunk for
+          certain characters depending on shape.
+        grouping: 'points' to return list of points, 'strokes' to
+          group by stroke.
 
     Returns:
         Either a list of points or a list of lists of points in which

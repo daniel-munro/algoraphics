@@ -76,7 +76,7 @@ def filtered(obj: Collection, fltr: dict) -> dict:
 
 
 def billowing(w: int, h: int, colors: Sequence[Color], scale: int,
-              gradient_mode: str = 'rgb') -> Image:
+              gradient_mode: str = 'rgb') -> 'Image':
     """Generate a billowing texture.
 
     Args:
@@ -104,7 +104,8 @@ def billow_region(outline: Collection, colors: Sequence[Color], scale:
         outline: The object that will become the clip.
         colors: A list of Colors to cycle through.
         scale: The distance in pixels for each color cycle.
-        gradient_mode: 'rgb' or 'hsl' to indicate how the gradient is interpolated.
+        gradient_mode: 'rgb' or 'hsl' to indicate how the gradient is
+          interpolated.
 
     Returns:
         A group with clip.

@@ -26,7 +26,10 @@ def filament(start: Point, direction: Param, width: Param, seg_length:
 
     Args:
         start: The midpoint of first edge of the filament.
-        direction: The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
+        direction: The direction (in degrees) of each segment.
+          Recommended to be a Param with a delta Param for a
+          meandering filament.  Nested delta Params will produce
+          meandering from higher-order random walks.
         width: The width of the filament (at segment joining edges).
         seg_length: Average side length of each segment.
         n_segments: Number of segments in the filament.
@@ -90,10 +93,14 @@ def tentacle(start: Point, direction: Param, length: Number, width:
 
     Args:
         start: The midpoint of first edge of the tentacle.
-        direction: The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.
+        direction: The direction (in degrees) of each segment.
+          Recommended to be a Param with a delta Param for a
+          meandering filament.  Nested delta Params will produce
+          meandering from higher-order random walks.
         length: Approximate length of the tentacle.
         width: The starting width of the tentacle.
-        seg_length: Average starting length of each segment.  They will shrink toward to the tip.
+        seg_length: Average starting length of each segment.  They
+          will shrink toward to the tip.
 
     Returns:
         A list of polygons (the segments from base to tip).
@@ -124,7 +131,8 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
         end: The ending point.
         spacing: Average distance between paint fingers.
         length: Average length of the paint fingers.
-        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        len_dev: The standard deviation of finger lengths relative to
+          ``length`` (so it should be less than 1).
         width: Average thickness of each finger.
 
     Returns:
@@ -179,7 +187,8 @@ def blow_paint_area(points: Sequence[Point], spacing: Number = 20,
         points: The vertices of the polygonal area.
         spacing: Average distance between paint fingers.
         length: Average length of the paint fingers.
-        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        len_dev: The standard deviation of finger lengths relative to
+          ``length`` (so it should be less than 1).
         width: Average thickness of each finger.
 
     """
@@ -207,7 +216,8 @@ def blow_paint_line(points: Sequence[Point], line_width: Number = 10,
         line_width: The thickness of the line (excluding the fingers).
         spacing: Average distance between paint fingers.
         length: Average length of the paint fingers.
-        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        len_dev: The standard deviation of finger lengths relative to
+          ``length`` (so it should be less than 1).
         width: Average thickness of each finger.
 
     """
@@ -224,7 +234,8 @@ def blow_paint_spot(point: Point, length: Number = 10, len_dev: float
     Args:
         point: The center of the splatter.
         length: Average length of the paint fingers.
-        len_dev: The standard deviation of finger lengths relative to ``length`` (so it should be less than 1).
+        len_dev: The standard deviation of finger lengths relative to
+          ``length`` (so it should be less than 1).
         width: Average thickness of each finger.
 
     """
@@ -243,7 +254,9 @@ def tree(start: Point, direction: Number, branch_length: Param, theta:
         direction: The starting direction (in degrees).
         branch_length: Branch length.
         theta: The angle (in degrees) between sibling branches.
-        p: The probability that a given branch will split instead of terminating.  Recommended to have a delta < 0 or ratio < 1 so that the tree is guaranteed to terminate.
+        p: The probability that a given branch will split instead of
+          terminating.  Recommended to have a delta < 0 or ratio < 1
+          so that the tree is guaranteed to terminate.
 
     Returns:
         A list of line shapes.

@@ -23,7 +23,8 @@ class Color:
 
     Args:
         hsl: The hsl specification, where each component is between 0 and 1.
-        hue: The hue specification from 0 to 1.  sat and li must also be provided.
+        hue: The hue specification from 0 to 1.  sat and li must also
+          be provided.
         sat: The saturation specification from 0 to 1.
         li: The lightness specification from 0 to 1.
         rgb: The red/green/blue components, each ranging from 0 to 1.
@@ -243,12 +244,18 @@ def map_colors_to_array(values: np.ndarray, colors: Sequence[Color],
     gradient.
 
     Args:
-        values: A 2D array of floats.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).
+        values: A 2D array of floats.  Values should range from 0,
+          inclusive, to len(colors) + 1, exclusive.  Each value
+          corresponds to a proportional mixture of the colors at the
+          two indices it is between (with values higher than the last
+          index cycling back to the first color).
         colors: A list of Color objects.
-        gradient_mode: Either 'rgb' or 'hsv' to indicate how the colors are interpolated.
+        gradient_mode: Either 'rgb' or 'hsv' to indicate how the
+          colors are interpolated.
 
     Returns:
-        A 3D array of RGB values (RGB mode because this is used for PIL images).
+        A 3D array of RGB values (RGB mode because this is used for
+        PIL images).
 
     """
     colors = np.array([make_color(color).rgb() for color in colors])

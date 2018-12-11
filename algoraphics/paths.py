@@ -38,8 +38,12 @@ def _spline_path(points: Sequence[Point], curvature: float = 0.3,
 
     Args:
         points: A list of points.
-        curvature: The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.
-        circular: If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.
+        curvature: The distance to the control point relative to the
+          distance to the adjacent point. Usually between zero and
+          one.
+        circular: If False, spline ends reasonably at the first and
+          last points.  If True, the ends of the spline will connect
+          smoothly.
 
     Returns:
         An SVG path.

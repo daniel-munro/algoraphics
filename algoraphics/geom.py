@@ -25,7 +25,7 @@ def deg(rad: Number) -> float:
 
 
 def rand_point_on_circle(c: Point, r: Number) -> Point:
-    """Return random point on a circle.
+    """Return a random point on a circle.
 
     Args:
         c: The center.
@@ -230,12 +230,12 @@ class Rtree:
         Args:
             point: A query point.
             n: Number of nearest points to return.
-            index: Whether to return the nearets points' indices instead of the points themselves.
+            index: Whether to return the nearets points' indices
+              instead of the points themselves.
 
         Returns:
-
-        If ``n`` is 1, the nearest point, otherwise a list of nearest
-        points.
+            If ``n`` is 1, the nearest point, otherwise a list of
+            nearest points.
 
         """
         a = list(self.idx.nearest(point, n))
@@ -277,6 +277,7 @@ def translated_point(point: Point, dx: Number, dy: Number) -> Point:
     """Get a translated point.
 
     Args:
+        point: The starting location.
         dx: The horizontal translation.
         dy: The vertical translation.
 
@@ -284,8 +285,13 @@ def translated_point(point: Point, dx: Number, dy: Number) -> Point:
     return (point[0] + dx, point[1] + dy)
 
 
-def rotated_point(point, pivot, angle):
-    """Get the point resulting from rotating `point` around `pivot` point by `angle` (in radians).
+def rotated_point(point: Point, pivot: Point, angle: Number) -> Point:
+    """Get the new location of a point after rotating around a reference point.
+
+    Args:
+        point: The starting location.
+        pivot: The center of rotation.
+        angle: The angle in radians by which to rotate.
 
     """
     x = (((point[0] - pivot[0]) * math.cos(angle))
@@ -303,7 +309,8 @@ def scaled_point(point: Point, cx: Number, cy: Number = None) -> Point:
     Provide either one scaling factor or cx and cy.
 
     Args:
-        cx: Either the scaling factor, or if ``cy`` is also provided, the horizontal scaling factor.
+        cx: Either the scaling factor, or if ``cy`` is also provided,
+          the horizontal scaling factor.
         cy: The vertical scaling factor.
 
     """
@@ -363,7 +370,8 @@ def scale_points(points: Sequence[Union[Point, Sequence]], cx: Number,
     Args:
         points: A list of points, which can be nested.
         cx: The horizontal scale factor.
-        cy: The vertical scale factor. If omitted, y-coordinates will be scaled by cx.
+        cy: The vertical scale factor. If omitted, y-coordinates will
+          be scaled by cx.
 
     """
     for i in range(len(points)):
@@ -378,7 +386,8 @@ def jitter_points(points: Sequence[Point], deviation: Number, type: str):
 
     Args:
         points: A list of points.
-        deviation: For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.
+        deviation: For gaussian jitter, the standard deviation. For
+          uniform jitter, the maximum distance.
         type: The type of noise, 'gaussian' or 'uniform'.
 
     """
@@ -400,7 +409,8 @@ def jittered_points(points: Sequence[Point], deviation: Number, type:
 
     Args:
         points: A list of points.
-        deviation: For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.
+        deviation: For gaussian jitter, the standard deviation. For
+          uniform jitter, the maximum distance.
         type: The type of noise, 'gaussian' or 'uniform'.
 
     """
@@ -447,9 +457,11 @@ def line_to_polygon(points: Sequence[Point], width: Number) -> Sequence[Point]:
 
 
 def is_clockwise(points: Sequence[Point]) -> bool:
-    """Determine if a set of polygon points goes in clockwise or counterclockwise direction.
+    """Determine the derection of a sequence of points around a polygon.
 
-    If edges cross, it gives the more prominent direction.
+    Finds whether a set of polygon points goes in a clockwise or
+    counterclockwise direction.  If edges cross, it gives the more
+    prominent direction.
 
     Args:
         points: A list of polygon vertices.

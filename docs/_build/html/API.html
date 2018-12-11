@@ -183,7 +183,8 @@ object.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>hsl</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The hsl specification, where each component is between 0 and 1.</li>
-<li><strong>hue</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The hue specification from 0 to 1.  sat and li must also be provided.</li>
+<li><strong>hue</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The hue specification from 0 to 1.  sat and li must also
+be provided.</li>
 <li><strong>sat</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The saturation specification from 0 to 1.</li>
 <li><strong>li</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The lightness specification from 0 to 1.</li>
 <li><strong>rgb</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The red/green/blue components, each ranging from 0 to 1.</li>
@@ -343,16 +344,22 @@ gradient.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>values</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A 2D array of floats.  Values should range from 0, inclusive, to len(colors) + 1, exclusive.  Each value corresponds to a proportional mixture of the colors at the two indices it is between (with values higher than the last index cycling back to the first color).</li>
+<li><strong>values</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A 2D array of floats.  Values should range from 0,
+inclusive, to len(colors) + 1, exclusive.  Each value
+corresponds to a proportional mixture of the colors at the
+two indices it is between (with values higher than the last
+index cycling back to the first color).</li>
 <li><strong>colors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]) – A list of Color objects.</li>
-<li><strong>gradient_mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Either ‘rgb’ or ‘hsv’ to indicate how the colors are interpolated.</li>
+<li><strong>gradient_mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Either ‘rgb’ or ‘hsv’ to indicate how the
+colors are interpolated.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 3D array of RGB values (RGB mode because this is used for PIL images).</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 3D array of RGB values (RGB mode because this is used for
+PIL images).</p>
 </td>
 </tr>
 </tbody>
@@ -384,14 +391,18 @@ gradient.</p>
 <dl class="class">
 <dt id="algoraphics.fill.Doodle">
 <em class="property">class </em><code class="descclassname">algoraphics.fill.</code><code class="descname">Doodle</code><span class="sig-paren">(</span><em>function</em>, <em>footprint</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.Doodle" title="Permalink to this definition">¶</a></dt>
-<dd><p>A Doodle object is itself a generator of doodles.</p>
+<dd><p>A Doodle object is a generator of doodles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>function</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]) – A function that takes no arguments and returns a shape or collection.</li>
-<li><strong>footprint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A boolean 2D array whose cells indicate the shape (within a grid) occupied by the generated doodles (before being oriented).  Row 0 should correspond to the top row of the doodle’s footprint.</li>
+<li><strong>function</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]) – A function that takes no arguments and returns a
+shape or collection.</li>
+<li><strong>footprint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A boolean 2D array whose cells indicate the shape
+(within a grid) occupied by the generated doodles (before
+being oriented).  Row 0 should correspond to the top row of
+the doodle’s footprint.</li>
 </ul>
 </td>
 </tr>
@@ -444,10 +455,13 @@ gradient.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direction_delta</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Parameter that will become the delta for the filament direction.</li>
+<li><strong>direction_delta</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Parameter that will become the delta for the
+filament direction.</li>
 <li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the filament.</li>
 <li><strong>seg_length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average side length of each segment.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – Color specification for filament segments.  A separate
+copy is used for each filament in case it involves
+deltas/ratios.</li>
 </ul>
 </td>
 </tr>
@@ -471,8 +485,15 @@ gradient.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – A shape or (nested) list of shapes that will become clip.</li>
-<li><strong>object_fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]) – A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args…): return lambda bounds: helper_fun(bounds, args…)</li>
-<li><strong>max_tries</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.</li>
+<li><strong>object_fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]) – A function that takes bounds as input and returns
+one randomly generated object.  Usually this is a lambda
+function that calls another function using arguments passed
+to the function that produced the lambda function.  i.e.,
+def caller_fun(args…): return lambda bounds:
+helper_fun(bounds, args…)</li>
+<li><strong>max_tries</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – If not None, the number of objects to generate
+(including those discarded for not filling space) before
+giving up and returning the region as is.</li>
 </ul>
 </td>
 </tr>
@@ -499,8 +520,13 @@ somewhat avoided by spacing out their centers.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – A region outline shape.</li>
-<li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The approximate distance between the centers of neighboring spots.</li>
-<li><strong>radius</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – The spot radius.  By default the radii range from <code class="docutils literal notranslate"><span class="pre">spacing</span></code> to <code class="docutils literal notranslate"><span class="pre">spacing</span></code> / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio &lt; 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.</li>
+<li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The approximate distance between the centers of
+neighboring spots.</li>
+<li><strong>radius</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – The spot radius.  By default the radii range from
+<code class="docutils literal notranslate"><span class="pre">spacing</span></code> to <code class="docutils literal notranslate"><span class="pre">spacing</span></code> / 5 in a geometric sequence.  If
+provided, it is recommended to supply a parameter with ratio
+&lt; 1 so that spaced-out larger points are plotted first, with
+progressively smaller points inserted between existing ones.</li>
 </ul>
 </td>
 </tr>
@@ -619,23 +645,20 @@ somewhat avoided by spacing out their centers.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>point</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A query point.</li>
 <li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of nearest points to return.</li>
-<li><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the nearets points’ indices instead of the points themselves.</li>
+<li><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the nearets points’ indices
+instead of the points themselves.</li>
 </ul>
 </td>
 </tr>
-</tbody>
-</table>
-<p>Returns:</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">n</span></code> is 1, the nearest point, otherwise a list of nearest
-points.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">If <code class="docutils literal notranslate"><span class="pre">n</span></code> is 1, the nearest point, otherwise a list of
+nearest points.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -790,8 +813,10 @@ that consecutive points are no more than ‘spacing’ distance apart.</p>
 <dl class="function">
 <dt id="algoraphics.geom.is_clockwise">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">is_clockwise</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.is_clockwise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine if a set of polygon points goes in clockwise or counterclockwise direction.</p>
-<p>If edges cross, it gives the more prominent direction.</p>
+<dd><p>Determine the derection of a sequence of points around a polygon.</p>
+<p>Finds whether a set of polygon points goes in a clockwise or
+counterclockwise direction.  If edges cross, it gives the more
+prominent direction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -814,7 +839,8 @@ that consecutive points are no more than ‘spacing’ distance apart.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.</li>
+<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For
+uniform jitter, the maximum distance.</li>
 <li><strong>type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The type of noise, ‘gaussian’ or ‘uniform’.</li>
 </ul>
 </td>
@@ -835,7 +861,8 @@ original list.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For uniform jitter, the maximum distance.</li>
+<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For
+uniform jitter, the maximum distance.</li>
 <li><strong>type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The type of noise, ‘gaussian’ or ‘uniform’.</li>
 </ul>
 </td>
@@ -987,7 +1014,7 @@ width, the outline of the stroke is returned.</p>
 <dl class="function">
 <dt id="algoraphics.geom.rand_point_on_circle">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">rand_point_on_circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.rand_point_on_circle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return random point on a circle.</p>
+<dd><p>Return a random point on a circle.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1032,7 +1059,23 @@ relative to <code class="docutils literal notranslate"><span class="pre">ref</sp
 <dl class="function">
 <dt id="algoraphics.geom.rotated_point">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">rotated_point</code><span class="sig-paren">(</span><em>point</em>, <em>pivot</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.rotated_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the point resulting from rotating <cite>point</cite> around <cite>pivot</cite> point by <cite>angle</cite> (in radians).</p>
+<dd><p>Get the new location of a point after rotating around a reference point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The starting location.</li>
+<li><strong>pivot</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The center of rotation.</li>
+<li><strong>angle</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The angle in radians by which to rotate.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1046,7 +1089,8 @@ relative to <code class="docutils literal notranslate"><span class="pre">ref</sp
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[+T_co]]]) – A list of points, which can be nested.</li>
 <li><strong>cx</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The horizontal scale factor.</li>
-<li><strong>cy</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The vertical scale factor. If omitted, y-coordinates will be scaled by cx.</li>
+<li><strong>cy</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The vertical scale factor. If omitted, y-coordinates will
+be scaled by cx.</li>
 </ul>
 </td>
 </tr>
@@ -1064,7 +1108,8 @@ relative to <code class="docutils literal notranslate"><span class="pre">ref</sp
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cx</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Either the scaling factor, or if <code class="docutils literal notranslate"><span class="pre">cy</span></code> is also provided, the horizontal scaling factor.</li>
+<li><strong>cx</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Either the scaling factor, or if <code class="docutils literal notranslate"><span class="pre">cy</span></code> is also provided,
+the horizontal scaling factor.</li>
 <li><strong>cy</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The vertical scaling factor.</li>
 </ul>
 </td>
@@ -1104,6 +1149,7 @@ relative to <code class="docutils literal notranslate"><span class="pre">ref</sp
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The starting location.</li>
 <li><strong>dx</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The horizontal translation.</li>
 <li><strong>dy</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The vertical translation.</li>
 </ul>
@@ -1309,8 +1355,8 @@ other grids.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>rows</strong> (<em>int</em>) – Number of rows in the grid.</li>
-<li><strong>cols</strong> (<em>int</em>) – Number of columns in the grid.</li>
+<li><strong>rows</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of rows in the grid.</li>
+<li><strong>cols</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of columns in the grid.</li>
 </ul>
 </td>
 </tr>
@@ -1384,8 +1430,8 @@ to a cyclical color gradient to create a billowing effect.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>rows</strong> (<em>int</em>) – Number of rows in grid.</li>
-<li><strong>cols</strong> (<em>int</em>) – Number of cols in grid.</li>
+<li><strong>rows</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of rows in grid.</li>
+<li><strong>cols</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of cols in grid.</li>
 </ul>
 </td>
 </tr>
@@ -1442,15 +1488,13 @@ it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A numpy array: 2D for grayscale or 3D for RGB.</li>
-<li><strong>scale</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, values in 2D array will be scaled so that the highest values are 255 (white).</li>
+<li><strong>array</strong> – A numpy array: 2D for grayscale or 3D for RGB.</li>
+<li><strong>scale</strong> – If True, values in 2D array will be scaled so that the
+highest values are 255 (white).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">&lt;module ‘PIL.Image’ from ‘/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py’&gt;</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL image in RGB mode.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL Image in RGB mode.</p>
 </td>
 </tr>
 </tbody>
@@ -1467,15 +1511,12 @@ it.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>frmt</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Either ‘JPEG’ or ‘PNG’.</li>
+<li><strong>image</strong> – A PIL Image.</li>
+<li><strong>frmt</strong> – Either ‘JPEG’ or ‘PNG’.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The image encoding.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The image encoding.</p>
 </td>
 </tr>
 </tbody>
@@ -1495,8 +1536,8 @@ irregular.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A list of shapes.</li>
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
+<li><strong>shapes</strong> – A list of shapes.</li>
+<li><strong>image</strong> – A PIL image.</li>
 </ul>
 </td>
 </tr>
@@ -1513,20 +1554,23 @@ irregular.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>n_segments</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Approximate number of desired segments.</li>
-<li><strong>compactness</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.</li>
-<li><strong>smoothness</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The width of gaussian smoothing applied before segmentation.</li>
-<li><strong>simplify</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Maximum distance from the edge of a simplified shape to its actual boundary when reducing the number of points, or None for no simplification.</li>
-<li><strong>expand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.</li>
-<li><strong>curvature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature in spline.  Usually between zero and one.</li>
+<li><strong>image</strong> – A PIL image.</li>
+<li><strong>n_segments</strong> – Approximate number of desired segments.</li>
+<li><strong>compactness</strong> – A higher value produces more compact, square-like
+segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.</li>
+<li><strong>smoothness</strong> – The width of gaussian smoothing applied before
+segmentation.</li>
+<li><strong>simplify</strong> – Maximum distance from the edge of a simplified shape
+to its actual boundary when reducing the number of points,
+or None for no simplification.</li>
+<li><strong>expand</strong> – Number of pixels to expand each segment in every
+direction to avoid gaps between adjacent shapes.</li>
+<li><strong>curvature</strong> – The degree of curvature in spline.  Usually between
+zero and one.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spline shapes, generally in order from left to right
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spline shapes, generally in order from left to right
 and then bottom to top.</p>
 </td>
 </tr>
@@ -1542,9 +1586,9 @@ and then bottom to top.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Path to the image file.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – Path to the image file.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">&lt;module ‘PIL.Image’ from ‘/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py’&gt;</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PIL Image.</td>
 </tr>
 </tbody>
 </table>
@@ -1587,16 +1631,13 @@ other.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – A shape corresponding to an image region to sample.</li>
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>n_points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of points to sample.</li>
+<li><strong>outline</strong> – A shape corresponding to an image region to sample.</li>
+<li><strong>image</strong> – A PIL image.</li>
+<li><strong>n_points</strong> – Number of points to sample.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The average color of the sampled image points.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The average color of the sampled image points.</p>
 </td>
 </tr>
 </tbody>
@@ -1614,9 +1655,9 @@ scales down.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>width</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The new width.  If None, scales according to height.</li>
-<li><strong>height</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The new height.  If None, scales according to width.</li>
+<li><strong>image</strong> – A PIL image.</li>
+<li><strong>width</strong> – The new width.  If None, scales according to height.</li>
+<li><strong>height</strong> – The new height.  If None, scales according to width.</li>
 </ul>
 </td>
 </tr>
@@ -1633,15 +1674,12 @@ scales down.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>points</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]]) – A list of image coordinates, or a single coordinate.</li>
+<li><strong>image</strong> – A PIL image.</li>
+<li><strong>points</strong> – A list of image coordinates, or a single coordinate.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of colors corresponding to <code class="docutils literal notranslate"><span class="pre">points</span></code>, or a single
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of colors corresponding to <code class="docutils literal notranslate"><span class="pre">points</span></code>, or a single
 color if input is a single point.</p>
 </td>
 </tr>
@@ -1659,17 +1697,16 @@ color if input is a single point.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> (<em>&lt;module 'PIL.Image' from '/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py'&gt;</em>) – A PIL image.</li>
-<li><strong>n_segments</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Approximate number of desired segments.</li>
-<li><strong>compactness</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.</li>
-<li><strong>smoothness</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The width of gaussian smoothing applied before segmentation.</li>
+<li><strong>image</strong> – A PIL image.</li>
+<li><strong>n_segments</strong> – Approximate number of desired segments.</li>
+<li><strong>compactness</strong> – A higher value produces more compact, square-like
+segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.</li>
+<li><strong>smoothness</strong> – The width of gaussian smoothing applied before
+segmentation.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of integer segment labels.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of integer segment labels.</p>
 </td>
 </tr>
 </tbody>
@@ -1687,9 +1724,13 @@ color if input is a single point.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>seg</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A 2D array of segment labels.</li>
-<li><strong>simplify</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Maximum distance from the edge of a simplified shape to the actual boundary when reducing number of points, or None for no simplification.</li>
-<li><strong>expand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.</li>
-<li><strong>curvature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature for the splines.  Usually between zero and one.</li>
+<li><strong>simplify</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Maximum distance from the edge of a simplified shape
+to the actual boundary when reducing number of points, or
+None for no simplification.</li>
+<li><strong>expand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of pixels to expand each segment in every
+direction to avoid gaps between adjacent shapes.</li>
+<li><strong>curvature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature for the splines.  Usually
+between zero and one.</li>
 </ul>
 </td>
 </tr>
@@ -1763,7 +1804,7 @@ issues at the edges of the region or canvas.</p>
 <dt id="algoraphics.main.background">
 <code class="descclassname">algoraphics.main.</code><code class="descname">background</code><span class="sig-paren">(</span><em>fill</em>, <em>w</em>, <em>h</em>, <em>margin=1</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.background" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a background color for the canvas.</p>
-<p>See region_background to set background for a specific region.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">region_background()</span></code> to set background for a specific region.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1887,7 +1928,11 @@ issues at the edges of the region or canvas.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>objects</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]]) – A list whose items are shapes or lists.</li>
-<li><strong>by</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘random’ to shuffle objects.  ‘out to in’ to arrange objects closer to the center on top of (later in list) those further from the center.  Distance is determined by furthest corner of bounding box so that smaller objects tend to be arranged on top of larger ones that surround them.</li>
+<li><strong>by</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘random’ to shuffle objects.  ‘out to in’ to arrange
+objects closer to the center on top of (later in list) those
+further from the center.  Distance is determined by furthest
+corner of bounding box so that smaller objects tend to be
+arranged on top of larger ones that surround them.</li>
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Canvas width, used to get center when by=’out to in’.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Canvas height, used to get center when by=’out to in’.</li>
 </ul>
@@ -1908,7 +1953,8 @@ issues at the edges of the region or canvas.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>obj</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – A shape or (nested) list of shapes.</li>
 <li><strong>attribute</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the style attribute.</li>
-<li><strong>value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>]) – Either a single value, Color, Param, or a function that returns values when called with no arguments.</li>
+<li><strong>value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>]) – Either a single value, Color, Param, or a function that
+returns values when called with no arguments.</li>
 </ul>
 </td>
 </tr>
@@ -2026,9 +2072,11 @@ higher-order random walks.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A value, list, or function that takes no arguments and returns a value.</li>
+<li><strong>x</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A value, list, or function that takes no arguments and
+returns a value.</li>
 <li><strong>delta</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A value to add to the previous value to get the next.</li>
-<li><strong>ratio</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Similar to delta, but is multiplied by, rather than added to, the previous value to get the next.</li>
+<li><strong>ratio</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Similar to delta, but is multiplied by, rather than
+added to, the previous value to get the next.</li>
 <li><strong>min</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The smallest allowable value when <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> is used.</li>
 <li><strong>max</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The largest allowable value when <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> is used.</li>
 </ul>
@@ -2196,7 +2244,9 @@ probabilities result in more erratic ripples.</p>
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
 <li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Distance between ripples.</li>
-<li><strong>trans_probs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A dictionary of dictionaries containing Markov chain transition probabilities from one state (first key) to another (second key).</li>
+<li><strong>trans_probs</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A dictionary of dictionaries containing Markov
+chain transition probabilities from one state (first key) to
+another (second key).</li>
 <li><strong>existing_pts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]]) – An optional list of points that ripples will avoid.</li>
 </ul>
 </td>
@@ -2316,14 +2366,14 @@ input shapes.</td>
 <dl class="function">
 <dt id="algoraphics.shapes.keep_shapes_inside">
 <code class="descclassname">algoraphics.shapes.</code><code class="descname">keep_shapes_inside</code><span class="sig-paren">(</span><em>shapes</em>, <em>boundary</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.keep_shapes_inside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove shapes from (nested) list if they lie entirely outside the boundary.</p>
+<dd><p>Remove shapes if they lie entirely outside the boundary.</p>
 <p>Used to optimize SVG file without altering the appearance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>shapes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]]) – A list of shapes.</li>
+<li><strong>shapes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]]) – A list of shapes, which can be nested.</li>
 <li><strong>boundary</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – One or more shapes giving the boundary.</li>
 </ul>
 </td>
@@ -2449,8 +2499,12 @@ determining overlap.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>shapes</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – One or more shapes.</li>
 <li><strong>poisition</strong> – The reference point.</li>
-<li><strong>h_align</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘left’ to move left bound to reference point.  ‘center’ to horizontally center object around reference point.  ‘right’ to move right bound to reference point.</li>
-<li><strong>v_align</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘bottom’ to move lower bound to reference point.  ‘middle’ to vertically center object around reference point.  ‘top’ to move upper bound to reference point.</li>
+<li><strong>h_align</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘left’ to move left bound to reference point.
+‘center’ to horizontally center object around reference
+point.  ‘right’ to move right bound to reference point.</li>
+<li><strong>v_align</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘bottom’ to move lower bound to reference point.
+‘middle’ to vertically center object around reference point.
+‘top’ to move upper bound to reference point.</li>
 </ul>
 </td>
 </tr>
@@ -2557,8 +2611,12 @@ place.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>curvature</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distance to the control point relative to the distance to the adjacent point. Usually between zero and one.</li>
-<li><strong>circular</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If False, spline ends reasonably at the first and last points.  If True, the ends of the spline will connect smoothly.</li>
+<li><strong>curvature</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distance to the control point relative to the
+distance to the adjacent point. Usually between zero and
+one.</li>
+<li><strong>circular</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If False, spline ends reasonably at the first and
+last points.  If True, the ends of the spline will connect
+smoothly.</li>
 </ul>
 </td>
 </tr>
@@ -2636,7 +2694,8 @@ blown along the page perpindicular to the edge.</p>
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – The vertices of the polygonal area.</li>
 <li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average distance between paint fingers.</li>
 <li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average length of the paint fingers.</li>
-<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to <code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
+<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to
+<code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
 <li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average thickness of each finger.</li>
 </ul>
 </td>
@@ -2664,7 +2723,8 @@ directions).</p>
 <li><strong>line_width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The thickness of the line (excluding the fingers).</li>
 <li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average distance between paint fingers.</li>
 <li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average length of the paint fingers.</li>
-<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to <code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
+<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to
+<code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
 <li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average thickness of each finger.</li>
 </ul>
 </td>
@@ -2688,7 +2748,8 @@ directions).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>point</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The center of the splatter.</li>
 <li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average length of the paint fingers.</li>
-<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to <code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
+<li><strong>len_dev</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The standard deviation of finger lengths relative to
+<code class="docutils literal notranslate"><span class="pre">length</span></code> (so it should be less than 1).</li>
 <li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average thickness of each finger.</li>
 </ul>
 </td>
@@ -2710,7 +2771,10 @@ directions).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The midpoint of first edge of the filament.</li>
-<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.
+Recommended to be a Param with a delta Param for a
+meandering filament.  Nested delta Params will produce
+meandering from higher-order random walks.</li>
 <li><strong>width</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The width of the filament (at segment joining edges).</li>
 <li><strong>seg_length</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Average side length of each segment.</li>
 <li><strong>n_segments</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of segments in the filament.</li>
@@ -2737,10 +2801,14 @@ directions).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The midpoint of first edge of the tentacle.</li>
-<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.  Recommended to be a Param with a delta Param for a meandering filament.  Nested delta Params will produce meandering from higher-order random walks.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.
+Recommended to be a Param with a delta Param for a
+meandering filament.  Nested delta Params will produce
+meandering from higher-order random walks.</li>
 <li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Approximate length of the tentacle.</li>
 <li><strong>width</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The starting width of the tentacle.</li>
-<li><strong>seg_length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average starting length of each segment.  They will shrink toward to the tip.</li>
+<li><strong>seg_length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average starting length of each segment.  They
+will shrink toward to the tip.</li>
 </ul>
 </td>
 </tr>
@@ -2767,7 +2835,9 @@ directions).</p>
 <li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The starting direction (in degrees).</li>
 <li><strong>branch_length</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Branch length.</li>
 <li><strong>theta</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The angle (in degrees) between sibling branches.</li>
-<li><strong>p</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The probability that a given branch will split instead of terminating.  Recommended to have a delta &lt; 0 or ratio &lt; 1 so that the tree is guaranteed to terminate.</li>
+<li><strong>p</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The probability that a given branch will split instead of
+terminating.  Recommended to have a delta &lt; 0 or ratio &lt; 1
+so that the tree is guaranteed to terminate.</li>
 </ul>
 </td>
 </tr>
@@ -2795,7 +2865,9 @@ directions).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>infile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The SVG file name.</li>
-<li><strong>outfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with ‘.png’.</li>
+<li><strong>outfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The PNG file name to write to.  If omitted, it will
+be set to the SVG file name with the extension replaced with
+‘.png’.</li>
 </ul>
 </td>
 </tr>
@@ -2812,7 +2884,8 @@ directions).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A (nested) collection of objects.  Placed onto the canvas in order after flattening.</li>
+<li><strong>objects</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A (nested) collection of objects.  They are placed
+onto the canvas in order after flattening.</li>
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of canvas.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of canvas.</li>
 <li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
@@ -2834,11 +2907,13 @@ directions).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – A function called with no arguments that returns an SVG object collection.</li>
+<li><strong>fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – A function called with no arguments that returns an SVG
+object collection.</li>
 <li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of frames to generate.</li>
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
-<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.</li>
+<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – A file name (without extension) to write to.  File
+names will be [file_name]_0.svg, etc.</li>
 </ul>
 </td>
 </tr>
@@ -3030,8 +3105,11 @@ square root of deviation, and points are uniformly jittered.</p>
 <li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
 <li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Line height.</li>
 <li><strong>pt_spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Approximate distance between adjacent points.</li>
-<li><strong>char_spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Size of the largest space on either side of each character relative to line height.  This space is shrunk for certain characters depending on shape.</li>
-<li><strong>grouping</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘points’ to return list of points, ‘strokes’ to group by stroke.</li>
+<li><strong>char_spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Size of the largest space on either side of each
+character relative to line height.  This space is shrunk for
+certain characters depending on shape.</li>
+<li><strong>grouping</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘points’ to return list of points, ‘strokes’ to
+group by stroke.</li>
 </ul>
 </td>
 </tr>
@@ -3100,7 +3178,8 @@ one shadow for the composite object.</p>
 <li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – The object that will become the clip.</li>
 <li><strong>colors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]) – A list of Colors to cycle through.</li>
 <li><strong>scale</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The distance in pixels for each color cycle.</li>
-<li><strong>gradient_mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘rgb’ or ‘hsl’ to indicate how the gradient is interpolated.</li>
+<li><strong>gradient_mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘rgb’ or ‘hsl’ to indicate how the gradient is
+interpolated.</li>
 </ul>
 </td>
 </tr>
@@ -3123,18 +3202,15 @@ one shadow for the composite object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>w</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Width of the texture.</li>
-<li><strong>h</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Height of the texture.</li>
-<li><strong>colors</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]) – A list of Color objects to cycle through.</li>
-<li><strong>scale</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Distance in pixels for each color cycle.</li>
-<li><strong>gradient_mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – ‘rgb’ or ‘hsl’ to choose the appearance of the gradient.</li>
+<li><strong>w</strong> – Width of the texture.</li>
+<li><strong>h</strong> – Height of the texture.</li>
+<li><strong>colors</strong> – A list of Color objects to cycle through.</li>
+<li><strong>scale</strong> – Distance in pixels for each color cycle.</li>
+<li><strong>gradient_mode</strong> – ‘rgb’ or ‘hsl’ to choose the appearance of the gradient.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">&lt;module ‘PIL.Image’ from ‘/home/dan/.local/lib/python3.7/site-packages/PIL/Image.py’&gt;</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL image object.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL image object.</p>
 </td>
 </tr>
 </tbody>
@@ -3271,7 +3347,9 @@ finite regions.</td>
 <li><strong>min_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The level of the largest triangles (0 is bounding triangle).</li>
 <li><strong>max_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The level of the smallest triangles.</li>
 <li><strong>color1</strong> – The color/s for half of the triangles.</li>
-<li><strong>color2</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]) – The color for the opposing half of the triangles.  This half of triangles will all be one color because it is the background.</li>
+<li><strong>color2</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>]) – The color for the opposing half of the triangles.
+This half of triangles will all be one color because it is
+the background.</li>
 </ul>
 </td>
 </tr>
@@ -3295,8 +3373,10 @@ finite regions.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>tip</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The tip of the bounding triangle.</li>
-<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The height of the bounding triangle (negative for upside-down triangle).</li>
-<li><strong>min_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The level of the largest triangles (0 is the bounding triangle).</li>
+<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The height of the bounding triangle (negative for
+upside-down triangle).</li>
+<li><strong>min_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The level of the largest triangles (0 is the
+bounding triangle).</li>
 <li><strong>max_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The level of the smallest triangles.</li>
 </ul>
 </td>
@@ -3323,7 +3403,8 @@ finite regions.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of points to generate.</li>
 <li><strong>bounds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A bounds tuple.</li>
-<li><strong>n_cand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of candidate points to generate for each output point.  Higher numbers result in higher regularity.</li>
+<li><strong>n_cand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of candidate points to generate for each output
+point.  Higher numbers result in higher regularity.</li>
 </ul>
 </td>
 </tr>
@@ -3348,8 +3429,10 @@ finite regions.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
-<li><strong>tile_shape</strong> – Either ‘polygon’ for Voronoi tiling or ‘triangle’ for Delaunay tiling.</li>
-<li><strong>edges</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the edges around tiles as lines instead of the tiles themselves.</li>
+<li><strong>tile_shape</strong> – Either ‘polygon’ for Voronoi tiling or ‘triangle’
+for Delaunay tiling.</li>
+<li><strong>edges</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the edges around tiles as lines
+instead of the tiles themselves.</li>
 <li><strong>tile_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The approximate area of each tile.</li>
 <li><strong>regularity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – A value of one or higher, passed to <code class="docutils literal notranslate"><span class="pre">spaced_points</span></code>.</li>
 </ul>
@@ -3375,10 +3458,12 @@ finite regions.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – The shape/s that will become the clip.</li>
-<li><strong>shape</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Either ‘polygon’ for Voronoi tiling or ‘triangle’ for Delaunay tiling.</li>
-<li><strong>edges</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the edges around tiles as lines instead of the tiles themselves.</li>
+<li><strong>shape</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Either ‘polygon’ for Voronoi tiling or ‘triangle’ for
+Delaunay tiling.</li>
+<li><strong>edges</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to return the edges around tiles as lines
+instead of the tiles themselves.</li>
 <li><strong>tile_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The approximate area of each tile.</li>
-<li><strong>regularity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – A value of one or higher, passed to <code class="docutils literal notranslate"><span class="pre">spaced_points</span></code>.</li>
+<li><strong>regularity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – A value of one or higher, passed to <code class="docutils literal notranslate"><span class="pre">spaced_points()</span></code>.</li>
 </ul>
 </td>
 </tr>

@@ -33,8 +33,15 @@ def fill_region(outline: Collection,
 
     Args:
         outline: A shape or (nested) list of shapes that will become clip.
-        object_fun: A function that takes bounds as input and returns one randomly generated object.  Usually this is a lambda function that calls another function using arguments passed to the function that produced the lambda function.  i.e., def caller_fun(args...): return lambda bounds: helper_fun(bounds, args...)
-        max_tries: If not None, the number of objects to generate (including those discarded for not filling space) before giving up and returning the region as is.
+        object_fun: A function that takes bounds as input and returns
+          one randomly generated object.  Usually this is a lambda
+          function that calls another function using arguments passed
+          to the function that produced the lambda function.  i.e.,
+          def caller_fun(args...): return lambda bounds:
+          helper_fun(bounds, args...)
+        max_tries: If not None, the number of objects to generate
+          (including those discarded for not filling space) before
+          giving up and returning the region as is.
 
     Returns:
         A group with clip.
@@ -69,10 +76,13 @@ def _filament_fill_obj(bounds: Bounds, direction_delta: Param, width:
 
     Args:
         bounds: A bounds tuple.
-        direction_delta: Parameter that will become the delta for the filament direction.
+        direction_delta: Parameter that will become the delta for the
+          filament direction.
         width: Width of the filament.
         seg_length: Average side length of each segment.
-        color: Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
+        color: Color specification for filament segments.  A separate
+          copy is used for each filament in case it involves
+          deltas/ratios.
 
     Returns:
         The ordered segment polygons.
@@ -100,10 +110,13 @@ def filament_fill(direction_delta: Param, width: Number, seg_length:
     """Generate filament fill function.
 
     Args:
-        direction_delta: Parameter that will become the delta for the filament direction.
+        direction_delta: Parameter that will become the delta for the
+          filament direction.
         width: Width of the filament.
         seg_length: Average side length of each segment.
-        color: Color specification for filament segments.  A separate copy is used for each filament in case it involves deltas/ratios.
+        color: Color specification for filament segments.  A separate
+          copy is used for each filament in case it involves
+          deltas/ratios.
 
     Returns:
         A function used by fill_region().
@@ -114,11 +127,15 @@ def filament_fill(direction_delta: Param, width: Number, seg_length:
 
 
 class Doodle:
-    """A Doodle object is itself a generator of doodles.
+    """A Doodle object is a generator of doodles.
 
     Args:
-        function: A function that takes no arguments and returns a shape or collection.
-        footprint: A boolean 2D array whose cells indicate the shape (within a grid) occupied by the generated doodles (before being oriented).  Row 0 should correspond to the top row of the doodle's footprint.
+        function: A function that takes no arguments and returns a
+          shape or collection.
+        footprint: A boolean 2D array whose cells indicate the shape
+          (within a grid) occupied by the generated doodles (before
+          being oriented).  Row 0 should correspond to the top row of
+          the doodle's footprint.
 
     """
     def __init__(self, function: Callable[[], Collection], footprint:
@@ -318,8 +335,13 @@ def fill_spots(outline: Collection, spacing: Number = 10, radius:
 
     Args:
         outline: A region outline shape.
-        spacing: The approximate distance between the centers of neighboring spots.
-        radius: The spot radius.  By default the radii range from ``spacing`` to ``spacing`` / 5 in a geometric sequence.  If provided, it is recommended to supply a parameter with ratio < 1 so that spaced-out larger points are plotted first, with progressively smaller points inserted between existing ones.
+        spacing: The approximate distance between the centers of
+          neighboring spots.
+        radius: The spot radius.  By default the radii range from
+          ``spacing`` to ``spacing`` / 5 in a geometric sequence.  If
+          provided, it is recommended to supply a parameter with ratio
+          < 1 so that spaced-out larger points are plotted first, with
+          progressively smaller points inserted between existing ones.
 
     Returns:
         A list of circle shapes.

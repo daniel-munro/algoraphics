@@ -25,24 +25,27 @@ Number = Union[int, float]
 Point = Tuple[Number, Number]
 
 
-def open_image(path: str) -> Image:
+def open_image(path: str) -> 'Image':
     """Load a PIL image from file.
 
     Args:
         path: Path to the image file.
+
+    Returns:
+        A PIL Image.
 
     """
     image = Image.open(path).transpose(Image.FLIP_TOP_BOTTOM)
     return image.convert('RGB')  # remove transparency coordinate from PNGs
 
 
-def encode_image(image: Image, frmt: str) -> str:
+def encode_image(image: 'Image', frmt: str) -> str:
     """Encode an image as a data string.
 
     Used to embed images in SVG.
 
     Args:
-        image: A PIL image.
+        image: A PIL Image.
         frmt: Either 'JPEG' or 'PNG'.
 
     Returns:
@@ -56,15 +59,16 @@ def encode_image(image: Image, frmt: str) -> str:
     return 'data:image/' + formats[frmt] + ';base64,' + data
 
 
-def array_to_image(array: np.ndarray, scale: bool = True) -> Image:
+def array_to_image(array: np.ndarray, scale: bool = True) -> 'Image':
     """Create an image from a 2D or 3D array.
 
     Args:
         array: A numpy array: 2D for grayscale or 3D for RGB.
-        scale: If True, values in 2D array will be scaled so that the highest values are 255 (white).
+        scale: If True, values in 2D array will be scaled so that the
+          highest values are 255 (white).
 
     Returns:
-        A PIL image in RGB mode.
+        A PIL Image in RGB mode.
 
     """
     if scale and len(array.shape) == 2:
@@ -75,7 +79,7 @@ def array_to_image(array: np.ndarray, scale: bool = True) -> Image:
         return Image.fromarray(array, mode='RGB')
 
 
-def resize_image(image: Image, width: int, height: int):
+def resize_image(image: 'Image', width: int, height: int):
     """Downscale an image.
 
     Scales according to whichever of width or height is not None. Only
@@ -100,7 +104,7 @@ def resize_image(image: Image, width: int, height: int):
     image.thumbnail((width, height))
 
 
-def sample_colors(image: Image, points:
+def sample_colors(image: 'Image', points:
                   Union[Point,
                         Sequence[Point]]) -> Union[Color, Sequence[Color]]:
     """Sample colors from an image.
@@ -124,7 +128,7 @@ def sample_colors(image: Image, points:
     return [Color(RGB=pixels[int(p[0]), int(p[1])]) for p in points]
 
 
-def region_color(outline: dict, image: Image, n_points: int = 10) -> Color:
+def region_color(outline: dict, image: 'Image', n_points: int = 10) -> Color:
     """Find representative color for an image region.
 
     Args:
@@ -140,7 +144,7 @@ def region_color(outline: dict, image: Image, n_points: int = 10) -> Color:
     return average_color(sample_colors(image, points))
 
 
-def fill_shapes_from_image(shapes: Sequence[dict], image: Image):
+def fill_shapes_from_image(shapes: Sequence[dict], image: 'Image'):
     """Fill shapes according to their corresponding image region.
 
     Faster than region_color which samples points, but should only be
@@ -159,7 +163,7 @@ def fill_shapes_from_image(shapes: Sequence[dict], image: Image):
         set_style(shapes[i], 'fill', colors[i])
 
 
-def segment_image(image: Image, n_segments: int = 100, compactness:
+def segment_image(image: 'Image', n_segments: int = 100, compactness:
                   Number = 10, smoothness: Number = 0) -> np.ndarray:
     """Divide image into segments.
 
@@ -168,8 +172,10 @@ def segment_image(image: Image, n_segments: int = 100, compactness:
     Args:
         image: A PIL image.
         n_segments: Approximate number of desired segments.
-        compactness: A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
-        smoothness: The width of gaussian smoothing applied before segmentation.
+        compactness: A higher value produces more compact, square-like
+          segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
+        smoothness: The width of gaussian smoothing applied before
+          segmentation.
 
     Returns:
         A 2D array of integer segment labels.
@@ -212,9 +218,13 @@ def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
 
     Args:
         seg: A 2D array of segment labels.
-        simplify: Maximum distance from the edge of a simplified shape to the actual boundary when reducing number of points, or None for no simplification.
-        expand: Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
-        curvature: The degree of curvature for the splines.  Usually between zero and one.
+        simplify: Maximum distance from the edge of a simplified shape
+          to the actual boundary when reducing number of points, or
+          None for no simplification.
+        expand: Number of pixels to expand each segment in every
+          direction to avoid gaps between adjacent shapes.
+        curvature: The degree of curvature for the splines.  Usually
+          between zero and one.
 
     Returns:
         A list of spline shapes, generally in order from left to right
@@ -238,7 +248,7 @@ def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
     return shapes
 
 
-def image_regions(image: Image, n_segments: int = 100, compactness:
+def image_regions(image: 'Image', n_segments: int = 100, compactness:
                   Number = 10, smoothness: Number = 0, simplify:
                   Number = 1, expand: int = 2, curvature:
                   float = 0.2) -> Sequence[dict]:
@@ -247,11 +257,17 @@ def image_regions(image: Image, n_segments: int = 100, compactness:
     Args:
         image: A PIL image.
         n_segments: Approximate number of desired segments.
-        compactness: A higher value produces more compact, square-like segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
-        smoothness: The width of gaussian smoothing applied before segmentation.
-        simplify: Maximum distance from the edge of a simplified shape to its actual boundary when reducing the number of points, or None for no simplification.
-        expand: Number of pixels to expand each segment in every direction to avoid gaps between adjacent shapes.
-        curvature: The degree of curvature in spline.  Usually between zero and one.
+        compactness: A higher value produces more compact, square-like
+          segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.
+        smoothness: The width of gaussian smoothing applied before
+          segmentation.
+        simplify: Maximum distance from the edge of a simplified shape
+          to its actual boundary when reducing the number of points,
+          or None for no simplification.
+        expand: Number of pixels to expand each segment in every
+          direction to avoid gaps between adjacent shapes.
+        curvature: The degree of curvature in spline.  Usually between
+          zero and one.
 
     Returns:
         A list of spline shapes, generally in order from left to right

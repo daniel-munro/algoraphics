@@ -30,9 +30,11 @@ class Param:
     higher-order random walks.
 
     Args:
-        x: A value, list, or function that takes no arguments and returns a value.
+        x: A value, list, or function that takes no arguments and
+          returns a value.
         delta: A value to add to the previous value to get the next.
-        ratio: Similar to delta, but is multiplied by, rather than added to, the previous value to get the next.
+        ratio: Similar to delta, but is multiplied by, rather than
+          added to, the previous value to get the next.
         min: The smallest allowable value when ``delta`` or ``ratio`` is used.
         max: The largest allowable value when ``delta`` or ``ratio`` is used.
 

@@ -21,7 +21,11 @@ Number = Union[int, float]
 
 
 def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
-    """Return index of dictionary in ``dicts`` matching ``d``, or None if no match."""
+    """Return index of dict in ``dicts`` matching ``d``.
+
+    Returns None if no match.
+
+    """
     for i in range(len(dicts)):
         if dicts[i] == d:
             return i
@@ -125,8 +129,10 @@ def _write_shape(shape: dict, defs: Sequence[str], filters:
 
     Args:
         shape: A geometric shape, group, text, or raster dictionary.
-        defs: A list of strings used to collect SVG representations of all clip paths, filters, etc.
-        filters: A collection of filter dictionaries used thus far so that duplicate filters can reference the same definition.
+        defs: A list of strings used to collect SVG representations of
+          all clip paths, filters, etc.
+        filters: A collection of filter dictionaries used thus far so
+          that duplicate filters can reference the same definition.
 
     Returns:
         An SVG encoding.
@@ -278,7 +284,8 @@ def write_SVG(objects: Union[list, dict], w: Number, h: Number,
     """Write an SVG file for a collection of objects.
 
     Args:
-        objects: A (nested) collection of objects.  Placed onto the canvas in order after flattening.
+        objects: A (nested) collection of objects.  They are placed
+          onto the canvas in order after flattening.
         w: Width of canvas.
         h: Height of canvas.
         file_name: The file name to write to.
@@ -322,7 +329,9 @@ def to_PNG(infile: str, outfile: str = None):
 
     Args:
         infile: The SVG file name.
-        outfile: The PNG file name to write to.  If omitted, it will be set to the SVG file name with the extension replaced with '.png'.
+        outfile: The PNG file name to write to.  If omitted, it will
+          be set to the SVG file name with the extension replaced with
+          '.png'.
 
     """
     if outfile is None:
@@ -338,11 +347,13 @@ def write_frames(fun: Callable, n: int, w: Number, h: Number,
     Frames can then be combined into an animated GIF.
 
     Args:
-        fun: A function called with no arguments that returns an SVG object collection.
+        fun: A function called with no arguments that returns an SVG
+          object collection.
         n: Number of frames to generate.
         w: Width of the canvas.
         h: Height of the canvas.
-        file_name: A file name (without extension) to write to.  File names will be [file_name]_0.svg, etc.
+        file_name: A file name (without extension) to write to.  File
+          names will be [file_name]_0.svg, etc.
 
     """
     for i in range(n):
