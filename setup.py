@@ -4,13 +4,13 @@ setup(
     name='algoraphics',
     # (...)
     install_requires=[
-        'matplotlib'
-        'scipy'
-        'Shapely'
-        'Rtree'
-        'numpy'
-        'scikit-image'
-        'Pillow'
+        'matplotlib',
+        'scipy',
+        'Shapely',
+        'Rtree',
+        'numpy',
+        'scikit-image',
+        'Pillow',
         'typing'],
     extras_require={
         'tests': [
