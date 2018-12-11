@@ -9,8 +9,8 @@ Glossary
        rectangular space.
 
    collection
-       A list containing :term:`shapes<shape>`, which can be nested in
-       lists.
+       A shape or a list containing :term:`shapes<shape>`, which can
+       be nested in lists.
 
    doodle
        An abstraction of a small drawing.  It can vary each time it is
