@@ -162,6 +162,11 @@ def distance(p1: Point, p2: Point) -> float:
     return math.sqrt(dx * dx + dy * dy)
 
 
+def direction_to(p1: Point, p2: Point) -> float:
+    """Get the direction of p2 from p1 in degrees."""
+    return deg(math.atan2(p2[1] - p1[1], p2[0] - p1[0]))
+
+
 def get_nearest(points: Sequence[Point], point: Point, index: bool =
                 False) -> Union[Point, int]:
     """Find the nearest point in a list to a target point.
@@ -381,27 +386,25 @@ def scale_points(points: Sequence[Union[Point, Sequence]], cx: Number,
             points[i] = scaled_point(points[i], cx, cy)
 
 
-def jitter_points(points: Sequence[Point], deviation: Number, type: str):
+def jitter_points(points: Sequence[Point], r: Number):
     """Add noise to the locations of points.
+
+    Distance and direction of movement are both uniformly random, so
+    the 2D probability density is circular with higher concentration
+    toward the center.
 
     Args:
         points: A list of points.
-        deviation: For gaussian jitter, the standard deviation. For
-          uniform jitter, the maximum distance.
-        type: The type of noise, 'gaussian' or 'uniform'.
+        r: The maximum distance points will move.
 
     """
+    angles = np.random.uniform(0, 2 * math.pi, size=len(points))
+    dists = np.random.uniform(0, r, size=len(points))
     for i in range(len(points)):
-        angle = np.random.uniform(0, 2 * math.pi)
-        if type == 'gaussian':
-            dist = np.random.normal(0, deviation)
-        elif type == 'uniform':
-            dist = np.random.uniform(0, deviation)
-        points[i] = endpoint(points[i], angle, dist)
+        points[i] = endpoint(points[i], angles[i], dists[i])
 
 
-def jittered_points(points: Sequence[Point], deviation: Number, type:
-                    str) -> Sequence[Point]:
+def jittered_points(points: Sequence[Point], r: Number) -> Sequence[Point]:
     """Get noisy copy of points.
 
     Like jitter_points but returns jittered points, not affecting the
@@ -409,13 +412,14 @@ def jittered_points(points: Sequence[Point], deviation: Number, type:
 
     Args:
         points: A list of points.
-        deviation: For gaussian jitter, the standard deviation. For
-          uniform jitter, the maximum distance.
-        type: The type of noise, 'gaussian' or 'uniform'.
+        r: The maximum distance points will move.
+
+    Returns:
+        A list of points.
 
     """
     x = points[:]
-    jitter_points(x, deviation, type)
+    jitter_points(x, r)
     return x
 
 

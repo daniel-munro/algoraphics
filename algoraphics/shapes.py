@@ -14,7 +14,7 @@ from shapely.geometry import Point as SPoint
 from typing import Sequence, Tuple, Union, List
 
 from .geom import translated_point, rotated_point, scale_points, scaled_point
-from .geom import distance, endpoint, rad
+from .geom import distance, endpoint, rad, jitter_points, interpolate
 from .param import fixed_value, make_param
 from .paths import translate_path, rotate_path, scale_path, path_points
 
@@ -129,39 +129,6 @@ def circle(c: Point, r: Number) -> dict:
     c = (fixed_value(c[0]), fixed_value(c[1]))
     r = fixed_value(r)
     return dict(type='circle', c=c, r=r)
-
-
-def wave(start: Point, direction: Number, width: Number, period:
-         Number, length: Number) -> dict:
-    """Generate a wave spline.
-
-    Args:
-        start: Starting point of the wave.
-        direction: Direction (in degrees) of the wave.
-        width: The total amplitude of the wave from peak to trough.
-        period: Period of the wave.
-        length: End-to-end length of the wave.
-
-    Returns:
-        A spline shape.
-
-    """
-    start = fixed_value(start)
-    direction = fixed_value(direction)
-    width = fixed_value(width)
-    period = make_param(period)
-
-    points = [endpoint(start, rad(direction + 90), width / 2)]
-    phase = 0
-    ref_point = start
-    while distance(start, points[-1]) < length:
-        phase = (phase + 1) % 2
-        ref_point = endpoint(ref_point, rad(direction), period.value() / 2)
-        if phase == 0:
-            points.append(endpoint(ref_point, rad(direction + 90), width / 2))
-        else:
-            points.append(endpoint(ref_point, rad(direction - 90), width / 2))
-    return spline(points=points)
 
 
 def bounding_box(shapes: Collection) -> Bounds:
@@ -513,3 +480,74 @@ def remove_hidden(shapes: Sequence[Collection]):
     cover = [SPoint((0, 0))]
     # Pack in list because 'shapes' can be single group:
     process_list([shapes], cover)
+
+
+def wobble(obj: Collection, dev: Number = 2):
+    """Add a little messiness to perfect shapes.
+
+    Convert straight lines and curves into slightly wavy splines.
+
+    Args:
+        obj: One or more shapes.
+        dev: The (approximate) maximum distance a part of an edge will
+        move.
+
+    """
+    # Note: modify shapes in place, esp. since a single shape might be
+    # given.
+    if type(obj) is list:
+        for x in obj:
+            wobble(x, dev)
+    elif obj['type'] == 'group':
+        for x in obj['members']:
+            wobble(x, dev)
+    elif obj['type'] == 'line':
+        _wobble_line(obj, dev)
+    elif obj['type'] == 'polyline':
+        _wobble_polyline(obj, dev)
+    elif obj['type'] == 'polygon':
+        _wobble_polygon(obj, dev)
+    elif obj['type'] == 'spline':
+        if obj['circular']:
+            _wobble_polygon(obj, dev)
+        else:
+            _wobble_polyline(obj, dev)
+    elif obj['type'] == 'circle':
+        _wobble_circle(obj, dev)
+
+
+def _wobble_line(obj: dict, dev: Number):
+    obj['type'] = 'spline'
+    pts = [obj['p1'], obj['p2']]
+    del obj['p1'], obj['p2']
+    interpolate(pts, 10)
+    jitter_points(pts, dev)
+    obj['points'] = pts
+
+
+def _wobble_polyline(obj: dict, dev: Number):
+    obj['type'] = 'spline'
+    interpolate(obj['points'], 10)
+    jitter_points(obj['points'], dev)
+
+
+def _wobble_polygon(obj: dict, dev: Number):
+    obj['type'] = 'spline'
+    obj['circular'] = True
+    pts = obj['points']
+    pts.append(pts[0])
+    interpolate(pts, 10)
+    del pts[-1]
+    jitter_points(pts, dev)
+
+
+def _wobble_circle(obj: dict, dev: Number):
+    r, c = obj['r'], obj['c']
+    del obj['r'], obj['c']
+    obj['type'] = 'spline'
+    obj['circular'] = True
+    n_pts = round(2 * r * np.pi / 10)
+    direcs = np.arange(n_pts) / n_pts * 2 * np.pi
+    pts = [endpoint(c, direc, r) for direc in direcs]
+    jitter_points(pts, dev)
+    obj['points'] = pts

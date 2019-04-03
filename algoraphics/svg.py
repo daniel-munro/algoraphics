@@ -177,10 +177,11 @@ def _write_style(shape: dict) -> str:
 
     """
     if 'style' in shape:
-        style = shape['style'].copy()  # keep input dict intact for reuse.
+        style = shape['style'].copy() # Keep input dict intact for reuse.
     else:
         style = dict()
-    if shape['type'] in ('path', 'spline') and 'fill' not in style:
+    if (shape['type'] in ('path', 'spline', 'circle', 'polygon')
+        and 'fill' not in style):
         style['fill'] = 'none'
         if 'stroke' not in style:
             style['stroke'] = 'black'
@@ -359,6 +360,9 @@ def write_frames(fun: Callable, n: int, w: Number, h: Number,
     for i in range(n):
         write_SVG(fun(), w, h, file_name + "_" + str(i) + ".svg")
 
+
+# For assembling GIF:
+# convert -dither None -delay 5 $1_*.svg -clone 0 -morph 1 -delete -1 $1.gif
 
 # def round_values(obj, digits=0):
 #     """rounds all values in nested structure"""

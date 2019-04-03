@@ -11,7 +11,7 @@ from typing import Union, Tuple, List
 
 from .main import shuffled, geom_seq, set_style
 from .geom import points_on_line, points_on_arc, scale_points, translate_points
-from .geom import horizontal_range, jitter_points, endpoint, deg
+from .geom import horizontal_range, endpoint, deg
 from .shapes import circle, spline
 from .color import Color
 

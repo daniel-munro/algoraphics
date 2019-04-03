@@ -1,0 +1,9 @@
+matplotlib
+scipy
+Shapely
+Rtree
+numpy
+scikit-image
+Pillow
+typing
+sphinx_autodoc_typehints

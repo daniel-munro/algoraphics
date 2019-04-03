@@ -12,9 +12,10 @@ from typing import Union, Tuple, Sequence, List
 from .main import set_style
 from .param import fixed_value, make_param
 from .geom import endpoint, rad, is_clockwise, interpolate, move_toward
-from .geom import rotate_and_move, jittered_points, line_to_polygon
+from .geom import rotate_and_move, line_to_polygon, jittered_points
+from .geom import direction_to
 from .shapes import polygon, spline, line
-from .param import Param
+from .param import Param, Cyclical, Wander
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -44,15 +45,22 @@ def filament(start: Point, direction: Param, width: Param, seg_length:
     seg_length = make_param(seg_length)
     n_segments = fixed_value(n_segments)
 
-    dirs = [direction.value() for i in range(n_segments)]
+    # dirs = [direction.value() for i in range(n_segments)]
     widths = [width.value() for i in range(n_segments)]
-    lengths = [seg_length.value() for i in range(n_segments)]
+    # lengths = [seg_length.value() for i in range(n_segments)]
 
-    backbone = [start]
-    for i in range(n_segments):
-        pt = endpoint(backbone[-1], rad(dirs[i]), lengths[i])
-        backbone.append(pt)
+    # backbone = [start]
+    # for i in range(n_segments):
+    #     pt = endpoint(backbone[-1], rad(dirs[i]), lengths[i])
+    #     backbone.append(pt)
 
+    backbone = Wander(start, direction=direction, distance=seg_length)
+    backbone = backbone.values(n_segments + 1)
+    # dirs = [angle_between(backbone[i], backbone[i+1], backbone[i+2])
+    #         for i in range(len(backbone) - 2)]
+    dirs = [direction_to(backbone[i], backbone[i+1]) for i in
+            range(len(backbone) - 1)]
+        
     # Filament starts with right angles:
     p1 = endpoint(start, rad(dirs[0] + 90), widths[0] / 2)
     p2 = endpoint(start, rad(dirs[0] - 90), widths[0] / 2)
@@ -156,7 +164,7 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
         pts_out[0] = move_toward(pts_out[0], start, width / 2)
         pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], math.pi / 2,
                                       width / 6)
-        pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3, 'uniform')
+        pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3)
 
         p3 = move_toward(loc, end, width / 2)
         p4 = rotate_and_move(p3, loc, math.pi / 2, le)
@@ -165,7 +173,7 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
         pts_in[-1] = move_toward(pts_in[-1], end, width / 2)
         pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -math.pi / 2,
                                     width / 6)
-        pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3, 'uniform')
+        pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3)
 
         pts.extend(pts_out)
         pts.extend(pts_in)
@@ -278,3 +286,42 @@ def tree(start: Point, direction: Number, branch_length: Param, theta:
         x.extend(tree(end, direction - theta_this / 2, branch_length,
                       theta, p))
     return x
+
+
+def wave(start: Point, direction: Number, period: Number, length:
+         Number) -> dict:
+    """Generate a wave spline.
+
+    The wave is generated as a series of points generated with
+    oscillating direction from the previous.  This allows for
+    different forms of randomness and dynamics to be used, but
+    amplitude is not independent of period.  All wave specifications
+    are approximate.
+
+    Args:
+        start: Starting point of the wave.
+        direction: Starting direction (in degrees) of the wave.
+        period: Peak-to-peak distance.
+        length: End-to-end length of the wave.
+
+    Returns:
+        A spline shape.
+
+    """
+    start = fixed_value(start)
+    direction = fixed_value(direction)
+    period = make_param(period)
+    length = fixed_value(length)
+
+    # Some of these calculations are wrong, but trig is hard.
+    n_pts = round(10 * length / period.value())
+    # Period and phase are chosen such that positive values come in pairs
+    # in each phase.  Then, Add half (2/4) of a phase's positive deltas to
+    # desired direction to start off in correct direction for phase 180.
+    direc = Param(direction,
+                  delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
+    direc.values(3)                 # Start wave in correct direction.
+    def dist_fun():
+        return (np.pi * period.value()) / (2 * 10)
+    x = Wander(start=start, direction=direc, distance=dist_fun)
+    return spline(points=x.values(n_pts))
