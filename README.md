@@ -2,7 +2,8 @@
 
 A Python library for creating graphics using algorithms and randomness.
 
-<img src="tests/png/structures3.png" alt="A ball of tentacles" width="200" />
+<img src="docs/_static/png/structures3.png" alt="A ball of tentacles"
+	width="200" />
 
 ## Installing
 
