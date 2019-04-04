@@ -368,6 +368,23 @@ def translate_points(points: Sequence[Union[Point, Sequence]], dx:
             points[i] = translated_point(points[i], dx, dy)
 
 
+def rotate_points(points: Sequence[Union[Point, Sequence]], pivot:
+                  Point, angle: Number):
+    """Rotate points around a reference point.
+
+    Args:
+        points: A list of points, which can be nested.
+        pivot: The center of rotation.
+        angle: The angle in radians by which to rotate.
+
+    """
+    for i in range(len(points)):
+        if isinstance(points[i], list):
+            rotate_points(points[i], pivot, angle)
+        else:
+            points[i] = rotated_point(points[i], pivot, angle)
+
+
 def scale_points(points: Sequence[Union[Point, Sequence]], cx: Number,
                  cy: Number = None):
     """Scale the coordinates of points.
@@ -424,14 +441,14 @@ def jittered_points(points: Sequence[Point], r: Number) -> Sequence[Point]:
 
 
 def line_to_polygon(points: Sequence[Point], width: Number) -> Sequence[Point]:
-    """Convert a sequence of points to a path outline.
+    """Convert a sequence of points to a thin outline.
 
     Imagining the points were connected with a stroke with positive
     width, the outline of the stroke is returned.
 
     Args:
         points: A list of line points.
-        width: Width of the path to be outlined.
+        width: Width of the stroke to be outlined.
 
     Returns:
         A list of points.

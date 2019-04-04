@@ -9,15 +9,16 @@ import numpy as np
 import string
 import subprocess
 import os
-from typing import Union, Sequence, Callable
+from typing import Union, Sequence, Callable, Tuple
 
 from .main import flatten
+from .geom import endpoint, rotated_point, direction_to, distance, rad
 from .shapes import scale_shapes, translate_shapes
-from .paths import _write_pathstring, _spline_path
 from .images import encode_image
 from .color import Color
 
 Number = Union[int, float]
+Point = Tuple[Number, Number]
 
 
 def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
@@ -32,9 +33,48 @@ def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
     return None
 
 
-def _write_path(shape: dict, mods: str) -> str:
-    """Generate the SVG representation of a path shape."""
-    return '<path d="' + _write_pathstring(shape['d']) + '" ' + mods + '/>\n'
+def _spline_path(points: Sequence[Point], smoothing: float = 0.2,
+                 circular: bool = False) -> str:
+    """Generate path string for spline.
+
+    Args:
+        points: A list of points.
+        smoothing: The distance to the control point relative to the
+          distance to the adjacent point. Usually between zero and
+          one.
+        circular: If False, spline ends reasonably at the first and
+          last points.  If True, the ends of the spline will connect
+          smoothly.
+
+    Returns:
+        An SVG path.
+
+    """
+    # Add reference points at ends, which don't get drawn:
+    if circular:
+        points = [points[-1]] + points + [points[0], points[1]]
+    else:
+        p0 = rotated_point(points[1], points[0], np.pi)
+        p_last = rotated_point(points[-2], points[-1], np.pi)
+        points = [p0] + points + [p_last]
+
+    path = 'M {} {}'.format(*points[1])
+
+    direction = direction_to(points[0], points[2])
+    dist = distance(points[0], points[2])
+    c1 = endpoint(points[1], rad(direction), smoothing * dist)
+
+    direction = direction_to(points[3], points[1])
+    dist = distance(points[3], points[1])
+    c2 = endpoint(points[2], rad(direction), smoothing * dist)
+    path += 'C {} {} {} {} {} {}'.format(*c1, *c2, *points[2])
+
+    for i in range(3, len(points) - 1):
+        direction = direction_to(points[i+1], points[i-1])
+        dist = distance(points[i+1], points[i-1])
+        c = endpoint(points[i], rad(direction), smoothing * dist)
+        path += 'S {} {} {} {}'.format(*c, *points[i])
+    return path
 
 
 def _write_polygon(shape: dict, mods: str) -> str:
@@ -46,11 +86,11 @@ def _write_polygon(shape: dict, mods: str) -> str:
 
 def _write_spline(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a spline path."""
-    if 'curvature' not in shape:
-        shape['curvature'] = 0.3
+    if 'smoothing' not in shape:
+        shape['smoothing'] = 0.2
     if 'circular' not in shape:
         shape['circular'] = False
-    d = _spline_path(shape['points'], shape['curvature'],
+    d = _spline_path(shape['points'], shape['smoothing'],
                      shape['circular'])
     return '<path d="' + d + '" ' + mods + '/>\n'
 
@@ -152,10 +192,10 @@ def _write_shape(shape: dict, defs: Sequence[str], filters:
 
     mods = style_string + filter_string
 
-    draw_funs = dict(path=_write_path, polygon=_write_polygon,
-                     spline=_write_spline, circle=_write_circle,
-                     line=_write_line, polyline=_write_polyline,
-                     text=_write_text, raster=_write_raster)
+    draw_funs = dict(polygon=_write_polygon, spline=_write_spline,
+                     circle=_write_circle, line=_write_line,
+                     polyline=_write_polyline, text=_write_text,
+                     raster=_write_raster)
 
     if shape['type'] == 'group':
         output = _write_group(shape, mods, defs, filters)
@@ -180,7 +220,7 @@ def _write_style(shape: dict) -> str:
         style = shape['style'].copy() # Keep input dict intact for reuse.
     else:
         style = dict()
-    if (shape['type'] in ('path', 'spline', 'circle', 'polygon')
+    if (shape['type'] in ('spline', 'circle', 'polygon')
         and 'fill' not in style):
         style['fill'] = 'none'
         if 'stroke' not in style:

@@ -22,9 +22,6 @@ API
 .. automodule:: algoraphics.param
    :members:
 
-.. automodule:: algoraphics.paths
-   :members:
-
 .. automodule:: algoraphics.ripples
    :members:
 

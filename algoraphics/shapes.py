@@ -16,7 +16,6 @@ from typing import Sequence, Tuple, Union, List
 from .geom import translated_point, rotated_point, scale_points, scaled_point
 from .geom import distance, endpoint, rad, jitter_points, interpolate
 from .param import fixed_value, make_param
-from .paths import translate_path, rotate_path, scale_path, path_points
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -37,13 +36,13 @@ def polygon(points: Sequence[Point]) -> dict:
     return dict(type='polygon', points=points)
 
 
-def spline(points: Sequence[Point], curvature: Number = 0.3, circular:
+def spline(points: Sequence[Point], smoothing: Number = 0.2, circular:
            bool = False) -> dict:
     """Create a spline shape.
 
     Args:
         points: A list of points.
-        curvature: The distance to the control point relative to the
+        smoothing: The distance to the control point relative to the
           distance to the adjacent point. Usually between zero and
           one.
         circular: If False, spline ends reasonably at the first and
@@ -53,7 +52,7 @@ def spline(points: Sequence[Point], curvature: Number = 0.3, circular:
         A spline shape.
 
     """
-    return dict(type='spline', points=points, curvature=curvature,
+    return dict(type='spline', points=points, smoothing=smoothing,
                 circular=circular)
 
 
@@ -160,9 +159,6 @@ def bounding_box(shapes: Collection) -> Bounds:
         c, r = shapes['c'], shapes['r']
         return (c[0] - r, c[1] - r, c[0] + r, c[1] + r)
 
-    elif shapes['type'] == 'path':
-        return bounding_box(polygon(points=path_points(shapes)))
-
 
 def rotated_bounding_box(shapes: Collection, angle: Number) -> Bounds:
     """Find the rotated bounding box of a shape or shape collection.
@@ -208,8 +204,6 @@ def translate_shapes(shapes: Collection, dx: Number, dy: Number):
     elif shapes['type'] == 'line':
         shapes['p1'] = translated_point(shapes['p1'], dx, dy)
         shapes['p2'] = translated_point(shapes['p2'], dx, dy)
-    elif shapes['type'] == 'path':
-        translate_path(shapes['d'], dx, dy)
     elif shapes['type'] == 'text':
         shapes['x'] += dx
         shapes['y'] += dy
@@ -244,8 +238,6 @@ def rotate_shapes(shapes: Collection, angle: Number, pivot: Point =
     elif shapes['type'] == 'line':
         shapes['p1'] = rotated_point(shapes['p1'], pivot, rad(angle))
         shapes['p2'] = rotated_point(shapes['p2'], pivot, rad(angle))
-    elif shapes['type'] == 'path':
-        rotate_path(shapes['d'], angle, pivot)
 
 
 def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
@@ -273,8 +265,6 @@ def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
     elif shapes['type'] == 'line':
         shapes['p1'] = scaled_point(shapes['p1'], cx, cy)
         shapes['p2'] = scaled_point(shapes['p2'], cx, cy)
-    elif shapes['type'] == 'path':
-        scale_path(shapes['d'], cx, cy)
     elif shapes['type'] == 'text':
         shapes['x'] *= cx
         shapes['y'] *= cy
@@ -352,9 +342,6 @@ def coverage(obj: Collection) -> Union[Polygon, SPoint, GeometryCollection]:
         return coverage
     elif 'points' in obj:
         return Polygon(obj['points'])
-    elif obj['type'] == 'path':
-        pts = path_points(obj)
-        return Polygon(pts)
     elif obj['type'] == 'circle':
         return SPoint(obj['c'][0], obj['c'][1]).buffer(obj['r'])
     else:

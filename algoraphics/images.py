@@ -211,7 +211,7 @@ def pad_array(pixels: np.ndarray, margin: int = 1) -> np.ndarray:
 
 def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
                        expand: int = 1,
-                       curvature: float = 0.2) -> Sequence[dict]:
+                       smoothing: float = 0.2) -> Sequence[dict]:
     """Convert an array of segment labels to spline shapes.
 
     Used by ``image_regions()``.
@@ -223,7 +223,7 @@ def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
           None for no simplification.
         expand: Number of pixels to expand each segment in every
           direction to avoid gaps between adjacent shapes.
-        curvature: The degree of curvature for the splines.  Usually
+        smoothing: The degree of curvature for the splines.  Usually
           between zero and one.
 
     Returns:
@@ -243,14 +243,14 @@ def segments_to_shapes(seg: np.ndarray, simplify: Number = None,
             points = approximate_polygon(points, simplify)
         points = list(points[:, ::-1])
         points = [tuple(p) for p in points]
-        shapes.append(spline(points=points, curvature=curvature,
+        shapes.append(spline(points=points, smoothing=smoothing,
                              circular=True))
     return shapes
 
 
 def image_regions(image: 'Image', n_segments: int = 100, compactness:
                   Number = 10, smoothness: Number = 0, simplify:
-                  Number = 1, expand: int = 2, curvature:
+                  Number = 1, expand: int = 2, smoothing:
                   float = 0.2) -> Sequence[dict]:
     """Get spline shapes corresponding to image regions.
 
@@ -266,7 +266,7 @@ def image_regions(image: 'Image', n_segments: int = 100, compactness:
           or None for no simplification.
         expand: Number of pixels to expand each segment in every
           direction to avoid gaps between adjacent shapes.
-        curvature: The degree of curvature in spline.  Usually between
+        smoothing: The degree of curvature in spline.  Usually between
           zero and one.
 
     Returns:
@@ -275,7 +275,7 @@ def image_regions(image: 'Image', n_segments: int = 100, compactness:
 
     """
     seg = segment_image(image, n_segments, compactness, smoothness)
-    return segments_to_shapes(seg, simplify, expand, curvature)
+    return segments_to_shapes(seg, simplify, expand, smoothing)
 
 
 # def color_distances(pixels, color):

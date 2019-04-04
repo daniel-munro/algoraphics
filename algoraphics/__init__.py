@@ -9,7 +9,6 @@ from .grid import *
 from .images import *
 from .main import *
 from .param import *
-from .paths import *
 from .ripples import *
 from .shapes import *
 from .structures import *

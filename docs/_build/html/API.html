@@ -89,7 +89,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#images-py">images.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main-py">main.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#param-py">param.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#paths-py">paths.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ripples-py">ripples.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#shapes-py">shapes.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#forms-py">forms.py</a></li>
@@ -704,6 +703,20 @@ nearest points.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.geom.direction_to">
+<code class="descclassname">algoraphics.geom.</code><code class="descname">direction_to</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.direction_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the direction of p2 from p1 in degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.geom.distance">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">distance</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the distance between two points.</p>
@@ -831,17 +844,18 @@ prominent direction.</p>
 
 <dl class="function">
 <dt id="algoraphics.geom.jitter_points">
-<code class="descclassname">algoraphics.geom.</code><code class="descname">jitter_points</code><span class="sig-paren">(</span><em>points</em>, <em>deviation</em>, <em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.jitter_points" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.geom.</code><code class="descname">jitter_points</code><span class="sig-paren">(</span><em>points</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.jitter_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add noise to the locations of points.</p>
+<p>Distance and direction of movement are both uniformly random, so
+the 2D probability density is circular with higher concentration
+toward the center.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For
-uniform jitter, the maximum distance.</li>
-<li><strong>type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The type of noise, ‘gaussian’ or ‘uniform’.</li>
+<li><strong>r</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The maximum distance points will move.</li>
 </ul>
 </td>
 </tr>
@@ -851,7 +865,7 @@ uniform jitter, the maximum distance.</li>
 
 <dl class="function">
 <dt id="algoraphics.geom.jittered_points">
-<code class="descclassname">algoraphics.geom.</code><code class="descname">jittered_points</code><span class="sig-paren">(</span><em>points</em>, <em>deviation</em>, <em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.jittered_points" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.geom.</code><code class="descname">jittered_points</code><span class="sig-paren">(</span><em>points</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.jittered_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get noisy copy of points.</p>
 <p>Like jitter_points but returns jittered points, not affecting the
 original list.</p>
@@ -861,13 +875,14 @@ original list.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>deviation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – For gaussian jitter, the standard deviation. For
-uniform jitter, the maximum distance.</li>
-<li><strong>type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The type of noise, ‘gaussian’ or ‘uniform’.</li>
+<li><strong>r</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The maximum distance points will move.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of points.</p>
 </td>
 </tr>
 </tbody>
@@ -877,7 +892,7 @@ uniform jitter, the maximum distance.</li>
 <dl class="function">
 <dt id="algoraphics.geom.line_to_polygon">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">line_to_polygon</code><span class="sig-paren">(</span><em>points</em>, <em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.line_to_polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a sequence of points to a path outline.</p>
+<dd><p>Convert a sequence of points to a thin outline.</p>
 <p>Imagining the points were connected with a stroke with positive
 width, the outline of the stroke is returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -886,7 +901,7 @@ width, the outline of the stroke is returned.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of line points.</li>
-<li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the path to be outlined.</li>
+<li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the stroke to be outlined.</li>
 </ul>
 </td>
 </tr>
@@ -1057,6 +1072,25 @@ relative to <code class="docutils literal notranslate"><span class="pre">ref</sp
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.geom.rotate_points">
+<code class="descclassname">algoraphics.geom.</code><code class="descname">rotate_points</code><span class="sig-paren">(</span><em>points</em>, <em>pivot</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.rotate_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate points around a reference point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[+T_co]]]) – A list of points, which can be nested.</li>
+<li><strong>pivot</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The center of rotation.</li>
+<li><strong>angle</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The angle in radians by which to rotate.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.geom.rotated_point">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">rotated_point</code><span class="sig-paren">(</span><em>point</em>, <em>pivot</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.rotated_point" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the new location of a point after rotating around a reference point.</p>
@@ -1204,6 +1238,15 @@ lower-left inner edges.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="algoraphics.grid.Maze_Style.output">
+<code class="descname">output</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the output shape/s from the generated points.</p>
+<p>This takes the maze outline points and produces the intended
+shape/s, e.g. polygon or spline.  Returns a polygon by
+default.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="algoraphics.grid.Maze_Style.straight">
 <code class="descname">straight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.straight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a non-turning cell.</p>
@@ -1259,6 +1302,15 @@ corresponding to the inner and then outer edges.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="algoraphics.grid.Maze_Style_Pipes.output">
+<code class="descname">output</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Pipes.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the output shape/s from the generated points.</p>
+<p>This takes the maze outline points and produces the intended
+shape/s, e.g. polygon or spline.  Returns a polygon by
+default.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -1547,7 +1599,7 @@ irregular.</p>
 
 <dl class="function">
 <dt id="algoraphics.images.image_regions">
-<code class="descclassname">algoraphics.images.</code><code class="descname">image_regions</code><span class="sig-paren">(</span><em>image</em>, <em>n_segments=100</em>, <em>compactness=10</em>, <em>smoothness=0</em>, <em>simplify=1</em>, <em>expand=2</em>, <em>curvature=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.image_regions" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.images.</code><code class="descname">image_regions</code><span class="sig-paren">(</span><em>image</em>, <em>n_segments=100</em>, <em>compactness=10</em>, <em>smoothness=0</em>, <em>simplify=1</em>, <em>expand=2</em>, <em>smoothing=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.image_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get spline shapes corresponding to image regions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1565,7 +1617,7 @@ to its actual boundary when reducing the number of points,
 or None for no simplification.</li>
 <li><strong>expand</strong> – Number of pixels to expand each segment in every
 direction to avoid gaps between adjacent shapes.</li>
-<li><strong>curvature</strong> – The degree of curvature in spline.  Usually between
+<li><strong>smoothing</strong> – The degree of curvature in spline.  Usually between
 zero and one.</li>
 </ul>
 </td>
@@ -1715,7 +1767,7 @@ segmentation.</li>
 
 <dl class="function">
 <dt id="algoraphics.images.segments_to_shapes">
-<code class="descclassname">algoraphics.images.</code><code class="descname">segments_to_shapes</code><span class="sig-paren">(</span><em>seg</em>, <em>simplify=None</em>, <em>expand=1</em>, <em>curvature=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.segments_to_shapes" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.images.</code><code class="descname">segments_to_shapes</code><span class="sig-paren">(</span><em>seg</em>, <em>simplify=None</em>, <em>expand=1</em>, <em>smoothing=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.segments_to_shapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an array of segment labels to spline shapes.</p>
 <p>Used by <code class="docutils literal notranslate"><span class="pre">image_regions()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1729,7 +1781,7 @@ to the actual boundary when reducing number of points, or
 None for no simplification.</li>
 <li><strong>expand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of pixels to expand each segment in every
 direction to avoid gaps between adjacent shapes.</li>
-<li><strong>curvature</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature for the splines.  Usually
+<li><strong>smoothing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature for the splines.  Usually
 between zero and one.</li>
 </ul>
 </td>
@@ -2004,17 +2056,46 @@ returns values when called with no arguments.</li>
 <h2>param.py<a class="headerlink" href="#param-py" title="Permalink to this headline">¶</a></h2>
 <p>Define parameter objects that incorporate randomness.</p>
 <dl class="class">
-<dt id="algoraphics.param.Exponential">
-<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Exponential</code><span class="sig-paren">(</span><em>mean=1</em>, <em>stdev=1</em>, <em>sigma=2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Exponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Paramaters with Exponential distributions.</p>
+<dt id="algoraphics.param.Cyclical">
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Cyclical</code><span class="sig-paren">(</span><em>low=-1</em>, <em>high=1</em>, <em>period=8</em>, <em>phase=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Cyclical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters that oscillate between values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mean</strong> – The distribution’s mean.</li>
-<li><strong>stdev</strong> – The distribution’s standard deviation.</li>
-<li><strong>sigma</strong> – How many standard deviations from the mean to clip values.</li>
+<li><strong>low</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The minimum value (wave trough).</li>
+<li><strong>high</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The maximum value (wave peak).</li>
+<li><strong>period</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The number of values returned per oscillation.  It
+need not be an integer.</li>
+<li><strong>phase</strong> – The starting offset of sine oscillation in degrees.
+The default of zero starts halfway between <code class="docutils literal notranslate"><span class="pre">low</span></code> and
+<code class="docutils literal notranslate"><span class="pre">high</span></code> and increases.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="algoraphics.param.Cyclical.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Cyclical.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="algoraphics.param.Exponential">
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Exponential</code><span class="sig-paren">(</span><em>mean=1</em>, <em>stdev=1</em>, <em>sigma=2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters with Exponential distributions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mean</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distribution’s mean.</li>
+<li><strong>stdev</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distribution’s standard deviation.</li>
+<li><strong>sigma</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – How many standard deviations from the mean to clip values.</li>
 </ul>
 </td>
 </tr>
@@ -2087,6 +2168,32 @@ added to, the previous value to get the next.</li>
 </dd></dl>
 
 <dl class="class">
+<dt id="algoraphics.param.Place">
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>ref</em>, <em>direction=None</em>, <em>distance=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object that generates points with respect to a reference point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ref</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The reference or starting point.</li>
+<li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – A param giving directions (in degrees) of generated
+points relative to ref.</li>
+<li><strong>distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – A param giving distances of generated points relative to ref.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="algoraphics.param.Place.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate points relative to reference.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="algoraphics.param.Uniform">
 <em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Uniform</code><span class="sig-paren">(</span><em>min=0</em>, <em>max=1</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters with uniformly random distributions.</p>
@@ -2106,6 +2213,18 @@ added to, the previous value to get the next.</li>
 <dt id="algoraphics.param.Uniform.value">
 <code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Uniform.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="algoraphics.param.Wander">
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Wander</code><span class="sig-paren">(</span><em>start</em>, <em>direction=None</em>, <em>distance=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Wander" title="Permalink to this definition">¶</a></dt>
+<dd><p>delta_direc: A param giving the direction to move in e</p>
+<dl class="method">
+<dt id="algoraphics.param.Wander.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Wander.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to get the next value.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2135,86 +2254,6 @@ case it has a <code class="docutils literal notranslate"><span class="pre">delta
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<span class="target" id="module-algoraphics.paths"></span><div class="section" id="paths-py">
-<h2>paths.py<a class="headerlink" href="#paths-py" title="Permalink to this headline">¶</a></h2>
-<p>Generate path strings.</p>
-<dl class="function">
-<dt id="algoraphics.paths.path_points">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">path_points</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.path_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get skeleton points of a path.</p>
-<p>Useful for finding an approximate bounding box for a path.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A list of path command dicts.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of points used in the path (excluding control points).</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.paths.rotate_path">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">rotate_path</code><span class="sig-paren">(</span><em>path</em>, <em>angle</em>, <em>pivot=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.rotate_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate a path.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A list of path command dicts.</li>
-<li><strong>angle</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Amount (in degrees) of rotation.</li>
-<li><strong>pivot</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – Pivot point.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.paths.scale_path">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">scale_path</code><span class="sig-paren">(</span><em>path</em>, <em>cx</em>, <em>cy=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.scale_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resize a path (radii currently scale by cx).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> – A list of path command dicts.</li>
-<li><strong>cx</strong> – Horizontal scale factor.</li>
-<li><strong>cy</strong> – Vertical scale factor.  If missing, <code class="docutils literal notranslate"><span class="pre">cx</span></code> will be used.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.paths.translate_path">
-<code class="descclassname">algoraphics.paths.</code><code class="descname">translate_path</code><span class="sig-paren">(</span><em>path</em>, <em>dx</em>, <em>dy</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.paths.translate_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move a path in space.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A list of path command dicts.</li>
-<li><strong>dx</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Horizontal change.</li>
-<li><strong>dy</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Vertical change.</li>
-</ul>
-</td>
 </tr>
 </tbody>
 </table>
@@ -2603,7 +2642,7 @@ place.</p>
 
 <dl class="function">
 <dt id="algoraphics.shapes.spline">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>curvature=0.3</em>, <em>circular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>smoothing=0.3</em>, <em>circular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a spline shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2611,7 +2650,7 @@ place.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]) – A list of points.</li>
-<li><strong>curvature</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distance to the control point relative to the
+<li><strong>smoothing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distance to the control point relative to the
 distance to the adjacent point. Usually between zero and
 one.</li>
 <li><strong>circular</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If False, spline ends reasonably at the first and
@@ -2650,26 +2689,19 @@ smoothly.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.shapes.wave">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">wave</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>width</em>, <em>period</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.wave" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a wave spline.</p>
+<dt id="algoraphics.shapes.wobble">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">wobble</code><span class="sig-paren">(</span><em>obj</em>, <em>dev=2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.wobble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a little messiness to perfect shapes.</p>
+<p>Convert straight lines and curves into slightly wavy splines.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – Starting point of the wave.</li>
-<li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Direction (in degrees) of the wave.</li>
-<li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The total amplitude of the wave from peak to trough.</li>
-<li><strong>period</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Period of the wave.</li>
-<li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – End-to-end length of the wave.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – One or more shapes.</li>
+<li><strong>dev</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The (approximate) maximum distance a part of an edge will</li>
+<li><strong>move.</strong> – </li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A spline shape.</p>
 </td>
 </tr>
 </tbody>
@@ -2845,6 +2877,37 @@ so that the tree is guaranteed to terminate.</li>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of line shapes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.structures.wave">
+<code class="descclassname">algoraphics.structures.</code><code class="descname">wave</code><span class="sig-paren">(</span><em>start</em>, <em>direction</em>, <em>period</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.structures.wave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a wave spline.</p>
+<p>The wave is generated as a series of points generated with
+oscillating direction from the previous.  This allows for
+different forms of randomness and dynamics to be used, but
+amplitude is not independent of period.  All wave specifications
+are approximate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – Starting point of the wave.</li>
+<li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Starting direction (in degrees) of the wave.</li>
+<li><strong>period</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Peak-to-peak distance.</li>
+<li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – End-to-end length of the wave.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A spline shape.</p>
 </td>
 </tr>
 </tbody>
@@ -3538,7 +3601,7 @@ regions.</td>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Dan Munro
+        &copy; Copyright 2019, Dan Munro
 
     </p>
   </div>
@@ -3559,20 +3622,11 @@ regions.</td>
 
     
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
 
   

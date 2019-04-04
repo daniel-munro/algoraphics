@@ -319,7 +319,6 @@ def fill_wrapping_paper(outline: Collection, spacing: Number, doodles:
 
     if rotate:
         rotate_shapes(fill, rotation)
-    # Doesn't work on paths (needs list of points):
     keep_shapes_inside(fill, outline)
 
     return dict(type='group', clip=outline, members=[fill])

@@ -38,9 +38,6 @@ x.append(ag.line(points=[(300, 30), (330, 170), (350, 90), (370, 160)]))
 x.append(ag.polygon(points=[(30, 230), (30, 370), (170, 230), (170, 370)]))
 x.append(ag.wave(start=(230, 230), direction=45,
                  period=ag.Param(20, delta=0.1), length=200))
-
-# TODO: test semicircle path.
-
 ag.wobble(x)
 
 ag.write_SVG(x, w, h, 'svg/shapes2.svg')

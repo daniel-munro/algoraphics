@@ -42,7 +42,6 @@ circle    c (point), r (float)
 group     members (list), clip (list or dict)
 raster    image (PIL Image), w (float), h (float), format (str)
 line      p1 (point), p2 (point)
-path      d (list of command dicts)
 polygon   points (list)
 polyline  points (list)
 spline    points (list), curvature (float), circular (bool)
@@ -85,7 +84,7 @@ For example, a simple command to draw 100 circles can produce this::
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/param1.png
+.. image:: /_static/png/param1.png
 
 or this::
 
@@ -197,7 +196,6 @@ circle       circle
 group        g
 raster       image
 line         line
-path         path
 polygon      polygon
 polyline     polyline
 spline       path made of bezier curves

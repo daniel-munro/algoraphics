@@ -207,7 +207,7 @@ def blow_paint_area(points: Sequence[Point], spacing: Number = 20,
     for i in range(len(points) - 1):
         pts.extend(_blow_paint_edge(points[i], points[i + 1], spacing,
                                     length, len_dev, width))
-    return spline(points=pts, circular=True, curvature=0.4)
+    return spline(points=pts, circular=True, smoothing=0.4)
 
 
 def blow_paint_line(points: Sequence[Point], line_width: Number = 10,

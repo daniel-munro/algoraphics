@@ -42,7 +42,6 @@ circle    c (point), r (float)
 group     members (list), clip (list or dict)
 raster    image (PIL Image), w (float), h (float), format (str)
 line      p1 (point), p2 (point)
-path      d (list of command dicts)
 polygon   points (list)
 polyline  points (list)
 spline    points (list), curvature (float), circular (bool)
@@ -85,7 +84,7 @@ For example, a simple command to draw 100 circles can produce this::
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/param1.png
+.. image:: /_static/png/param1.png
 
 or this::
 
@@ -96,7 +95,7 @@ or this::
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/param2.png
+.. image:: /_static/png/param2.png
 
 or this::
 
@@ -107,7 +106,7 @@ or this::
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/param3.png
+.. image:: /_static/png/param3.png
 
 :term:`Parameter<parameter>` classes for random distributions like
 ``Uniform``, ``Normal``, and ``Exponential`` are memoryless.  A
@@ -127,7 +126,7 @@ added to the last value to get the next one each time the
  
  ag.set_style(x, 'stroke-width', 2)
 
-.. image:: ../tests/png/param4.png
+.. image:: /_static/png/param4.png
 
 The delta attribute can itself be a :term:`parameter`, which can allow
 for :term:`shape` attributes to be generated as a random walk (middle
@@ -150,7 +149,7 @@ will be uniformly randomly sampled::
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/param5.png
+.. image:: /_static/png/param5.png
 
 Finally, a :term:`parameter` can be defined with an arbitrary
 function, which will be called with no arguments to generate values.
@@ -173,7 +172,7 @@ distribution from which colors will be sampled::
  x = ag.fill_spots(outline)
  ag.set_style(x, 'fill', color)
 
-.. image:: ../tests/png/fill3.png
+.. image:: /_static/png/fill3.png
 
 Color values can be defined and retrieved using other color
 specifications.
@@ -197,7 +196,6 @@ circle       circle
 group        g
 raster       image
 line         line
-path         path
 polygon      polygon
 polyline     polyline
 spline       path made of bezier curves
@@ -229,7 +227,7 @@ locations::
  x = ag.tile_canvas(w, h, shape='polygon', tile_size=100)
  ag.fill_shapes_from_image(x, image)
 
-.. image:: ../tests/png/images1.png
+.. image:: /_static/png/images1.png
 
 :term:`Images<image>` can also be segmented into
 :term:`regions<region>` that correspond to detected color boundaries
@@ -244,7 +242,7 @@ with some smoothing, but are constrained to not be too large::
      ag.set_style(outline, 'fill', color)
  ag.add_paper_texture(x)
 
-.. image:: ../tests/png/images2.png
+.. image:: /_static/png/images2.png
 
 Fill functions can be applied and passed representative colors::
 
@@ -261,7 +259,7 @@ Fill functions can be applied and passed representative colors::
      ag.set_style(outline, 'fill', color)
  ag.add_paper_texture(x)
 
-.. image:: ../tests/png/images3.png
+.. image:: /_static/png/images3.png
 
 
 Structures
@@ -292,7 +290,7 @@ along their form::
  ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
-.. image:: ../tests/png/text1.png
+.. image:: /_static/png/text1.png
 
 These :term:`points<point>` can then be manipulated in many ways::
 
@@ -312,7 +310,7 @@ These :term:`points<point>` can then be manipulated in many ways::
  ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
-.. image:: ../tests/png/text2.png
+.. image:: /_static/png/text2.png
 
 Currently only the characters displayed in these examples are
 provided, though additional ones can be added on request::
@@ -329,7 +327,7 @@ provided, though additional ones can be added on request::
  ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
-.. image:: ../tests/png/text3.png
+.. image:: /_static/png/text3.png
 
 Since generated :term:`points<point>` are grouped by continuous pen
 strokes, :term:`points<point>` within each list can be joined::
@@ -344,14 +342,14 @@ strokes, :term:`points<point>` within each list can be joined::
  ag.reposition(y, (w / 2, h - 250), 'center', 'top')
  x.append(y)
 
-.. image:: ../tests/png/text4.png
+.. image:: /_static/png/text4.png
 
 Actual SVG text can also be produced::
 
  w, h = 400, 100
  x = ag.caption("SVG text.", x=w-20, y=20)
 
-.. image:: ../tests/png/text5.png
+.. image:: /_static/png/text5.png
 
 
 Filaments
@@ -367,7 +365,7 @@ Filaments made of quadrilateral segments can be generated::
                   seg_length=length, n_segments=20) for d in dirs]
  ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
 
-.. image:: ../tests/png/structures1.png
+.. image:: /_static/png/structures1.png
 
 The direction :term:`parameter's<parameter>` delta or ratio attribute
 allows the filament to move in different directions.  Nested deltas
@@ -380,7 +378,7 @@ produce smooth curves::
  ag.set_style(x, 'fill',
               ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
 
-.. image:: ../tests/png/structures2.png
+.. image:: /_static/png/structures2.png
 
 A tentacle is a convenience wrapper for a filament with steadily
 decreasing segment width and length to come to a point at a specified
@@ -394,7 +392,7 @@ total length::
  
  ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0.6, max=0.75), 1, 0.5)))
 
-.. image:: ../tests/png/structures3.png
+.. image:: /_static/png/structures3.png
 
 
 Blow paint
@@ -418,7 +416,7 @@ object) can be created for 0D, 1D, and 2D forms::
  z = ag.blow_paint_spot((350, 350), length=20)
  ag.set_style(z, 'stroke', 'blue')
 
-.. image:: ../tests/png/structures4.png
+.. image:: /_static/png/structures4.png
 
 
 Trees
@@ -435,7 +433,7 @@ Trees with randomly bifurcating branches can be generated::
                                     sat=ag.Uniform(0.4, 0.7),
                                     li=0.3))
 
-.. image:: ../tests/png/structures5.png
+.. image:: /_static/png/structures5.png
 
 
 Fills
@@ -455,7 +453,7 @@ Random polygonal (i.e. Voronoi) tiles can be generated::
  x = ag.tile_region(outline, shape='polygon', tile_size=500)
  ag.set_style(x['members'], 'fill', colors)
 
-.. image:: ../tests/png/tiling1.png
+.. image:: /_static/png/tiling1.png
 
 Random triangular (i.e. Delaunay) tiles can be generated::
 
@@ -464,7 +462,7 @@ Random triangular (i.e. Delaunay) tiles can be generated::
  x = ag.tile_region(outline, shape='triangle', tile_size=500)
  ag.set_style(x['members'], 'fill', colors)
 
-.. image:: ../tests/png/tiling2.png
+.. image:: /_static/png/tiling2.png
 
 The edges between polygonal or triangular tiles can be created instead::
 
@@ -475,7 +473,7 @@ The edges between polygonal or triangular tiles can be created instead::
  ag.set_style(x['members'], 'stroke', colors)
  ag.set_style(x['members'], 'stroke-width', 2)
 
-.. image:: ../tests/png/tiling3.png
+.. image:: /_static/png/tiling3.png
 
 Nested equilateral triangles can be created, with the level of nesting
 random but specifiable::
@@ -484,7 +482,7 @@ random but specifiable::
  color = ag.Color(hue=ag.Uniform(min=0, max=0.15), sat=0.8, li=0.5)
  x = ag.fill_nested_triangles(outline, min_level=2, max_level=5, color=color)
 
-.. image:: ../tests/png/tiling5.png
+.. image:: /_static/png/tiling5.png
 
 
 Mazes
@@ -497,7 +495,7 @@ These patterns resemble mazes, but are actually random spanning trees::
                   style=ag.Maze_Style_Straight(rel_thickness=0.2))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/grid1.png
+.. image:: /_static/png/grid1.png
 
 The maze style is defined by an instance of a subclass of
 ``Maze_Style``::
@@ -507,7 +505,7 @@ The maze style is defined by an instance of a subclass of
                   style=ag.Maze_Style_Jagged(min_w=0.2, max_w=0.8))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/grid2.png
+.. image:: /_static/png/grid2.png
 
 Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
@@ -518,7 +516,7 @@ cell contains a rotation and/or reflection of one of these components::
                   style=ag.Maze_Style_Pipes(rel_thickness=0.6))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/grid3.png
+.. image:: /_static/png/grid3.png
 
 The grid can be rotated::
 
@@ -528,7 +526,7 @@ The grid can be rotated::
                   rotation=45)
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: ../tests/png/grid4.png
+.. image:: /_static/png/grid4.png
 
 Custom styles can be used by creating a new subclass of `Maze_Style`.
 
@@ -568,7 +566,7 @@ orientations to fill a grid::
  outline = ag.circle(c=(200, 200), r=180)
  x = ag.fill_wrapping_paper(outline, 30, doodles, rotate=True)
 
-.. image:: ../tests/png/fill2.png
+.. image:: /_static/png/fill2.png
 
 Each :term:`doodle` is defined by creating a Doodle object that
 specifies a generating function and footprint.  This allows each
@@ -586,7 +584,7 @@ Ripples can fill the canvas while avoiding specified
                          theta_end=360, spacing=10)
  x = ag.ripple_canvas(w, h, spacing=10, existing_pts=circ)
 
-.. image:: ../tests/png/ripples1.png
+.. image:: /_static/png/ripples1.png
 
 They are generated by a Markov chain telling them when to follow a
 boundary on the left, on the right, or to change direction.  The
@@ -602,7 +600,7 @@ alter the appearance::
  x = ag.ripple_canvas(w, h, spacing=10, trans_probs=trans_probs,
                       existing_pts=circ)
 
-.. image:: ../tests/png/ripples2.png
+.. image:: /_static/png/ripples2.png
 
 A billowing texture is produced by generating a random spanning tree
 across a grid of pixels, and then moving through the tree and coloring
@@ -616,7 +614,7 @@ them with a cyclical color gradient::
  colors = [(0, 1, 0.3), (0.6, 1, 0.3)]
  y = ag.billow_region(outline, colors, scale=400, gradient_mode='hsv')
 
-.. image:: ../tests/png/textures2.png
+.. image:: /_static/png/textures2.png
 
 A :term:`region` can be filled with structures such as filaments using
 a generic function that generates random instances of the structure
@@ -632,7 +630,7 @@ and places them until the :term:`region` is filled::
  x = ag.fill_region(outline, filfun)
  ag.add_shadows(x['members'])
 
-.. image:: ../tests/png/fill1.png
+.. image:: /_static/png/fill1.png
 
 
 Effects
@@ -660,7 +658,7 @@ Shadows can be added to :term:`shapes<shape>` or
  x = [path, circles]
  ag.add_shadows(x, stdev=20, darkness=0.5)
 
-.. image:: ../tests/png/textures1.png
+.. image:: /_static/png/textures1.png
 
 Shapes or collections can be given a rough paper texture, and their
 edges can appear torn::
@@ -672,4 +670,4 @@ edges can appear torn::
  ag.add_paper_texture(x)
  x = ag.tear_paper_rect(x, (60, 340, 60, 340))
 
-.. image:: ../tests/png/textures3.png
+.. image:: /_static/png/textures3.png

@@ -13,9 +13,11 @@ import copy
 from typing import Sequence, Tuple, Union
 
 from .main import add_margin, set_style
-from .paths import rotate_path, translate_path, scale_path
 from .shapes import bounding_box, rotated_bounding_box, rotate_shapes
+from .shapes import polygon, spline
 from .color import Color
+from .geom import points_on_line, points_on_arc, rotate_points
+from .geom import translate_points, scale_points, rad, deg
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -148,6 +150,16 @@ class Maze_Style:
         raise NotImplementedError(("Your maze style must have tip, turn, "
                                    + "straight, T, and cross functions."))
 
+    def output(self, points):
+        """Make the output shape/s from the generated points.
+
+        This takes the maze outline points and produces the intended
+        shape/s, e.g. polygon or spline.  Returns a polygon by
+        default.
+
+        """
+        return polygon(points=points)
+
     def tip(self):
         """Generate a dead-end cell.
 
@@ -208,47 +220,58 @@ class Maze_Style_Pipes(Maze_Style):
         self.rel_thickness = rel_thickness
         self.w = rel_thickness / 2
 
+    def output(self, points):
+        return spline(points=points)
+
     def right_turn(self):
         """"""
         r_in = (0.5 - self.w) * self.rel_thickness  # inner curve radius
-        p1 = (0.5 + self.w, 0.5 - self.w - r_in)  # beginning of inner curve
-        p2 = (0.5 + self.w + r_in, 0.5 - self.w)  # end of inner curve
-        return [dict(command='L', to=p1),
-                dict(command='A', r=r_in, large_arc=False,
-                     positive=False, to=p2)]
+        x = points_on_line((0.5 + self.w, 0), (0.5 + self.w, 0.5 -
+                                               self.w - r_in), 0.1)[:-1]
+        x += points_on_arc((0.5 + self.w + r_in, 0.5 - self.w - r_in),
+                           r_in, 180, 90, 0.03)[:-1]
+        x += points_on_line((0.5 + self.w + r_in, 0.5 - self.w),
+                            (1, 0.5 - self.w), 0.1)[:-1]
+        return x
+        
 
     def tip(self):
         """"""
-        path = [dict(command='L', to=(0.5 + self.w, 0.5)),
-                dict(command='A', r=self.w, large_arc=False,
-                     positive=True, to=(0.5 - self.w, 0.5))]
-        return path
+        x = points_on_line((0.5 + self.w, 0), (0.5 + self.w, 0.5),
+                           self.w / 2)[:-1]
+        x += points_on_arc((0.5, 0.5), self.w, 0, 180, self.w / 2)[:-1]
+        x += points_on_line((0.5 - self.w, 0.5), (0.5 - self.w, 0),
+                            self.w / 2)[:-1]
+        return x
 
     def turn(self):
         """"""
-        path1 = self.right_turn()
-        path2 = [dict(command='L', to=(0.5, 0.5 + self.w)),
-                 dict(command='A', r=self.w, large_arc=False,
-                      positive=True, to=(0.5 - self.w, 0.5))]
-        return (path1, path2)
+        x1 = self.right_turn()
+        x2 = points_on_line((1, 0.5 + self.w), (0.5, 0.5 + self.w), 0.1)[:-1]
+        x2 += points_on_arc((0.5, 0.5), self.w, 90, 180, self.w / 2)[:-1]
+        x2 += points_on_line((0.5 - self.w, 0.5), (0.5 - self.w, 0), 0.1)[:-1]
+        return (x1, x2)
 
     def straight(self):
         """"""
-        return ([], [])
+        x1 = [(0.5 + self.w, 0.1), (0.5 + self.w, 0.9)]
+        x2 = [(0.5 - self.w, 0.9), (0.5 - self.w, 0.1)]
+        return (x1, x2)
 
     def T(self):
         """"""
-        path1 = self.right_turn()
-        path2 = _rotated_piece(path1, 3)
-        return (path1, [], path2)
+        x1 = self.right_turn()
+        x2 = [(0.9, 0.5 + self.w), (0.1, 0.5 + self.w)]
+        x3 = _rotated_piece(x1, 3)
+        return (x1, x2, x3)
 
     def cross(self):
         """"""
-        path1 = self.right_turn()
-        path2 = _rotated_piece(path1, 1)
-        path3 = _rotated_piece(path1, 2)
-        path4 = _rotated_piece(path1, 3)
-        return (path1, path2, path3, path4)
+        x1 = self.right_turn()
+        x2 = _rotated_piece(x1, 1)
+        x3 = _rotated_piece(x1, 2)
+        x4 = _rotated_piece(x1, 3)
+        return (x1, x2, x3, x4)
 
 
 class Maze_Style_Round(Maze_Style):
@@ -261,51 +284,55 @@ class Maze_Style_Round(Maze_Style):
     def __init__(self, rel_thickness: float):
         self.w = rel_thickness / 2
 
+    def output(self, points):
+        return spline(points=points)
+
     def right_turn(self):
         """"""
-        return [dict(command='A', r=0.5 - self.w, large_arc=False,
-                     positive=False, to=(1, 0.5 - self.w))]
+        pts = points_on_arc((1, 0), 0.5 - self.w, 180, 90,
+                            (0.5 - self.w) / 2)[:-1]
+        return pts
 
     def tip(self):
         """"""
-        path = [dict(command='L', to=(0.5 + self.w, 0.5)),
-                dict(command='A', r=self.w, large_arc=False,
-                     positive=True, to=(0.5 - self.w, 0.5)),
-                dict(command='L', to=(0.5 - self.w, 0))]
-        return path
+        pts = points_on_line((0.5 + self.w, 0), (0.5 + self.w, 0.5), 0.2)[:-1]
+        pts += points_on_arc((0.5, 0.5), self.w, 0, 180, self.w / 2)[:-1]
+        pts += points_on_line((0.5 - self.w, 0.5), (0.5 - self.w, 0), 0.2)[:-1]
+        return pts
 
     def turn(self):
         """"""
-        path1 = self.right_turn()
-        path2 = [dict(command='A', r=0.5 + self.w, large_arc=False,
-                      positive=True, to=(0.5 - self.w, 0))]
-        return (path1, path2)
+        inner = self.right_turn()
+        outer = points_on_arc((1, 0), 0.5 + self.w, 90, 180, 0.2)[:-1]
+        return (inner, outer)
 
     def straight(self):
         """"""
-        path1 = [dict(command='L', to=(0.5 + self.w, 1))]
-        path2 = [dict(command='L', to=(0.5 - self.w, 0))]
-        return (path1, path2)
+        right = [(0.5 + self.w, 0.1), (0.5 + self.w, 0.9)]
+        left = [(0.5 - self.w, 0.9), (0.5 - self.w, 0.1)]
+        return (right, left)
 
     def T(self):
         """"""
-        path1 = self.right_turn()
-        p = (0.5, math.sqrt((0.5 + self.w) ** 2 - 0.5 ** 2))
-        path2 = [dict(command='A', r=0.5 + self.w, large_arc=False,
-                      positive=True, to=p),
-                 dict(command='A', r=0.5 + self.w, large_arc=False,
-                      positive=True, to=(0, 0.5 + self.w))]
-        path3 = _rotated_piece(path1, 3)
-        return (path1, path2, path3)
+        right = self.right_turn()
+        # p = (0.5, math.sqrt((0.5 + self.w) ** 2 - 0.5 ** 2))
+        theta = deg(np.arccos(0.5 / (0.5 + self.w)))
+        top = points_on_arc((1, 0), 0.5 + self.w, 90, 180 - theta, 0.2)
+        top += points_on_arc((0, 0), 0.5 + self.w, theta, 90, 0.2)[:-1]
+        left = _rotated_piece(right, 3)
+        return (right, top, left)
 
     def cross(self):
         """"""
-        path1 = [dict(command='L', to=(0.5 + self.w, 0.5 - self.w)),
-                 dict(command='L', to=(1, 0.5 - self.w))]
-        path2 = _rotated_piece(path1, 1)
-        path3 = _rotated_piece(path1, 2)
-        path4 = _rotated_piece(path1, 3)
-        return (path1, path2, path3, path4)
+        pts1 = [(0.5 + self.w, 0.5 - self.w), (1, 0.5 - self.w)]
+        pts1 = points_on_line((0.5 + self.w, 0),
+                              (0.5 + self.w, 0.5 - self.w), 0.2)
+        pts1 += points_on_line((0.5 + self.w, 0.5 - self.w),
+                               (1, 0.5 - self.w), 0.2)
+        pts2 = _rotated_piece(pts1, 1)
+        pts3 = _rotated_piece(pts1, 2)
+        pts4 = _rotated_piece(pts1, 3)
+        return (pts1, pts2, pts3, pts4)
 
 
 class Maze_Style_Straight(Maze_Style):
@@ -318,19 +345,21 @@ class Maze_Style_Straight(Maze_Style):
     def __init__(self, rel_thickness: float):
         self.w = rel_thickness / 2
 
+    def output(self, points):
+        return polygon(points=points)
+
     def tip(self):
         """"""
         w = self.w
-        path = [dict(command='L', to=(0.5 + w, 0.5 + w)),
-                dict(command='L', to=(0.5 - w, 0.5 + w))]
-        return path
+        pts = [(0.5 + w, 0.5 + w), (0.5 - w, 0.5 + w)]
+        return pts
 
     def turn(self):
         """"""
         w = self.w
-        path1 = [dict(command='L', to=(0.5 + w, 0.5 - w))]
-        path2 = [dict(command='L', to=(0.5 - w, 0.5 + w))]
-        return (path1, path2)
+        inner = [(0.5 + w, 0.5 - w)]
+        outer = [(0.5 - w, 0.5 + w)]
+        return (inner, outer)
 
     def straight(self):
         """"""
@@ -339,18 +368,18 @@ class Maze_Style_Straight(Maze_Style):
     def T(self):
         """"""
         w = self.w
-        path1 = [dict(command='L', to=(0.5 + w, 0.5 - w))]
-        path2 = [dict(command='L', to=(0.5 - w, 0.5 - w))]
-        return (path1, [], path2)
+        right = [(0.5 + w, 0.5 - w)]
+        left = [(0.5 - w, 0.5 - w)]
+        return (right, [], left)
 
     def cross(self):
         """"""
         w = self.w
-        path1 = [dict(command='L', to=(0.5 + w, 0.5 - w))]
-        path2 = [dict(command='L', to=(0.5 + w, 0.5 + w))]
-        path3 = [dict(command='L', to=(0.5 - w, 0.5 + w))]
-        path4 = [dict(command='L', to=(0.5 - w, 0.5 - w))]
-        return (path1, path2, path3, path4)
+        pt1 = [(0.5 + w, 0.5 - w)]
+        pt2 = [(0.5 + w, 0.5 + w)]
+        pt3 = [(0.5 - w, 0.5 + w)]
+        pt4 = [(0.5 - w, 0.5 - w)]
+        return (pt1, pt2, pt3, pt4)
 
 
 class Maze_Style_Jagged(Maze_Style):
@@ -366,6 +395,9 @@ class Maze_Style_Jagged(Maze_Style):
         self.min_w = min_w
         self.max_w = max_w
 
+    def output(self, points):
+        return polygon(points=points)
+
     def dev(self):
         return np.random.uniform(self.min_w / 2, self.max_w / 2)
 
@@ -375,40 +407,40 @@ class Maze_Style_Jagged(Maze_Style):
     def tip(self):
         """"""
         dev = self.dev
-        path = [dict(command='L', to=(0.5 + dev(), 0.5 + dev())),
-                dict(command='L', to=(0.5 - dev(), 0.5 + dev()))]
-        return path
+        pts = [(0.5 + dev(), 0.5 + dev()),
+               (0.5 - dev(), 0.5 + dev())]
+        return pts
 
     def turn(self):
         """"""
         dev = self.dev
-        path1 = [dict(command='L', to=(0.5 + dev(), 0.5 - dev()))]
-        path2 = [dict(command='L', to=(0.5 - dev(), 0.5 + dev()))]
-        return (path1, path2)
+        inner = [(0.5 + dev(), 0.5 - dev())]
+        outer = [(0.5 - dev(), 0.5 + dev())]
+        return (inner, outer)
 
     def straight(self):
         """"""
         dev = self.dev
-        path1 = [dict(command='L', to=(0.5 + dev(), 0.5 + self.big_dev()))]
-        path2 = [dict(command='L', to=(0.5 - dev(), 0.5 + self.big_dev()))]
-        return (path1, path2)
+        right = [(0.5 + dev(), 0.5 + self.big_dev())]
+        left = [(0.5 - dev(), 0.5 + self.big_dev())]
+        return (right, left)
 
     def T(self):
         """"""
         dev = self.dev
-        path1 = [dict(command='L', to=(0.5 + dev(), 0.5 - dev()))]
-        path2 = [dict(command='L', to=(0.5 + self.big_dev(), 0.5 + dev()))]
-        path3 = [dict(command='L', to=(0.5 - dev(), 0.5 - dev()))]
-        return (path1, path2, path3)
+        right = [(0.5 + dev(), 0.5 - dev())]
+        top = [(0.5 + self.big_dev(), 0.5 + dev())]
+        left = [(0.5 - dev(), 0.5 - dev())]
+        return (right, top, left)
 
     def cross(self):
         """"""
         dev = self.dev
-        path1 = [dict(command='L', to=(0.5 + dev(), 0.5 - dev()))]
-        path2 = [dict(command='L', to=(0.5 + dev(), 0.5 + dev()))]
-        path3 = [dict(command='L', to=(0.5 - dev(), 0.5 + dev()))]
-        path4 = [dict(command='L', to=(0.5 - dev(), 0.5 - dev()))]
-        return (path1, path2, path3, path4)
+        pt1 = [(0.5 + dev(), 0.5 - dev())]
+        pt2 = [(0.5 + dev(), 0.5 + dev())]
+        pt3 = [(0.5 - dev(), 0.5 + dev())]
+        pt4 = [(0.5 - dev(), 0.5 - dev())]
+        return (pt1, pt2, pt3, pt4)
 
 
 def _new_coords(prev_coords: Tuple[int, int], direction:
@@ -435,39 +467,38 @@ def _new_coords(prev_coords: Tuple[int, int], direction:
     return (r, c)
 
 
-def _rotate_cell(path: Union[Sequence[dict], Tuple[Sequence[dict], ...]],
+def _rotate_cell(points: Union[Sequence[Point], Tuple[Sequence[Point], ...]],
                  times: int):
-    """Rotate path/s at right angles within grid cell.
+    """Rotate points at right angles within grid cell.
 
     Args:
-        path: A path list or tuple of path lists.
+        points: A point list or tuple of point lists.
         times: Number of 90 degree counter-clockwise turns.
 
     """
     times = times % 4
-    if type(path) is tuple:  # multiple paths
-        for p in path:
-            _rotate_cell(p, times)
-    elif times > 0:
-        rotate_path(path, times * 90, (0.5, 0.5))
+    if type(points) is not tuple:
+        points = (points,)
+    if times > 0:
+        for p in points:
+            rotate_points(p, (0.5, 0.5), rad(times * 90))
 
 
-def _translate_cell(path: Union[Sequence[dict], Tuple[Sequence[dict], ...]],
+def _translate_cell(points: Union[Sequence[Point], Tuple[Sequence[Point], ...]],
                     coords: Tuple[int, int]):
-    """Translate path/s to grid coordinate.
+    """Translate points to grid coordinate.
 
     Treats grid cells as having width 1.
 
     Args:
-        path: A path list or tuple of path lists.
+        points: A point list or tuple of point lists.
         coords: The (r, c) coordinates to move to.
 
     """
-    if isinstance(path, tuple):  # multiple paths
-        for p in path:
-            _translate_cell(p, coords)
-    else:
-        translate_path(path, coords[1], coords[0])
+    if type(points) is not tuple:
+        points = (points,)
+    for p in points:
+        translate_points(p, coords[1], coords[0])
 
 
 def _process_neighbor(coords: Tuple[int, int], direc: int,
@@ -482,7 +513,7 @@ def _process_neighbor(coords: Tuple[int, int], direc: int,
         style: An object specifying how the maze path is to be drawn.
 
     Returns:
-        Path list for neighboring subtree.
+        Point list for neighboring subtree.
 
     """
     coords2 = _new_coords(coords, direc % 4)
@@ -491,7 +522,7 @@ def _process_neighbor(coords: Tuple[int, int], direc: int,
 
 def _draw_cell(coords: Tuple[int, int], dir_from: int, neighbor_mat:
                np.ndarray, style: Maze_Style) -> list:
-    """Get the subtree path recursively for a cell.
+    """Get the subtree points recursively for a cell.
 
     Args:
         coords: The current (r, c) coordinates.
@@ -503,7 +534,7 @@ def _draw_cell(coords: Tuple[int, int], dir_from: int, neighbor_mat:
         style: An object specifying how the maze path is to be drawn.
 
     Returns:
-        Path list for subtree that excludes everything in the
+        Point list for subtree that excludes everything in the
         originating direction.
 
     """
@@ -592,7 +623,7 @@ def maze(rows: int, cols: int, spacing: Number, start: Point, style:
         style: An object specifying how the maze path is to be drawn.
 
     Returns:
-        A path shape.
+        A shape (usually a spline or polygon) or collection.
 
     """
     neighbor_mat = grid_tree_neighbors(rows, cols)
@@ -614,11 +645,10 @@ def maze(rows: int, cols: int, spacing: Number, start: Point, style:
         n2 = _process_neighbor((0, 0), 2, neighbor_mat, style)
         path = paths[1] + n1 + paths[0] + n2
 
-    scale_path(path, spacing)
-    translate_path(path, start[0], start[1])
-    path.insert(0, dict(command='M', to=path[-1]['to']))
+    scale_points(path, spacing)
+    translate_points(path, start[0], start[1])
 
-    return dict(type='path', d=path)
+    return style.output(path)
 
 
 def fill_maze(outline: Collection, spacing: Number, style: Maze_Style,
