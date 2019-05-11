@@ -8,10 +8,11 @@ General functions involving points in 2D space.
 import math
 import numpy as np
 import rtree
-from typing import Union, Tuple, Sequence
+from typing import Union, Tuple, Sequence, List
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
+Bounds = Tuple[Number, Number, Number, Number]
 
 
 def rad(deg: Number) -> float:
@@ -36,8 +37,40 @@ def rand_point_on_circle(c: Point, r: Number) -> Point:
     return (c[0] + math.cos(theta) * r, c[1] + math.sin(theta) * r)
 
 
-def points_on_line(start: Point, end: Point,
-                   spacing: Number) -> Sequence[Point]:
+def spaced_points(n: int, bounds: Bounds, n_cand: int = 10) -> List[Point]:
+    """Generate random but evenly-spaced points.
+
+    Uses Mitchell's best-candidate algorithm.
+
+    Args:
+        n: Number of points to generate.
+        bounds: A bounds tuple.
+        n_cand: Number of candidate points to generate for each output
+          point.  Higher numbers result in higher regularity.
+
+    Returns:
+        The generated points.
+
+    """
+    x_min, y_min, x_max, y_max = bounds
+    points = [(np.random.uniform(x_min, x_max), np.random.uniform(y_min, y_max))]
+    idx = Rtree(points)
+
+    for i in range(1, n):
+        best_distance = 0
+        for j in range(n_cand):
+            cand = (np.random.uniform(x_min, x_max), np.random.uniform(y_min, y_max))
+            nearest = idx.nearest(cand)
+            dist = distance(nearest, cand)
+            if dist > best_distance:
+                best_distance = dist
+                best_candidate = cand
+        points.append(best_candidate)
+        idx.add_point(best_candidate)
+    return points
+
+
+def points_on_line(start: Point, end: Point, spacing: Number) -> Sequence[Point]:
     """Generate points along a line.
 
     Args:
@@ -76,8 +109,13 @@ def interpolate(points: Sequence[Point], spacing: Number):
             points[i:i] = newpts
 
 
-def points_on_arc(center: Point, radius: Number, theta_start: Number,
-                  theta_end: Number, spacing: Number) -> Sequence[Point]:
+def points_on_arc(
+    center: Point,
+    radius: Number,
+    theta_start: Number,
+    theta_end: Number,
+    spacing: Number,
+) -> Sequence[Point]:
     """Generate points along an arc.
 
     Args:
@@ -95,8 +133,7 @@ def points_on_arc(center: Point, radius: Number, theta_start: Number,
     theta_end = rad(theta_end)
     theta = float(theta_end - theta_start)
     n_points = int(abs(theta) * radius / spacing) + 1
-    theta_p = [theta_start + i * theta / (n_points - 1) for i in
-               range(n_points)]
+    theta_p = [theta_start + i * theta / (n_points - 1) for i in range(n_points)]
     return [endpoint(center, t, radius) for t in theta_p]
 
 
@@ -131,13 +168,13 @@ def move_toward(start: Point, target: Point, distance: Number) -> Point:
     return endpoint(start, angle, distance)
 
 
-def rotate_and_move(start, ref, angle, distance):
+def rotate_and_move(start: Point, ref: Point, angle: float, distance: Number):
     """Combine ``rotated_point`` and ``move_toward`` for convenience.
 
     Args:
         start: Starting point.
         ref: A reference point.
-        angle: The angle to rotate ``ref`` around start.
+        angle: The angle in radians to rotate ``ref`` around start.
         distance: The distance to move from ``start``.
 
     Returns:
@@ -150,13 +187,7 @@ def rotate_and_move(start, ref, angle, distance):
 
 
 def distance(p1: Point, p2: Point) -> float:
-    """Get the distance between two points.
-
-    Args:
-        p1: First point.
-        p2: Second point.
-
-    """
+    """Get the distance between two points."""
     dx = p1[0] - p2[0]
     dy = p1[1] - p2[1]
     return math.sqrt(dx * dx + dy * dy)
@@ -167,8 +198,9 @@ def direction_to(p1: Point, p2: Point) -> float:
     return deg(math.atan2(p2[1] - p1[1], p2[0] - p1[0]))
 
 
-def get_nearest(points: Sequence[Point], point: Point, index: bool =
-                False) -> Union[Point, int]:
+def get_nearest(
+    points: Sequence[Point], point: Point, index: bool = False
+) -> Union[Point, int]:
     """Find the nearest point in a list to a target point.
 
     Args:
@@ -198,6 +230,7 @@ class Rtree:
         points: Starting points.
 
     """
+
     def __init__(self, points: Sequence[Point] = None):
         if points is None:
             points = []
@@ -228,8 +261,9 @@ class Rtree:
         for point in points:
             self.add_point(point)
 
-    def nearest(self, point: Point, n: int = 1, index: bool =
-                False) -> Union[Sequence[Point], Point]:
+    def nearest(
+        self, point: Point, n: int = 1, index: bool = False
+    ) -> Union[Sequence[Point], Point]:
         """Get the nearest point or points to a query point.
 
         Args:
@@ -259,7 +293,7 @@ def midpoint(p1: Point, p2: Point) -> Point:
         p2: Another point.
 
     """
-    return (p1[0] + p2[0]) / 2., (p1[1] + p2[1]) / 2.
+    return (p1[0] + p2[0]) / 2.0, (p1[1] + p2[1]) / 2.0
 
 
 def angle_between(p1: Point, p2: Point, p3: Point) -> float:
@@ -299,12 +333,16 @@ def rotated_point(point: Point, pivot: Point, angle: Number) -> Point:
         angle: The angle in radians by which to rotate.
 
     """
-    x = (((point[0] - pivot[0]) * math.cos(angle))
-         - ((point[1] - pivot[1]) * math.sin(angle))
-         + pivot[0])
-    y = (((point[1] - pivot[1]) * math.cos(angle))
-         + ((point[0] - pivot[0]) * math.sin(angle))
-         + pivot[1])
+    x = (
+        ((point[0] - pivot[0]) * math.cos(angle))
+        - ((point[1] - pivot[1]) * math.sin(angle))
+        + pivot[0]
+    )
+    y = (
+        ((point[1] - pivot[1]) * math.cos(angle))
+        + ((point[0] - pivot[0]) * math.sin(angle))
+        + pivot[1]
+    )
     return (x, y)
 
 
@@ -323,21 +361,6 @@ def scaled_point(point: Point, cx: Number, cy: Number = None) -> Point:
     return (point[0] * cx, point[1] * cy)
 
 
-# def in_box(point, x_min, x_max, y_min, y_max):
-#     """Determine if a point lies within the specified bounds."""
-#     in_bounds = (x_min < point[0] and point[0] < x_max and
-#                  y_min < point[1] and point[1] < y_max)
-#     return in_bounds
-
-
-# def in_ellipse(point, x_min, x_max, y_min, y_max):
-#     """Determine if a point lies within an ellipse with the specified bounds."""
-#     c = (x_min + x_max) / 2., (y_min + y_max) / 2.
-#     r_x = c[0] - x_min
-#     r_y = c[1] - y_min
-#     return ((point[0] - c[0]) / r_x) ** 2 + ((point[1] - c[1]) / r_y) ** 2 < 1
-
-
 def horizontal_range(points: Sequence[Point]) -> Number:
     """Get the magnitude of the horizontal range of a list of points.
 
@@ -351,8 +374,7 @@ def horizontal_range(points: Sequence[Point]) -> Number:
         return max([x[0] for x in points]) - min([x[0] for x in points])
 
 
-def translate_points(points: Sequence[Union[Point, Sequence]], dx:
-                     Number, dy: Number):
+def translate_points(points: Sequence[Union[Point, Sequence]], dx: Number, dy: Number):
     """Shift the location of points.
 
     Args:
@@ -368,8 +390,9 @@ def translate_points(points: Sequence[Union[Point, Sequence]], dx:
             points[i] = translated_point(points[i], dx, dy)
 
 
-def rotate_points(points: Sequence[Union[Point, Sequence]], pivot:
-                  Point, angle: Number):
+def rotate_points(
+    points: Sequence[Union[Point, Sequence]], pivot: Point, angle: Number
+):
     """Rotate points around a reference point.
 
     Args:
@@ -385,8 +408,9 @@ def rotate_points(points: Sequence[Union[Point, Sequence]], pivot:
             points[i] = rotated_point(points[i], pivot, angle)
 
 
-def scale_points(points: Sequence[Union[Point, Sequence]], cx: Number,
-                 cy: Number = None):
+def scale_points(
+    points: Sequence[Union[Point, Sequence]], cx: Number, cy: Number = None
+):
     """Scale the coordinates of points.
 
     Args:
@@ -489,6 +513,7 @@ def is_clockwise(points: Sequence[Point]) -> bool:
 
     """
     p = points + [points[0]]
-    edge_vals = [(p[i+1][0] - p[i][0]) * (p[i+1][1] + p[i][1]) for i
-                 in range(len(points))]
+    edge_vals = [
+        (p[i + 1][0] - p[i][0]) * (p[i + 1][1] + p[i][1]) for i in range(len(points))
+    ]
     return sum(edge_vals) > 0

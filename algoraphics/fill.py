@@ -9,16 +9,25 @@ import math
 import numpy as np
 from typing import Union, Callable, Tuple, List, Sequence
 
-from .main import set_style, add_margin, flatten
-from .shapes import bounding_box, coverage, remove_hidden, keep_points_inside
-from .shapes import rotated_bounding_box, keep_shapes_inside, circle
-from .shapes import rotate_shapes, translate_shapes, scale_shapes
-from .shapes import sample_points_in_shape
-from .geom import distance, rand_point_on_circle, deg
+from .main import add_margin, flatten
+from .shapes import (
+    bounding_box,
+    coverage,
+    remove_hidden,
+    keep_points_inside,
+    rotated_bounding_box,
+    keep_shapes_inside,
+    circle,
+    rotate_shapes,
+    translate_shapes,
+    scale_shapes,
+    sample_points_in_shape,
+    set_style,
+)
+from .geom import distance, rand_point_on_circle, deg, spaced_points
 from .structures import filament
-from .tiling import spaced_points
 from .param import Param, make_param, fixed_value
-from .color import make_color, Color
+from .color import Color, make_color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -26,9 +35,11 @@ Bounds = Tuple[Number, Number, Number, Number]
 Collection = Union[dict, list]
 
 
-def fill_region(outline: Collection,
-                object_fun: Callable[[Bounds], Collection],
-                max_tries: int = None) -> dict:
+def fill_region(
+    outline: Collection,
+    object_fun: Callable[[Bounds], Collection],
+    max_tries: int = None,
+) -> dict:
     """Fill a region by iteratively placing randomly generated objects.
 
     Args:
@@ -63,13 +74,18 @@ def fill_region(outline: Collection,
             objects.append(obj)
             # space = space_copy
 
-    filled_region = dict(type='group', clip=outline, members=objects)
+    filled_region = dict(type="group", clip=outline, members=objects)
     remove_hidden(filled_region)
     return filled_region
 
 
-def _filament_fill_obj(bounds: Bounds, direction_delta: Param, width:
-                       Param, seg_length: Param, color: Color) -> List[dict]:
+def _filament_fill_obj(
+    bounds: Bounds,
+    direction_delta: Param,
+    width: Param,
+    seg_length: Param,
+    color: Color,
+) -> List[dict]:
     """Generate filament extending into bounds.
 
     Called indirectly by lambda function produced by filament_fill().
@@ -101,12 +117,13 @@ def _filament_fill_obj(bounds: Bounds, direction_delta: Param, width:
     direction = Param(dir_start, delta=direction_delta)
     n_segments = int(2.2 * r / seg_length.mean)
     x = filament(start, direction, width, seg_length, n_segments)
-    set_style(x, 'fill', color)
+    set_style(x, "fill", color)
     return x
 
 
-def filament_fill(direction_delta: Param, width: Number, seg_length:
-                  Number, color: Color) -> Callable[[Bounds], List[dict]]:
+def filament_fill(
+    direction_delta: Param, width: Number, seg_length: Number, color: Color
+) -> Callable[[Bounds], List[dict]]:
     """Generate filament fill function.
 
     Args:
@@ -122,8 +139,9 @@ def filament_fill(direction_delta: Param, width: Number, seg_length:
         A function used by fill_region().
 
     """
-    return lambda bounds: _filament_fill_obj(bounds, direction_delta,
-                                             width, seg_length, color)
+    return lambda bounds: _filament_fill_obj(
+        bounds, direction_delta, width, seg_length, color
+    )
 
 
 class Doodle:
@@ -138,8 +156,8 @@ class Doodle:
           the doodle's footprint.
 
     """
-    def __init__(self, function: Callable[[], Collection], footprint:
-                 np.ndarray):
+
+    def __init__(self, function: Callable[[], Collection], footprint: np.ndarray):
         self.function = function
         # Reverse footprint so that row 0 is the bottom.
         self.fp = np.array(footprint)[::-1]
@@ -189,8 +207,7 @@ class Doodle:
         return x
 
 
-def _doodle_fits(grid: np.ndarray, coords: Point, footprint:
-                 np.ndarray) -> bool:
+def _doodle_fits(grid: np.ndarray, coords: Point, footprint: np.ndarray) -> bool:
     """Determine whether a doodle will fit at a location.
 
     Args:
@@ -202,8 +219,10 @@ def _doodle_fits(grid: np.ndarray, coords: Point, footprint:
         Whether the space is available for the footprint.
 
     """
-    subgrid = grid[coords[0]:(coords[0] + footprint.shape[0]),
-                   coords[1]:(coords[1] + footprint.shape[1])]
+    subgrid = grid[
+        coords[0] : (coords[0] + footprint.shape[0]),
+        coords[1] : (coords[1] + footprint.shape[1]),
+    ]
     return np.sum(np.logical_and(subgrid, footprint)) == 0
 
 
@@ -216,11 +235,14 @@ def _add_doodle(grid: np.ndarray, coords: Point, footprint: np.ndarray):
         footprint: The doodle's footprint.
 
     """
-    subgrid = grid[coords[0]:(coords[0] + footprint.shape[0]),
-                   coords[1]:(coords[1] + footprint.shape[1])]
-    grid[coords[0]:(coords[0] + footprint.shape[0]),
-         coords[1]:(coords[1] + footprint.shape[1])] = np.logical_or(subgrid,
-                                                                     footprint)
+    subgrid = grid[
+        coords[0] : (coords[0] + footprint.shape[0]),
+        coords[1] : (coords[1] + footprint.shape[1]),
+    ]
+    grid[
+        coords[0] : (coords[0] + footprint.shape[0]),
+        coords[1] : (coords[1] + footprint.shape[1]),
+    ] = np.logical_or(subgrid, footprint)
 
 
 def _next_cell(r, c, rows, cols):
@@ -234,8 +256,9 @@ def _next_cell(r, c, rows, cols):
     return (r, c)
 
 
-def grid_wrapping_paper(rows: int, cols: int, spacing: Number, start:
-                        Point, doodles: Sequence[Doodle]) -> List[Collection]:
+def grid_wrapping_paper(
+    rows: int, cols: int, spacing: Number, start: Point, doodles: Sequence[Doodle]
+) -> List[Collection]:
     """Create a tiling of non-overlapping doodles.
 
     Args:
@@ -254,7 +277,7 @@ def grid_wrapping_paper(rows: int, cols: int, spacing: Number, start:
     occupied = np.zeros((rows + 2 * margin, cols + 2 * margin), dtype=bool)
     shapes = []
 
-    while(np.sum(np.logical_not(occupied)) > 0 and len(doodles) > 0):
+    while np.sum(np.logical_not(occupied)) > 0 and len(doodles) > 0:
         # Choose from remaining doodles weighted by size.
         n_cells = [doodle.n_cells for doodle in doodles]
         weights = [x / float(sum(n_cells)) for x in n_cells]
@@ -292,8 +315,9 @@ def grid_wrapping_paper(rows: int, cols: int, spacing: Number, start:
     return shapes
 
 
-def fill_wrapping_paper(outline: Collection, spacing: Number, doodles:
-                        Sequence[Doodle], rotate: bool = True) -> dict:
+def fill_wrapping_paper(
+    outline: Collection, spacing: Number, doodles: Sequence[Doodle], rotate: bool = True
+) -> dict:
     """Fill a region with a tiling of non-overlapping doodles.
 
     Args:
@@ -314,18 +338,18 @@ def fill_wrapping_paper(outline: Collection, spacing: Number, doodles:
 
     rows = int(math.ceil((bounds[3] - bounds[1]) / spacing))
     cols = int(math.ceil((bounds[2] - bounds[0]) / spacing))
-    fill = grid_wrapping_paper(rows, cols, spacing, (bounds[0], bounds[1]),
-                               doodles)
+    fill = grid_wrapping_paper(rows, cols, spacing, (bounds[0], bounds[1]), doodles)
 
     if rotate:
         rotate_shapes(fill, rotation)
     keep_shapes_inside(fill, outline)
 
-    return dict(type='group', clip=outline, members=[fill])
+    return dict(type="group", clip=outline, members=[fill])
 
 
-def fill_spots(outline: Collection, spacing: Number = 10, radius:
-               Param = None) -> List[dict]:
+def fill_spots(
+    outline: Collection, spacing: Number = 10, radius: Param = None
+) -> List[dict]:
     """Fill a region with randomly sized spots.
 
     The spots are reminiscent of Ishihara color blindness tests.  The
@@ -359,5 +383,4 @@ def fill_spots(outline: Collection, spacing: Number = 10, radius:
         radius = Param(spacing, ratio=ratio)
     else:
         radius = make_param(radius)
-    return [circle(c=points[i], r=radius.value()) for i in
-            range(len(points))]
+    return [circle(c=points[i], r=radius.value()) for i in range(len(points))]

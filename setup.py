@@ -2,16 +2,18 @@ from setuptools import setup
 
 setup(
     name='algoraphics',
-    # (...)
+    author='Dan Munro',
     install_requires=[
+        'cairosvg',
         'matplotlib',
+        'numpy',
+        'Pillow',
+        'Rtree',
+        'scikit-image',
         'scipy',
         'Shapely',
-        'Rtree',
-        'numpy',
-        'scikit-image',
-        'Pillow',
-        'typing'],
+        'typing',
+    ],
     extras_require={
         'tests': [
         ],

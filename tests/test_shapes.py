@@ -1,18 +1,13 @@
 import os
-import sys
-import numpy as np
-script_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(script_dir, '..'))
 import algoraphics as ag
 
-os.chdir(script_dir)
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-w = 400
-h = 400
+c = ag.Canvas(400, 400)
 
-######################################################################
-# Waves
-######################################################################
+#########
+# Waves #
+#########
 
 # n_waves = 100
 # x = []
@@ -27,18 +22,19 @@ h = 400
 # ag.to_PNG('svg/shapes1.svg', 'png/shapes1.png')
 
 
-######################################################################
-# Wobble (make edges a little messy)
-######################################################################
+######################################
+# Wobble (make edges a little messy) #
+######################################
 
 x = []
 x.append(ag.circle(c=(100, 100), r=80))
 x.append(ag.line(p1=(200, 30), p2=(250, 170)))
 x.append(ag.line(points=[(300, 30), (330, 170), (350, 90), (370, 160)]))
 x.append(ag.polygon(points=[(30, 230), (30, 370), (170, 230), (170, 370)]))
-x.append(ag.wave(start=(230, 230), direction=45,
-                 period=ag.Param(20, delta=0.1), length=200))
+x.append(
+    ag.wave(start=(230, 230), direction=45, period=ag.Param(20, delta=0.1), length=200)
+)
 ag.wobble(x)
 
-ag.write_SVG(x, w, h, 'svg/shapes2.svg')
-ag.to_PNG('svg/shapes2.svg', 'png/shapes2.png')
+c.add(x)
+c.png("png/shapes1.png")

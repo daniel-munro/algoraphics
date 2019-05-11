@@ -12,7 +12,6 @@ from typing import Tuple
 
 from .main import add_margin, bounding_box, random_walk
 from .color import map_colors_to_array, make_color, Color
-from .images import array_to_image
 from .grid import grid_tree_dists
 from .param import fixed_value
 from .shapes import polygon
@@ -20,6 +19,26 @@ from .shapes import polygon
 Number = Union[int, float]
 Collection = Union[list, dict]
 Bounds = Tuple[Number, Number, Number, Number]
+
+
+def array_to_image(array: np.ndarray, scale: bool = True) -> "Image":
+    """Create an image from a 2D or 3D array.
+
+    Args:
+        array: A numpy array: 2D for grayscale or 3D for RGB.
+        scale: If True, values in 2D array will be scaled so that the
+          highest values are 255 (white).
+
+    Returns:
+        A PIL Image in RGB mode.
+
+    """
+    if scale and len(array.shape) == 2:
+        array = 255.0 * array / np.max(array)
+    if len(array.shape) == 2:
+        return Image.fromarray(array).convert("RGB")
+    else:
+        return Image.fromarray(array, mode="RGB")
 
 
 def add_shadows(objects: Sequence[Collection], stdev: Number = 10,

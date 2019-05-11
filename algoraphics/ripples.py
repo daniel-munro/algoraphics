@@ -8,7 +8,7 @@ Create space-filling ripple effects.
 import numpy as np
 from typing import Union, Tuple, Dict, List, Sequence
 
-from .main import _markov_next, set_style, add_margin
+from .main import _markov_next, add_margin
 from .geom import rotated_point, rad, endpoint, distance, Rtree
 from .param import fixed_value
 from .shapes import spline
@@ -160,7 +160,5 @@ def ripple_canvas(w: Number, h: Number, spacing: Number,
             else:
                 more_space = False
 
-    paths = [spline(points=p) for p in curves]
-    set_style(paths, 'fill', 'none')
-    set_style(paths, 'stroke', 'black')
+    paths = [spline(points=p, fill='none', stroke='black') for p in curves]
     return paths

@@ -184,7 +184,7 @@ class Cyclical(Param):
 
     """
     def __init__(self, low: Number = -1, high: Number = 1, period:
-                 Number = 8, phase = 0):
+                 Number = 8, phase: Number = 0):
         self.low = make_param(low)
         self.high = make_param(high)
         self.period = make_param(period)
@@ -193,7 +193,7 @@ class Cyclical(Param):
         self.next = self._wave_value()
 
     def _wave_value(self):
-        val = (np.sin(self.theta) + 1) / 2 # Scale to 0-1 range.
+        val = (np.sin(self.theta) + 1) / 2  # Scale to 0-1 range.
         high, low = self.high.value(), self.low.value()
         return val * (high - low) + low
 
@@ -244,7 +244,7 @@ class Place:
         self.ref = ref
         self.direction = make_param(direction)
         self.distance = make_param(distance)
-            
+
     def value(self):
         """Generate points relative to reference."""
         return endpoint(self.ref, rad(self.direction.value()),

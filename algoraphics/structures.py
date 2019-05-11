@@ -9,20 +9,27 @@ import math
 import numpy as np
 from typing import Union, Tuple, Sequence, List
 
-from .main import set_style
-from .param import fixed_value, make_param
-from .geom import endpoint, rad, is_clockwise, interpolate, move_toward
-from .geom import rotate_and_move, line_to_polygon, jittered_points
-from .geom import direction_to
-from .shapes import polygon, spline, line
-from .param import Param, Cyclical, Wander
+from .geom import (
+    endpoint,
+    rad,
+    is_clockwise,
+    interpolate,
+    move_toward,
+    rotate_and_move,
+    line_to_polygon,
+    jittered_points,
+    direction_to,
+)
+from .shapes import polygon, spline, line, set_style
+from .param import Param, Cyclical, Wander, fixed_value, make_param
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
 
 
-def filament(start: Point, direction: Param, width: Param, seg_length:
-             Param, n_segments: int) -> List[dict]:
+def filament(
+    start: Point, direction: Param, width: Param, seg_length: Param, n_segments: int
+) -> List[dict]:
     """Generate a meandering segmented filament.
 
     Args:
@@ -58,16 +65,17 @@ def filament(start: Point, direction: Param, width: Param, seg_length:
     backbone = backbone.values(n_segments + 1)
     # dirs = [angle_between(backbone[i], backbone[i+1], backbone[i+2])
     #         for i in range(len(backbone) - 2)]
-    dirs = [direction_to(backbone[i], backbone[i+1]) for i in
-            range(len(backbone) - 1)]
-        
+    dirs = [
+        direction_to(backbone[i], backbone[i + 1]) for i in range(len(backbone) - 1)
+    ]
+
     # Filament starts with right angles:
     p1 = endpoint(start, rad(dirs[0] + 90), widths[0] / 2)
     p2 = endpoint(start, rad(dirs[0] - 90), widths[0] / 2)
     pt_pairs = [[p1, p2]]
     for i in range(1, n_segments):
-        angle = dirs[i] - dirs[i-1]
-        angle = (180 + (dirs[i-1] - dirs[i])) / 2
+        angle = dirs[i] - dirs[i - 1]
+        angle = (180 + (dirs[i - 1] - dirs[i])) / 2
         # Points are more than width / 2 from backbone to account for
         # the angles, so the trapezoids are the correct width.
         dist = widths[i] / (2 * math.sin(rad(angle)))
@@ -81,12 +89,11 @@ def filament(start: Point, direction: Param, width: Param, seg_length:
 
     segments = []
     for i in range(n_segments):
-        pts = [pt_pairs[i][0], pt_pairs[i][1],
-               pt_pairs[i+1][1], pt_pairs[i+1][0]]
+        pts = [pt_pairs[i][0], pt_pairs[i][1], pt_pairs[i + 1][1], pt_pairs[i + 1][0]]
         segments.append(polygon(points=pts))
 
-    set_style(segments, 'stroke', 'match')
-    set_style(segments, 'stroke-width', 0.3)
+    set_style(segments, "stroke", "match")
+    set_style(segments, "stroke-width", 0.3)
 
     # For debugging:
     # x = [dict(type='circle', c=p, r=2) for p in backbone]
@@ -95,8 +102,9 @@ def filament(start: Point, direction: Param, width: Param, seg_length:
     return segments
 
 
-def tentacle(start: Point, direction: Param, length: Number, width:
-             Param, seg_length: Number) -> List[dict]:
+def tentacle(
+    start: Point, direction: Param, length: Number, width: Param, seg_length: Number
+) -> List[dict]:
     """Generate a filament that tapers to a point.
 
     Args:
@@ -125,9 +133,14 @@ def tentacle(start: Point, direction: Param, length: Number, width:
     return filament(start, direction, width, seg_length, n_segments)
 
 
-def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
-                     length: Number = 40, len_dev: float = 0.25,
-                     width: Number = 5) -> List[Point]:
+def _blow_paint_edge(
+    start: Point,
+    end: Point,
+    spacing: Number = 20,
+    length: Number = 40,
+    len_dev: float = 0.25,
+    width: Number = 5,
+) -> List[Point]:
     """Draw blow-paint shapes along an edge.
 
     Creates 'fingers' of paint along the edge, as if being blown along
@@ -162,8 +175,7 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
         interpolate(pts_out, min(20, le / 3))
         # spread base and bulb:
         pts_out[0] = move_toward(pts_out[0], start, width / 2)
-        pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], math.pi / 2,
-                                      width / 6)
+        pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], math.pi / 2, width / 6)
         pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3)
 
         p3 = move_toward(loc, end, width / 2)
@@ -171,8 +183,7 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
         pts_in = [p4, p3]
         interpolate(pts_in, min(20, le / 3))
         pts_in[-1] = move_toward(pts_in[-1], end, width / 2)
-        pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -math.pi / 2,
-                                    width / 6)
+        pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -math.pi / 2, width / 6)
         pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3)
 
         pts.extend(pts_out)
@@ -183,9 +194,13 @@ def _blow_paint_edge(start: Point, end: Point, spacing: Number = 20,
     return pts
 
 
-def blow_paint_area(points: Sequence[Point], spacing: Number = 20,
-                    length: Number = 40, len_dev: float = 0.25,
-                    width: Number = 5) -> dict:
+def blow_paint_area(
+    points: Sequence[Point],
+    spacing: Number = 20,
+    length: Number = 40,
+    len_dev: float = 0.25,
+    width: Number = 5,
+) -> dict:
     """Draw a blow-paint effect around an area.
 
     Creates 'fingers' of paint projecting from each edge, as if being
@@ -205,14 +220,20 @@ def blow_paint_area(points: Sequence[Point], spacing: Number = 20,
     points.append(points[0])
     pts = []
     for i in range(len(points) - 1):
-        pts.extend(_blow_paint_edge(points[i], points[i + 1], spacing,
-                                    length, len_dev, width))
+        pts.extend(
+            _blow_paint_edge(points[i], points[i + 1], spacing, length, len_dev, width)
+        )
     return spline(points=pts, circular=True, smoothing=0.4)
 
 
-def blow_paint_line(points: Sequence[Point], line_width: Number = 10,
-                    spacing: Number = 20, length: Number = 20,
-                    len_dev: float = 0.33, width: Number = 5) -> dict:
+def blow_paint_line(
+    points: Sequence[Point],
+    line_width: Number = 10,
+    spacing: Number = 20,
+    length: Number = 20,
+    len_dev: float = 0.33,
+    width: Number = 5,
+) -> dict:
     """Draw a blow-paint effect connecting a sequence of points.
 
     Creates 'fingers' of paint projecting from each edge, as if being
@@ -233,8 +254,9 @@ def blow_paint_line(points: Sequence[Point], line_width: Number = 10,
     return blow_paint_area(pts, spacing, length, len_dev, width)
 
 
-def blow_paint_spot(point: Point, length: Number = 10, len_dev: float
-                    = 0.7, width: Number = 3) -> dict:
+def blow_paint_spot(
+    point: Point, length: Number = 10, len_dev: float = 0.7, width: Number = 3
+) -> dict:
     """Draw a paint splatter.
 
     Creates 'fingers' of paint projecting from a point.
@@ -247,14 +269,15 @@ def blow_paint_spot(point: Point, length: Number = 10, len_dev: float
         width: Average thickness of each finger.
 
     """
-    le = 10                     # Length of hexagon edge.
+    le = 10  # Length of hexagon edge.
     offset = np.random.uniform(0, 60)
     pts = [endpoint(point, rad(i * 60 + offset), le) for i in range(6)]
     return blow_paint_area(pts, le - 1, length, len_dev, width)
 
 
-def tree(start: Point, direction: Number, branch_length: Param, theta:
-         Param, p: Param) -> List[dict]:
+def tree(
+    start: Point, direction: Number, branch_length: Param, theta: Param, p: Param
+) -> List[dict]:
     """Generate a tree with randomly terminating branches.
 
     Args:
@@ -281,15 +304,12 @@ def tree(start: Point, direction: Number, branch_length: Param, theta:
     x = [line(p1=start, p2=end)]
     if np.random.random() < p.value():
         theta_this = theta.value()
-        x.extend(tree(end, direction + theta_this / 2, branch_length,
-                      theta, p))
-        x.extend(tree(end, direction - theta_this / 2, branch_length,
-                      theta, p))
+        x.extend(tree(end, direction + theta_this / 2, branch_length, theta, p))
+        x.extend(tree(end, direction - theta_this / 2, branch_length, theta, p))
     return x
 
 
-def wave(start: Point, direction: Number, period: Number, length:
-         Number) -> dict:
+def wave(start: Point, direction: Number, period: Number, length: Number) -> dict:
     """Generate a wave spline.
 
     The wave is generated as a series of points generated with
@@ -318,10 +338,11 @@ def wave(start: Point, direction: Number, period: Number, length:
     # Period and phase are chosen such that positive values come in pairs
     # in each phase.  Then, Add half (2/4) of a phase's positive deltas to
     # desired direction to start off in correct direction for phase 180.
-    direc = Param(direction,
-                  delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
-    direc.values(3)                 # Start wave in correct direction.
+    direc = Param(direction, delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
+    direc.values(3)  # Start wave in correct direction.
+
     def dist_fun():
         return (np.pi * period.value()) / (2 * 10)
+
     x = Wander(start=start, direction=direc, distance=dist_fun)
     return spline(points=x.values(n_pts))

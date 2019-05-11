@@ -9,10 +9,18 @@ import math
 import numpy as np
 from typing import Union, Tuple, List
 
-from .main import shuffled, geom_seq, set_style
-from .geom import points_on_line, points_on_arc, scale_points, translate_points
-from .geom import horizontal_range, endpoint, deg
-from .shapes import circle, spline
+from .main import shuffled, geom_seq
+from .geom import (
+    points_on_line,
+    points_on_arc,
+    scale_points,
+    translate_points,
+    horizontal_range,
+    endpoint,
+    deg,
+    jitter_points,
+)
+from .shapes import circle, spline, set_style
 from .color import Color
 
 Number = Union[int, float]
@@ -928,15 +936,6 @@ def text_points(text: str, height: Number, pt_spacing: Number, char_spacing:
         return strokes
 
 
-# def position_text(text, position, align='left'):
-#     if align == 'left':
-#         dx = position[0]
-#     elif align == 'center':
-#         w = max([p[0] for p in flatten(text)])
-#         dx = position[0] - w / 2.
-#     translate_points(text, dx, position[1])
-
-
 def splatter_text(text: str, height: Number, spread: Number, density:
                   Number, min_size: Number, max_size: Number, color:
                   Color) -> List[dict]:
@@ -949,7 +948,7 @@ def splatter_text(text: str, height: Number, spread: Number, density:
         density: Number of dots per pixel.
         min_size: The smallest dot radius.
         max_size: The largest dot radius.
-        color: A fill color or function.
+        color: A fill Color.
 
     Returns:
         A list of circle shapes (in random order).
@@ -957,10 +956,9 @@ def splatter_text(text: str, height: Number, spread: Number, density:
     """
     spacing = 1. / density
     points = text_points(text, height, spacing, 0.15)
-    jitter_points(points, spread, 'gaussian')
+    jitter_points(points, spread)
     size = shuffled(geom_seq(max_size, min_size, len(points)))
-    x = [circle(c=p, r=size[i]) for i, p in enumerate(points)]
-    set_style(x, 'fill', color)
+    x = [circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
     return shuffled(x)
 
 
@@ -1022,8 +1020,7 @@ def hazy_text(text: str, height: Number, spread: Number, density:
     sizes = [min_size + (1 - d) * (max_size - min_size) for d in
              rel_sqrt_dists]
     points = [endpoint(p, angles[i], dists[i]) for i, p in enumerate(points)]
-    x = [circle(c=p, r=sizes[i]) for i, p in enumerate(points)]
-    set_style(x, 'fill', color)
+    x = [circle(c=p, r=sizes[i], fill=color) for i, p in enumerate(points)]
     return shuffled(x)
 
 
@@ -1045,10 +1042,8 @@ def squiggle_text(text: str, height: Number, spread: Number, density:
     strokes = text_points(text, height, pt_spacing=spacing,
                           char_spacing=0.2, grouping='strokes')
     for stroke in strokes:
-        jitter_points(stroke, spread, type='uniform')
-    splines = [spline(points=stroke) for stroke in strokes]
-    set_style(splines, 'fill', 'none')
-    set_style(splines, 'stroke', 'black')
+        jitter_points(stroke, spread)
+    splines = [spline(points=stroke, fill='none', stroke='black') for stroke in strokes]
     return splines
 
 

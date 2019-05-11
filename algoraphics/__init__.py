@@ -8,6 +8,7 @@ from .geom import *
 from .grid import *
 from .images import *
 from .main import *
+from .mazes import *
 from .param import *
 from .ripples import *
 from .shapes import *

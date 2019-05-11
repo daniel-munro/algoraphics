@@ -10,10 +10,16 @@ import numpy as np
 from scipy import spatial
 from typing import Union, Tuple, List, Sequence
 
-from .main import set_style, add_margin, bounding_box, region_background
-from .shapes import rotated_bounding_box, rotate_shapes, keep_shapes_inside
-from .shapes import polygon, line
-from .geom import Rtree, distance, midpoint
+from .main import add_margin, bounding_box, region_background
+from .shapes import (
+    rotated_bounding_box,
+    rotate_shapes,
+    keep_shapes_inside,
+    polygon,
+    line,
+    set_style,
+)
+from .geom import midpoint, spaced_points
 from .color import Color
 
 Number = Union[int, float]
@@ -21,47 +27,6 @@ Point = Tuple[Number, Number]
 Bounds = Tuple[Number, Number, Number, Number]
 Collection = Union[list, dict]
 
-
-def spaced_points(n: int, bounds: Bounds, n_cand: int = 10) -> List[Point]:
-    """Generate random but evenly-spaced points.
-
-    Uses Mitchell's best-candidate algorithm.
-
-    Args:
-        n: Number of points to generate.
-        bounds: A bounds tuple.
-        n_cand: Number of candidate points to generate for each output
-          point.  Higher numbers result in higher regularity.
-
-    Returns:
-        The generated points.
-
-    """
-    x_min, y_min, x_max, y_max = bounds
-    points = [(np.random.uniform(x_min, x_max),
-               np.random.uniform(y_min, y_max))]
-    idx = Rtree(points)
-
-    for i in range(1, n):
-        best_distance = 0
-        for j in range(n_cand):
-            cand = (np.random.uniform(x_min, x_max),
-                    np.random.uniform(y_min, y_max))
-            nearest = idx.nearest(cand)
-            dist = distance(nearest, cand)
-            if dist > best_distance:
-                best_distance = dist
-                best_candidate = cand
-        points.append(best_candidate)
-        idx.add_point(best_candidate)
-    return points
-
-
-# this version always returns list with elements corresponding to input points (i.e. returns None for point with no region), but I don't think this is useful.
-# def voronoi_regions(points):
-#     vor = spatial.Voronoi(np.array(points))
-#     regions = [[tuple(vor.vertices[i]) for i in region] if -1 not in region else None for region in vor.regions]
-#     return [regions[i] if i != -1 else None for i in vor.point_region]
 
 def voronoi_regions(points: Sequence[Point]) -> List[dict]:
     """Find Voronoi regions for a set of points.
@@ -76,11 +41,14 @@ def voronoi_regions(points: Sequence[Point]) -> List[dict]:
 
     """
     vor = spatial.Voronoi(np.array(points))
-    regions = [[tuple(vor.vertices[i]) for i in region] for region in
-               vor.regions if -1 not in region and len(region) > 0]
+    regions = [
+        [tuple(vor.vertices[i]) for i in region]
+        for region in vor.regions
+        if -1 not in region and len(region) > 0
+    ]
     polygons = [polygon(points=region) for region in regions]
-    set_style(polygons, 'stroke', 'match')
-    set_style(polygons, 'stroke-width', 0.3)
+    set_style(polygons, "stroke", "match")
+    set_style(polygons, "stroke-width", 0.3)
     return polygons
 
 
@@ -95,8 +63,11 @@ def voronoi_edges(points: Sequence[Point]) -> List[dict]:
 
     """
     vor = spatial.Voronoi(np.array(points))
-    edges = [[tuple(vor.vertices[i]) for i in edge] for edge in
-             vor.ridge_vertices if -1 not in edge]
+    edges = [
+        [tuple(vor.vertices[i]) for i in edge]
+        for edge in vor.ridge_vertices
+        if -1 not in edge
+    ]
     return [line(p1=edge[0], p2=edge[1]) for edge in edges]
 
 
@@ -116,8 +87,8 @@ def delaunay_regions(points: Sequence[Point]) -> List[dict]:
     tri = spatial.Delaunay(np.array(points))
     regions = [[points[i] for i in region] for region in tri.simplices]
     polygons = [polygon(points=region) for region in regions]
-    set_style(polygons, 'stroke', 'match')
-    set_style(polygons, 'stroke-width', 1)
+    set_style(polygons, "stroke", "match")
+    set_style(polygons, "stroke-width", 1)
     return polygons
 
 
@@ -144,9 +115,13 @@ def delaunay_edges(points: Sequence[Point]) -> List[dict]:
     return [line(p1=ed[0], p2=ed[1]) for ed in edges]
 
 
-def tile_region(outline: Collection, shape: str = 'polygon', edges:
-                bool = False, tile_size: Number = 500, regularity:
-                int = 10) -> dict:
+def tile_region(
+    outline: Collection,
+    shape: str = "polygon",
+    edges: bool = False,
+    tile_size: Number = 500,
+    regularity: int = 10,
+) -> dict:
     """Fill region with (uncolored) tiles or tile edges.
 
     Args:
@@ -167,22 +142,27 @@ def tile_region(outline: Collection, shape: str = 'polygon', edges:
     h = bounds[3] - bounds[1]
     n_points = int(float(w * h) / tile_size)
     points = spaced_points(n_points, bounds, regularity)
-    if shape == 'polygon' and not edges:
+    if shape == "polygon" and not edges:
         tiles = voronoi_regions(points)
-    elif shape == 'polygon' and edges:
+    elif shape == "polygon" and edges:
         tiles = voronoi_edges(points)
-    elif shape == 'triangle' and not edges:
+    elif shape == "triangle" and not edges:
         tiles = delaunay_regions(points)
-    elif shape == 'triangle' and edges:
+    elif shape == "triangle" and edges:
         tiles = delaunay_edges(points)
     else:
         raise ValueError("Invalid tile specification.")
-    return dict(type='group', clip=outline, members=tiles)
+    return dict(type="group", clip=outline, members=tiles)
 
 
-def tile_canvas(w: Number, h: Number, shape: str = 'polygon', edges:
-                bool = False, tile_size: Number = 500, regularity: int
-                = 10) -> List[dict]:
+def tile_canvas(
+    w: Number,
+    h: Number,
+    shape: str = "polygon",
+    edges: bool = False,
+    tile_size: Number = 500,
+    regularity: int = 10,
+) -> List[dict]:
     """Fill canvas with (uncolored) tiles.
 
     Args:
@@ -205,21 +185,22 @@ def tile_canvas(w: Number, h: Number, shape: str = 'polygon', edges:
     h = bounds[3] - bounds[1]
     n_points = int(float(w * h) / tile_size)
     points = spaced_points(n_points, bounds, regularity)
-    if shape == 'polygon' and not edges:
+    if shape == "polygon" and not edges:
         tiles = voronoi_regions(points)
-    elif shape == 'polygon' and edges:
+    elif shape == "polygon" and edges:
         tiles = voronoi_edges(points)
-    elif shape == 'triangle' and not edges:
+    elif shape == "triangle" and not edges:
         tiles = delaunay_regions(points)
-    elif shape == 'triangle' and edges:
+    elif shape == "triangle" and edges:
         tiles = delaunay_edges(points)
     else:
         raise ValueError("Invalid tile specification.")
     return tiles
 
 
-def nested_triangles(tip: Point, height: Number, min_level: int,
-                     max_level: int) -> List[dict]:
+def nested_triangles(
+    tip: Point, height: Number, min_level: int, max_level: int
+) -> List[dict]:
     """Generate nested equilateral triangles.
 
     Args:
@@ -234,18 +215,17 @@ def nested_triangles(tip: Point, height: Number, min_level: int,
         A list of triangle polygon shapes.
 
     """
+
     def process_triangle(tip, height, level, triangles):
         b1 = (tip[0] - height / math.sqrt(3), tip[1] - height)
         b2 = (tip[0] + height / math.sqrt(3), tip[1] - height)
-        if ((level < min_level) or (level < max_level and
-                                    np.random.random() < 0.75)):
+        if (level < min_level) or (level < max_level and np.random.random() < 0.75):
             process_triangle(tip, height / 2, level + 1, triangles)
-            process_triangle(midpoint(tip, b1), height / 2,
-                             level + 1, triangles)
-            process_triangle(midpoint(tip, b2), height / 2,
-                             level + 1, triangles)
-            process_triangle((tip[0], tip[1] - height),
-                             -height / 2, level + 1, triangles)
+            process_triangle(midpoint(tip, b1), height / 2, level + 1, triangles)
+            process_triangle(midpoint(tip, b2), height / 2, level + 1, triangles)
+            process_triangle(
+                (tip[0], tip[1] - height), -height / 2, level + 1, triangles
+            )
         elif height > 0:  # only draw upward-pointing triangles
             triangles.append(polygon(points=[tip, b1, b2]))
 
@@ -254,9 +234,13 @@ def nested_triangles(tip: Point, height: Number, min_level: int,
     return triangles
 
 
-def fill_nested_triangles(outline: Collection, min_level: int,
-                          max_level: int, color: Color = None, color2:
-                          Color = None) -> dict:
+def fill_nested_triangles(
+    outline: Collection,
+    min_level: int,
+    max_level: int,
+    color: Color = None,
+    color2: Color = None,
+) -> dict:
     """Fill region with nested triangle pattern.
 
     Args:
@@ -280,9 +264,9 @@ def fill_nested_triangles(outline: Collection, min_level: int,
     triangles = nested_triangles(tip, height, min_level, max_level)
     rotate_shapes(triangles, rotation)
     keep_shapes_inside(triangles, outline)
-    region = dict(type='group', clip=outline, members=triangles)
+    region = dict(type="group", clip=outline, members=triangles)
     if color is not None:
-        set_style(region['members'], 'fill', color)
+        set_style(region["members"], "fill", color)
     if color2 is not None:
         region_background(region, color2)
     return region

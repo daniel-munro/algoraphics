@@ -724,14 +724,7 @@ nearest points.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>p1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – First point.</li>
-<li><strong>p2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – Second point.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1056,10 +1049,10 @@ width, the outline of the stroke is returned.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> – Starting point.</li>
-<li><strong>ref</strong> – A reference point.</li>
-<li><strong>angle</strong> – The angle to rotate <code class="docutils literal notranslate"><span class="pre">ref</span></code> around start.</li>
-<li><strong>distance</strong> – The distance to move from <code class="docutils literal notranslate"><span class="pre">start</span></code>.</li>
+<li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – Starting point.</li>
+<li><strong>ref</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A reference point.</li>
+<li><strong>angle</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The angle in radians to rotate <code class="docutils literal notranslate"><span class="pre">ref</span></code> around start.</li>
+<li><strong>distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The distance to move from <code class="docutils literal notranslate"><span class="pre">start</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1156,6 +1149,33 @@ the horizontal scaling factor.</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.geom.spaced_points">
+<code class="descclassname">algoraphics.geom.</code><code class="descname">spaced_points</code><span class="sig-paren">(</span><em>n</em>, <em>bounds</em>, <em>n_cand=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.spaced_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random but evenly-spaced points.</p>
+<p>Uses Mitchell’s best-candidate algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of points to generate.</li>
+<li><strong>bounds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A bounds tuple.</li>
+<li><strong>n_cand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of candidate points to generate for each output
+point.  Higher numbers result in higher regularity.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The generated points.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.geom.translate_points">
 <code class="descclassname">algoraphics.geom.</code><code class="descname">translate_points</code><span class="sig-paren">(</span><em>points</em>, <em>dx</em>, <em>dy</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.geom.translate_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift the location of points.</p>
@@ -1199,203 +1219,7 @@ the horizontal scaling factor.</li>
 </div>
 <span class="target" id="module-algoraphics.grid"></span><div class="section" id="grid-py">
 <h2>grid.py<a class="headerlink" href="#grid-py" title="Permalink to this headline">¶</a></h2>
-<p>Functions for grids, including creating maze-like patterns.</p>
-<dl class="class">
-<dt id="algoraphics.grid.Maze_Style">
-<em class="property">class </em><code class="descclassname">algoraphics.grid.</code><code class="descname">Maze_Style</code><a class="headerlink" href="#algoraphics.grid.Maze_Style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Specifications for maze styles.</p>
-<p>Built-in styles inherit from this class, and custom styles can be
-made to do so as well.  It must implement the tip, turn, straight,
-T, and cross methods to describe how each component is drawn.</p>
-<p>Each of these methods should generate forms for one cell of the
-maze.  They must provide one or more pieces which are stitched
-together when the maze is assembled.  For example, for a cell in
-which the maze turns right, the inner and outer edges of the curve
-are generated.  Once this cell is encountered in the stitching
-process, the inner edge is added, then everything from the cell to
-the right is recursively added, and then the outer edge is added
-to get one continuous edge.</p>
-<p>For all methods the edge enters below and draws the component
-counter-clockwise.  During maze generation components are
-generated and then rotated as needed to accomodate any combination
-of neighbors that the cell should connect to.</p>
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.T">
-<code class="descname">T</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.T" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a ‘T’-shaped cell.</p>
-<p>This should return a tuple of three lists of path commands
-corresponding to the right inner edge, top edge, and then left
-inner edge.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.cross">
-<code class="descname">cross</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.cross" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a cell connecting in all directions.</p>
-<p>This should return a tuple of four lists of path commands
-corresponding to the lower-right, upper-right, upper-left, and
-lower-left inner edges.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.output">
-<code class="descname">output</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the output shape/s from the generated points.</p>
-<p>This takes the maze outline points and produces the intended
-shape/s, e.g. polygon or spline.  Returns a polygon by
-default.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.straight">
-<code class="descname">straight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.straight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a non-turning cell.</p>
-<p>This should return a tuple of two lists of path commands
-corresponding to the right and then left edges.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.tip">
-<code class="descname">tip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.tip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a dead-end cell.</p>
-<p>This should return a list of path command dictionaries.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style.turn">
-<code class="descname">turn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style.turn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a right turn cell.</p>
-<p>This should return a tuple of two lists of path commands
-corresponding to the inner and then outer edges.</p>
-<p>Left turns will be drawn with this and then rotated.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="algoraphics.grid.Maze_Style_Jagged">
-<em class="property">class </em><code class="descclassname">algoraphics.grid.</code><code class="descname">Maze_Style_Jagged</code><span class="sig-paren">(</span><em>min_w</em>, <em>max_w</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Jagged" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate pieces for jagged maze.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>min_w</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Minimum width of channel segment relative to cell width.</li>
-<li><strong>max_w</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Maximum width of channel segment relative to cell width.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="algoraphics.grid.Maze_Style_Pipes">
-<em class="property">class </em><code class="descclassname">algoraphics.grid.</code><code class="descname">Maze_Style_Pipes</code><span class="sig-paren">(</span><em>rel_thickness</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Pipes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate pieces for curved pipes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Channel width relative to cell width, from 0 to 1.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="algoraphics.grid.Maze_Style_Pipes.output">
-<code class="descname">output</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Pipes.output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the output shape/s from the generated points.</p>
-<p>This takes the maze outline points and produces the intended
-shape/s, e.g. polygon or spline.  Returns a polygon by
-default.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="algoraphics.grid.Maze_Style_Round">
-<em class="property">class </em><code class="descclassname">algoraphics.grid.</code><code class="descname">Maze_Style_Round</code><span class="sig-paren">(</span><em>rel_thickness</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Round" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate pieces for very curvy pipes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Channel width relative to cell width, from 0 to 1.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="algoraphics.grid.Maze_Style_Straight">
-<em class="property">class </em><code class="descclassname">algoraphics.grid.</code><code class="descname">Maze_Style_Straight</code><span class="sig-paren">(</span><em>rel_thickness</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.Maze_Style_Straight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate pieces for simple right-angle maze.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rel_thickness</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Channel width relative to cell width, from 0 to 1.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.grid.fill_maze">
-<code class="descclassname">algoraphics.grid.</code><code class="descname">fill_maze</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing</em>, <em>style</em>, <em>rotation=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.fill_maze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill a region with a maze-like pattern.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – The shape/s that will become the clip.</li>
-<li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The cell width of the grid.</li>
-<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.grid.Maze_Style" title="algoraphics.grid.Maze_Style"><code class="xref py py-class docutils literal notranslate"><span class="pre">Maze_Style</span></code></a>) – An object specifying how the maze path is to be drawn.</li>
-<li><strong>rotation</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The orientation of the grid in degrees.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group with clip.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.grid.fill_maze_hue_rotate">
-<code class="descclassname">algoraphics.grid.</code><code class="descname">fill_maze_hue_rotate</code><span class="sig-paren">(</span><em>outline</em>, <em>spacing</em>, <em>style</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.fill_maze_hue_rotate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fill a region with mazes with hue-dependent orientation.</p>
-<p>Used for texturing image regions so that adjacent regions of
-similar color blend together while contrasting with regions of
-different color.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – The shape/s that will become the clip.</li>
-<li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The cell width of the grid.</li>
-<li><strong>style</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – An object specifying how the maze path is to be drawn.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – The fill color for the maze.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group with clip.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+<p>Functions for working with grids.</p>
 <dl class="function">
 <dt id="algoraphics.grid.grid_tree">
 <code class="descclassname">algoraphics.grid.</code><code class="descname">grid_tree</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.grid_tree" title="Permalink to this definition">¶</a></dt>
@@ -1500,81 +1324,10 @@ it.</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="algoraphics.grid.maze">
-<code class="descclassname">algoraphics.grid.</code><code class="descname">maze</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em>, <em>spacing</em>, <em>start</em>, <em>style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.grid.maze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a maze-like pattern spanning the specified grid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>rows</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of rows in the grid.</li>
-<li><strong>cols</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of columns in the grid.</li>
-<li><strong>spacing</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The cell width.</li>
-<li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The bottom-left coordinate of the grid.</li>
-<li><strong>style</strong> (<a class="reference internal" href="#algoraphics.grid.Maze_Style" title="algoraphics.grid.Maze_Style"><code class="xref py py-class docutils literal notranslate"><span class="pre">Maze_Style</span></code></a>) – An object specifying how the maze path is to be drawn.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A path shape.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <span class="target" id="module-algoraphics.images"></span><div class="section" id="images-py">
 <h2>images.py<a class="headerlink" href="#images-py" title="Permalink to this headline">¶</a></h2>
 <p>Generate graphics based on images.</p>
-<dl class="function">
-<dt id="algoraphics.images.array_to_image">
-<code class="descclassname">algoraphics.images.</code><code class="descname">array_to_image</code><span class="sig-paren">(</span><em>array</em>, <em>scale=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.array_to_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an image from a 2D or 3D array.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> – A numpy array: 2D for grayscale or 3D for RGB.</li>
-<li><strong>scale</strong> – If True, values in 2D array will be scaled so that the
-highest values are 255 (white).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL Image in RGB mode.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.images.encode_image">
-<code class="descclassname">algoraphics.images.</code><code class="descname">encode_image</code><span class="sig-paren">(</span><em>image</em>, <em>frmt</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.encode_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encode an image as a data string.</p>
-<p>Used to embed images in SVG.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> – A PIL Image.</li>
-<li><strong>frmt</strong> – Either ‘JPEG’ or ‘PNG’.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The image encoding.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="function">
 <dt id="algoraphics.images.fill_shapes_from_image">
 <code class="descclassname">algoraphics.images.</code><code class="descname">fill_shapes_from_image</code><span class="sig-paren">(</span><em>shapes</em>, <em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.fill_shapes_from_image" title="Permalink to this definition">¶</a></dt>
@@ -1853,33 +1606,6 @@ issues at the edges of the region or canvas.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.main.background">
-<code class="descclassname">algoraphics.main.</code><code class="descname">background</code><span class="sig-paren">(</span><em>fill</em>, <em>w</em>, <em>h</em>, <em>margin=1</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.background" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a background color for the canvas.</p>
-<p>See <code class="docutils literal notranslate"><span class="pre">region_background()</span></code> to set background for a specific region.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fill</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – The background color.</li>
-<li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – width of canvas.</li>
-<li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – height of canvas.</li>
-<li><strong>margin</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – width of margin to include to avoid edge artifacts.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A filled rectangular polygon covering the canvas.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.main.flatten">
 <code class="descclassname">algoraphics.main.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.flatten" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a flattened list from a nested list.</p>
@@ -1995,26 +1721,6 @@ arranged on top of larger ones that surround them.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.main.set_style">
-<code class="descclassname">algoraphics.main.</code><code class="descname">set_style</code><span class="sig-paren">(</span><em>obj</em>, <em>attribute</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.set_style" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set style attribute of one or more shapes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>obj</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – A shape or (nested) list of shapes.</li>
-<li><strong>attribute</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the style attribute.</li>
-<li><strong>value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>]) – Either a single value, Color, Param, or a function that
-returns values when called with no arguments.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.main.shuffled">
 <code class="descclassname">algoraphics.main.</code><code class="descname">shuffled</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.shuffled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create shuffled version of a list.</p>
@@ -2068,7 +1774,7 @@ returns values when called with no arguments.</li>
 <li><strong>high</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The maximum value (wave peak).</li>
 <li><strong>period</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The number of values returned per oscillation.  It
 need not be an integer.</li>
-<li><strong>phase</strong> – The starting offset of sine oscillation in degrees.
+<li><strong>phase</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The starting offset of sine oscillation in degrees.
 The default of zero starts halfway between <code class="docutils literal notranslate"><span class="pre">low</span></code> and
 <code class="docutils literal notranslate"><span class="pre">high</span></code> and increases.</li>
 </ul>
@@ -2342,7 +2048,7 @@ another (second key).</li>
 
 <dl class="function">
 <dt id="algoraphics.shapes.circle">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.circle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">circle</code><span class="sig-paren">(</span><em>c</em>, <em>r</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.circle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a circle shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2423,7 +2129,7 @@ input shapes.</td>
 
 <dl class="function">
 <dt id="algoraphics.shapes.line">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">line</code><span class="sig-paren">(</span><em>p1=None</em>, <em>p2=None</em>, <em>points=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.line" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">line</code><span class="sig-paren">(</span><em>p1=None</em>, <em>p2=None</em>, <em>points=None</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.line" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a line or polyline shape.</p>
 <p>Supply either <code class="docutils literal notranslate"><span class="pre">p1</span></code> and <code class="docutils literal notranslate"><span class="pre">p2</span></code> for a line or <code class="docutils literal notranslate"><span class="pre">points</span></code> for a polyline.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2449,7 +2155,7 @@ input shapes.</td>
 
 <dl class="function">
 <dt id="algoraphics.shapes.polygon">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.polygon" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">polygon</code><span class="sig-paren">(</span><em>points</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.polygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a polygon shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2485,7 +2191,7 @@ input shapes.</td>
 
 <dl class="function">
 <dt id="algoraphics.shapes.rectangle">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.rectangle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">rectangle</code><span class="sig-paren">(</span><em>start=None</em>, <em>w=None</em>, <em>h=None</em>, <em>bounds=None</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a rectangular polygon shape.</p>
 <p>Provide either start + w + h or a bounds tuple.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2641,8 +2347,28 @@ place.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="algoraphics.shapes.set_style">
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">set_style</code><span class="sig-paren">(</span><em>obj</em>, <em>attribute</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.set_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set style attribute of one or more shapes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A shape or (nested) list of shapes.</li>
+<li><strong>attribute</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the style attribute.</li>
+<li><strong>value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>]) – Either a single value, Color, Param, or a function that
+returns values when called with no arguments.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.shapes.spline">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>smoothing=0.3</em>, <em>circular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>smoothing=0.2</em>, <em>circular=False</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a spline shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2919,6 +2645,26 @@ are approximate.</p>
 <h2>svg.py<a class="headerlink" href="#svg-py" title="Permalink to this headline">¶</a></h2>
 <p>write SVG files.</p>
 <dl class="function">
+<dt id="algoraphics.svg.svg_string">
+<code class="descclassname">algoraphics.svg.</code><code class="descname">svg_string</code><span class="sig-paren">(</span><em>objects</em>, <em>w</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.svg_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an SVG string for a collection of objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>objects</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A (nested) collection of objects.  They are placed
+onto the canvas in order after flattening.</li>
+<li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
+<li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="algoraphics.svg.to_PNG">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">to_PNG</code><span class="sig-paren">(</span><em>infile</em>, <em>outfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.to_PNG" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert and SVG file to a PNG image.</p>
@@ -3115,7 +2861,7 @@ square root of deviation, and points are uniformly jittered.</p>
 <li><strong>density</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Number of dots per pixel.</li>
 <li><strong>min_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The smallest dot radius.</li>
 <li><strong>max_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The largest dot radius.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – A fill color or function.</li>
+<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – A fill Color.</li>
 </ul>
 </td>
 </tr>
@@ -3223,6 +2969,28 @@ one shadow for the composite object.</p>
 <li><strong>stdev</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Standard deviation of the shadow gradient.</li>
 <li><strong>darkness</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – A number below one for lighter shadow, above one for darker.</li>
 </ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.textures.array_to_image">
+<code class="descclassname">algoraphics.textures.</code><code class="descname">array_to_image</code><span class="sig-paren">(</span><em>array</em>, <em>scale=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.array_to_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an image from a 2D or 3D array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> – A numpy array: 2D for grayscale or 3D for RGB.</li>
+<li><strong>scale</strong> – If True, values in 2D array will be scaled so that the
+highest values are 255 (white).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PIL Image in RGB mode.</p>
 </td>
 </tr>
 </tbody>
@@ -3448,33 +3216,6 @@ bounding triangle).</li>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of triangle polygon shapes.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.tiling.spaced_points">
-<code class="descclassname">algoraphics.tiling.</code><code class="descname">spaced_points</code><span class="sig-paren">(</span><em>n</em>, <em>bounds</em>, <em>n_cand=10</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.tiling.spaced_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate random but evenly-spaced points.</p>
-<p>Uses Mitchell’s best-candidate algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of points to generate.</li>
-<li><strong>bounds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A bounds tuple.</li>
-<li><strong>n_cand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of candidate points to generate for each output
-point.  Higher numbers result in higher regularity.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The generated points.</p>
 </td>
 </tr>
 </tbody>

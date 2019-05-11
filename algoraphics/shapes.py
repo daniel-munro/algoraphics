@@ -11,11 +11,20 @@ import copy
 from PIL import Image
 from shapely.geometry import Polygon, GeometryCollection
 from shapely.geometry import Point as SPoint
-from typing import Sequence, Tuple, Union, List
+from typing import Sequence, Tuple, Union, List, Callable
 
-from .geom import translated_point, rotated_point, scale_points, scaled_point
-from .geom import distance, endpoint, rad, jitter_points, interpolate
-from .param import fixed_value, make_param
+from .geom import (
+    translated_point,
+    rotated_point,
+    scale_points,
+    scaled_point,
+    endpoint,
+    rad,
+    jitter_points,
+    interpolate,
+)
+from .param import fixed_value, Param
+from .color import Color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -23,7 +32,7 @@ Bounds = Tuple[Number, Number, Number, Number]
 Collection = Union[list, dict]
 
 
-def polygon(points: Sequence[Point]) -> dict:
+def polygon(points: Sequence[Point], **style) -> dict:
     """Create a polygon shape.
 
     Args:
@@ -33,11 +42,15 @@ def polygon(points: Sequence[Point]) -> dict:
         A polygon shape.
 
     """
-    return dict(type='polygon', points=points)
+    shape = dict(type="polygon", points=points)
+    for key, value in style.items():
+        set_style(shape, key, value)
+    return shape
 
 
-def spline(points: Sequence[Point], smoothing: Number = 0.2, circular:
-           bool = False) -> dict:
+def spline(
+    points: Sequence[Point], smoothing: Number = 0.2, circular: bool = False, **style
+) -> dict:
     """Create a spline shape.
 
     Args:
@@ -52,12 +65,15 @@ def spline(points: Sequence[Point], smoothing: Number = 0.2, circular:
         A spline shape.
 
     """
-    return dict(type='spline', points=points, smoothing=smoothing,
-                circular=circular)
+    shape = dict(type="spline", points=points, smoothing=smoothing, circular=circular)
+    for key, value in style.items():
+        set_style(shape, key, value)
+    return shape
 
 
-def line(p1: Point = None, p2: Point = None, points: Sequence[Point] =
-         None) -> dict:
+def line(
+    p1: Point = None, p2: Point = None, points: Sequence[Point] = None, **style
+) -> dict:
     """Create a line or polyline shape.
 
     Supply either ``p1`` and ``p2`` for a line or ``points`` for a polyline.
@@ -72,15 +88,23 @@ def line(p1: Point = None, p2: Point = None, points: Sequence[Point] =
 
     """
     if points is not None:
-        return dict(type='polyline', points=points)
+        shape = dict(type="polyline", points=points)
     else:
         p1 = (fixed_value(p1[0]), fixed_value(p1[1]))
         p2 = (fixed_value(p2[0]), fixed_value(p2[1]))
-        return dict(type='line', p1=p1, p2=p2)
+        shape = dict(type="line", p1=p1, p2=p2)
+    for key, value in style.items():
+        set_style(shape, key, value)
+    return shape
 
 
-def rectangle(start: Point = None, w: Number = None, h: Number = None,
-              bounds: Bounds = None) -> dict:
+def rectangle(
+    start: Point = None,
+    w: Number = None,
+    h: Number = None,
+    bounds: Bounds = None,
+    **style
+) -> dict:
     """Create a rectangular polygon shape.
 
     Provide either start + w + h or a bounds tuple.
@@ -104,17 +128,26 @@ def rectangle(start: Point = None, w: Number = None, h: Number = None,
 
     if start is not None:
         assert w is not None and h is not None
-        pts = [start,
-               (start[0] + w, start[1]),
-               (start[0] + w, start[1] + h),
-               (start[0], start[1] + h)]
+        pts = [
+            start,
+            (start[0] + w, start[1]),
+            (start[0] + w, start[1] + h),
+            (start[0], start[1] + h),
+        ]
     else:
-        pts = [(bounds[0], bounds[1]), (bounds[2], bounds[1]),
-               (bounds[2], bounds[3]), (bounds[0], bounds[3])]
-    return dict(type='polygon', points=pts)
+        pts = [
+            (bounds[0], bounds[1]),
+            (bounds[2], bounds[1]),
+            (bounds[2], bounds[3]),
+            (bounds[0], bounds[3]),
+        ]
+    shape = dict(type="polygon", points=pts)
+    for key, value in style.items():
+        set_style(shape, key, value)
+    return shape
 
 
-def circle(c: Point, r: Number) -> dict:
+def circle(c: Point, r: Number, **style) -> dict:
     """Create a circle shape.
 
     Args:
@@ -127,7 +160,38 @@ def circle(c: Point, r: Number) -> dict:
     """
     c = (fixed_value(c[0]), fixed_value(c[1]))
     r = fixed_value(r)
-    return dict(type='circle', c=c, r=r)
+    shape = dict(type="circle", c=c, r=r)
+    for key, value in style.items():
+        set_style(shape, key, value)
+    return shape
+
+
+def set_style(
+    obj: Collection, attribute: str, value: Union[str, Number, Param, Color, Callable]
+):
+    """Set style attribute of one or more shapes.
+
+    Args:
+        obj: A shape or (nested) list of shapes.
+        attribute: Name of the style attribute.
+        value: Either a single value, Color, Param, or a function that
+          returns values when called with no arguments.
+
+    """
+    if isinstance(obj, list):
+        for o in obj:
+            set_style(o, attribute, value)
+    else:
+        if "style" not in obj:
+            obj["style"] = dict()
+        if isinstance(value, Param):
+            obj["style"][attribute] = value.value()
+        elif type(value) is Color:
+            obj["style"][attribute] = value.hex()
+        elif callable(value):
+            obj["style"][attribute] = value()
+        else:
+            obj["style"][attribute] = value
 
 
 def bounding_box(shapes: Collection) -> Bounds:
@@ -144,19 +208,19 @@ def bounding_box(shapes: Collection) -> Bounds:
         b = list(zip(*[bounding_box(s) for s in shapes]))
         return (min(b[0]), min(b[1]), max(b[2]), max(b[3]))
 
-    elif shapes['type'] == 'group':
-        if 'clip' in shapes:
-            return bounding_box(shapes['clip'])
+    elif shapes["type"] == "group":
+        if "clip" in shapes:
+            return bounding_box(shapes["clip"])
         else:
-            return bounding_box(shapes['members'])
+            return bounding_box(shapes["members"])
 
-    elif 'points' in shapes:
-        x = [p[0] for p in shapes['points']]
-        y = [p[1] for p in shapes['points']]
+    elif "points" in shapes:
+        x = [p[0] for p in shapes["points"]]
+        y = [p[1] for p in shapes["points"]]
         return (min(x), min(y), max(x), max(y))
 
-    elif shapes['type'] == 'circle':
-        c, r = shapes['c'], shapes['r']
+    elif shapes["type"] == "circle":
+        c, r = shapes["c"], shapes["r"]
         return (c[0] - r, c[1] - r, c[0] + r, c[1] + r)
 
 
@@ -191,29 +255,28 @@ def translate_shapes(shapes: Collection, dx: Number, dy: Number):
     if isinstance(shapes, list):
         for shape in shapes:
             translate_shapes(shape, dx, dy)
-    elif shapes['type'] == 'group':
-        translate_shapes(shapes['members'], dx, dy)
-        if 'clip' in shapes:
-            translate_shapes(shapes['clip'], dx, dy)
-    elif 'points' in shapes:
-        pts = shapes['points']
+    elif shapes["type"] == "group":
+        translate_shapes(shapes["members"], dx, dy)
+        if "clip" in shapes:
+            translate_shapes(shapes["clip"], dx, dy)
+    elif "points" in shapes:
+        pts = shapes["points"]
         for i in range(len(pts)):
             pts[i] = translated_point(pts[i], dx, dy)
-    elif shapes['type'] == 'circle':
-        shapes['c'] = translated_point(shapes['c'], dx, dy)
-    elif shapes['type'] == 'line':
-        shapes['p1'] = translated_point(shapes['p1'], dx, dy)
-        shapes['p2'] = translated_point(shapes['p2'], dx, dy)
-    elif shapes['type'] == 'text':
-        shapes['x'] += dx
-        shapes['y'] += dy
-    elif shapes['type'] == 'raster':
-        shapes['x'] += dx
-        shapes['y'] += dy
+    elif shapes["type"] == "circle":
+        shapes["c"] = translated_point(shapes["c"], dx, dy)
+    elif shapes["type"] == "line":
+        shapes["p1"] = translated_point(shapes["p1"], dx, dy)
+        shapes["p2"] = translated_point(shapes["p2"], dx, dy)
+    elif shapes["type"] == "text":
+        shapes["x"] += dx
+        shapes["y"] += dy
+    elif shapes["type"] == "raster":
+        shapes["x"] += dx
+        shapes["y"] += dy
 
 
-def rotate_shapes(shapes: Collection, angle: Number, pivot: Point =
-                  (0, 0)):
+def rotate_shapes(shapes: Collection, angle: Number, pivot: Point = (0, 0)):
     """Rotate one or more shapes around a point.
 
     Args:
@@ -225,19 +288,19 @@ def rotate_shapes(shapes: Collection, angle: Number, pivot: Point =
     if isinstance(shapes, list):
         for shape in shapes:
             rotate_shapes(shape, angle, pivot)
-    elif shapes['type'] == 'group':
-        rotate_shapes(shapes['members'], angle, pivot)
-        if 'clip' in shapes:
-            rotate_shapes(shapes['clip'], angle, pivot)
-    elif 'points' in shapes:
-        pts = shapes['points']
+    elif shapes["type"] == "group":
+        rotate_shapes(shapes["members"], angle, pivot)
+        if "clip" in shapes:
+            rotate_shapes(shapes["clip"], angle, pivot)
+    elif "points" in shapes:
+        pts = shapes["points"]
         for i in range(len(pts)):
             pts[i] = rotated_point(pts[i], pivot, rad(angle))
-    elif shapes['type'] == 'circle':
-        shapes['c'] = rotated_point(shapes['c'], pivot, rad(angle))
-    elif shapes['type'] == 'line':
-        shapes['p1'] = rotated_point(shapes['p1'], pivot, rad(angle))
-        shapes['p2'] = rotated_point(shapes['p2'], pivot, rad(angle))
+    elif shapes["type"] == "circle":
+        shapes["c"] = rotated_point(shapes["c"], pivot, rad(angle))
+    elif shapes["type"] == "line":
+        shapes["p1"] = rotated_point(shapes["p1"], pivot, rad(angle))
+        shapes["p2"] = rotated_point(shapes["p2"], pivot, rad(angle))
 
 
 def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
@@ -253,43 +316,44 @@ def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
     if isinstance(shapes, list):
         for shape in shapes:
             scale_shapes(shape, cx, cy)
-    elif shapes['type'] == 'group':
-        scale_shapes(shapes['members'], cx, cy)
-        if 'clip' in shapes:
-            scale_shapes(shapes['clip'], cx, cy)
-    elif 'points' in shapes:
-        scale_points(shapes['points'], cx, cy)
-    elif shapes['type'] == 'circle':
-        shapes['c'] = scaled_point(shapes['c'], cx, cy)
-        shapes['r'] *= abs(cx)
-    elif shapes['type'] == 'line':
-        shapes['p1'] = scaled_point(shapes['p1'], cx, cy)
-        shapes['p2'] = scaled_point(shapes['p2'], cx, cy)
-    elif shapes['type'] == 'text':
-        shapes['x'] *= cx
-        shapes['y'] *= cy
-    elif shapes['type'] == 'raster':
+    elif shapes["type"] == "group":
+        scale_shapes(shapes["members"], cx, cy)
+        if "clip" in shapes:
+            scale_shapes(shapes["clip"], cx, cy)
+    elif "points" in shapes:
+        scale_points(shapes["points"], cx, cy)
+    elif shapes["type"] == "circle":
+        shapes["c"] = scaled_point(shapes["c"], cx, cy)
+        shapes["r"] *= abs(cx)
+    elif shapes["type"] == "line":
+        shapes["p1"] = scaled_point(shapes["p1"], cx, cy)
+        shapes["p2"] = scaled_point(shapes["p2"], cx, cy)
+    elif shapes["type"] == "text":
+        shapes["x"] *= cx
+        shapes["y"] *= cy
+    elif shapes["type"] == "raster":
         # note: image contents not scaled/flipped!
-        shapes['x'] *= cx
-        shapes['y'] *= cy
+        shapes["x"] *= cx
+        shapes["y"] *= cy
         # for now I only flip image, no actual scaling
         # shapes['w'] *= abs(cx)
         # shapes['h'] *= abs(cy)
 
         if cx < 0:
-            shapes['image'] = shapes['image'].transpose(Image.FLIP_LEFT_RIGHT)
-            if 'w' not in shapes:
-                shapes['w'] = shapes['image'].width
-            shapes['x'] -= shapes['w']
+            shapes["image"] = shapes["image"].transpose(Image.FLIP_LEFT_RIGHT)
+            if "w" not in shapes:
+                shapes["w"] = shapes["image"].width
+            shapes["x"] -= shapes["w"]
         if cy < 0:
-            shapes['image'] = shapes['image'].transpose(Image.FLIP_TOP_BOTTOM)
-            if 'h' not in shapes:
-                shapes['h'] = shapes['image'].height
-            shapes['y'] -= shapes['h']
+            shapes["image"] = shapes["image"].transpose(Image.FLIP_TOP_BOTTOM)
+            if "h" not in shapes:
+                shapes["h"] = shapes["image"].height
+            shapes["y"] -= shapes["h"]
 
 
-def reposition(shapes: Collection, position: Point, h_align: str =
-               'left', v_align: str = 'bottom'):
+def reposition(
+    shapes: Collection, position: Point, h_align: str = "left", v_align: str = "bottom"
+):
     """Align one or more shapes to a reference point.
 
     Args:
@@ -305,18 +369,18 @@ def reposition(shapes: Collection, position: Point, h_align: str =
     """
     x_min, y_min, x_max, y_max = bounding_box(shapes)
 
-    if h_align == 'left':
+    if h_align == "left":
         dx = position[0] - x_min
-    elif h_align == 'center':
+    elif h_align == "center":
         dx = position[0] - np.mean([x_min, x_max])
-    elif h_align == 'right':
+    elif h_align == "right":
         dx = position[0] - x_max
 
-    if v_align == 'bottom':
+    if v_align == "bottom":
         dy = position[1] - y_min
-    elif v_align == 'middle':
+    elif v_align == "middle":
         dy = position[1] - np.mean([y_min, y_max])
-    elif v_align == 'top':
+    elif v_align == "top":
         dy = position[1] - y_max
 
     translate_shapes(shapes, dx, dy)
@@ -340,12 +404,12 @@ def coverage(obj: Collection) -> Union[Polygon, SPoint, GeometryCollection]:
         for o in obj[1:]:
             cover = cover.union(coverage(o))
         return coverage
-    elif 'points' in obj:
-        return Polygon(obj['points'])
-    elif obj['type'] == 'circle':
-        return SPoint(obj['c'][0], obj['c'][1]).buffer(obj['r'])
+    elif "points" in obj:
+        return Polygon(obj["points"])
+    elif obj["type"] == "circle":
+        return SPoint(obj["c"][0], obj["c"][1]).buffer(obj["r"])
     else:
-        print("Can't get coverage for:", obj['type'])
+        print("Can't get coverage for:", obj["type"])
 
 
 def keep_shapes_inside(shapes: Sequence[Collection], boundary: Collection):
@@ -362,10 +426,10 @@ def keep_shapes_inside(shapes: Sequence[Collection], boundary: Collection):
     for i, shape in reversed(list(enumerate(shapes))):
         if isinstance(shape, list):
             keep_shapes_inside(shape, boundary)
-        elif shape['type'] == 'group':
-            if 'clip' in shape:
-                boundary = shape['clip']
-            keep_shapes_inside(shape['members'], boundary)
+        elif shape["type"] == "group":
+            if "clip" in shape:
+                boundary = shape["clip"]
+            keep_shapes_inside(shape["members"], boundary)
         else:
             if not coverage(boundary).intersects(coverage(shape)):
                 del shapes[i]
@@ -381,10 +445,10 @@ def centroid(shape: dict) -> Point:
         A point.
 
     """
-    if 'points' in shape:
-        return Polygon(shape['points']).centroid.coords[0]
-    elif shape['type'] == 'circle':
-        return shape['c']
+    if "points" in shape:
+        return Polygon(shape["points"]).centroid.coords[0]
+    elif shape["type"] == "circle":
+        return shape["c"]
 
 
 def polygon_area(vertices: Sequence[Point]) -> float:
@@ -415,9 +479,11 @@ def sample_points_in_shape(shape: dict, n: int) -> List[Point]:
     points = []
     for i in range(n):
         while True:
-            p = (np.random.uniform(bound[0], bound[2]),
-                 np.random.uniform(bound[1], bound[3]))
-            if SPoint(p[0], p[1]).within(Polygon(shape['points'])):
+            p = (
+                np.random.uniform(bound[0], bound[2]),
+                np.random.uniform(bound[1], bound[3]),
+            )
+            if SPoint(p[0], p[1]).within(Polygon(shape["points"])):
                 points.append(p)
                 break
     return points
@@ -448,14 +514,15 @@ def remove_hidden(shapes: Sequence[Collection]):
         shapes: A list of shapes.
 
     """
+
     def process_list(l, cover):
         for i, item in reversed(list(enumerate(l))):
             if isinstance(item, list):
                 process_list(item, cover)
-            elif item['type'] == 'group':
-                if 'clip' in item:
-                    keep_shapes_inside(item['members'], shapes['clip'])
-                process_list(item['members'], cover)
+            elif item["type"] == "group":
+                if "clip" in item:
+                    keep_shapes_inside(item["members"], shapes["clip"])
+                process_list(item["members"], cover)
             else:
                 shape = coverage(item)
                 if shape.within(cover[0]):
@@ -485,43 +552,43 @@ def wobble(obj: Collection, dev: Number = 2):
     if type(obj) is list:
         for x in obj:
             wobble(x, dev)
-    elif obj['type'] == 'group':
-        for x in obj['members']:
+    elif obj["type"] == "group":
+        for x in obj["members"]:
             wobble(x, dev)
-    elif obj['type'] == 'line':
+    elif obj["type"] == "line":
         _wobble_line(obj, dev)
-    elif obj['type'] == 'polyline':
+    elif obj["type"] == "polyline":
         _wobble_polyline(obj, dev)
-    elif obj['type'] == 'polygon':
+    elif obj["type"] == "polygon":
         _wobble_polygon(obj, dev)
-    elif obj['type'] == 'spline':
-        if obj['circular']:
+    elif obj["type"] == "spline":
+        if obj["circular"]:
             _wobble_polygon(obj, dev)
         else:
             _wobble_polyline(obj, dev)
-    elif obj['type'] == 'circle':
+    elif obj["type"] == "circle":
         _wobble_circle(obj, dev)
 
 
 def _wobble_line(obj: dict, dev: Number):
-    obj['type'] = 'spline'
-    pts = [obj['p1'], obj['p2']]
-    del obj['p1'], obj['p2']
+    obj["type"] = "spline"
+    pts = [obj["p1"], obj["p2"]]
+    del obj["p1"], obj["p2"]
     interpolate(pts, 10)
     jitter_points(pts, dev)
-    obj['points'] = pts
+    obj["points"] = pts
 
 
 def _wobble_polyline(obj: dict, dev: Number):
-    obj['type'] = 'spline'
-    interpolate(obj['points'], 10)
-    jitter_points(obj['points'], dev)
+    obj["type"] = "spline"
+    interpolate(obj["points"], 10)
+    jitter_points(obj["points"], dev)
 
 
 def _wobble_polygon(obj: dict, dev: Number):
-    obj['type'] = 'spline'
-    obj['circular'] = True
-    pts = obj['points']
+    obj["type"] = "spline"
+    obj["circular"] = True
+    pts = obj["points"]
     pts.append(pts[0])
     interpolate(pts, 10)
     del pts[-1]
@@ -529,12 +596,12 @@ def _wobble_polygon(obj: dict, dev: Number):
 
 
 def _wobble_circle(obj: dict, dev: Number):
-    r, c = obj['r'], obj['c']
-    del obj['r'], obj['c']
-    obj['type'] = 'spline'
-    obj['circular'] = True
+    r, c = obj["r"], obj["c"]
+    del obj["r"], obj["c"]
+    obj["type"] = "spline"
+    obj["circular"] = True
     n_pts = round(2 * r * np.pi / 10)
     direcs = np.arange(n_pts) / n_pts * 2 * np.pi
     pts = [endpoint(c, direc, r) for direc in direcs]
     jitter_points(pts, dev)
-    obj['points'] = pts
+    obj["points"] = pts
