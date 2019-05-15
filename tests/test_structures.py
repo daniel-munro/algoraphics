@@ -9,7 +9,7 @@ c = ag.Canvas(400, 400)
 # Fixed-width filaments #
 #########################
 
-dirs = [ag.Param(d, delta=ag.Uniform(min=-20, max=20)) for d in range(360)[::10]]
+dirs = [ag.Delta(d, delta=ag.Uniform(min=-20, max=20)) for d in range(360)[::10]]
 width = ag.Uniform(min=8, max=12)
 length = ag.Uniform(min=8, max=12)
 # x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
@@ -36,19 +36,15 @@ c.png("png/structures1.png")
 # Fixed-width filaments with smooth curls #
 ###########################################
 
-direc = ag.Param(
-    90, delta=ag.Param(0, min=-20, max=20, delta=ag.Uniform(min=-3, max=3))
+direc = ag.Delta(
+    90, delta=ag.Delta(0, min=-20, max=20, delta=ag.Uniform(min=-3, max=3))
 )
-# direc = ag.Param(90, delta=ag.Param(min=-20, max=20))
 x = [
     ag.filament(start=(z, -10), direction=direc, width=8, seg_length=10, n_segments=50)
     for z in range(c.width)[::30]
 ]
-# y = [ag.filament(start=(z, -10), direction=direc, width=10,
-#                  seg_length=10, n_segments=60) for z in range(w)[::50]]
 
 ag.set_style(x, "fill", ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
-# ag.set_style(y, 'fill', ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.35, max=0.55))))
 
 c.new(x)
 c.png("png/structures2.png")
@@ -59,7 +55,7 @@ c.png("png/structures2.png")
 #################################
 
 dirs = [
-    ag.Param(d, delta=ag.Param(0, min=-20, max=20, delta=ag.Uniform(min=-30, max=30)))
+    ag.Delta(d, delta=ag.Delta(0, min=-20, max=20, delta=ag.Uniform(min=-30, max=30)))
     for d in range(360)[::15]
 ]
 # n_seg = 50
@@ -148,7 +144,7 @@ x = [
         direction=d,
         branch_length=ag.Uniform(min=8, max=20),
         theta=ag.Uniform(min=15, max=20),
-        p=ag.Param(1, delta=-0.08),
+        p=ag.Delta(1, delta=-0.08),
     )
     for d in range(360)[::20]
 ]

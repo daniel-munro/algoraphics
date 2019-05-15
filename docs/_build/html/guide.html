@@ -86,8 +86,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#shapes">Shapes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#styles">Styles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#location-parameters">Location Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#colors">Colors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#output">Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#svg-representation">SVG Representation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
 </ul>
 </li>
@@ -198,6 +199,13 @@ the top of the canvas as y=0 with y increasing downward, here y=0 is
 the bottom of the canvas with y increasing upward.  It also means that
 while the coordinate units are pixels, negative and non-integer values
 are allowed.</p>
+<p>The Canvas object holds a list of objects to be drawn.  It has a
+<code class="docutils literal notranslate"><span class="pre">width</span></code>, <code class="docutils literal notranslate"><span class="pre">height</span></code>, and <code class="docutils literal notranslate"><span class="pre">background</span></code> color (or <code class="docutils literal notranslate"><span class="pre">None</span></code> for
+transparent background).  It has methods to <code class="docutils literal notranslate"><span class="pre">add</span></code> one or more
+objects and <code class="docutils literal notranslate"><span class="pre">clear</span></code> the canvas (for convenience, <code class="docutils literal notranslate"><span class="pre">new</span></code> clears the
+canvas and then adds the objects).  The SVG representation of a filled
+canvas can be retrieved with <code class="docutils literal notranslate"><span class="pre">get_svg</span></code>, saved to file with <code class="docutils literal notranslate"><span class="pre">svg</span></code>,
+or rendered to PNG with <code class="docutils literal notranslate"><span class="pre">png</span></code>.</p>
 </div>
 <div class="section" id="shapes">
 <h3>Shapes<a class="headerlink" href="#shapes" title="Permalink to this headline">¶</a></h3>
@@ -278,7 +286,7 @@ different patterns.</p>
 <p>or this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span>
 <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">]),</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">radius</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
@@ -287,7 +295,7 @@ different patterns.</p>
 <img alt="_images/param2.png" src="_images/param2.png" />
 <p>or this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span>
-<span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">radius</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.005</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
@@ -296,18 +304,21 @@ different patterns.</p>
 </div>
 <img alt="_images/param3.png" src="_images/param3.png" />
 <p><a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">Parameter</span></a> classes for random distributions like
-<code class="docutils literal notranslate"><span class="pre">Uniform</span></code>, <code class="docutils literal notranslate"><span class="pre">Normal</span></code>, and <code class="docutils literal notranslate"><span class="pre">Exponential</span></code> are memoryless.  A
-<a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> can instead have a delta attribute, whose value is
-added to the last value to get the next one each time the
-<a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> value is accessed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">)</span>
+<code class="docutils literal notranslate"><span class="pre">Uniform</span></code>, <code class="docutils literal notranslate"><span class="pre">Normal</span></code>, and <code class="docutils literal notranslate"><span class="pre">Exponential</span></code> are memoryless.  For a
+Delta <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a>, a value is added to the last value to get the
+next one each time the <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> value is accessed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">170</span><span class="p">,</span> <span class="n">delta</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">)</span>
 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">170</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
 
-<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">130</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">130</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
 
-<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-               <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">p2y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nb">max</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
 <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ag</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">p2y</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
 
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;stroke-width&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -317,10 +328,10 @@ added to the last value to get the next one each time the
 <p>The delta attribute can itself be a <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a>, which can allow
 for <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> attributes to be generated as a random walk (middle
 row of lines above).</p>
-<p>If the delta <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> has its own delta attribute,
-second-order changes are produced (bottom row of lines above).</p>
-<p><a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">Parameters</span></a> can have a ratio attribute instead of
-delta, which works the same way but multiplies, rather than adds,
+<p>If the delta <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> is itself a Delta, second-order changes
+are produced (bottom row of lines above).</p>
+<p>Delta <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameters</span></a> can have a ratio attribute instead
+of delta, which works the same way but multiplies, rather than adds,
 <code class="docutils literal notranslate"><span class="pre">ratio</span></code> to the last value.</p>
 <p>A <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> can also be defined with a list of values, which
 will be uniformly randomly sampled:</p>
@@ -333,10 +344,49 @@ will be uniformly randomly sampled:</p>
 </pre></div>
 </div>
 <img alt="_images/param5.png" src="_images/param5.png" />
-<p>Finally, a <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> can be defined with an arbitrary
-function, which will be called with no arguments to generate values.</p>
+<p>Or, a <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> can be defined with an arbitrary function,
+which will be called with no arguments to generate values.</p>
+<p>Finally, a <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameter</span></a> can be cyclical:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wave</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Cyclical</span><span class="p">(</span>
+    <span class="n">low</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+    <span class="n">high</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span>
+    <span class="n">period</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">wave</span><span class="o">.</span><span class="n">value</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">400</span><span class="p">)]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">spline</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/param6.png" src="_images/param6.png" />
 <p>Note that once a <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> is generated, its
 <a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameters</span></a> are generally static.</p>
+</div>
+<div class="section" id="location-parameters">
+<h3>Location Parameters<a class="headerlink" href="#location-parameters" title="Permalink to this headline">¶</a></h3>
+<p>While Param and its subclasses are used for one-dimensional
+<a class="reference internal" href="glossary.html#term-parameter"><span class="xref std std-term">parameters</span></a>, two-dimensional, location-based
+parameters are handled with Place objects.  They operate in polar
+space, so points are defined by their direction and distance from
+other points:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">place</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Place</span><span class="p">(</span>
+    <span class="n">ref</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="n">distance</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;purple&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">place</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
+</pre></div>
+</div>
+<img alt="_images/param7.png" src="_images/param7.png" />
+<p>The two-dimensional equivalent of Delta is Wander:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Wander</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">direction</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Delta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))),</span>
+    <span class="n">distance</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="n">radius</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">)]</span>
+</pre></div>
+</div>
+<img alt="_images/param8.png" src="_images/param8.png" />
 </div>
 <div class="section" id="colors">
 <h3>Colors<a class="headerlink" href="#colors" title="Permalink to this headline">¶</a></h3>
@@ -358,11 +408,11 @@ specifications.</p>
 be set with a string, which will be used as-is in the SVG file.  This
 will work for hex codes, named colors, etc.</p>
 </div>
-<div class="section" id="output">
-<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">Shapes</span></a> are written to an SVG file using the
-<code class="docutils literal notranslate"><span class="pre">write_SVG</span></code> function.  Each type of <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> corresponds to a
-SVG object type or a specific form of one.</p>
+<div class="section" id="svg-representation">
+<h3>SVG Representation<a class="headerlink" href="#svg-representation" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">Shapes</span></a> are converted to SVG for export.  Each type of
+<a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> corresponds to a SVG object type or a specific form of
+one.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="30%" />
@@ -405,8 +455,6 @@ become references to SVG filters, which are defined at the beginning
 of the SVG file.</p>
 <p>By default, the SVG code is optimized using <code class="docutils literal notranslate"><span class="pre">svgo</span></code>, but this can be
 skipped for more readable SVG code, e.g. for debugging.</p>
-<p>SVG files can then be converted to PNG files using the <code class="docutils literal notranslate"><span class="pre">to_PNG</span></code>
-function.</p>
 </div>
 <div class="section" id="images">
 <h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
@@ -664,7 +712,7 @@ random but specifiable:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/grid1.png" src="_images/grid1.png" />
+<img alt="_images/mazes1.png" src="_images/mazes1.png" />
 <p>The maze style is defined by an instance of a subclass of
 <code class="docutils literal notranslate"><span class="pre">Maze_Style</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
@@ -673,7 +721,7 @@ random but specifiable:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/grid2.png" src="_images/grid2.png" />
+<img alt="_images/mazes2.png" src="_images/mazes2.png" />
 <p>Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
 cell contains a rotation and/or reflection of one of these components:</p>
@@ -683,7 +731,7 @@ cell contains a rotation and/or reflection of one of these components:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/grid3.png" src="_images/grid3.png" />
+<img alt="_images/mazes3.png" src="_images/mazes3.png" />
 <p>The grid can be rotated:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -692,7 +740,7 @@ cell contains a rotation and/or reflection of one of these components:</p>
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="_images/grid4.png" src="_images/grid4.png" />
+<img alt="_images/mazes4.png" src="_images/mazes4.png" />
 <p>Custom styles can be used by creating a new subclass of <cite>Maze_Style</cite>.</p>
 </div>
 <div class="section" id="doodles">
@@ -792,37 +840,34 @@ and places them until the <a class="reference internal" href="glossary.html#term
 </div>
 <div class="section" id="effects">
 <h2>Effects<a class="headerlink" href="#effects" title="Permalink to this headline">¶</a></h2>
+<p>Warning: Effects are currently not exported to PNG!</p>
 <p>Shadows can be added to <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a> or
 <a class="reference internal" href="glossary.html#term-collection"><span class="xref std std-term">collections</span></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">350</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">320</span><span class="p">,</span> <span class="mi">70</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">320</span><span class="p">)),</span>
-     <span class="nb">dict</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">))]</span>
-<span class="n">path</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s2">&quot;#55CC55&quot;</span><span class="p">)</span>
-
-<span class="n">centers</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">)]</span>
-<span class="n">circles</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">centers</span><span class="p">]</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s2">&quot;#FFDDDD&quot;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">circles</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s2">&quot;#DDDDFF&quot;</span><span class="p">)</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="p">,</span> <span class="n">circles</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;#FFDDDD&quot;</span><span class="p">),</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;#DDDDFF&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;stroke-width&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">add_shadows</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">darkness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#FFDDDD&quot;</span><span class="p">),</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#DDDDFF&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">add_shadows</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">darkness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/textures1.png" src="_images/textures1.png" />
 <p>Shapes or collections can be given a rough paper texture, and their
 edges can appear torn:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">w</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
-     <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">)]</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFCCCC&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">w</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">),</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#FFCCCC&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+
 <span class="n">ag</span><span class="o">.</span><span class="n">add_paper_texture</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tear_paper_rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">340</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tear_paper_rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">340</span><span class="p">))</span>
 </pre></div>
 </div>
 <img alt="_images/textures3.png" src="_images/textures3.png" />

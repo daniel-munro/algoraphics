@@ -77,37 +77,6 @@ def shuffled(items: Sequence) -> list:
     return list(np.random.choice(items, len(items), replace=False))
 
 
-def arith_seq(start: Number, stop: Number, length: int) -> list:
-    """Generate an arithmetic sequence.
-
-    Args:
-        start: The first value in the sequence.
-        stop: The last value in the sequence.
-        length: The length of the the sequence.
-
-    Returns:
-        The generated sequence.
-
-    """
-    return [(float(x) / (length - 1)) * (stop - start) + start for x in range(length)]
-
-
-def geom_seq(start: Number, stop: Number, length: int) -> list:
-    """Generate geometric sequence.
-
-    Args:
-        start: The first value in the sequence.
-        stop: The last value in the sequence.
-        length: Length of the sequence.
-
-    Returns:
-        The generated sequence.
-
-    """
-    r = (float(stop) / start) ** (1 / (length - 1))
-    return [start * (r ** i) for i in range(length)]
-
-
 def reorder_objects(
     objects: Sequence[Collection],
     by: str = "random",

@@ -49,7 +49,7 @@ def polygon(points: Sequence[Point], **style) -> dict:
 
 
 def spline(
-    points: Sequence[Point], smoothing: Number = 0.2, circular: bool = False, **style
+    points: Sequence[Point], smoothing: Number = 0.3, circular: bool = False, **style
 ) -> dict:
     """Create a spline shape.
 

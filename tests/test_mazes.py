@@ -3,7 +3,8 @@ import algoraphics as ag
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-c = ag.Canvas(400, 400)
+w, h = 400, 400
+c = ag.Canvas(w, h)
 
 ###################################
 # Straight-line maze-like pattern #
@@ -15,7 +16,7 @@ x = ag.fill_maze(outline, spacing=20,
 ag.set_style(x['members'], 'fill', 'blue')
 
 c.add(x)
-c.png("png/grid1.png")
+c.png("png/mazes1.png")
 
 
 ##################################
@@ -28,7 +29,7 @@ x = ag.fill_maze(outline, spacing=20,
 ag.set_style(x['members'], 'fill', 'blue')
 
 c.new(x)
-c.png("png/grid2.png")
+c.png("png/mazes2.png")
 
 
 ###################
@@ -41,7 +42,7 @@ x = ag.fill_maze(outline, spacing=20,
 ag.set_style(x['members'], 'fill', 'blue')
 
 c.new(x)
-c.png("png/grid3.png")
+c.png("png/mazes3.png")
 
 
 #########################
@@ -55,4 +56,4 @@ x = ag.fill_maze(outline, spacing=20,
 ag.set_style(x['members'], 'fill', 'blue')
 
 c.new(x)
-c.png("png/grid4.png")
+c.png("png/mazes4.png")

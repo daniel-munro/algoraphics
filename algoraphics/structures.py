@@ -21,7 +21,7 @@ from .geom import (
     direction_to,
 )
 from .shapes import polygon, spline, line, set_style
-from .param import Param, Cyclical, Wander, fixed_value, make_param
+from .param import Param, Delta, Cyclical, Wander, fixed_value, make_param
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -35,9 +35,9 @@ def filament(
     Args:
         start: The midpoint of first edge of the filament.
         direction: The direction (in degrees) of each segment.
-          Recommended to be a Param with a delta Param for a
-          meandering filament.  Nested delta Params will produce
-          meandering from higher-order random walks.
+          Recommended to be a Delta for a meandering filament.  Nested
+          Deltas will produce meandering from higher-order
+          random walks.
         width: The width of the filament (at segment joining edges).
         seg_length: Average side length of each segment.
         n_segments: Number of segments in the filament.
@@ -110,9 +110,9 @@ def tentacle(
     Args:
         start: The midpoint of first edge of the tentacle.
         direction: The direction (in degrees) of each segment.
-          Recommended to be a Param with a delta Param for a
-          meandering filament.  Nested delta Params will produce
-          meandering from higher-order random walks.
+          Recommended to be a Delta for a meandering filament.  Nested
+          Deltas will produce meandering from higher-order random
+          walks.
         length: Approximate length of the tentacle.
         width: The starting width of the tentacle.
         seg_length: Average starting length of each segment.  They
@@ -128,8 +128,8 @@ def tentacle(
 
     # Seg lengths will shrink from seg_length to 1/2 seg_length:
     n_segments = int(length / (0.75 * seg_length))
-    width = Param(width, delta=-(width / n_segments))
-    seg_length = Param(seg_length, delta=-(seg_length / (2 * n_segments)))
+    width = Delta(width, delta=-(width / n_segments))
+    seg_length = Delta(seg_length, delta=-(seg_length / (2 * n_segments)))
     return filament(start, direction, width, seg_length, n_segments)
 
 
@@ -338,7 +338,7 @@ def wave(start: Point, direction: Number, period: Number, length: Number) -> dic
     # Period and phase are chosen such that positive values come in pairs
     # in each phase.  Then, Add half (2/4) of a phase's positive deltas to
     # desired direction to start off in correct direction for phase 180.
-    direc = Param(direction, delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
+    direc = Delta(direction, delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
     direc.values(3)  # Start wave in correct direction.
 
     def dist_fun():

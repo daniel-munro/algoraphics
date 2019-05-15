@@ -27,6 +27,14 @@ the bottom of the canvas with y increasing upward.  It also means that
 while the coordinate units are pixels, negative and non-integer values
 are allowed.
 
+The Canvas object holds a list of objects to be drawn.  It has a
+``width``, ``height``, and ``background`` color (or ``None`` for
+transparent background).  It has methods to ``add`` one or more
+objects and ``clear`` the canvas (for convenience, ``new`` clears the
+canvas and then adds the objects).  The SVG representation of a filled
+canvas can be retrieved with ``get_svg``, saved to file with ``svg``,
+or rendered to PNG with ``png``.
+
 Shapes
 ------
 
@@ -90,7 +98,7 @@ or this::
 
  w, h = 400, 200
  center = (ag.Param([100, 300]), 100)
- radius = ag.Param(100, delta=-1)
+ radius = ag.Delta(100, delta=-1)
  color = ag.Color(hue=0.8, sat=0.9, li=ag.Uniform(0, 1))
  x = [ag.circle(center, radius) for i in range(100)]
  ag.set_style(x, 'fill', color)
@@ -100,7 +108,7 @@ or this::
 or this::
 
  w, h = 400, 200
- center = (ag.Param(0, delta=4), ag.Uniform(0, h))
+ center = (ag.Delta(0, delta=4), ag.Uniform(0, h))
  radius = ag.Uniform(5, 30)
  color = ag.Color(hue=ag.Param(0, delta=0.005), sat=0.9, li=0.5)
  x = [ag.circle(center, radius) for i in range(100)]
@@ -109,19 +117,22 @@ or this::
 .. image:: /_static/png/param3.png
 
 :term:`Parameter<parameter>` classes for random distributions like
-``Uniform``, ``Normal``, and ``Exponential`` are memoryless.  A
-:term:`parameter` can instead have a delta attribute, whose value is
-added to the last value to get the next one each time the
-:term:`parameter` value is accessed::
+``Uniform``, ``Normal``, and ``Exponential`` are memoryless.  For a
+Delta :term:`parameter`, a value is added to the last value to get the
+next one each time the :term:`parameter` value is accessed::
 
- p2y = ag.Param(170, delta=-0.25)
+ p2y = ag.Delta(start=170, delta=-0.25)
  x.append([ag.line((i * 4, 170), (i * 4, p2y)) for i in range(100)])
 
- p2y = ag.Param(100, min=70, max=130, delta=ag.Uniform(-5, 5))
+ p2y = ag.Delta(start=100, min=70, max=130, delta=ag.Uniform(-5, 5))
  x.append([ag.line((i * 4, 100), (i * 4, p2y)) for i in range(100)])
  
- p2y = ag.Param(30, min=0, max=60,
-                delta=ag.Param(0, min=-2, max=2, delta=ag.Uniform(-2, 2)))
+ p2y = ag.Delta(
+     start=30,
+     min=0,
+     max=60,
+     delta=ag.Delta(start=0, min=-2, max=2, delta=ag.Uniform(-2, 2)),
+ )
  x.append([ag.line((i * 4, 30), (i * 4, p2y)) for i in range(100)])
  
  ag.set_style(x, 'stroke-width', 2)
@@ -132,11 +143,11 @@ The delta attribute can itself be a :term:`parameter`, which can allow
 for :term:`shape` attributes to be generated as a random walk (middle
 row of lines above).
 
-If the delta :term:`parameter` has its own delta attribute,
-second-order changes are produced (bottom row of lines above).
+If the delta :term:`parameter` is itself a Delta, second-order changes
+are produced (bottom row of lines above).
 
-:term:`Parameters<parameter>` can have a ratio attribute instead of
-delta, which works the same way but multiplies, rather than adds,
+Delta :term:`parameters<parameter>` can have a ratio attribute instead
+of delta, which works the same way but multiplies, rather than adds,
 ``ratio`` to the last value.
 
 A :term:`parameter` can also be defined with a list of values, which
@@ -151,11 +162,54 @@ will be uniformly randomly sampled::
 
 .. image:: /_static/png/param5.png
 
-Finally, a :term:`parameter` can be defined with an arbitrary
-function, which will be called with no arguments to generate values.
+Or, a :term:`parameter` can be defined with an arbitrary function,
+which will be called with no arguments to generate values.
+
+Finally, a :term:`parameter` can be cyclical::
+
+ wave = ag.Cyclical(
+     low=ag.Delta(min=0, max=50, delta=ag.Uniform(-5, 5)),
+     high=ag.Delta(min=150, max=200, delta=ag.Uniform(-5, 5)),
+     period=ag.Delta(min=10, max=30, delta=ag.Uniform(-2, 2)),
+ )
+ pts = [(i, wave.value()) for i in range(400)]
+ x = ag.spline(pts)
+
+.. image:: /_static/png/param6.png
 
 Note that once a :term:`shape` is generated, its
 :term:`parameters<parameter>` are generally static.
+
+
+Location Parameters
+-------------------
+
+While Param and its subclasses are used for one-dimensional
+:term:`parameters<parameter>`, two-dimensional, location-based
+parameters are handled with Place objects.  They operate in polar
+space, so points are defined by their direction and distance from
+other points::
+
+ place = ag.Place(
+     ref=(200, 0),
+     direction=ag.Normal(90, 30),
+     distance=ag.Exponential(mean=50, stdev=100, sigma=3),
+ )
+ x = [ag.circle(p, 2, fill="purple") for p in place.values(10000)]
+
+.. image:: /_static/png/param7.png
+
+The two-dimensional equivalent of Delta is Wander::
+
+ path = ag.Wander(
+     start=(0, 100),
+     direction=ag.Delta(0, ag.Delta(0, min=-20, max=20, delta=ag.Uniform(-3, 3))),
+     distance=ag.Uniform(8, 12),
+ )
+ radius = ag.Uniform(2, 4)
+ x = [ag.circle(path.value(), radius) for i in range(300)]
+
+.. image:: /_static/png/param8.png
 
 
 Colors
@@ -182,12 +236,12 @@ be set with a string, which will be used as-is in the SVG file.  This
 will work for hex codes, named colors, etc.
 
 
-Output
-------
+SVG Representation
+------------------
 
-:term:`Shapes<shape>` are written to an SVG file using the
-``write_SVG`` function.  Each type of :term:`shape` corresponds to a
-SVG object type or a specific form of one.
+:term:`Shapes<shape>` are converted to SVG for export.  Each type of
+:term:`shape` corresponds to a SVG object type or a specific form of
+one.
 
 ===========  ==========================
 algoraphics  SVG
@@ -208,9 +262,6 @@ of the SVG file.
 
 By default, the SVG code is optimized using ``svgo``, but this can be
 skipped for more readable SVG code, e.g. for debugging.
-
-SVG files can then be converted to PNG files using the ``to_PNG``
-function.
 
 
 Images
@@ -495,7 +546,7 @@ These patterns resemble mazes, but are actually random spanning trees::
                   style=ag.Maze_Style_Straight(rel_thickness=0.2))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: /_static/png/grid1.png
+.. image:: /_static/png/mazes1.png
 
 The maze style is defined by an instance of a subclass of
 ``Maze_Style``::
@@ -505,7 +556,7 @@ The maze style is defined by an instance of a subclass of
                   style=ag.Maze_Style_Jagged(min_w=0.2, max_w=0.8))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: /_static/png/grid2.png
+.. image:: /_static/png/mazes2.png
 
 Each style defines the appearance of five maze components that each
 occupy one grid cell: tip, turn, straight, T, and cross.  Each grid
@@ -516,7 +567,7 @@ cell contains a rotation and/or reflection of one of these components::
                   style=ag.Maze_Style_Pipes(rel_thickness=0.6))
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: /_static/png/grid3.png
+.. image:: /_static/png/mazes3.png
 
 The grid can be rotated::
 
@@ -526,7 +577,7 @@ The grid can be rotated::
                   rotation=45)
  ag.set_style(x['members'], 'fill', 'blue')
 
-.. image:: /_static/png/grid4.png
+.. image:: /_static/png/mazes4.png
 
 Custom styles can be used by creating a new subclass of `Maze_Style`.
 
@@ -636,38 +687,36 @@ and places them until the :term:`region` is filled::
 Effects
 =======
 
+Warning: Effects are currently not exported to PNG!
+
 Shadows can be added to :term:`shapes<shape>` or
 :term:`collections<collection>`::
 
- d = [dict(command='M', to=(50, 50)),
-      dict(command='L', to=(50, 350)),
-      dict(command='L', to=(350, 50)),
-      dict(command='L', to=(50, 50)),
-      dict(command='M', to=(70, 70)),
-      dict(command='L', to=(320, 70)),
-      dict(command='L', to=(70, 320)),
-      dict(command='L', to=(70, 70))]
- path = dict(type='path', d=d)
- ag.set_style(path, 'fill', "#55CC55")
- 
- centers = [(300, 250), (250, 300)]
- circles = [ag.circle(c=c, r=50) for c in centers]
- ag.set_style(circles[0], 'fill', "#FFDDDD")
- ag.set_style(circles[1], 'fill', "#DDDDFF")
- 
- x = [path, circles]
+ x = [
+     ag.circle(c=(100, 150), r=50, stroke="#FFDDDD"),
+     ag.circle(c=(150, 100), r=50, stroke="#DDDDFF"),
+ ]
+ ag.set_style(x, "stroke-width", 10)
  ag.add_shadows(x, stdev=20, darkness=0.5)
+ 
+ y = [
+     ag.circle(c=(300, 250), r=50, fill="#FFDDDD"),
+     ag.circle(c=(250, 300), r=50, fill="#DDDDFF"),
+ ]
+ 
+ ag.add_shadows(y, stdev=20, darkness=0.5)
 
 .. image:: /_static/png/textures1.png
 
 Shapes or collections can be given a rough paper texture, and their
 edges can appear torn::
 	   
- x = [ag.rectangle(start=(50, 50), w=300, h=300),
-      ag.circle(c=(200, 200), r=150)]
- ag.set_style(x[0], 'fill', 'green')
- ag.set_style(x[1], 'fill', '#FFCCCC')
+ x = [
+     ag.rectangle(start=(50, 50), w=300, h=300, fill="green"),
+     ag.circle(c=(200, 200), r=150, fill="#FFCCCC")
+ ]
+ 
  ag.add_paper_texture(x)
- x = ag.tear_paper_rect(x, (60, 340, 60, 340))
+ x = ag.tear_paper_rect(x, (60, 60, 340, 340))
 
 .. image:: /_static/png/textures3.png

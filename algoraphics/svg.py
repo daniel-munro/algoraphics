@@ -105,7 +105,7 @@ def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
 
 
 def _spline_path(
-    points: Sequence[Point], smoothing: float = 0.2, circular: bool = False
+    points: Sequence[Point], smoothing: float = 0.3, circular: bool = False
 ) -> str:
     """Generate path string for spline.
 

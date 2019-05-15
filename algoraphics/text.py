@@ -9,7 +9,7 @@ import math
 import numpy as np
 from typing import Union, Tuple, List
 
-from .main import shuffled, geom_seq
+from .main import shuffled
 from .geom import (
     points_on_line,
     points_on_arc,
@@ -954,7 +954,7 @@ def splatter_text(text: str, height: Number, spread: Number, density:
         A list of circle shapes (in random order).
 
     """
-    spacing = 1. / density
+    spacing = 1 / density
     points = text_points(text, height, spacing, 0.15)
     jitter_points(points, spread)
     size = shuffled(geom_seq(max_size, min_size, len(points)))

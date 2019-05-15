@@ -173,15 +173,12 @@ or other filling pattern should extend beyond the canvas or
 <dd>A <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> or <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a> specifying an area in
 which some function will draw.</dd>
 <dt id="term-parameter">parameter</dt>
-<dd>A specification for some attribute of a drawing.  A Param
-object, or one whose type inherits from Param, can represent
-the attribute so that the attribute can vary within the
-drawing, or so that multiple <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a> can be drawn
-without having to explicitly generate random values for each
-one.</dd>
-<dt id="term-path">path</dt>
-<dd>A representation of an SVG path.  It specifies a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>
-that can include disjoint lines, arcs, and Bezier curves.</dd>
+<dd>A specification for some attribute of a drawing.  A Param (1D) or
+Place (2D) object, or one whose type inherits from them, can
+represent the attribute so that the attribute can vary within
+the drawing, or so that multiple <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a> can be
+drawn without having to explicitly generate random values for
+each one.</dd>
 <dt id="term-point">point</dt>
 <dd>A tuple containing the x and y coordinates of a point in 2D
 space.  The units are pixels by default, but can be defined

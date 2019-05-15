@@ -33,16 +33,12 @@ Glossary
        which some function will draw.
 
    parameter
-       A specification for some attribute of a drawing.  A Param
-       object, or one whose type inherits from Param, can represent
-       the attribute so that the attribute can vary within the
-       drawing, or so that multiple :term:`shapes<shape>` can be drawn
-       without having to explicitly generate random values for each
-       one.
-
-   path
-       A representation of an SVG path.  It specifies a :term:`shape`
-       that can include disjoint lines, arcs, and Bezier curves.
+       A specification for some attribute of a drawing.  A Param (1D) or
+       Place (2D) object, or one whose type inherits from them, can
+       represent the attribute so that the attribute can vary within
+       the drawing, or so that multiple :term:`shapes<shape>` can be
+       drawn without having to explicitly generate random values for
+       each one.
 
    point
        A tuple containing the x and y coordinates of a point in 2D

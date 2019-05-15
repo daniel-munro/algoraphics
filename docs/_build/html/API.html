@@ -1581,31 +1581,6 @@ issues at the edges of the region or canvas.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.main.arith_seq">
-<code class="descclassname">algoraphics.main.</code><code class="descname">arith_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.arith_seq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an arithmetic sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The first value in the sequence.</li>
-<li><strong>stop</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The last value in the sequence.</li>
-<li><strong>length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The length of the the sequence.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The generated sequence.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.main.flatten">
 <code class="descclassname">algoraphics.main.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.flatten" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a flattened list from a nested list.</p>
@@ -1618,31 +1593,6 @@ issues at the edges of the region or canvas.</p>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The non-list elements within the input.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.geom_seq">
-<code class="descclassname">algoraphics.main.</code><code class="descname">geom_seq</code><span class="sig-paren">(</span><em>start</em>, <em>stop</em>, <em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.geom_seq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate geometric sequence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>start</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The first value in the sequence.</li>
-<li><strong>stop</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The last value in the sequence.</li>
-<li><strong>length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Length of the sequence.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The generated sequence.</p>
-</td>
 </tr>
 </tbody>
 </table>
@@ -1765,6 +1715,8 @@ arranged on top of larger ones that surround them.</li>
 <dt id="algoraphics.param.Cyclical">
 <em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Cyclical</code><span class="sig-paren">(</span><em>low=-1</em>, <em>high=1</em>, <em>period=8</em>, <em>phase=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Cyclical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters that oscillate between values.</p>
+<p>Its low value, high value, and period can be Params to add
+randomness to the cycle.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1788,6 +1740,35 @@ The default of zero starts halfway between <code class="docutils literal notrans
 <dd><p>Generate a value.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="algoraphics.param.Delta">
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Delta</code><span class="sig-paren">(</span><em>start=None</em>, <em>delta=None</em>, <em>ratio=None</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters whose values depend on the previous value.</p>
+<p>Provide a Param or number for <code class="docutils literal notranslate"><span class="pre">delta</span></code> which will be added to the
+previously generated value to get the next one.  Or, provide a
+<code class="docutils literal notranslate"><span class="pre">ratio</span></code> Param or number to multiply to each previous value.</p>
+<p>Passing a randomized <code class="docutils literal notranslate"><span class="pre">Param</span></code> object to <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code>
+will result in a random walk.  These <code class="docutils literal notranslate"><span class="pre">Param</span></code> objects can
+themselves have a <code class="docutils literal notranslate"><span class="pre">delta</span></code>/<code class="docutils literal notranslate"><span class="pre">ratio</span></code> argument, resulting in
+higher-order random walks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> – The starting value, which can be obtained from a Param.</li>
+<li><strong>delta</strong> – A value to add to the previous value to get the next.</li>
+<li><strong>ratio</strong> – Similar to delta, but is multiplied by, rather than
+added to, the previous value to get the next.</li>
+<li><strong>min</strong> – The smallest allowable value.</li>
+<li><strong>max</strong> – The largest allowable value.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -1841,33 +1822,17 @@ The default of zero starts halfway between <code class="docutils literal notrans
 
 <dl class="class">
 <dt id="algoraphics.param.Param">
-<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Param</code><span class="sig-paren">(</span><em>x=None</em>, <em>delta=None</em>, <em>ratio=None</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Param" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Param</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Objects to represent fixed or random parameters for shapes.</p>
-<p>Create <code class="docutils literal notranslate"><span class="pre">Param</span></code> objects for fixed values, value lists, arbitrary
-functions, and parameters with <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code>.  For random
-distributions, use a specific class that inherits from <code class="docutils literal notranslate"><span class="pre">Param</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> is supplied, <code class="docutils literal notranslate"><span class="pre">x</span></code> is the starting value
-if supplied.  Otherwise, if <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> are supplied, the
-starting value will be chosen uniformly randomly between them.
-Otherwise, the starting value will be 0 (delta) or 1 (ratio).</p>
-<p>Passing a randomized <code class="docutils literal notranslate"><span class="pre">Param</span></code> object to <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code>
-will result in a random walk.  These <code class="docutils literal notranslate"><span class="pre">Param</span></code> objects can
-themselves have a <code class="docutils literal notranslate"><span class="pre">delta</span></code>/<code class="docutils literal notranslate"><span class="pre">ratio</span></code> argument, resulting in
-higher-order random walks.</p>
+<p>Create <code class="docutils literal notranslate"><span class="pre">Param</span></code> objects for fixed values, value lists, or
+arbitrary functions.  For random distributions, use a specific
+class that inherits from <code class="docutils literal notranslate"><span class="pre">Param</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A value, list, or function that takes no arguments and
-returns a value.</li>
-<li><strong>delta</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A value to add to the previous value to get the next.</li>
-<li><strong>ratio</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>, <a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Similar to delta, but is multiplied by, rather than
-added to, the previous value to get the next.</li>
-<li><strong>min</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The smallest allowable value when <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> is used.</li>
-<li><strong>max</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The largest allowable value when <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> is used.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>]) – A value, list, or a function that takes no arguments and
+returns a value.</td>
 </tr>
 </tbody>
 </table>
@@ -1875,17 +1840,18 @@ added to, the previous value to get the next.</li>
 
 <dl class="class">
 <dt id="algoraphics.param.Place">
-<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>ref</em>, <em>direction=None</em>, <em>distance=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>ref</em>, <em>direction=0</em>, <em>distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place" title="Permalink to this definition">¶</a></dt>
 <dd><p>An object that generates points with respect to a reference point.</p>
+<p>It is the 2D version of Param, and uses polar coordinates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>ref</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The reference or starting point.</li>
-<li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – A param giving directions (in degrees) of generated
+<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – A param giving directions (in degrees) of generated
 points relative to ref.</li>
-<li><strong>distance</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – A param giving distances of generated points relative to ref.</li>
+<li><strong>distance</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – A param giving distances of generated points relative to ref.</li>
 </ul>
 </td>
 </tr>
@@ -1925,8 +1891,18 @@ points relative to ref.</li>
 
 <dl class="class">
 <dt id="algoraphics.param.Wander">
-<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Wander</code><span class="sig-paren">(</span><em>start</em>, <em>direction=None</em>, <em>distance=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Wander" title="Permalink to this definition">¶</a></dt>
-<dd><p>delta_direc: A param giving the direction to move in e</p>
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Wander</code><span class="sig-paren">(</span><em>start</em>, <em>direction=0</em>, <em>distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Wander" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object that generates points relative to the previous point.</p>
+<p>Just as Place is the 2D version of Param, Wander is the 2D version
+of Delta.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delta_direc</strong> – A param giving the direction to move in e</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="algoraphics.param.Wander.value">
 <code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Wander.value" title="Permalink to this definition">¶</a></dt>
@@ -1952,9 +1928,23 @@ points relative to ref.</li>
 <dl class="function">
 <dt id="algoraphics.param.make_param">
 <code class="descclassname">algoraphics.param.</code><code class="descname">make_param</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.make_param" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a <code class="docutils literal notranslate"><span class="pre">Param</span></code> object if something else is supplied.</p>
+<dd><p>Get a <code class="docutils literal notranslate"><span class="pre">Param</span></code> object even if something else is supplied.</p>
 <p>If a <code class="docutils literal notranslate"><span class="pre">Param</span></code> object is supplied, a deep copy is generated in
 case it has a <code class="docutils literal notranslate"><span class="pre">delta</span></code> or <code class="docutils literal notranslate"><span class="pre">ratio</span></code> and is being reused.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.param.make_place">
+<code class="descclassname">algoraphics.param.</code><code class="descname">make_place</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.make_place" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <code class="docutils literal notranslate"><span class="pre">Place</span></code> object even if a fixed point is supplied.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2368,7 +2358,7 @@ returns values when called with no arguments.</li>
 
 <dl class="function">
 <dt id="algoraphics.shapes.spline">
-<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>smoothing=0.2</em>, <em>circular=False</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.shapes.</code><code class="descname">spline</code><span class="sig-paren">(</span><em>points</em>, <em>smoothing=0.3</em>, <em>circular=False</em>, <em>**style</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.shapes.spline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a spline shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2530,9 +2520,9 @@ directions).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The midpoint of first edge of the filament.</li>
 <li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.
-Recommended to be a Param with a delta Param for a
-meandering filament.  Nested delta Params will produce
-meandering from higher-order random walks.</li>
+Recommended to be a Delta for a meandering filament.  Nested
+Deltas will produce meandering from higher-order
+random walks.</li>
 <li><strong>width</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The width of the filament (at segment joining edges).</li>
 <li><strong>seg_length</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Average side length of each segment.</li>
 <li><strong>n_segments</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of segments in the filament.</li>
@@ -2560,9 +2550,9 @@ meandering from higher-order random walks.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The midpoint of first edge of the tentacle.</li>
 <li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The direction (in degrees) of each segment.
-Recommended to be a Param with a delta Param for a
-meandering filament.  Nested delta Params will produce
-meandering from higher-order random walks.</li>
+Recommended to be a Delta for a meandering filament.  Nested
+Deltas will produce meandering from higher-order random
+walks.</li>
 <li><strong>length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Approximate length of the tentacle.</li>
 <li><strong>width</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – The starting width of the tentacle.</li>
 <li><strong>seg_length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average starting length of each segment.  They

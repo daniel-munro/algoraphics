@@ -26,7 +26,7 @@ from .shapes import (
 )
 from .geom import distance, rand_point_on_circle, deg, spaced_points
 from .structures import filament
-from .param import Param, make_param, fixed_value
+from .param import Param, Delta, make_param, fixed_value
 from .color import Color, make_color
 
 Number = Union[int, float]
@@ -114,7 +114,7 @@ def _filament_fill_obj(
     start = rand_point_on_circle(c, r)
     angle = math.atan2(c[1] - start[1], c[0] - start[0])
     dir_start = deg(angle) + np.random.uniform(-60, 60)
-    direction = Param(dir_start, delta=direction_delta)
+    direction = Delta(dir_start, delta=direction_delta)
     n_segments = int(2.2 * r / seg_length.mean)
     x = filament(start, direction, width, seg_length, n_segments)
     set_style(x, "fill", color)
@@ -380,7 +380,7 @@ def fill_spots(
         points = sample_points_in_shape(outline, 1)
     if radius is None:
         ratio = ((spacing / 5) / spacing) ** (1 / (len(points) - 1))
-        radius = Param(spacing, ratio=ratio)
+        radius = Delta(spacing, ratio=ratio)
     else:
         radius = make_param(radius)
     return [circle(c=points[i], r=radius.value()) for i in range(len(points))]
