@@ -53,7 +53,6 @@ line      p1 (point), p2 (point)
 polygon   points (list)
 polyline  points (list)
 spline    points (list), curvature (float), circular (bool)
-text      text (str), x (float), y (float), align (str), font_size (float)
 ========  ================================================================
 
 :term:`Shapes<shape>` can be stored in nested lists without affecting
@@ -61,12 +60,12 @@ their rendering.  The purpose of groups, on the other hand, is to
 apply things like clipping and shadows to a :term:`collection` of
 :term:`shapes<shape>`.
 
-Convenience functions like ``circle`` exist that simply return a
-dictionary.  Functions also exist to define :term:`shapes<shape>` in
-alternative ways for convenience.  For example, the ``rectangle``
-function accepts a starting :term:`point`, width, and height, or just
-a set of x and y bounds, and returns a polygon defined by its four
-corners.
+Convenience functions like ``circle`` exist that return a dictionary
+and assign any style attributes provided.  Functions also exist to
+define :term:`shapes<shape>` in alternative ways for convenience.  For
+example, the ``rectangle`` function accepts a starting :term:`point`,
+width, and height, or just a set of x and y bounds, and returns a
+polygon defined by its four corners.
 
 Styles
 ------
@@ -253,7 +252,6 @@ line         line
 polygon      polygon
 polyline     polyline
 spline       path made of bezier curves
-text         text
 ===========  ==========================
 
 SVG-rendered effects like shadows and paper texture applied to objects
@@ -394,13 +392,6 @@ strokes, :term:`points<point>` within each list can be joined::
  x.append(y)
 
 .. image:: /_static/png/text4.png
-
-Actual SVG text can also be produced::
-
- w, h = 400, 100
- x = ag.caption("SVG text.", x=w-20, y=20)
-
-.. image:: /_static/png/text5.png
 
 
 Filaments

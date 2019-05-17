@@ -203,29 +203,6 @@ def _write_polyline(shape: dict, mods: str) -> str:
     return '<polyline points="' + points + '" fill="none" ' + mods + "/>\n"
 
 
-def _write_text(shape: dict, mods: str) -> str:
-    """Generate SVG text."""
-    anchors = dict(left="start", center="middle", right="end")
-    anchor = anchors[shape["align"]]
-    return (
-        '<text x="'
-        + str(shape["x"])
-        + '" y="'
-        + str(shape["y"])
-        + '" '
-        + 'text-anchor="'
-        + anchor
-        + '" '
-        + 'font-size="'
-        + str(shape["font_size"])
-        + '" '
-        + mods
-        + ">"
-        + shape["text"]
-        + "</text>\n"
-    )
-
-
 def _write_raster(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a raster image."""
     output = "<image "
@@ -277,7 +254,7 @@ def _write_shape(shape: dict, defs: Sequence[str], filters: Sequence[dict]) -> s
     """Generate SVG representation of a shape.
 
     Args:
-        shape: A geometric shape, group, text, or raster dictionary.
+        shape: A geometric shape, group, or raster dictionary.
         defs: A list of strings used to collect SVG representations of
           all clip paths, filters, etc.
         filters: A collection of filter dictionaries used thus far so
@@ -307,7 +284,6 @@ def _write_shape(shape: dict, defs: Sequence[str], filters: Sequence[dict]) -> s
         circle=_write_circle,
         line=_write_line,
         polyline=_write_polyline,
-        text=_write_text,
         raster=_write_raster,
     )
 
@@ -323,7 +299,7 @@ def _write_style(shape: dict) -> str:
     """Generate an SVG representation of a shape's style.
 
     Args:
-        shape: A geometric shape, group, text, or raster dictionary.
+        shape: A geometric shape, group, or raster dictionary.
 
     Returns:
         An SVG encoding which should be inserted between the quotes of

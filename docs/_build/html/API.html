@@ -1840,7 +1840,7 @@ returns a value.</td>
 
 <dl class="class">
 <dt id="algoraphics.param.Place">
-<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>ref</em>, <em>direction=0</em>, <em>distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">algoraphics.param.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>ref</em>, <em>direction=None</em>, <em>distance=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.param.Place" title="Permalink to this definition">¶</a></dt>
 <dd><p>An object that generates points with respect to a reference point.</p>
 <p>It is the 2D version of Param, and uses polar coordinates.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1849,8 +1849,9 @@ returns a value.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>ref</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The reference or starting point.</li>
-<li><strong>direction</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – A param giving directions (in degrees) of generated
-points relative to ref.</li>
+<li><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>]) – A param giving directions (in degrees) of generated
+points relative to ref.  By default the direction is
+uniformly random.</li>
 <li><strong>distance</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – A param giving distances of generated points relative to ref.</li>
 </ul>
 </td>
@@ -2725,33 +2726,6 @@ names will be [file_name]_0.svg, etc.</li>
 <h2>text.py<a class="headerlink" href="#text-py" title="Permalink to this headline">¶</a></h2>
 <p>Generate text in the form of shapes or SVG text.</p>
 <dl class="function">
-<dt id="algoraphics.text.caption">
-<code class="descclassname">algoraphics.text.</code><code class="descname">caption</code><span class="sig-paren">(</span><em>text</em>, <em>anchor</em>, <em>align='right'</em>, <em>color='#aaa'</em>, <em>font_size=14</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.caption" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a caption.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
-<li><strong>anchor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – The reference point.</li>
-<li><strong>align</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The alignment to reference point: ‘left’, ‘center’, or ‘right’.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – The text fill color.</li>
-<li><strong>font_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The font size.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A text shape.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.text.char_points">
 <code class="descclassname">algoraphics.text.</code><code class="descname">char_points</code><span class="sig-paren">(</span><em>char</em>, <em>start</em>, <em>h</em>, <em>spacing</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.char_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate points along a character shape.</p>
@@ -2772,119 +2746,6 @@ names will be [file_name]_0.svg, etc.</li>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of lists of points.  Each list of points corresponds to
 a pen stroke (i.e. what can be drawn without lifting the pen).</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.text.double_dots_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">double_dots_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>top_color='white'</em>, <em>bottom_color='black'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.double_dots_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate text with one splatter color over another.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
-<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The line height.</li>
-<li><strong>top_color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – The color for top (inner) splatters.</li>
-<li><strong>bottom_color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – The color for bottom (outer) splatters.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of two lists of circle shapes (inner lists are
-randomized).</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.text.hazy_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">hazy_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.hazy_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate text with hazy dots effect.</p>
-<p>Similar to splatter text but dot size is inversely proportional to
-square root of deviation, and points are uniformly jittered.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
-<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The line height.</li>
-<li><strong>spread</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Standard deviation of point jittering.</li>
-<li><strong>density</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Number of dots per pixel.</li>
-<li><strong>min_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The smallest dot radius.</li>
-<li><strong>max_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The largest dot radius.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – A fill color or function.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of circle shapes (in random order).</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.text.splatter_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">splatter_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em>, <em>min_size</em>, <em>max_size</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.splatter_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate text with paint splatter appearance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
-<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The line height.</li>
-<li><strong>spread</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Standard deviation of point jittering.</li>
-<li><strong>density</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Number of dots per pixel.</li>
-<li><strong>min_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The smallest dot radius.</li>
-<li><strong>max_size</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The largest dot radius.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – A fill Color.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of circle shapes (in random order).</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.text.squiggle_text">
-<code class="descclassname">algoraphics.text.</code><code class="descname">squiggle_text</code><span class="sig-paren">(</span><em>text</em>, <em>height</em>, <em>spread</em>, <em>density</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.text.squiggle_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate squiggly line text.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text.</li>
-<li><strong>height</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The line height.</li>
-<li><strong>spread</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Maximum deviation of point jittering.</li>
-<li><strong>density</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Number of spline points per pixel.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of splines.</p>
 </td>
 </tr>
 </tbody>

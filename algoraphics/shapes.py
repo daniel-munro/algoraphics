@@ -268,9 +268,6 @@ def translate_shapes(shapes: Collection, dx: Number, dy: Number):
     elif shapes["type"] == "line":
         shapes["p1"] = translated_point(shapes["p1"], dx, dy)
         shapes["p2"] = translated_point(shapes["p2"], dx, dy)
-    elif shapes["type"] == "text":
-        shapes["x"] += dx
-        shapes["y"] += dy
     elif shapes["type"] == "raster":
         shapes["x"] += dx
         shapes["y"] += dy
@@ -328,9 +325,6 @@ def scale_shapes(shapes: Collection, cx: Number, cy: Number = None):
     elif shapes["type"] == "line":
         shapes["p1"] = scaled_point(shapes["p1"], cx, cy)
         shapes["p2"] = scaled_point(shapes["p2"], cx, cy)
-    elif shapes["type"] == "text":
-        shapes["x"] *= cx
-        shapes["y"] *= cy
     elif shapes["type"] == "raster":
         # note: image contents not scaled/flipped!
         shapes["x"] *= cx

@@ -245,21 +245,18 @@ will be ignored).</p>
 <tr class="row-even"><td>spline</td>
 <td>points (list), curvature (float), circular (bool)</td>
 </tr>
-<tr class="row-odd"><td>text</td>
-<td>text (str), x (float), y (float), align (str), font_size (float)</td>
-</tr>
 </tbody>
 </table>
 <p><a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">Shapes</span></a> can be stored in nested lists without affecting
 their rendering.  The purpose of groups, on the other hand, is to
 apply things like clipping and shadows to a <a class="reference internal" href="glossary.html#term-collection"><span class="xref std std-term">collection</span></a> of
 <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a>.</p>
-<p>Convenience functions like <code class="docutils literal notranslate"><span class="pre">circle</span></code> exist that simply return a
-dictionary.  Functions also exist to define <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a> in
-alternative ways for convenience.  For example, the <code class="docutils literal notranslate"><span class="pre">rectangle</span></code>
-function accepts a starting <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">point</span></a>, width, and height, or just
-a set of x and y bounds, and returns a polygon defined by its four
-corners.</p>
+<p>Convenience functions like <code class="docutils literal notranslate"><span class="pre">circle</span></code> exist that return a dictionary
+and assign any style attributes provided.  Functions also exist to
+define <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a> in alternative ways for convenience.  For
+example, the <code class="docutils literal notranslate"><span class="pre">rectangle</span></code> function accepts a starting <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">point</span></a>,
+width, and height, or just a set of x and y bounds, and returns a
+polygon defined by its four corners.</p>
 </div>
 <div class="section" id="styles">
 <h3>Styles<a class="headerlink" href="#styles" title="Permalink to this headline">¶</a></h3>
@@ -445,9 +442,6 @@ one.</p>
 <tr class="row-even"><td>spline</td>
 <td>path made of bezier curves</td>
 </tr>
-<tr class="row-odd"><td>text</td>
-<td>text</td>
-</tr>
 </tbody>
 </table>
 <p>SVG-rendered effects like shadows and paper texture applied to objects
@@ -578,12 +572,6 @@ strokes, <a class="reference internal" href="glossary.html#term-point"><span cla
 </pre></div>
 </div>
 <img alt="_images/text4.png" src="_images/text4.png" />
-<p>Actual SVG text can also be produced:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">100</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="s2">&quot;SVG text.&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">w</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="_images/text5.png" src="_images/text5.png" />
 </div>
 <div class="section" id="filaments">
 <h3>Filaments<a class="headerlink" href="#filaments" title="Permalink to this headline">¶</a></h3>

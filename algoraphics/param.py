@@ -228,14 +228,18 @@ class Place:
     Args:
         ref: The reference or starting point.
         direction: A param giving directions (in degrees) of generated
-          points relative to ref.
+          points relative to ref.  By default the direction is
+          uniformly random.
         distance: A param giving distances of generated points relative to ref.
 
     """
 
-    def __init__(self, ref: Point, direction: Param = 0, distance: Param = 0):
+    def __init__(self, ref: Point, direction: Param = None, distance: Param = 0):
         self.ref = fixed_value(ref)
-        self.direction = make_param(direction)
+        if direction is None:
+            self.direction = Uniform(0, 360)
+        else:
+            self.direction = make_param(direction)
         self.distance = make_param(distance)
 
     def value(self):

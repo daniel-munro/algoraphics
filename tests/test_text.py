@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import math
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -12,22 +13,27 @@ c = ag.Canvas(w, h)
 
 color = ag.Color(hue=ag.Uniform(0, 0.15), sat=0.8, li=0.5)
 
-x1 = ag.splatter_text(
-    "ABCDEFG", height=50, spread=2, density=2, min_size=1, max_size=3, color=color
-)
+points = ag.text_points("ABCDEFG", 50, pt_spacing=0.5, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x1 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
 ag.reposition(x1, (w / 2, h - 50), "center", "top")
+c.new(ag.shuffled(x1))
 
-x2 = ag.splatter_text(
-    "HIJKLM", height=50, spread=2, density=2, min_size=1, max_size=3, color=color
-)
+points = ag.text_points("HIJKLM", 50, pt_spacing=0.5, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x2 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
 ag.reposition(x2, (w / 2, h - 150), "center", "top")
+c.add(ag.shuffled(x2))
 
-x3 = ag.splatter_text(
-    "0123456789", height=50, spread=2, density=2, min_size=1, max_size=3, color=color
-)
+points = ag.text_points("0123456789", 50, pt_spacing=0.5, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x3 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
 ag.reposition(x3, (w / 2, h - 250), "center", "top")
+c.add(ag.shuffled(x3))
 
-c.add(x1, x2, x3)
 c.png("png/text1.png")
 
 
@@ -35,20 +41,45 @@ c.png("png/text1.png")
 # Double dots text #
 ####################
 
-x1 = ag.double_dots_text("NOPQRST", height=40)
-ag.reposition(x1, (w / 2, h - 50), "center", "top")
+points = ag.text_points("NOPQRST", 40, pt_spacing=0.3, char_spacing=0.15)
+ag.jitter_points(points, 8)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x1a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
 
-x2 = ag.double_dots_text(
-    "UVWXYZ", height=40, top_color="#FF8888", bottom_color="#555555"
-)
-ag.reposition(x2, (w / 2, h - 150), "center", "top")
+points = ag.text_points("NOPQRST", 40, pt_spacing=1, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+x1b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
 
-x3 = ag.double_dots_text(
-    ".,!?:;'\"/", height=40, top_color="#FF8888", bottom_color="#555555"
-)
-ag.reposition(x3, (w / 2, h - 250), "center", "top")
+ag.reposition([x1a, x1b], (w / 2, h - 50), "center", "top")
+c.new(x1a, x1b)
 
-c.new(x1, x2, x3)
+points = ag.text_points("UVWXYZ", 40, pt_spacing=0.3, char_spacing=0.15)
+ag.jitter_points(points, 8)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x2a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
+
+points = ag.text_points("UVWXYZ", 40, pt_spacing=1, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+x2b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
+
+ag.reposition([x2a, x2b], (w / 2, h - 150), "center", "top")
+c.add(x2a, x2b)
+
+points = ag.text_points(".,!?:;'\"/", 40, pt_spacing=0.3, char_spacing=0.15)
+ag.jitter_points(points, 8)
+size = ag.Exponential(2.2, stdev=1).values(len(points))
+x3a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
+
+points = ag.text_points(".,!?:;'\"/", 40, pt_spacing=1, char_spacing=0.15)
+ag.jitter_points(points, 2)
+size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+x3b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
+
+ag.reposition([x3a, x3b], (w / 2, h - 250), "center", "top")
+c.add(x3a, x3b)
+
 c.png("png/text2.png")
 
 
@@ -56,15 +87,21 @@ c.png("png/text2.png")
 # Hazy text #
 #############
 
-x1 = ag.hazy_text(
-    "abcdefg", height=50, spread=10, density=3, min_size=0.5, max_size=2, color="green"
-)
+pts = ag.text_points("abcdefg", height=50, pt_spacing=1/4, char_spacing=0.15)
+dists = ag.Uniform(0, 10).values(len(pts))
+points = [ag.endpoint(p, ag.Uniform(0, 360).value(), dists[i]) for i, p in enumerate(pts)]
+radii = [0.5 * math.sqrt(10 - d) for d in dists]
+x1 = [ag.circle(c=p, r=radii[i]) for i, p in enumerate(points)]
 ag.reposition(x1, (w / 2, h - 100), "center", "top")
+ag.set_style(x1, "fill", "green")
 
-x2 = ag.hazy_text(
-    "hijklm", height=50, spread=10, density=3, min_size=0.5, max_size=2, color="green"
-)
+pts = ag.text_points("hijklm", height=50, pt_spacing=1/4, char_spacing=0.15)
+dists = ag.Uniform(0, 10).values(len(pts))
+points = [ag.endpoint(p, ag.Uniform(0, 360).value(), dists[i]) for i, p in enumerate(pts)]
+radii = [0.5 * math.sqrt(10 - d) for d in dists]
+x2 = [ag.circle(c=p, r=radii[i]) for i, p in enumerate(points)]
 ag.reposition(x2, (w / 2, h - 250), "center", "top")
+ag.set_style(x2, "fill", "green")
 
 c.new(x1, x2)
 c.png("png/text3.png")
@@ -74,23 +111,19 @@ c.png("png/text3.png")
 # Squiggle text #
 #################
 
-x1 = ag.squiggle_text("nopqrst", height=60, spread=10, density=1)
+strokes = ag.text_points("nopqrst", 60, pt_spacing=1,
+                         char_spacing=0.2, grouping='strokes')
+for stroke in strokes:
+    ag.jitter_points(stroke, 10)
+x1 = [ag.spline(points=stroke) for stroke in strokes]
 ag.reposition(x1, (w / 2, h - 100), "center", "top")
 
-x2 = ag.squiggle_text("uvwxyz", height=60, spread=10, density=1)
+strokes = ag.text_points("uvwxyz", 60, pt_spacing=1,
+                         char_spacing=0.2, grouping='strokes')
+for stroke in strokes:
+    ag.jitter_points(stroke, 10)
+x2 = [ag.spline(points=stroke) for stroke in strokes]
 ag.reposition(x2, (w / 2, h - 250), "center", "top")
 
 c.new(x1, x2)
 c.png("png/text4.png")
-
-
-######################
-# Caption (SVG text) #
-######################
-
-w, h = 400, 100
-c = ag.Canvas(w, h)
-x = ag.caption("SVG text.", anchor=(w - 20, 20))
-
-c.add(x)
-c.png("png/text5.png")
