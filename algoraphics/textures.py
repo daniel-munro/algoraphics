@@ -10,11 +10,10 @@ from typing import Union, Sequence
 from PIL import Image
 from typing import Tuple
 
-from .main import add_margin, bounding_box, random_walk
+from .main import add_margin, bounding_box
 from .color import map_colors_to_array, make_color, Color
 from .grid import grid_tree_dists
 from .param import fixed_value
-from .shapes import polygon
 
 Number = Union[int, float]
 Collection = Union[list, dict]
@@ -41,8 +40,9 @@ def array_to_image(array: np.ndarray, scale: bool = True) -> "Image":
         return Image.fromarray(array, mode="RGB")
 
 
-def add_shadows(objects: Sequence[Collection], stdev: Number = 10,
-                darkness: Number = 0.5):
+def add_shadows(
+    objects: Sequence[Collection], stdev: Number = 10, darkness: Number = 0.5
+):
     """Add shadows to objects.
 
     Each element (nested or not) of the list is replaced with a group
@@ -58,8 +58,8 @@ def add_shadows(objects: Sequence[Collection], stdev: Number = 10,
     """
     for i, obj in enumerate(objects):
         obj = obj if isinstance(obj, list) else [obj]
-        fltr = dict(type='shadow', stdev=stdev, darkness=darkness)
-        objects[i] = dict(type='group', members=obj, filter=fltr)
+        fltr = dict(type="shadow", stdev=stdev, darkness=darkness)
+        objects[i] = dict(type="group", members=obj, filter=fltr)
 
 
 def with_shadow(obj: Collection, stdev: Number, darkness: Number) -> dict:
@@ -76,7 +76,7 @@ def with_shadow(obj: Collection, stdev: Number, darkness: Number) -> dict:
         A group with ``obj`` as members and a filter applied to the group.
 
     """
-    return filtered(obj, dict(type='shadow', stdev=stdev, darkness=darkness))
+    return filtered(obj, dict(type="shadow", stdev=stdev, darkness=darkness))
 
 
 def filtered(obj: Collection, fltr: dict) -> dict:
@@ -91,11 +91,12 @@ def filtered(obj: Collection, fltr: dict) -> dict:
 
     """
     obj = obj if isinstance(obj, list) else [obj]
-    return dict(type='group', members=obj, filter=fltr)
+    return dict(type="group", members=obj, filter=fltr)
 
 
-def billowing(w: int, h: int, colors: Sequence[Color], scale: int,
-              gradient_mode: str = 'rgb') -> 'Image':
+def billowing(
+    w: int, h: int, colors: Sequence[Color], scale: int, gradient_mode: str = "rgb"
+) -> "Image":
     """Generate a billowing texture.
 
     Args:
@@ -115,8 +116,12 @@ def billowing(w: int, h: int, colors: Sequence[Color], scale: int,
     return array_to_image(mat)
 
 
-def billow_region(outline: Collection, colors: Sequence[Color], scale:
-                  int = 200, gradient_mode: str = 'rgb') -> dict:
+def billow_region(
+    outline: Collection,
+    colors: Sequence[Color],
+    scale: int = 200,
+    gradient_mode: str = "rgb",
+) -> dict:
     """Fill region with billowing texture.
 
     Args:
@@ -137,9 +142,8 @@ def billow_region(outline: Collection, colors: Sequence[Color], scale:
     w = int(bound[2] - bound[0])
     h = int(bound[3] - bound[1])
     billow = billowing(w, h, colors, scale, gradient_mode)
-    billow = dict(type='raster', image=billow, x=bound[0], y=bound[1],
-                  format='PNG')
-    return dict(type='group', clip=outline, members=[billow])
+    billow = dict(type="raster", image=billow, x=bound[0], y=bound[1], format="PNG")
+    return dict(type="group", clip=outline, members=[billow])
 
 
 def add_paper_texture(obj: Collection):
@@ -152,60 +156,8 @@ def add_paper_texture(obj: Collection):
     if isinstance(obj, list):
         for o in obj:
             add_paper_texture(o)
-    elif obj['type'] == 'group':
-        for o in obj['members']:
+    elif obj["type"] == "group":
+        for o in obj["members"]:
             add_paper_texture(o)
     else:
-        obj['filter'] = dict(type='roughness')
-
-
-def tear_paper_rect(objects: Collection, bounds: Bounds) -> dict:
-    """Add effect of tearing a rectangle around a shape or collection.
-
-    Args:
-        objects: A shape or (nested) list of shapes.
-        bounds: A rectangle will be torn just inside these bounds.
-
-    Returns:
-        A shadow-filtered group containing a clipped group containing
-        original shapes.
-
-    """
-    e = 10
-    d = 0.5
-
-    s1 = (bounds[0] + np.random.uniform(0, e),
-          bounds[1] + np.random.uniform(0, e))
-    s = s1
-    points = [s]
-    n = int((bounds[2] - s[0] - np.random.uniform(0, e)) / d)
-    x = [s[0] + d * i for i in range(n)]
-    y = random_walk(min_val=bounds[1], max_val=bounds[1] + e,
-                    max_step=0.5, n=n, start=s[1])
-    points.extend(zip(x, y))
-
-    s = points[-1]
-    n = int((bounds[3] - s[1] - np.random.uniform(0, e)) / d)
-    x = random_walk(min_val=bounds[2] - e, max_val=bounds[2],
-                    max_step=0.5, n=n, start=s[0])
-    y = [s[1] + d * i for i in range(n)]
-    points.extend(zip(x, y))
-
-    s = points[-1]
-    n = int((s[0] - bounds[0] - np.random.uniform(0, e)) / d)
-    x = [s[0] - d * i for i in range(n)]
-    y = random_walk(min_val=bounds[3] - e, max_val=bounds[3],
-                    max_step=0.5, n=n, start=s[1])
-    points.extend(zip(x, y))
-
-    s = points[-1]
-    n = int((s[1] - s1[1]) / d)
-    x = random_walk(min_val=bounds[0], max_val=bounds[0] + e,
-                    max_step=0.5, n=n, start=s[0])
-    y = [s[1] - d * i for i in range(n)]
-    points.extend(zip(x, y))
-
-    clip = polygon(points=points)
-    members = objects if isinstance(objects, list) else [objects]
-    group = dict(type='group', clip=clip, members=members)
-    return filtered(group, dict(type='shadow', stdev=7, darkness=0.8))
+        obj["filter"] = dict(type="roughness")

@@ -9,7 +9,9 @@ import numpy as np
 import string
 import subprocess
 import os
-import cairosvg
+
+# import cairosvg
+import tempfile
 from PIL import Image
 from io import BytesIO
 from base64 import b64encode
@@ -69,7 +71,10 @@ class Canvas:
 
     def png(self, file_name: str):
         svg = self.get_svg()
-        cairosvg.svg2png(svg, write_to=file_name)
+        # cairosvg.svg2png(svg, write_to=file_name)
+        handle, path = tempfile.mkstemp()
+        open(handle, "w").write(svg)
+        subprocess.run(["convert", path, file_name])
 
 
 def _encode_image(image: Image, frmt: str) -> str:
@@ -426,59 +431,6 @@ def _write_filters(filters: Sequence[dict]) -> str:
     return fltrs
 
 
-def write_SVG(
-    objects: Union[list, dict],
-    w: Number,
-    h: Number,
-    file_name: str,
-    optimize: bool = True,
-):
-    """Write an SVG file for a collection of objects.
-
-    Args:
-        objects: A (nested) collection of objects.  They are placed
-          onto the canvas in order after flattening.
-        w: Width of canvas.
-        h: Height of canvas.
-        file_name: The file name to write to.
-        optimize: Whether to optimize the SVG file using svgo.
-
-    """
-    defs = []
-    filters = []
-    out = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" '
-    out += 'xmlns:xlink="http://www.w3.org/1999/xlink" '
-    out += 'width="' + str(w) + '" height="' + str(h) + '">\n'
-
-    # flip y-axis so zero is at the bottom:
-    scale_shapes(objects, 1, -1)
-    translate_shapes(objects, 0, h)
-
-    objects = "".join([_write_shape(obj, defs, filters) for obj in flatten(objects)])
-
-    defs.extend(_write_filters(filters))
-    out += "<defs>\n" + "".join(defs) + "</defs>\n"
-
-    # flip y-axis so zero is at the bottom:
-    # out += '<g transform="translate(0, ' + str(h) + ') scale(1, -1)">\n'
-    # out += objects
-    # out += '</g>\n</svg>\n'
-    out += objects + "</svg>\n"
-
-    open(file_name, "w").write(out)
-    if optimize:
-        subprocess.run(
-            [
-                "svgo",
-                "--quiet",
-                "--precision=2",
-                # '--config=/home/dan/coding/graphics/algoraphics/scripts/svgo_config.txt',
-                # '--disable=collapseGroups',
-                "--input=" + file_name,
-            ]
-        )
-
-
 def svg_string(objects: Union[list, dict], w: Number, h: Number):
     """Create an SVG string for a collection of objects.
 
@@ -508,62 +460,22 @@ def svg_string(objects: Union[list, dict], w: Number, h: Number):
     return out
 
 
-def to_PNG(infile: str, outfile: str = None):
-    """Convert and SVG file to a PNG image.
+# def write_frames(fun: Callable, n: int, w: Number, h: Number, file_name: str):
+#     """Write multiple frames of randomized objects.
 
-    Args:
-        infile: The SVG file name.
-        outfile: The PNG file name to write to.  If omitted, it will
-          be set to the SVG file name with the extension replaced with
-          '.png'.
+#     Frames can then be combined into an animated GIF.
 
-    """
-    if outfile is None:
-        inbase = os.path.splitext(infile)[0]
-        outfile = inbase + ".png"
-    subprocess.run(["convert", infile, outfile])
+#     Args:
+#         fun: A function called with no arguments that returns an SVG
+#           object collection.
+#         n: Number of frames to generate.
+#         w: Width of the canvas.
+#         h: Height of the canvas.
+#         file_name: A file name (without extension) to write to.  File
+#           names will be [file_name]_0.svg, etc.
 
-
-def write_frames(fun: Callable, n: int, w: Number, h: Number, file_name: str):
-    """Write multiple frames of randomized objects.
-
-    Frames can then be combined into an animated GIF.
-
-    Args:
-        fun: A function called with no arguments that returns an SVG
-          object collection.
-        n: Number of frames to generate.
-        w: Width of the canvas.
-        h: Height of the canvas.
-        file_name: A file name (without extension) to write to.  File
-          names will be [file_name]_0.svg, etc.
-
-    """
-    for i in range(n):
-        write_SVG(fun(), w, h, file_name + "_" + str(i) + ".svg")
-
-
-# For assembling GIF:
-# convert -dither None -delay 5 $1_*.svg -clone 0 -morph 1 -delete -1 $1.gif
-
-# def round_values(obj, digits=0):
-#     """rounds all values in nested structure"""
-#
-#     def round_value(value, digits=0):
-#         if digits == 0:
-#             return int(round(value))
-#         else:
-#             return round(value, digits)
-#
-#     def process_item(obj, i):
-#         if isinstance(obj[i], (list, dict)):
-#             round_values(obj[i], digits)
-#         elif isinstance(obj[i], float):
-#             obj[i] = round_value(obj[i], digits)
-#
-#     if isinstance(obj, list):
-#         for i in range(len(obj)):
-#             process_item(obj, i)
-#     else:
-#         for field in obj:
-#             process_item(obj, field)
+#     """
+#     for i in range(n):
+#         write_SVG(fun(), w, h, file_name + "_" + str(i) + ".svg")
+# # For assembling GIF:
+# # convert -dither None -delay 5 $1_*.svg -clone 0 -morph 1 -delete -1 $1.gif

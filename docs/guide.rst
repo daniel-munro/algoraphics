@@ -678,10 +678,9 @@ and places them until the :term:`region` is filled::
 Effects
 =======
 
-Warning: Effects are currently not exported to PNG!
-
 Shadows can be added to :term:`shapes<shape>` or
-:term:`collections<collection>`::
+:term:`collections<collection>`, and shapes can be given rough paper
+textures::
 
  x = [
      ag.circle(c=(100, 150), r=50, stroke="#FFDDDD"),
@@ -690,24 +689,12 @@ Shadows can be added to :term:`shapes<shape>` or
  ag.set_style(x, "stroke-width", 10)
  ag.add_shadows(x, stdev=20, darkness=0.5)
  
- y = [
+ y = [[
      ag.circle(c=(300, 250), r=50, fill="#FFDDDD"),
      ag.circle(c=(250, 300), r=50, fill="#DDDDFF"),
- ]
+ ]]
+ ag.add_paper_texture(y)
  
  ag.add_shadows(y, stdev=20, darkness=0.5)
 
 .. image:: /_static/png/textures1.png
-
-Shapes or collections can be given a rough paper texture, and their
-edges can appear torn::
-	   
- x = [
-     ag.rectangle(start=(50, 50), w=300, h=300, fill="green"),
-     ag.circle(c=(200, 200), r=150, fill="#FFCCCC")
- ]
- 
- ag.add_paper_texture(x)
- x = ag.tear_paper_rect(x, (60, 60, 340, 340))
-
-.. image:: /_static/png/textures3.png

@@ -28,40 +28,12 @@ def flatten(objects: Any) -> list:
 
     """
     out = []
-    if isinstance(objects, list):
+    if type(objects) is list:
         for obj in objects:
             out.extend(flatten(obj))
     else:
         out.append(objects)
     return out
-
-
-def random_walk(
-    min_val: Number, max_val: Number, max_step: Number, n: int, start: Number = None
-) -> list:
-    """Generate a random walk sequence.
-
-    Steps are sampled from a uniform random distribution.
-
-    Args:
-        min_val: Values will not fall below this value.
-        max_val: Values will not fall above this value.
-        max_step: Maximum magnitude of each step.
-        n: Length of the sequence.
-        start: The starting value.
-
-    Returns:
-        The generated sequence.
-
-    """
-    if start is None:
-        x = [np.random.uniform(min_val, max_val)]
-    else:
-        x = [float(start)]
-    for i in range(1, n):
-        val = x[-1] + np.random.uniform(-max_step, max_step)
-        x.append(max(min_val, min(max_val, val)))
-    return x
 
 
 def shuffled(items: Sequence) -> list:
@@ -151,7 +123,7 @@ def region_background(region: dict, color: Color):
     """
     bounds = add_margin(bounding_box(region["clip"]), 10)
     bg = rectangle(bounds=bounds, fill=color)
-    if isinstance(region["members"], list):
+    if type(region["members"]) is list:
         region["members"].insert(0, bg)
     else:
         region["members"] = [bg, region["members"]]
@@ -168,7 +140,7 @@ def tint_region(region: dict, color: Color, opacity: float):
     """
     bounds = add_margin(bounding_box(region["clip"]), 10)
     tint = rectangle(bounds=bounds, fill=color, opacity=opacity)
-    if isinstance(region["members"], list):
+    if type(region["members"]) is list:
         region["members"].append(tint)
     else:
         region["members"] = [region["members"], tint]

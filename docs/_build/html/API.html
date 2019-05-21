@@ -1492,64 +1492,6 @@ color if input is a single point.</p>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="algoraphics.images.segment_image">
-<code class="descclassname">algoraphics.images.</code><code class="descname">segment_image</code><span class="sig-paren">(</span><em>image</em>, <em>n_segments=100</em>, <em>compactness=10</em>, <em>smoothness=0</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.segment_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Divide image into segments.</p>
-<p>Used by image_regions().</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>image</strong> – A PIL image.</li>
-<li><strong>n_segments</strong> – Approximate number of desired segments.</li>
-<li><strong>compactness</strong> – A higher value produces more compact, square-like
-segments.  Try values along log-scale, e.g. 0.1, 1, 10, 100.</li>
-<li><strong>smoothness</strong> – The width of gaussian smoothing applied before
-segmentation.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A 2D array of integer segment labels.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.images.segments_to_shapes">
-<code class="descclassname">algoraphics.images.</code><code class="descname">segments_to_shapes</code><span class="sig-paren">(</span><em>seg</em>, <em>simplify=None</em>, <em>expand=1</em>, <em>smoothing=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.images.segments_to_shapes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert an array of segment labels to spline shapes.</p>
-<p>Used by <code class="docutils literal notranslate"><span class="pre">image_regions()</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>seg</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – A 2D array of segment labels.</li>
-<li><strong>simplify</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Maximum distance from the edge of a simplified shape
-to the actual boundary when reducing number of points, or
-None for no simplification.</li>
-<li><strong>expand</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of pixels to expand each segment in every
-direction to avoid gaps between adjacent shapes.</li>
-<li><strong>smoothing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The degree of curvature for the splines.  Usually
-between zero and one.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of spline shapes, generally in order from left to right
-and then bottom to top.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <span class="target" id="module-algoraphics.main"></span><div class="section" id="main-py">
 <h2>main.py<a class="headerlink" href="#main-py" title="Permalink to this headline">¶</a></h2>
@@ -1593,34 +1535,6 @@ issues at the edges of the region or canvas.</p>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The non-list elements within the input.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.main.random_walk">
-<code class="descclassname">algoraphics.main.</code><code class="descname">random_walk</code><span class="sig-paren">(</span><em>min_val</em>, <em>max_val</em>, <em>max_step</em>, <em>n</em>, <em>start=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.main.random_walk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a random walk sequence.</p>
-<p>Steps are sampled from a uniform random distribution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>min_val</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Values will not fall below this value.</li>
-<li><strong>max_val</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Values will not fall above this value.</li>
-<li><strong>max_step</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Maximum magnitude of each step.</li>
-<li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Length of the sequence.</li>
-<li><strong>start</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The starting value.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The generated sequence.</p>
-</td>
 </tr>
 </tbody>
 </table>
@@ -2655,72 +2569,6 @@ onto the canvas in order after flattening.</li>
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="algoraphics.svg.to_PNG">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">to_PNG</code><span class="sig-paren">(</span><em>infile</em>, <em>outfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.to_PNG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert and SVG file to a PNG image.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>infile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The SVG file name.</li>
-<li><strong>outfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The PNG file name to write to.  If omitted, it will
-be set to the SVG file name with the extension replaced with
-‘.png’.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.svg.write_SVG">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">write_SVG</code><span class="sig-paren">(</span><em>objects</em>, <em>w</em>, <em>h</em>, <em>file_name</em>, <em>optimize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_SVG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write an SVG file for a collection of objects.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>objects</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A (nested) collection of objects.  They are placed
-onto the canvas in order after flattening.</li>
-<li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of canvas.</li>
-<li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of canvas.</li>
-<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
-<li><strong>optimize</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to optimize the SVG file using svgo.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.svg.write_frames">
-<code class="descclassname">algoraphics.svg.</code><code class="descname">write_frames</code><span class="sig-paren">(</span><em>fun</em>, <em>n</em>, <em>w</em>, <em>h</em>, <em>file_name</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.write_frames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write multiple frames of randomized objects.</p>
-<p>Frames can then be combined into an animated GIF.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – A function called with no arguments that returns an SVG
-object collection.</li>
-<li><strong>n</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of frames to generate.</li>
-<li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
-<li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
-<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – A file name (without extension) to write to.  File
-names will be [file_name]_0.svg, etc.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <span class="target" id="module-algoraphics.text"></span><div class="section" id="text-py">
 <h2>text.py<a class="headerlink" href="#text-py" title="Permalink to this headline">¶</a></h2>
@@ -2917,31 +2765,6 @@ interpolated.</li>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A group with <code class="docutils literal notranslate"><span class="pre">obj</span></code> as members and filter applied to group.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="algoraphics.textures.tear_paper_rect">
-<code class="descclassname">algoraphics.textures.</code><code class="descname">tear_paper_rect</code><span class="sig-paren">(</span><em>objects</em>, <em>bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.textures.tear_paper_rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add effect of tearing a rectangle around a shape or collection.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>objects</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]) – A shape or (nested) list of shapes.</li>
-<li><strong>bounds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A rectangle will be torn just inside these bounds.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A shadow-filtered group containing a clipped group containing
-original shapes.</p>
 </td>
 </tr>
 </tbody>

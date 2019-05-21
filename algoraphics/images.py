@@ -117,7 +117,7 @@ def fill_shapes_from_image(shapes: Sequence[dict], image: "Image"):
         set_style(shapes[i], "fill", colors[i])
 
 
-def segment_image(
+def _segment_image(
     image: "Image",
     n_segments: int = 100,
     compactness: Number = 10,
@@ -168,7 +168,7 @@ def pad_array(pixels: np.ndarray, margin: int = 1) -> np.ndarray:
     return pixels
 
 
-def segments_to_shapes(
+def _segments_to_shapes(
     seg: np.ndarray, simplify: Number = None, expand: int = 1, smoothing: float = 0.2
 ) -> Sequence[dict]:
     """Convert an array of segment labels to spline shapes.
@@ -237,5 +237,5 @@ def image_regions(
         and then bottom to top.
 
     """
-    seg = segment_image(image, n_segments, compactness, smoothness)
-    return segments_to_shapes(seg, simplify, expand, smoothing)
+    seg = _segment_image(image, n_segments, compactness, smoothness)
+    return _segments_to_shapes(seg, simplify, expand, smoothing)

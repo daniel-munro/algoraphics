@@ -6,22 +6,16 @@ Generate text in the form of shapes or SVG text.
 """
 
 import math
-import numpy as np
 from typing import Union, Tuple, List
 
-from .main import shuffled
 from .geom import (
     points_on_line,
     points_on_arc,
     scale_points,
     translate_points,
     horizontal_range,
-    endpoint,
     deg,
-    jitter_points,
 )
-from .shapes import circle, spline, set_style
-from .color import Color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]

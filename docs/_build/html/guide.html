@@ -828,9 +828,9 @@ and places them until the <a class="reference internal" href="glossary.html#term
 </div>
 <div class="section" id="effects">
 <h2>Effects<a class="headerlink" href="#effects" title="Permalink to this headline">¶</a></h2>
-<p>Warning: Effects are currently not exported to PNG!</p>
 <p>Shadows can be added to <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shapes</span></a> or
-<a class="reference internal" href="glossary.html#term-collection"><span class="xref std std-term">collections</span></a>:</p>
+<a class="reference internal" href="glossary.html#term-collection"><span class="xref std std-term">collections</span></a>, and shapes can be given rough paper
+textures:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;#FFDDDD&quot;</span><span class="p">),</span>
     <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="s2">&quot;#DDDDFF&quot;</span><span class="p">),</span>
@@ -838,27 +838,16 @@ and places them until the <a class="reference internal" href="glossary.html#term
 <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;stroke-width&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">add_shadows</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">darkness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[[</span>
     <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#FFDDDD&quot;</span><span class="p">),</span>
     <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#DDDDFF&quot;</span><span class="p">),</span>
-<span class="p">]</span>
+<span class="p">]]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">add_paper_texture</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="n">ag</span><span class="o">.</span><span class="n">add_shadows</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">darkness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/textures1.png" src="_images/textures1.png" />
-<p>Shapes or collections can be given a rough paper texture, and their
-edges can appear torn:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">ag</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">w</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">),</span>
-    <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;#FFCCCC&quot;</span><span class="p">)</span>
-<span class="p">]</span>
-
-<span class="n">ag</span><span class="o">.</span><span class="n">add_paper_texture</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">tear_paper_rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">340</span><span class="p">))</span>
-</pre></div>
-</div>
-<img alt="_images/textures3.png" src="_images/textures3.png" />
 </div>
 </div>
 

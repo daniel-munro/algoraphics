@@ -19,5 +19,7 @@ setup(
         ],
         'docs': [
             'sphinx',
-            'sphinx_autodoc_typehints']}
+            'sphinx_autodoc_typehints',
+        ]
+    }
 )
