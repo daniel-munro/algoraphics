@@ -662,15 +662,26 @@ A :term:`region` can be filled with structures such as filaments using
 a generic function that generates random instances of the structure
 and places them until the :term:`region` is filled::
 
- color = ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5))
+ def filament_fill(bounds):
+     c = ((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
+     r = ag.distance(c, (bounds[2], bounds[3]))
+     start = ag.rand_point_on_circle(c, r)
+     dir_start = ag.direction_to(start, c)
+     filament = ag.filament(
+         start=start,
+         direction=ag.Delta(dir_start, delta=ag.Uniform(min=-20, max=20)),
+         width=ag.Uniform(min=8, max=12),
+         seg_length=ag.Uniform(min=8, max=12),
+         n_segments=int(2.2 * r / 10),
+     )
+     color = ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5))
+     ag.set_style(filament, "fill", color)
+     return filament
+ 
+ 
  outline = ag.circle(c=(200, 200), r=100)
- dir_delta = ag.Uniform(min=-20, max=20)
- width = ag.Uniform(min=8, max=12)
- length = ag.Uniform(min=8, max=12)
- filfun = ag.filament_fill(direction_delta=dir_delta, width=width,
-                           seg_length=length, color=color)
- x = ag.fill_region(outline, filfun)
- ag.add_shadows(x['members'])
+ x = ag.fill_region(outline, filament_fill)
+ ag.add_shadows(x["members"])
 
 .. image:: /_static/png/fill1.png
 

@@ -446,37 +446,8 @@ the doodle’s footprint.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="algoraphics.fill.filament_fill">
-<code class="descclassname">algoraphics.fill.</code><code class="descname">filament_fill</code><span class="sig-paren">(</span><em>direction_delta</em>, <em>width</em>, <em>seg_length</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.filament_fill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate filament fill function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>direction_delta</strong> (<a class="reference internal" href="#algoraphics.param.Param" title="algoraphics.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a>) – Parameter that will become the delta for the
-filament direction.</li>
-<li><strong>width</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the filament.</li>
-<li><strong>seg_length</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Average side length of each segment.</li>
-<li><strong>color</strong> (<a class="reference internal" href="#algoraphics.color.Color" title="algoraphics.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a>) – Color specification for filament segments.  A separate
-copy is used for each filament in case it involves
-deltas/ratios.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A function used by fill_region().</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="algoraphics.fill.fill_region">
-<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_region" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">algoraphics.fill.</code><code class="descname">fill_region</code><span class="sig-paren">(</span><em>outline</em>, <em>object_fun</em>, <em>min_coverage=1</em>, <em>max_tries=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.fill.fill_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill a region by iteratively placing randomly generated objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -485,11 +456,9 @@ deltas/ratios.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>outline</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]) – A shape or (nested) list of shapes that will become clip.</li>
 <li><strong>object_fun</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]], <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]) – A function that takes bounds as input and returns
-one randomly generated object.  Usually this is a lambda
-function that calls another function using arguments passed
-to the function that produced the lambda function.  i.e.,
-def caller_fun(args…): return lambda bounds:
-helper_fun(bounds, args…)</li>
+a randomly generated object.</li>
+<li><strong>min_coverage</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The minimum fraction of the region’s area filled
+before stopping.</li>
 <li><strong>max_tries</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – If not None, the number of objects to generate
 (including those discarded for not filling space) before
 giving up and returning the region as is.</li>

@@ -22,12 +22,9 @@ from .shapes import (
     translate_shapes,
     scale_shapes,
     sample_points_in_shape,
-    set_style,
 )
-from .geom import distance, rand_point_on_circle, deg, spaced_points
-from .structures import filament
+from .geom import spaced_points
 from .param import Param, Delta, make_param, fixed_value
-from .color import Color, make_color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -38,6 +35,7 @@ Collection = Union[dict, list]
 def fill_region(
     outline: Collection,
     object_fun: Callable[[Bounds], Collection],
+    min_coverage: float = 1,
     max_tries: int = None,
 ) -> dict:
     """Fill a region by iteratively placing randomly generated objects.
@@ -45,11 +43,9 @@ def fill_region(
     Args:
         outline: A shape or (nested) list of shapes that will become clip.
         object_fun: A function that takes bounds as input and returns
-          one randomly generated object.  Usually this is a lambda
-          function that calls another function using arguments passed
-          to the function that produced the lambda function.  i.e.,
-          def caller_fun(args...): return lambda bounds:
-          helper_fun(bounds, args...)
+          a randomly generated object.
+        min_coverage: The minimum fraction of the region's area filled
+          before stopping.
         max_tries: If not None, the number of objects to generate
           (including those discarded for not filling space) before
           giving up and returning the region as is.
@@ -60,88 +56,24 @@ def fill_region(
     """
     bounds = add_margin(bounding_box(outline), 10)
     space = coverage(outline)
+    total_area = space.area
     objects = []
     try_count = 0
-    while space.area > 0.1 and (max_tries is None or try_count < max_tries):
+    while space.area > (1 - min_coverage) * total_area and (
+        max_tries is None or try_count < max_tries
+    ):
         try_count += 1
         obj = object_fun(bounds)
-        # space_copy = copy.deepcopy(space)
         old_area = space.area
         shapes = [coverage(o) for o in flatten(obj)]
         for shape in shapes:
             space = space.difference(shape)
         if space.area < old_area:
             objects.append(obj)
-            # space = space_copy
 
     filled_region = dict(type="group", clip=outline, members=objects)
     remove_hidden(filled_region)
     return filled_region
-
-
-def _filament_fill_obj(
-    bounds: Bounds,
-    direction_delta: Param,
-    width: Param,
-    seg_length: Param,
-    color: Color,
-) -> List[dict]:
-    """Generate filament extending into bounds.
-
-    Called indirectly by lambda function produced by filament_fill().
-
-    Args:
-        bounds: A bounds tuple.
-        direction_delta: Parameter that will become the delta for the
-          filament direction.
-        width: Width of the filament.
-        seg_length: Average side length of each segment.
-        color: Color specification for filament segments.  A separate
-          copy is used for each filament in case it involves
-          deltas/ratios.
-
-    Returns:
-        The ordered segment polygons.
-
-    """
-    direction_delta = make_param(direction_delta)
-    width = make_param(width)
-    seg_length = make_param(seg_length)
-    color = make_color(color)
-
-    c = ((bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2)
-    r = distance(c, (bounds[2], bounds[3]))
-    start = rand_point_on_circle(c, r)
-    angle = math.atan2(c[1] - start[1], c[0] - start[0])
-    dir_start = deg(angle) + np.random.uniform(-60, 60)
-    direction = Delta(dir_start, delta=direction_delta)
-    n_segments = int(2.2 * r / seg_length.mean)
-    x = filament(start, direction, width, seg_length, n_segments)
-    set_style(x, "fill", color)
-    return x
-
-
-def filament_fill(
-    direction_delta: Param, width: Number, seg_length: Number, color: Color
-) -> Callable[[Bounds], List[dict]]:
-    """Generate filament fill function.
-
-    Args:
-        direction_delta: Parameter that will become the delta for the
-          filament direction.
-        width: Width of the filament.
-        seg_length: Average side length of each segment.
-        color: Color specification for filament segments.  A separate
-          copy is used for each filament in case it involves
-          deltas/ratios.
-
-    Returns:
-        A function used by fill_region().
-
-    """
-    return lambda bounds: _filament_fill_obj(
-        bounds, direction_delta, width, seg_length, color
-    )
 
 
 class Doodle:
