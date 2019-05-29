@@ -88,6 +88,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#location-parameters">Location Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#animation">Animation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#svg-representation">SVG Representation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
 </ul>
@@ -266,7 +267,7 @@ as a dictionary in each <a class="reference internal" href="glossary.html#term-s
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <p>Many algoraphics functions accept abstract parameters that specify a
-distribution to randomly sample from.  This makes it easy to
+distribution from which to randomly sample.  This makes it easy to
 incorporate subtle or not-so-subtle randomness into the graphics.  It
 also allows basic functions to be used in multiple ways to create
 different patterns.</p>
@@ -405,11 +406,44 @@ specifications.</p>
 be set with a string, which will be used as-is in the SVG file.  This
 will work for hex codes, named colors, etc.</p>
 </div>
+<div class="section" id="animation">
+<h3>Animation<a class="headerlink" href="#animation" title="Permalink to this headline">¶</a></h3>
+<p>These parameters make it easy to animate a graphic by putting its code
+in a function and generating multiple instances, then stitching them
+into a GIF or video:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">frame1</span><span class="p">():</span>
+    <span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_spots</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">gif</span><span class="p">(</span><span class="n">frame1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;png/svg1.gif&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/svg1.gif" src="_images/svg1.gif" />
+<p>The frame generator can be a function of time (in seconds):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">frame</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="n">outline</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">r</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_spots</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">gif</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;png/svg3.gif&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/svg3.gif" src="_images/svg3.gif" />
+</div>
 <div class="section" id="svg-representation">
 <h3>SVG Representation<a class="headerlink" href="#svg-representation" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">Shapes</span></a> are converted to SVG for export.  Each type of
 <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> corresponds to a SVG object type or a specific form of
-one.</p>
+pone.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="30%" />

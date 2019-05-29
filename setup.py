@@ -6,6 +6,7 @@ setup(
     install_requires=[
         'cairosvg',
         'matplotlib',
+        'moviepy',
         'numpy',
         'Pillow',
         'Rtree',

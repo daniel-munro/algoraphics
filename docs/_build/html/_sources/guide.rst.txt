@@ -77,7 +77,7 @@ Parameters
 ----------
 
 Many algoraphics functions accept abstract parameters that specify a
-distribution to randomly sample from.  This makes it easy to
+distribution from which to randomly sample.  This makes it easy to
 incorporate subtle or not-so-subtle randomness into the graphics.  It
 also allows basic functions to be used in multiple ways to create
 different patterns.
@@ -235,12 +235,48 @@ be set with a string, which will be used as-is in the SVG file.  This
 will work for hex codes, named colors, etc.
 
 
+Animation
+---------
+
+These parameters make it easy to animate a graphic by putting its code
+in a function and generating multiple instances, then stitching them
+into a GIF or video::
+  
+ def frame1():
+     outline = ag.circle(c=(200, 200), r=180)
+     color = ag.Color(
+         hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=ag.Uniform(min=0.5, max=0.7)
+     )
+     x = ag.fill_spots(outline, spacing=30)
+     ag.set_style(x, "fill", color)
+     c.new(x)
+     return c
+ 
+ ag.gif(frame1, seconds=2, fps=12, file_name="png/svg1.gif")
+
+.. image:: /_static/png/svg1.gif
+
+The frame generator can be a function of time (in seconds)::
+
+ def frame(t):
+     outline = ag.circle(c=(200, 200), r=180)
+     color = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=1 - 0.4 * abs(1 - t))
+     x = ag.fill_spots(outline, spacing=30)
+     ag.set_style(x, "fill", color)
+     c.new(x)
+     return c
+ 
+ ag.gif(frame, seconds=2, fps=12, file_name="png/svg3.gif")
+
+.. image:: /_static/png/svg3.gif
+
+
 SVG Representation
 ------------------
 
 :term:`Shapes<shape>` are converted to SVG for export.  Each type of
 :term:`shape` corresponds to a SVG object type or a specific form of
-one.
+pone.
 
 ===========  ==========================
 algoraphics  SVG

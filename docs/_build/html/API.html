@@ -2518,6 +2518,123 @@ are approximate.</p>
 <span class="target" id="module-algoraphics.svg"></span><div class="section" id="svg-py">
 <h2>svg.py<a class="headerlink" href="#svg-py" title="Permalink to this headline">¶</a></h2>
 <p>write SVG files.</p>
+<dl class="class">
+<dt id="algoraphics.svg.Canvas">
+<em class="property">class </em><code class="descclassname">algoraphics.svg.</code><code class="descname">Canvas</code><span class="sig-paren">(</span><em>width</em>, <em>height</em>, <em>background='white'</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>A rectangular space to be filled with graphics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> – The canvas width.</li>
+<li><strong>height</strong> – The canvas height.</li>
+<li><strong>background</strong> – The background color.  If None, background will be
+transparent.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>*object</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add one or more shapes or collections to the canvas.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all objects from the canvas.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.get_svg">
+<code class="descname">get_svg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.get_svg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the SVG representation of the canvas as a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.new">
+<code class="descname">new</code><span class="sig-paren">(</span><em>*object</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the canvas and then add one or more shapes or collections.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.png">
+<code class="descname">png</code><span class="sig-paren">(</span><em>file_name</em>, <em>force_RGBA=False</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.png" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the canvas to a PNG file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
+<li><strong>force_RGBA</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to write PNG in RGBA colorspace, even
+if it could be grayscale.  This is for, e.g., moviepy
+which requires all frame images to be in the same
+colorspace.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="algoraphics.svg.Canvas.svg">
+<code class="descname">svg</code><span class="sig-paren">(</span><em>file_name</em>, <em>optimize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.Canvas.svg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the canvas to an SVG file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
+<li><strong>optimize</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to optimize the SVG file using svgo.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.svg.gif">
+<code class="descclassname">algoraphics.svg.</code><code class="descname">gif</code><span class="sig-paren">(</span><em>function</em>, <em>fps</em>, <em>file_name</em>, <em>n_frames=None</em>, <em>seconds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.gif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a GIF image from a frame-generating function.</p>
+<p>By wrapping typical canvas drawing code in a function, multiple
+versions of the drawing, each with random variation, can be
+stitched together into an animated GIF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>function</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – A function called with no arguments that returns a
+(filled) Canvas.</li>
+<li><strong>fps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Frames per second of the GIF.</li>
+<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
+<li><strong>n_frames</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Number of frames to generate.</li>
+<li><strong>seconds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Specify length of the GIF in seconds instead of
+number of frames.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="algoraphics.svg.svg_string">
 <code class="descclassname">algoraphics.svg.</code><code class="descname">svg_string</code><span class="sig-paren">(</span><em>objects</em>, <em>w</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.svg_string" title="Permalink to this definition">¶</a></dt>
@@ -2531,6 +2648,32 @@ are approximate.</p>
 onto the canvas in order after flattening.</li>
 <li><strong>w</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Width of the canvas.</li>
 <li><strong>h</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Height of the canvas.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="algoraphics.svg.video">
+<code class="descclassname">algoraphics.svg.</code><code class="descname">video</code><span class="sig-paren">(</span><em>function</em>, <em>fps</em>, <em>file_name</em>, <em>n_frames=None</em>, <em>seconds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#algoraphics.svg.video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a GIF image from a frame-generating function.</p>
+<p>By wrapping typical canvas drawing code in a function, multiple
+versions of the drawing, each with random variation, can be
+stitched together into an animated GIF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>function</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>) – A function called with no arguments that returns a
+(filled) Canvas.</li>
+<li><strong>fps</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Frames per second of the GIF.</li>
+<li><strong>file_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file name to write to.</li>
+<li><strong>n_frames</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Number of frames to generate.</li>
+<li><strong>seconds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Specify length of the GIF in seconds instead of
+number of frames.</li>
 </ul>
 </td>
 </tr>

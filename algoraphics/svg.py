@@ -8,13 +8,14 @@ write SVG files.
 import numpy as np
 import string
 import subprocess
-import os
 
 # import cairosvg
 import tempfile
 from PIL import Image
 from io import BytesIO
 from base64 import b64encode
+from moviepy.editor import ImageSequenceClip
+from inspect import signature
 from typing import Union, Sequence, Callable, Tuple
 
 from .main import flatten
@@ -27,6 +28,16 @@ Point = Tuple[Number, Number]
 
 
 class Canvas:
+    """A rectangular space to be filled with graphics.
+
+    Args:
+        width: The canvas width.
+        height: The canvas height.
+        background: The background color.  If None, background will be
+          transparent.
+
+    """
+
     def __init__(self, width, height, background="white"):
         self.width = width
         self.height = height
@@ -37,17 +48,21 @@ class Canvas:
         # self.svg = None
 
     def add(self, *object: Union[list, dict]):
+        """Add one or more shapes or collections to the canvas."""
         for obj in object:
             self.objects.append(obj)
 
     def clear(self):
+        """Remove all objects from the canvas."""
         self.objects = []
 
     def new(self, *object):
+        """Clear the canvas and then add one or more shapes or collections."""
         self.objects = []
         self.add(*object)
 
-    def get_svg(self):
+    def get_svg(self) -> str:
+        """Get the SVG representation of the canvas as a string."""
         obj = self.objects[:]
         if self.background is not None:
             bg = rectangle(
@@ -69,12 +84,23 @@ class Canvas:
         if optimize:
             subprocess.run(["svgo", "--quiet", "--precision=2", "--input=" + file_name])
 
-    def png(self, file_name: str):
+    def png(self, file_name: str, force_RGBA: bool = False):
+        """Write the canvas to a PNG file.
+
+        Args:
+            file_name: The file name to write to.
+            force_RGBA: Whether to write PNG in RGBA colorspace, even
+              if it could be grayscale.  This is for, e.g., moviepy
+              which requires all frame images to be in the same
+              colorspace.
+
+        """
         svg = self.get_svg()
         # cairosvg.svg2png(svg, write_to=file_name)
         handle, path = tempfile.mkstemp()
         open(handle, "w").write(svg)
-        subprocess.run(["convert", path, file_name])
+        frmt = "PNG32:" if force_RGBA else ""
+        subprocess.run(["convert", path, frmt + file_name])
 
 
 def _encode_image(image: Image, frmt: str) -> str:
@@ -460,22 +486,72 @@ def svg_string(objects: Union[list, dict], w: Number, h: Number):
     return out
 
 
-# def write_frames(fun: Callable, n: int, w: Number, h: Number, file_name: str):
-#     """Write multiple frames of randomized objects.
+def gif(
+    function: Callable,
+    fps: int,
+    file_name: str,
+    n_frames: int = None,
+    seconds: float = None,
+):
+    """Create a GIF image from a frame-generating function.
 
-#     Frames can then be combined into an animated GIF.
+    By wrapping typical canvas drawing code in a function, multiple
+    versions of the drawing, each with random variation, can be
+    stitched together into an animated GIF.
 
-#     Args:
-#         fun: A function called with no arguments that returns an SVG
-#           object collection.
-#         n: Number of frames to generate.
-#         w: Width of the canvas.
-#         h: Height of the canvas.
-#         file_name: A file name (without extension) to write to.  File
-#           names will be [file_name]_0.svg, etc.
+    Args:
 
-#     """
-#     for i in range(n):
-#         write_SVG(fun(), w, h, file_name + "_" + str(i) + ".svg")
-# # For assembling GIF:
-# # convert -dither None -delay 5 $1_*.svg -clone 0 -morph 1 -delete -1 $1.gif
+        function: A function called with no arguments that returns a
+          (filled) Canvas.
+        fps: Frames per second of the GIF.
+        file_name: The file name to write to.
+        n_frames: Number of frames to generate.
+        seconds: Specify length of the GIF in seconds instead of
+          number of frames.
+
+    """
+    if n_frames is None:
+        n_frames = seconds * fps
+    files = _write_frames(function, n_frames, fps)
+    ImageSequenceClip(files, fps=fps).write_gif(file_name, logger=None)
+
+
+def video(
+    function: Callable,
+    fps: int,
+    file_name: str,
+    n_frames: int = None,
+    seconds: float = None,
+):
+    """Create a GIF image from a frame-generating function.
+
+    By wrapping typical canvas drawing code in a function, multiple
+    versions of the drawing, each with random variation, can be
+    stitched together into an animated GIF.
+
+    Args:
+
+        function: A function called with no arguments that returns a
+          (filled) Canvas.
+        fps: Frames per second of the GIF.
+        file_name: The file name to write to.
+        n_frames: Number of frames to generate.
+        seconds: Specify length of the GIF in seconds instead of
+          number of frames.
+
+    """
+    if n_frames is None:
+        n_frames = seconds * fps
+    files = _write_frames(function, n_frames, fps)
+    ImageSequenceClip(files, fps=fps).write_videofile(file_name, logger=None)
+
+
+def _write_frames(function: Callable, n_frames: int, fps: int) -> Sequence[str]:
+    files = []
+    time_dep = len(signature(function).parameters) > 0
+    for i in range(n_frames):
+        canvas = function(i / fps) if time_dep else function()
+        handle, path = tempfile.mkstemp(suffix=".png")
+        canvas.png(path, force_RGBA=True)
+        files.append(path)
+    return files
