@@ -109,6 +109,32 @@ def interpolate(points: Sequence[Point], spacing: Number):
             points[i:i] = newpts
 
 
+def remove_close_points(points: Sequence[Point], spacing: Number):
+    """Remove points that are closer than 'spacing'.
+
+    A point is removed if it follows the previous point too closely.
+    Consecutive points cannot both be removed, so the list is scanned
+    repeatedly until all consecutive points are at least 'spacing'
+    apart.
+
+    Args:
+        points: A list of points.
+        spacing: Minimum distance between adjacent points.
+
+    """
+    any_too_close = True
+    while any_too_close:
+        any_too_close = False
+        del_last = False
+        for i in reversed(range(1, len(points))):
+            if distance(points[i-1], points[i]) < spacing and not del_last:
+                del points[i]
+                any_too_close = True
+                del_last = True
+            else:
+                del_last = False
+
+
 def points_on_arc(
     center: Point,
     radius: Number,

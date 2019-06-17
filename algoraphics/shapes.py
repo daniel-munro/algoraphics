@@ -22,6 +22,7 @@ from .geom import (
     rad,
     jitter_points,
     interpolate,
+    remove_close_points,
 )
 from .param import fixed_value, Param
 from .color import Color
@@ -568,6 +569,7 @@ def _wobble_line(obj: dict, dev: Number):
     obj["type"] = "spline"
     pts = [obj["p1"], obj["p2"]]
     del obj["p1"], obj["p2"]
+    remove_close_points(pts, 2 * dev)
     interpolate(pts, 10)
     jitter_points(pts, dev)
     obj["points"] = pts
@@ -575,6 +577,7 @@ def _wobble_line(obj: dict, dev: Number):
 
 def _wobble_polyline(obj: dict, dev: Number):
     obj["type"] = "spline"
+    remove_close_points(obj["points"], 2 * dev)
     interpolate(obj["points"], 10)
     jitter_points(obj["points"], dev)
 
@@ -584,6 +587,7 @@ def _wobble_polygon(obj: dict, dev: Number):
     obj["circular"] = True
     pts = obj["points"]
     pts.append(pts[0])
+    remove_close_points(pts, 2 * dev)
     interpolate(pts, 10)
     del pts[-1]
     jitter_points(pts, dev)
