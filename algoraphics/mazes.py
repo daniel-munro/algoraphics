@@ -603,28 +603,3 @@ def fill_maze(
         rotate_shapes(fill, rotation)
 
     return dict(type="group", clip=outline, members=[fill])
-
-
-def fill_maze_hue_rotate(
-    outline: Collection, spacing: Number, style: Number, color: Color
-) -> dict:
-    """Fill a region with mazes with hue-dependent orientation.
-
-    Used for texturing image regions so that adjacent regions of
-    similar color blend together while contrasting with regions of
-    different color.
-
-    Args:
-        outline: The shape/s that will become the clip.
-        spacing: The cell width of the grid.
-        style: An object specifying how the maze path is to be drawn.
-        color: The fill color for the maze.
-
-    Returns:
-        A group with clip.
-
-    """
-    rotation = color.value()[0] * 90
-    x = fill_maze(outline, spacing, style, rotation)
-    set_style(x["members"], "fill", color)
-    return x

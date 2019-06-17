@@ -338,11 +338,10 @@ Fill functions can be applied and passed representative colors::
  for i, outline in enumerate(x):
      color = ag.region_color(outline, image)
      maze = ag.Maze_Style_Pipes(rel_thickness=0.6)
-     x[i] = ag.fill_maze_hue_rotate(outline, spacing=5, style=maze,
-                                    color=color)
+     rot = color.value()[0] * 90
+     x[i] = ag.fill_maze(outline, spacing=5, style=maze, rotation=rot)
+     ag.set_style(x[i]["members"], "fill", color)
      ag.region_background(x[i], ag.contrasting_lightness(color, light_diff=0.2))
-     ag.set_style(outline, 'fill', color)
- ag.add_paper_texture(x)
 
 .. image:: /_static/png/images3.png
 
