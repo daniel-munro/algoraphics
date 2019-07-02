@@ -16,10 +16,9 @@ from .param import fixed_value
 class Color:
     """Object to represent a color or distribution of colors.
 
-    Define using any of an hsl tuple, separate
-    hue/saturation/lightness arguments, an rgb tuple (0 to 1), or an
-    RGB tuple (integers 0 to 255).  Any component can be a Param
-    object.
+    Define using either an hsl tuple, separate
+    hue/saturation/lightness arguments, or an RGB tuple.  Any
+    component can be a Param object.
 
     Args:
         hsl: The hsl specification, where each component is between 0 and 1.
@@ -27,7 +26,6 @@ class Color:
           be provided.
         sat: The saturation specification from 0 to 1.
         li: The lightness specification from 0 to 1.
-        rgb: The red/green/blue components, each ranging from 0 to 1.
         RGB: The red/green/blue components, each ranging from 0 to 255.
 
     """
@@ -38,7 +36,6 @@ class Color:
         hue: float = None,
         sat: float = None,
         li: float = None,
-        rgb: Tuple[float, float, float] = None,
         RGB: Tuple[int, int, int] = None,
     ):
         if hue is not None:
@@ -46,13 +43,13 @@ class Color:
             self.hsl = (hue, sat, li)
         elif hsl is not None:
             self.hsl = hsl
-        elif rgb is not None:
-            hue, li, sat = colorsys.rgb_to_hls(*rgb)
-            self.hsl = (hue, sat, li)
         elif RGB is not None:
-            r, g, b = tuple([x / 255 for x in RGB])
+            r, g, b = tuple([fixed_value(x) / 255 for x in RGB])
             hue, li, sat = colorsys.rgb_to_hls(r, g, b)
             self.hsl = (hue, sat, li)
+
+    def __str__(self):
+        return str(self.hsl)
 
     def value(self) -> Tuple[float, float, float]:
         """Get the color's hsl specification.
@@ -60,15 +57,8 @@ class Color:
         Returns one fixed specification if the color is parameterized.
 
         """
-        return tuple([fixed_value(x) for x in self.hsl])
-
-    def hex(self) -> str:
-        """Get the color's hsl specification.
-
-        Returns one fixed specification if the color is parameterized.
-
-        """
-        return matplotlib.colors.to_hex(self.rgb())
+        hue, sat, li = tuple([fixed_value(x) for x in self.hsl])
+        return (hue % 1, np.clip(sat, 0, 1), np.clip(li, 0, 1))
 
     def rgb(self) -> Tuple[float, float, float]:
         """Get the color's rgb specification.
@@ -76,21 +66,40 @@ class Color:
         Returns one fixed specification if the color is parameterized.
 
         """
-        hsl = self.value()
-        return colorsys.hls_to_rgb(hsl[0], hsl[2], hsl[1])
+        # from https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB
+        # (could have used colorsys, but I might switch to HCL.
+        hue, sat, li = self.value()
+        c = (1 - abs(2*li - 1)) * sat  # chroma
+        h = hue * 6
+        x = c * (1 - abs((h % 2) - 1))
+        if 0 <= h and h <= 1:
+            rgb1 = (c, x, 0)
+        elif 1 <= h and h <= 2:
+            rgb1 = (x, c, 0)
+        elif 2 <= h and h <= 3:
+            rgb1 = (0, c, x)
+        elif 3 <= h and h <= 4:
+            rgb1 = (0, x, c)
+        elif 4 <= h and h <= 5:
+            rgb1 = (x, 0, c)
+        elif 5 <= h and h <= 6:
+            rgb1 = (c, 0, x)
+        m = li - c / 2
+        return (rgb1[0] + m, rgb1[1] + m, rgb1[2] + m)
 
-    def RGB(self) -> Tuple[int, int, int]:
-        """Get the color's RGB specification.
+    def hex(self) -> str:
+        """Get the color's hex specification.
 
         Returns one fixed specification if the color is parameterized.
 
         """
-        r, g, b = self.rgb()
-        return (int(r * 255), int(g * 255), int(b * 255))
+        rgb = self.rgb()
+        R, G, B = tuple([int(round(x * 255)) for x in rgb])
+        return "#{0:02x}{1:02x}{2:02x}".format(R, G, B)
 
 
 def make_color(x: Union[Color, Tuple[float, float, float]]) -> Color:
-    """Convert to a color object if a tuple is provided."""
+    """Convert to a color object if a tuple (assumed to be hsl) is provided."""
     if isinstance(x, Color):
         return x
     elif type(x) is tuple:
@@ -126,7 +135,8 @@ def hsv_array_to_rgb(hsv: np.ndarray) -> np.ndarray:
 def average_color(colors: Sequence[Color]) -> Color:
     """Find average of list of colors.
 
-    Currently, this finds the arithmetic mean in RGB color space.
+    This finds the arithmetic mean in RGB color space, since averaging
+    hues has unexpected results with black, white, and gray.
 
     Args:
         colors: A list of Color objects.
@@ -135,9 +145,10 @@ def average_color(colors: Sequence[Color]) -> Color:
         The average color.
 
     """
-    rgbs = [make_color(color).rgb() for color in colors]
-    rgb = tuple([np.mean(component) for component in zip(*rgbs)])
-    return Color(rgb=rgb)
+    reds, greens, blues = zip(*[make_color(color).rgb() for color in colors])
+    rgb = (np.mean(reds), np.mean(greens), np.mean(blues))
+    RGB = tuple([int(round(x * 255)) for x in rgb])
+    return Color(RGB=RGB)
 
 
 def contrasting_lightness(color: Color, light_diff: float) -> Color:

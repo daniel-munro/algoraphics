@@ -1,5 +1,5 @@
 /algoraphics/__pycache__
 /algoraphics.egg-info
 /notes.org
-/tests/png/*.png
-/tests/svg/*.svg
+/tests/png/*
+/tests/svg/*

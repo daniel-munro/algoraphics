@@ -17,9 +17,7 @@ from .shapes import (
     rotate_shapes,
     polygon,
     spline,
-    set_style,
 )
-from .color import Color
 from .geom import (
     points_on_line,
     points_on_arc,
@@ -217,7 +215,7 @@ class Maze_Style_Round(Maze_Style):
     def tip(self):
         """"""
         pts = points_on_line((0.5 + self.w, 0), (0.5 + self.w, 0.5), 0.2)[:-1]
-        pts += points_on_arc((0.5, 0.5), self.w, 0, 180, self.w / 2)[:-1]
+        pts += points_on_arc((0.5, 0.5), self.w, 0, 180, self.w / 4)[:-1]
         pts += points_on_line((0.5 - self.w, 0.5), (0.5 - self.w, 0), 0.2)[:-1]
         return pts
 

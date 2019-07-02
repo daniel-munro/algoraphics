@@ -173,18 +173,20 @@ class Delta(Param):
         start: [Number, Param] = None,
         delta: Union[Number, Callable, Param] = None,
         ratio: Union[Number, Callable, Param] = None,
-        min: Number = None,
-        max: Number = None,
+        min: Union[Number, Param] = None,
+        max: Union[Number, Param] = None,
     ):
         assert delta is not None or ratio is not None, "Provide delta or ratio."
+        self.min = min
+        self.max = max
         if start is not None:
             self.next = start
         elif min is not None and max is not None:
-            self.next = np.random.uniform(min, max)
+            self.min = make_param(min)
+            self.max = make_param(max)
+            self.next = np.random.uniform(min.value(), max.value())
         else:
             self.next = 0 if delta is not None else 1
-        self.min = min
-        self.max = max
         self.delta = delta
         self.ratio = ratio
         if delta is not None:
@@ -198,9 +200,9 @@ class Delta(Param):
         val = self.next
         new = val + this_delta
         if self.min is not None:
-            new = max(new, self.min)
+            new = max(new, self.min.value())
         if self.max is not None:
-            new = min(new, self.max)
+            new = min(new, self.max.value())
         self.next = new
         return val
 
@@ -210,9 +212,9 @@ class Delta(Param):
         val = self.next
         new = self.next * this_ratio
         if self.min is not None:
-            new = max(new, self.min)
+            new = max(new, self.min.value())
         if self.max is not None:
-            new = min(new, self.max)
+            new = min(new, self.max.value())
         self.next = new
         return val
 

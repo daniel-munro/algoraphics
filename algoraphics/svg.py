@@ -100,7 +100,9 @@ class Canvas:
         handle, path = tempfile.mkstemp()
         open(handle, "w").write(svg)
         frmt = "PNG32:" if force_RGBA else ""
-        subprocess.run(["convert", path, frmt + file_name])
+        # subprocess.run(["convert", "-background None", path, frmt + file_name])
+        # For some reason it has to be this way to use '-background None':
+        subprocess.run("convert -background None {} {}".format(path, frmt + file_name), shell=True)
 
 
 def _encode_image(image: Image, frmt: str) -> str:
@@ -189,7 +191,7 @@ def _write_polygon(shape: dict, mods: str) -> str:
 def _write_spline(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a spline path."""
     if "smoothing" not in shape:
-        shape["smoothing"] = 0.2
+        shape["smoothing"] = 0.3
     if "circular" not in shape:
         shape["circular"] = False
     d = _spline_path(shape["points"], shape["smoothing"], shape["circular"])
@@ -500,7 +502,6 @@ def gif(
     stitched together into an animated GIF.
 
     Args:
-
         function: A function called with no arguments that returns a
           (filled) Canvas.
         fps: Frames per second of the GIF.
@@ -530,7 +531,6 @@ def video(
     stitched together into an animated GIF.
 
     Args:
-
         function: A function called with no arguments that returns a
           (filled) Canvas.
         fps: Frames per second of the GIF.
