@@ -8,7 +8,7 @@ Generate text in the form of shapes or SVG text.
 import math
 from typing import Union, Tuple, List
 
-from .geom import (
+from ..geom import (
     points_on_line,
     points_on_arc,
     scale_points,

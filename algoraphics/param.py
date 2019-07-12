@@ -106,6 +106,81 @@ class Exponential(Param):
         return x
 
 
+class Delta(Param):
+    """Parameters whose values depend on the previous value.
+
+    Provide a Param or number for ``delta`` which will be added to the
+    previously generated value to get the next one.  Or, provide a
+    ``ratio`` Param or number to multiply to each previous value.
+
+    Passing a randomized ``Param`` object to ``delta`` or ``ratio``
+    will result in a random walk.  These ``Param`` objects can
+    themselves have a ``delta``/``ratio`` argument, resulting in
+    higher-order random walks.
+
+    Args:
+        start: The starting value, which can be obtained from a Param.
+        delta: A value to add to the previous value to get the next.
+        ratio: Similar to delta, but is multiplied by, rather than
+          added to, the previous value to get the next.
+        min: The smallest allowable value.
+        max: The largest allowable value.
+
+    """
+
+    def __init__(
+        self,
+        start: [Number, Param] = None,
+        delta: Union[Number, Callable, Param] = None,
+        ratio: Union[Number, Callable, Param] = None,
+        min: Union[Number, Param] = None,
+        max: Union[Number, Param] = None,
+    ):
+        assert delta is not None or ratio is not None, "Provide delta or ratio."
+        self.min = make_param(min)
+        self.max = make_param(max)
+        if start is not None:
+            self.next = start
+        elif min is not None and max is not None:
+            self.next = np.random.uniform(min.value(), max.value())
+        else:
+            self.next = 0 if delta is not None else 1
+        self.delta = delta
+        self.ratio = ratio
+        if delta is not None:
+            self.value = self._value_with_delta
+        else:
+            self.value = self._value_with_ratio
+
+    def _value_with_delta(self):
+        """Add ``delta`` to get the next value."""
+        this_delta = fixed_value(self.delta)
+        val = self.next
+        new = val + this_delta
+        mn, mx = self.min.value(), self.max.value()
+        if mn is not None:
+            new = max(new, mn)
+        if mx is not None:
+            new = min(new, mx)
+        self.next = new
+        return val
+
+    def _value_with_ratio(self):
+        """Multiply by ``ratio`` to get the next value."""
+        this_ratio = fixed_value(self.ratio)
+        val = self.next
+        new = self.next * this_ratio
+        if self.min is not None:
+            new = max(new, self.min.value())
+        if self.max is not None:
+            new = min(new, self.max.value())
+        self.next = new
+        return val
+
+    def values(self, n):
+        return [self.value() for i in range(n)]
+
+
 class Cyclical(Param):
     """Parameters that oscillate between values.
 
@@ -144,82 +219,6 @@ class Cyclical(Param):
         self.theta += 2 * np.pi / self.period.value()
         self.next = self._wave_value()
         return val
-
-
-class Delta(Param):
-    """Parameters whose values depend on the previous value.
-
-    Provide a Param or number for ``delta`` which will be added to the
-    previously generated value to get the next one.  Or, provide a
-    ``ratio`` Param or number to multiply to each previous value.
-
-    Passing a randomized ``Param`` object to ``delta`` or ``ratio``
-    will result in a random walk.  These ``Param`` objects can
-    themselves have a ``delta``/``ratio`` argument, resulting in
-    higher-order random walks.
-
-    Args:
-        start: The starting value, which can be obtained from a Param.
-        delta: A value to add to the previous value to get the next.
-        ratio: Similar to delta, but is multiplied by, rather than
-          added to, the previous value to get the next.
-        min: The smallest allowable value.
-        max: The largest allowable value.
-
-    """
-
-    def __init__(
-        self,
-        start: [Number, Param] = None,
-        delta: Union[Number, Callable, Param] = None,
-        ratio: Union[Number, Callable, Param] = None,
-        min: Union[Number, Param] = None,
-        max: Union[Number, Param] = None,
-    ):
-        assert delta is not None or ratio is not None, "Provide delta or ratio."
-        self.min = min
-        self.max = max
-        if start is not None:
-            self.next = start
-        elif min is not None and max is not None:
-            self.min = make_param(min)
-            self.max = make_param(max)
-            self.next = np.random.uniform(min.value(), max.value())
-        else:
-            self.next = 0 if delta is not None else 1
-        self.delta = delta
-        self.ratio = ratio
-        if delta is not None:
-            self.value = self._value_with_delta
-        else:
-            self.value = self._value_with_ratio
-
-    def _value_with_delta(self):
-        """Add ``delta`` to get the next value."""
-        this_delta = fixed_value(self.delta)
-        val = self.next
-        new = val + this_delta
-        if self.min is not None:
-            new = max(new, self.min.value())
-        if self.max is not None:
-            new = min(new, self.max.value())
-        self.next = new
-        return val
-
-    def _value_with_ratio(self):
-        """Multiply by ``ratio`` to get the next value."""
-        this_ratio = fixed_value(self.ratio)
-        val = self.next
-        new = self.next * this_ratio
-        if self.min is not None:
-            new = max(new, self.min.value())
-        if self.max is not None:
-            new = min(new, self.max.value())
-        self.next = new
-        return val
-
-    def values(self, n):
-        return [self.value() for i in range(n)]
 
 
 class Place:

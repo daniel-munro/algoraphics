@@ -190,6 +190,8 @@ def _write_polygon(shape: dict, mods: str) -> str:
 
 def _write_spline(shape: dict, mods: str) -> str:
     """Generate the SVG representation of a spline path."""
+    if len(shape["points"]) < 2:
+        return ""
     if "smoothing" not in shape:
         shape["smoothing"] = 0.3
     if "circular" not in shape:
@@ -350,12 +352,13 @@ def _write_style(shape: dict) -> str:
     if shape["type"] in ("line", "polyline") and "stroke" not in style:
         style["stroke"] = "black"
     if "fill" in style and type(style["fill"]) is tuple:
-        RGB = Color(hsl=style["fill"]).RGB()
-        style["fill"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
+        # RGB = Color(hsl=style["fill"]).RGB()
+        # style["fill"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
+        style["fill"] = Color(hsl=style["fill"]).hex()
     if "stroke" in style and type(style["stroke"]) is tuple:
-        RGB = Color(hsl=style["stroke"]).RGB()
-        style["stroke"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
-
+        # RGB = Color(hsl=style["stroke"]).RGB()
+        # style["stroke"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
+        style["stroke"] = Color(hsl=style["stroke"]).hex()
     if "stroke" in style and style["stroke"] == "match":
         # 'match' used to slightly expand filled shapes by setting the
         # stroke to match the fill.  Useful to prevent gap artifacts.

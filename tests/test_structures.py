@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import algoraphics.extras as ex
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +16,7 @@ length = ag.Uniform(min=8, max=12)
 # x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
 #                  seg_length=length, n_segments=40) for d in dirs]
 x = [
-    ag.filament(
+    ex.filament(
         start=(c.width / 2, c.height / 2),
         direction=d,
         width=width,
@@ -40,7 +41,7 @@ direc = ag.Delta(
     90, delta=ag.Delta(0, min=-20, max=20, delta=ag.Uniform(min=-3, max=3))
 )
 x = [
-    ag.filament(start=(z, -10), direction=direc, width=8, seg_length=10, n_segments=50)
+    ex.filament(start=(z, -10), direction=direc, width=8, seg_length=10, n_segments=50)
     for z in range(c.width)[::30]
 ]
 
@@ -65,7 +66,7 @@ dirs = [
 # x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
 #                  seg_length=length, n_segments=n_seg) for d in dirs]
 x = [
-    ag.tentacle(
+    ex.tentacle(
         start=(c.width / 2, c.height / 2),
         length=225,
         direction=d,
@@ -117,17 +118,17 @@ c.png("png/structures3.png")
 ################################################
 
 pts1 = [(50, 50), (50, 100), (100, 70), (150, 130), (200, 60)]
-x1 = ag.blow_paint_area(pts1)
+x1 = ex.blow_paint_area(pts1)
 
 pts2 = [(250, 50), (350, 50), (300, 200)]
-x2 = ag.blow_paint_area(pts2, spacing=20, length=20, len_dev=0.4, width=8)
+x2 = ex.blow_paint_area(pts2, spacing=20, length=20, len_dev=0.4, width=8)
 ag.set_style(x2, "fill", "orange")
 
 pts3 = [(50, 300), (100, 350), (200, 250), (300, 300)]
-y = ag.blow_paint_line(pts3, line_width=8, spacing=15, length=30, len_dev=0.4, width=6)
+y = ex.blow_paint_line(pts3, line_width=8, spacing=15, length=30, len_dev=0.4, width=6)
 ag.set_style(y, "fill", "red")
 
-z = ag.blow_paint_spot((350, 350), length=20)
+z = ex.blow_paint_spot((350, 350), length=20)
 ag.set_style(z, "stroke", "blue")
 
 c.new(x1, x2, y, z)
@@ -139,7 +140,7 @@ c.png("png/structures4.png")
 ################################
 
 x = [
-    ag.tree(
+    ex.tree(
         (200, 200),
         direction=d,
         branch_length=ag.Uniform(min=8, max=20),

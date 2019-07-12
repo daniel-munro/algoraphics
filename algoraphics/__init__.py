@@ -12,8 +12,8 @@ from .mazes import *
 from .param import *
 from .ripples import *
 from .shapes import *
-from .structures import *
+# from .structures import *
 from .svg import *
-from .text import *
+# from .text import *
 from .textures import *
 from .tiling import *

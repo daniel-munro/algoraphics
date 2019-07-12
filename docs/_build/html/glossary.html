@@ -17,33 +17,35 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="API" href="API.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -148,60 +150,60 @@
             
   <div class="section" id="glossary">
 <h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
-<dl class="glossary docutils">
-<dt id="term-bounds">bounds</dt>
-<dd>A tuple giving the minimum x, minimum y, maximum x, and maximum
+<dl class="glossary simple">
+<dt id="term-bounds">bounds</dt><dd><p>A tuple giving the minimum x, minimum y, maximum x, and maximum
 y coordinate of a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>, <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a>, or general
-rectangular space.</dd>
-<dt id="term-collection">collection</dt>
-<dd>A shape or a list containing <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a>, which can
-be nested in lists.</dd>
-<dt id="term-doodle">doodle</dt>
-<dd>An abstraction of a small drawing.  It can vary each time it is
+rectangular space.</p>
+</dd>
+<dt id="term-collection">collection</dt><dd><p>A shape or a list containing <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a>, which can
+be nested in lists.</p>
+</dd>
+<dt id="term-doodle">doodle</dt><dd><p>An abstraction of a small drawing.  It can vary each time it is
 drawn.  A fill function can draw it in different orientations
-and locations to fill a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</dd>
-<dt id="term-image">image</dt>
-<dd>A PIL Image object specifying a grid of pixels.  These are
+and locations to fill a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</p>
+</dd>
+<dt id="term-image">image</dt><dd><p>A PIL Image object specifying a grid of pixels.  These are
 usually used as templates, but can also be drawn using a
-<code class="docutils literal notranslate"><span class="pre">raster</span></code> <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>.</dd>
-<dt id="term-margin">margin</dt>
-<dd>The space added in all four directions to the <a class="reference internal" href="#term-bounds"><span class="xref std std-term">bounds</span></a> of
+<code class="docutils literal notranslate"><span class="pre">raster</span></code> <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a>.</p>
+</dd>
+<dt id="term-margin">margin</dt><dd><p>The space added in all four directions to the <a class="reference internal" href="#term-bounds"><span class="xref std std-term">bounds</span></a> of
 some area to improve visual continuity.  For example, a tiling
 or other filling pattern should extend beyond the canvas or
-<a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a> edges to avoid edge artifacts or gaps.</dd>
-<dt id="term-outline">outline</dt>
-<dd>A <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> or <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a> specifying an area in
-which some function will draw.</dd>
-<dt id="term-parameter">parameter</dt>
-<dd>A specification for some attribute of a drawing.  A Param (1D) or
+<a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a> edges to avoid edge artifacts or gaps.</p>
+</dd>
+<dt id="term-outline">outline</dt><dd><p>A <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> or <a class="reference internal" href="#term-collection"><span class="xref std std-term">collection</span></a> specifying an area in
+which some function will draw.</p>
+</dd>
+<dt id="term-parameter">parameter</dt><dd><p>A specification for some attribute of a drawing.  A Param (1D) or
 Place (2D) object, or one whose type inherits from them, can
 represent the attribute so that the attribute can vary within
 the drawing, or so that multiple <a class="reference internal" href="#term-shape"><span class="xref std std-term">shapes</span></a> can be
 drawn without having to explicitly generate random values for
-each one.</dd>
-<dt id="term-point">point</dt>
-<dd>A tuple containing the x and y coordinates of a point in 2D
+each one.</p>
+</dd>
+<dt id="term-point">point</dt><dd><p>A tuple containing the x and y coordinates of a point in 2D
 space.  The units are pixels by default, but can be defined
-with floats.</dd>
-<dt id="term-region">region</dt>
-<dd>A drawing occupying a specified area.  It is generally
+with floats.</p>
+</dd>
+<dt id="term-region">region</dt><dd><p>A drawing occupying a specified area.  It is generally
 represented as a group <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> clipped (i.e., contains
 the <code class="docutils literal notranslate"><span class="pre">clip</span></code> attribute) by an <a class="reference internal" href="#term-outline"><span class="xref std std-term">outline</span></a>.  It is often
 created using either a <a class="reference internal" href="#term-bounds"><span class="xref std std-term">bounds</span></a> specification or by
-segmenting an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a>.</dd>
-<dt id="term-segment">segment</dt>
-<dd>An area of an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a> that is contiguous and visually
-distinct and can form the basis of a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</dd>
-<dt id="term-shape">shape</dt>
-<dd>A visual object that is specified by a single SVG element.  It
+segmenting an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a>.</p>
+</dd>
+<dt id="term-segment">segment</dt><dd><p>An area of an <a class="reference internal" href="#term-image"><span class="xref std std-term">image</span></a> that is contiguous and visually
+distinct and can form the basis of a <a class="reference internal" href="#term-region"><span class="xref std std-term">region</span></a>.</p>
+</dd>
+<dt id="term-shape">shape</dt><dd><p>A visual object that is specified by a single SVG element.  It
 is represented by a dictionary with a <code class="docutils literal notranslate"><span class="pre">type</span></code> attribute
 specifying the type of shape, and other attributes defining its
-<a class="reference internal" href="#term-parameter"><span class="xref std std-term">parameters</span></a>.</dd>
-<dt id="term-style">style</dt>
-<dd>A visual attribute of a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> that is stored in a
+<a class="reference internal" href="#term-parameter"><span class="xref std std-term">parameters</span></a>.</p>
+</dd>
+<dt id="term-style">style</dt><dd><p>A visual attribute of a <a class="reference internal" href="#term-shape"><span class="xref std std-term">shape</span></a> that is stored in a
 dictionary in the shape’s <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute.  It usually
 corresponds to an SVG attribute, and any SVG attribute can be
-specified.</dd>
+specified.</p>
+</dd>
 </dl>
 </div>
 
@@ -214,7 +216,7 @@ specified.</dd>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="API.html" class="btn btn-neutral" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="API.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -240,26 +242,16 @@ specified.</dd>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

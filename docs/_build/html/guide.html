@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API" href="API.html" />
     <link rel="prev" title="Documentation for algoraphics" href="index.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -93,7 +95,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#extras">Extras</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#text">Text</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#filaments">Filaments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#blow-paint">Blow paint</a></li>
@@ -214,37 +216,37 @@ or rendered to PNG with <code class="docutils literal notranslate"><span class="
 <code class="docutils literal notranslate"><span class="pre">type</span></code> attribute defines what is drawn and which other attributes
 will be accessed (though additional attributes can be supplied and
 will be ignored).</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="11%" />
-<col width="89%" />
+<col style="width: 11%" />
+<col style="width: 89%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Object</th>
-<th class="head">Attributes</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Object</p></th>
+<th class="head"><p>Attributes</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>circle</td>
-<td>c (point), r (float)</td>
+<tbody>
+<tr class="row-even"><td><p>circle</p></td>
+<td><p>c (point), r (float)</p></td>
 </tr>
-<tr class="row-odd"><td>group</td>
-<td>members (list), clip (list or dict)</td>
+<tr class="row-odd"><td><p>group</p></td>
+<td><p>members (list), clip (list or dict)</p></td>
 </tr>
-<tr class="row-even"><td>raster</td>
-<td>image (PIL Image), w (float), h (float), format (str)</td>
+<tr class="row-even"><td><p>raster</p></td>
+<td><p>image (PIL Image), w (float), h (float), format (str)</p></td>
 </tr>
-<tr class="row-odd"><td>line</td>
-<td>p1 (point), p2 (point)</td>
+<tr class="row-odd"><td><p>line</p></td>
+<td><p>p1 (point), p2 (point)</p></td>
 </tr>
-<tr class="row-even"><td>polygon</td>
-<td>points (list)</td>
+<tr class="row-even"><td><p>polygon</p></td>
+<td><p>points (list)</p></td>
 </tr>
-<tr class="row-odd"><td>polyline</td>
-<td>points (list)</td>
+<tr class="row-odd"><td><p>polyline</p></td>
+<td><p>points (list)</p></td>
 </tr>
-<tr class="row-even"><td>spline</td>
-<td>points (list), curvature (float), circular (bool)</td>
+<tr class="row-even"><td><p>spline</p></td>
+<td><p>points (list), curvature (float), circular (bool)</p></td>
 </tr>
 </tbody>
 </table>
@@ -443,38 +445,38 @@ into a GIF or video:</p>
 <h3>SVG Representation<a class="headerlink" href="#svg-representation" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">Shapes</span></a> are converted to SVG for export.  Each type of
 <a class="reference internal" href="glossary.html#term-shape"><span class="xref std std-term">shape</span></a> corresponds to a SVG object type or a specific form of
-pone.</p>
-<table border="1" class="docutils">
+one.</p>
+<table class="docutils align-default">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col style="width: 30%" />
+<col style="width: 70%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">algoraphics</th>
-<th class="head">SVG</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>algoraphics</p></th>
+<th class="head"><p>SVG</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>circle</td>
-<td>circle</td>
+<tbody>
+<tr class="row-even"><td><p>circle</p></td>
+<td><p>circle</p></td>
 </tr>
-<tr class="row-odd"><td>group</td>
-<td>g</td>
+<tr class="row-odd"><td><p>group</p></td>
+<td><p>g</p></td>
 </tr>
-<tr class="row-even"><td>raster</td>
-<td>image</td>
+<tr class="row-even"><td><p>raster</p></td>
+<td><p>image</p></td>
 </tr>
-<tr class="row-odd"><td>line</td>
-<td>line</td>
+<tr class="row-odd"><td><p>line</p></td>
+<td><p>line</p></td>
 </tr>
-<tr class="row-even"><td>polygon</td>
-<td>polygon</td>
+<tr class="row-even"><td><p>polygon</p></td>
+<td><p>polygon</p></td>
 </tr>
-<tr class="row-odd"><td>polyline</td>
-<td>polyline</td>
+<tr class="row-odd"><td><p>polyline</p></td>
+<td><p>polyline</p></td>
 </tr>
-<tr class="row-even"><td>spline</td>
-<td>path made of bezier curves</td>
+<tr class="row-even"><td><p>spline</p></td>
+<td><p>path made of bezier curves</p></td>
 </tr>
 </tbody>
 </table>
@@ -520,89 +522,137 @@ with some smoothing, but are constrained to not be too large:</p>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">outline</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">region_color</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
     <span class="n">maze</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Maze_Style_Pipes</span><span class="p">(</span><span class="n">rel_thickness</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze_hue_rotate</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">maze</span><span class="p">,</span>
-                                   <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">rot</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">90</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">fill_maze</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">maze</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rot</span><span class="p">)</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;members&quot;</span><span class="p">],</span> <span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
     <span class="n">ag</span><span class="o">.</span><span class="n">region_background</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ag</span><span class="o">.</span><span class="n">contrasting_lightness</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">light_diff</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
-    <span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="s1">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">add_paper_texture</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/images3.png" src="_images/images3.png" />
 </div>
 </div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="extras">
+<h2>Extras<a class="headerlink" href="#extras" title="Permalink to this headline">¶</a></h2>
+<p>You can create your own package of reusable functions built upon
+algoraphics.  The <code class="docutils literal notranslate"><span class="pre">extras</span></code> subpackage is an example of this
+containing structures, fill functions, and more.</p>
+<p>These code snippets are preceded by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">algoraphics.extras</span> <span class="k">as</span> <span class="nn">ex</span>
+</pre></div>
+</div>
 <div class="section" id="text">
 <h3>Text<a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
 <p>Text can be created and stylized.  Characters are generated as nested
 lists of <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">points</span></a> (one list per continuous pen stroke)
 along their form:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">hue</span><span class="o">=</span><span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">sat</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">li</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;ABCDEFG&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;ABCDEFG&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">shuffled</span><span class="p">(</span><span class="n">x1</span><span class="p">))</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;HIJKLM&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;HIJKLM&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">shuffled</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">splatter_text</span><span class="p">(</span><span class="s1">&#39;0123456789&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                     <span class="n">min_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;0123456789&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ag</span><span class="o">.</span><span class="n">shuffled</span><span class="p">(</span><span class="n">x3</span><span class="p">))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 </div>
 <img alt="_images/text1.png" src="_images/text1.png" />
 <p>These <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">points</span></a> can then be manipulated in many ways:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;NOPQRST&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x1a</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s1">&#39;NOPQRST&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;NOPQRST&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x1b</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s1">&#39;UVWXYZ&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">top_color</span><span class="o">=</span><span class="s1">&#39;#FF8888&#39;</span><span class="p">,</span>
-                        <span class="n">bottom_color</span><span class="o">=</span><span class="s1">&#39;#555555&#39;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">([</span><span class="n">x1a</span><span class="p">,</span> <span class="n">x1b</span><span class="p">],</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">x1a</span><span class="p">,</span> <span class="n">x1b</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">double_dots_text</span><span class="p">(</span><span class="s2">&quot;.,!?:;&#39;</span><span class="se">\&quot;</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">top_color</span><span class="o">=</span><span class="s1">&#39;#FF8888&#39;</span><span class="p">,</span>
-                        <span class="n">bottom_color</span><span class="o">=</span><span class="s1">&#39;#555555&#39;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;UVWXYZ&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x2a</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;UVWXYZ&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x2b</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">([</span><span class="n">x2a</span><span class="p">,</span> <span class="n">x2b</span><span class="p">],</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">150</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x2a</span><span class="p">,</span> <span class="n">x2b</span><span class="p">)</span>
+
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;.,!?:;&#39;</span><span class="se">\&quot;</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x3a</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+
+<span class="n">points</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;.,!?:;&#39;</span><span class="se">\&quot;</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Exponential</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+<span class="n">x3b</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">([</span><span class="n">x3a</span><span class="p">,</span> <span class="n">x3b</span><span class="p">],</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x3a</span><span class="p">,</span> <span class="n">x3b</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/text2.png" src="_images/text2.png" />
 <p>Currently only the characters displayed in these examples are
 provided, though additional ones can be added on request:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pts</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;abcdefg&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">dists</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">))</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">endpoint</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="n">dists</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span> <span class="p">(</span><span class="n">pts</span><span class="p">)]</span>
+<span class="n">radii</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">10</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dists</span><span class="p">))</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">hazy_text</span><span class="p">(</span><span class="s1">&#39;abcdefg&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                 <span class="n">min_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;hijklm&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">dists</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">))</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">endpoint</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">ag</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="n">dists</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pts</span><span class="p">)]</span>
+<span class="n">radii</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">10</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dists</span><span class="p">))</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">radii</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">)]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">hazy_text</span><span class="p">(</span><span class="s1">&#39;hijklm&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                 <span class="n">min_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/text3.png" src="_images/text3.png" />
 <p>Since generated <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">points</span></a> are grouped by continuous pen
 strokes, <a class="reference internal" href="glossary.html#term-point"><span class="xref std std-term">points</span></a> within each list can be joined:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">strokes</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;nopqrst&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">grouping</span><span class="o">=</span><span class="s1">&#39;strokes&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">stroke</span> <span class="ow">in</span> <span class="n">strokes</span><span class="p">:</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">stroke</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">spline</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">stroke</span><span class="p">)</span> <span class="k">for</span> <span class="n">stroke</span> <span class="ow">in</span> <span class="n">strokes</span><span class="p">]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">squiggle_text</span><span class="p">(</span><span class="s1">&#39;nopqrst&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">strokes</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">text_points</span><span class="p">(</span><span class="s2">&quot;uvwxyz&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">pt_spacing</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">char_spacing</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">grouping</span><span class="o">=</span><span class="s1">&#39;strokes&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">stroke</span> <span class="ow">in</span> <span class="n">strokes</span><span class="p">:</span>
+    <span class="n">ag</span><span class="o">.</span><span class="n">jitter_points</span><span class="p">(</span><span class="n">stroke</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="p">[</span><span class="n">ag</span><span class="o">.</span><span class="n">spline</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">stroke</span><span class="p">)</span> <span class="k">for</span> <span class="n">stroke</span> <span class="ow">in</span> <span class="n">strokes</span><span class="p">]</span>
+<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">)</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">squiggle_text</span><span class="p">(</span><span class="s1">&#39;uvwxyz&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">reposition</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">250</span><span class="p">),</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/text4.png" src="_images/text4.png" />
@@ -907,7 +957,7 @@ textures:</p>
         <a href="API.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Documentation for algoraphics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Documentation for algoraphics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -933,26 +983,16 @@ textures:</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

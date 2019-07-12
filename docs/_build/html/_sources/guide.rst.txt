@@ -276,7 +276,7 @@ SVG Representation
 
 :term:`Shapes<shape>` are converted to SVG for export.  Each type of
 :term:`shape` corresponds to a SVG object type or a specific form of
-pone.
+one.
 
 ===========  ==========================
 algoraphics  SVG
@@ -338,17 +338,24 @@ Fill functions can be applied and passed representative colors::
  for i, outline in enumerate(x):
      color = ag.region_color(outline, image)
      maze = ag.Maze_Style_Pipes(rel_thickness=0.6)
-     x[i] = ag.fill_maze_hue_rotate(outline, spacing=5, style=maze,
-                                    color=color)
+     rot = color.value()[0] * 90
+     x[i] = ag.fill_maze(outline, spacing=5, style=maze, rotation=rot)
+     ag.set_style(x[i]["members"], "fill", color)
      ag.region_background(x[i], ag.contrasting_lightness(color, light_diff=0.2))
-     ag.set_style(outline, 'fill', color)
- ag.add_paper_texture(x)
 
 .. image:: /_static/png/images3.png
 
 
-Structures
-==========
+Extras
+======
+
+You can create your own package of reusable functions built upon
+algoraphics.  The ``extras`` subpackage is an example of this
+containing structures, fill functions, and more.
+
+These code snippets are preceded by::
+
+  import algoraphics.extras as ex
 
 Text
 ----
@@ -357,75 +364,117 @@ Text can be created and stylized.  Characters are generated as nested
 lists of :term:`points<point>` (one list per continuous pen stroke)
 along their form::
 
- x = []
  color = ag.Color(hue=ag.Uniform(0, 0.15), sat=0.8, li=0.5)
  
- y = ag.splatter_text('ABCDEFG', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, color=color)
- ag.reposition(y, (w / 2, h - 50), 'center', 'top')
- x.append(y)
+ points = ex.text_points("ABCDEFG", 50, pt_spacing=0.5, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x1 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
+ ag.reposition(x1, (w / 2, h - 50), "center", "top")
+ c.new(ag.shuffled(x1))
  
- y = ag.splatter_text('HIJKLM', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, color=color)
- ag.reposition(y, (w / 2, h - 150), 'center', 'top')
- x.append(y)
+ points = ex.text_points("HIJKLM", 50, pt_spacing=0.5, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x2 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
+ ag.reposition(x2, (w / 2, h - 150), "center", "top")
+ c.add(ag.shuffled(x2))
  
- y = ag.splatter_text('0123456789', height=50, spread=2, density=2,
-                      min_size=1, max_size=3, color=color)
- ag.reposition(y, (w / 2, h - 250), 'center', 'top')
- x.append(y)
+ points = ex.text_points("0123456789", 50, pt_spacing=0.5, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x3 = [ag.circle(c=p, r=size[i], fill=color) for i, p in enumerate(points)]
+ ag.reposition(x3, (w / 2, h - 250), "center", "top")
+ c.add(ag.shuffled(x3))
+ 
+ x = []
 
 .. image:: /_static/png/text1.png
 
 These :term:`points<point>` can then be manipulated in many ways::
 
- x = []
+ points = ex.text_points("NOPQRST", 40, pt_spacing=0.3, char_spacing=0.15)
+ ag.jitter_points(points, 8)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x1a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
  
- y = ag.double_dots_text('NOPQRST', height=40)
- ag.reposition(y, (w / 2, h - 50), 'center', 'top')
- x.append(y)
+ points = ex.text_points("NOPQRST", 40, pt_spacing=1, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+ x1b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
  
- y = ag.double_dots_text('UVWXYZ', height=40, top_color='#FF8888',
-                         bottom_color='#555555')
- ag.reposition(y, (w / 2, h - 150), 'center', 'top')
- x.append(y)
+ ag.reposition([x1a, x1b], (w / 2, h - 50), "center", "top")
+ c.new(x1a, x1b)
  
- y = ag.double_dots_text(".,!?:;'\"/", height=40, top_color='#FF8888',
-                         bottom_color='#555555')
- ag.reposition(y, (w / 2, h - 250), 'center', 'top')
- x.append(y)
+ points = ex.text_points("UVWXYZ", 40, pt_spacing=0.3, char_spacing=0.15)
+ ag.jitter_points(points, 8)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x2a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
+ 
+ points = ex.text_points("UVWXYZ", 40, pt_spacing=1, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+ x2b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
+ 
+ ag.reposition([x2a, x2b], (w / 2, h - 150), "center", "top")
+ c.add(x2a, x2b)
+ 
+ points = ex.text_points(".,!?:;'\"/", 40, pt_spacing=0.3, char_spacing=0.15)
+ ag.jitter_points(points, 8)
+ size = ag.Exponential(2.2, stdev=1).values(len(points))
+ x3a = [ag.circle(c=p, r=size[i], fill="black") for i, p in enumerate(points)]
+ 
+ points = ex.text_points(".,!?:;'\"/", 40, pt_spacing=1, char_spacing=0.15)
+ ag.jitter_points(points, 2)
+ size = ag.Exponential(1.5, stdev=0.5).values(len(points))
+ x3b = [ag.circle(c=p, r=size[i], fill="white") for i, p in enumerate(points)]
+ 
+ ag.reposition([x3a, x3b], (w / 2, h - 250), "center", "top")
+ c.add(x3a, x3b)
 
 .. image:: /_static/png/text2.png
 
 Currently only the characters displayed in these examples are
 provided, though additional ones can be added on request::
 
- x = []
+ pts = ex.text_points("abcdefg", height=50, pt_spacing=1/4, char_spacing=0.15)
+ dists = ag.Uniform(0, 10).values(len(pts))
+ points = [ag.endpoint(p, ag.Uniform(0, 360).value(), dists[i]) for i, p in enumerate (pts)]
+ radii = 0.5 * np.sqrt(10 - np.array(dists))
+ x1 = [ag.circle(c=p, r=radii[i]) for i, p in enumerate(points)]
+ ag.reposition(x1, (w / 2, h - 100), "center", "top")
+ ag.set_style(x1, "fill", "green")
  
- y = ag.hazy_text('abcdefg', height=50, spread=10, density=3,
-                  min_size=0.5, max_size=2, color='green')
- ag.reposition(y, (w / 2, h - 100), 'center', 'top')
- x.append(y)
+ pts = ex.text_points("hijklm", height=50, pt_spacing=1/4, char_spacing=0.15)
+ dists = ag.Uniform(0, 10).values(len(pts))
+ points = [ag.endpoint(p, ag.Uniform(0, 360).value(), dists[i]) for i, p in enumerate(pts)]
+ radii = 0.5 * np.sqrt(10 - np.array(dists))
+ x2 = [ag.circle(c=p, r=radii[i]) for i, p in enumerate(points)]
+ ag.reposition(x2, (w / 2, h - 250), "center", "top")
+ ag.set_style(x2, "fill", "green")
  
- y = ag.hazy_text('hijklm', height=50, spread=10, density=3,
-                  min_size=0.5, max_size=2, color='green')
- ag.reposition(y, (w / 2, h - 250), 'center', 'top')
- x.append(y)
+ c.new(x1, x2)
 
 .. image:: /_static/png/text3.png
 
 Since generated :term:`points<point>` are grouped by continuous pen
 strokes, :term:`points<point>` within each list can be joined::
 
- x = []
+ strokes = ex.text_points("nopqrst", 60, pt_spacing=1,
+                          char_spacing=0.2, grouping='strokes')
+ for stroke in strokes:
+     ag.jitter_points(stroke, 10)
+ x1 = [ag.spline(points=stroke) for stroke in strokes]
+ ag.reposition(x1, (w / 2, h - 100), "center", "top")
  
- y = ag.squiggle_text('nopqrst', height=60, spread=10, density=1)
- ag.reposition(y, (w / 2, h - 100), 'center', 'top')
- x.append(y)
+ strokes = ex.text_points("uvwxyz", 60, pt_spacing=1,
+                          char_spacing=0.2, grouping='strokes')
+ for stroke in strokes:
+     ag.jitter_points(stroke, 10)
+ x2 = [ag.spline(points=stroke) for stroke in strokes]
+ ag.reposition(x2, (w / 2, h - 250), "center", "top")
  
- y = ag.squiggle_text('uvwxyz', height=60, spread=10, density=1)
- ag.reposition(y, (w / 2, h - 250), 'center', 'top')
- x.append(y)
+ c.new(x1, x2)
 
 .. image:: /_static/png/text4.png
 

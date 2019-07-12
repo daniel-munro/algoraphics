@@ -28,13 +28,7 @@ API
 .. automodule:: algoraphics.shapes
    :members:
 
-.. automodule:: algoraphics.structures
-   :members:
-
 .. automodule:: algoraphics.svg
-   :members:
-
-.. automodule:: algoraphics.text
    :members:
 
 .. automodule:: algoraphics.textures
@@ -42,3 +36,14 @@ API
 
 .. automodule:: algoraphics.tiling
    :members:
+
+
+Extras API
+==========
+
+.. automodule:: algoraphics.extras.structures
+   :members:
+
+.. automodule:: algoraphics.extras.text
+   :members:
+

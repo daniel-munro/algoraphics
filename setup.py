@@ -20,6 +20,7 @@ setup(
         ],
         'docs': [
             'sphinx',
+            'sphinx_rtd_theme',
             'sphinx_autodoc_typehints',
         ]
     }

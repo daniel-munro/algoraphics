@@ -1,15 +1,14 @@
 """
-forms.py
-============
-Create forms such as filaments and trees.
+structures.py
+=============
+Create structures such as filaments and trees.
 
 """
 
-import math
 import numpy as np
 from typing import Union, Tuple, Sequence, List
 
-from .geom import (
+from ..geom import (
     endpoint,
     rad,
     is_clockwise,
@@ -20,8 +19,8 @@ from .geom import (
     jittered_points,
     direction_to,
 )
-from .shapes import polygon, spline, line, set_style
-from .param import Param, Delta, Cyclical, Wander, fixed_value, make_param
+from ..shapes import polygon, spline, line, set_style
+from ..param import Param, Delta, Cyclical, Wander, fixed_value, make_param
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -51,20 +50,10 @@ def filament(
     width = make_param(width)
     seg_length = make_param(seg_length)
     n_segments = fixed_value(n_segments)
-
-    # dirs = [direction.value() for i in range(n_segments)]
     widths = [width.value() for i in range(n_segments)]
-    # lengths = [seg_length.value() for i in range(n_segments)]
-
-    # backbone = [start]
-    # for i in range(n_segments):
-    #     pt = endpoint(backbone[-1], rad(dirs[i]), lengths[i])
-    #     backbone.append(pt)
 
     backbone = Wander(start, direction=direction, distance=seg_length)
     backbone = backbone.values(n_segments + 1)
-    # dirs = [angle_between(backbone[i], backbone[i+1], backbone[i+2])
-    #         for i in range(len(backbone) - 2)]
     dirs = [
         direction_to(backbone[i], backbone[i + 1]) for i in range(len(backbone) - 1)
     ]
@@ -78,7 +67,7 @@ def filament(
         angle = (180 + (dirs[i - 1] - dirs[i])) / 2
         # Points are more than width / 2 from backbone to account for
         # the angles, so the trapezoids are the correct width.
-        dist = widths[i] / (2 * math.sin(rad(angle)))
+        dist = widths[i] / (2 * np.sin(rad(angle)))
         p1 = endpoint(backbone[i], rad(dirs[i] + angle), dist)
         p2 = endpoint(backbone[i], rad(dirs[i] + angle + 180), dist)
         pt_pairs.append([p1, p2])
@@ -94,11 +83,6 @@ def filament(
 
     set_style(segments, "stroke", "match")
     set_style(segments, "stroke-width", 0.3)
-
-    # For debugging:
-    # x = [dict(type='circle', c=p, r=2) for p in backbone]
-    # return [segments, x]
-
     return segments
 
 
@@ -170,20 +154,20 @@ def _blow_paint_edge(
         le = max(5, np.random.normal(length, length * len_dev))
 
         p1 = move_toward(loc, start, width / 2)
-        p2 = rotate_and_move(p1, loc, -math.pi / 2, le)
+        p2 = rotate_and_move(p1, loc, -np.pi / 2, le)
         pts_out = [p1, p2]
         interpolate(pts_out, min(20, le / 3))
         # spread base and bulb:
         pts_out[0] = move_toward(pts_out[0], start, width / 2)
-        pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], math.pi / 2, width / 6)
+        pts_out[-1] = rotate_and_move(pts_out[-1], pts_out[0], np.pi / 2, width / 6)
         pts_out[1:-1] = jittered_points(pts_out[1:-1], width / 3)
 
         p3 = move_toward(loc, end, width / 2)
-        p4 = rotate_and_move(p3, loc, math.pi / 2, le)
+        p4 = rotate_and_move(p3, loc, np.pi / 2, le)
         pts_in = [p4, p3]
         interpolate(pts_in, min(20, le / 3))
         pts_in[-1] = move_toward(pts_in[-1], end, width / 2)
-        pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -math.pi / 2, width / 6)
+        pts_in[0] = rotate_and_move(pts_in[0], pts_in[-1], -np.pi / 2, width / 6)
         pts_in[1:-1] = jittered_points(pts_in[1:-1], width / 3)
 
         pts.extend(pts_out)
