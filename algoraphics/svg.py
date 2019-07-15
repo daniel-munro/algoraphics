@@ -388,76 +388,23 @@ def _write_filters(filters: Sequence[dict]) -> str:
     """
     fltrs = []
     for i, fltr in enumerate(filters):
-
         if fltr["type"] == "shadow":
             f = '<filter id="filter' + str(i) + '" '
             f += 'x="-50%" y="-50%" width="200%" height="200%">\n'
-
             f += '<feGaussianBlur in="SourceAlpha" '
             f += 'stdDeviation="' + str(fltr["stdev"]) + '" result="blur" />\n'
-
             f += (
                 '<feFlood flood-color="black" flood-opacity="'
                 + str(fltr["darkness"])
                 + '" />\n'
             )
             f += '<feComposite in2="blur" operator="in" />\n'
-
             f += (
                 "<feMerge>"
                 + '<feMergeNode /><feMergeNode in="SourceGraphic" />'
                 + "</feMerge>\n"
             )
             f += "</filter>\n"
-
-        elif fltr["type"] == "roughness":
-            f = '<filter id="filter' + str(i) + '">\n'
-            f += (
-                '<feTurbulence type="fractalNoise" baseFrequency="0.02" '
-                + 'numOctaves="5" result="noise" />\n'
-            )
-            f += (
-                '<feDiffuseLighting in="noise" lighting-color="white" '
-                + 'surfaceScale="0.5" result="diffLight">\n'
-            )
-            f += '<feDistantLight azimuth="45" elevation="35" />\n'
-            f += "</feDiffuseLighting>\n"
-
-            f += (
-                '<feColorMatrix in="diffLight" type="matrix" '
-                + 'values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0" '
-                + 'result="diffLightLight" />\n'
-            )
-            f += (
-                '<feColorMatrix in="diffLight" type="matrix" '
-                + 'values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1 0 0 0 1" '
-                + 'result="diffLightShadow" />\n'
-            )
-
-            f += (
-                '<feComponentTransfer in="diffLightLight" '
-                + 'result="diffLightLight2">\n'
-            )
-            f += '<feFuncA type="table" tableValues="0 0 0.8" />\n'
-            f += "</feComponentTransfer>\n"
-
-            f += (
-                '<feComponentTransfer in="diffLightShadow" '
-                + 'result="diffLightShadow2">\n'
-            )
-            f += '<feFuncA type="table" tableValues="0 0 0.5 0.5" />\n'
-            f += "</feComponentTransfer>\n"
-
-            f += (
-                '<feComposite in2="SourceGraphic" in="diffLightShadow2" '
-                + 'operator="atop" result="sourceWithShadow" />\n'
-            )
-            f += (
-                '<feComposite in2="sourceWithShadow" in="diffLightLight2" '
-                + 'operator="atop" />\n'
-            )
-            f += "</filter>\n"
-
         fltrs.append(f)
     return fltrs
 

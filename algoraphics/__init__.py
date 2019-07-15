@@ -8,12 +8,12 @@ from .geom import *
 from .grid import *
 from .images import *
 from .main import *
-from .mazes import *
+# from .mazes import *
 from .param import *
-from .ripples import *
+# from .ripples import *
 from .shapes import *
 # from .structures import *
 from .svg import *
 # from .text import *
-from .textures import *
+# from .textures import *
 from .tiling import *

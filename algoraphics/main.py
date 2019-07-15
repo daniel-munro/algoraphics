@@ -162,3 +162,57 @@ def _markov_next(state: str, trans_probs: Dict[str, Dict[str, float]]) -> str:
     states = list(trans_probs[state].keys())
     probs = [trans_probs[state][s] for s in states]
     return np.random.choice(states, p=probs)
+
+
+def add_shadows(
+    objects: Sequence[Collection], stdev: Number = 10, darkness: Number = 0.5
+):
+    """Add shadows to objects.
+
+    Each element (nested or not) of the list is replaced with a group
+    with shadow filter. So items that are shapes will have their own
+    shadow, while an item that is a (nested) list of shapes will have
+    one shadow for the composite object.
+
+    Args:
+        objects: A list of shapes (can be nested).
+        stdev: Standard deviation of the shadow gradient.
+        darkness: A number below one for lighter shadow, above one for darker.
+
+    """
+    for i, obj in enumerate(objects):
+        obj = obj if isinstance(obj, list) else [obj]
+        fltr = dict(type="shadow", stdev=stdev, darkness=darkness)
+        objects[i] = dict(type="group", members=obj, filter=fltr)
+
+
+def with_shadow(obj: Collection, stdev: Number, darkness: Number) -> dict:
+    """Add shadow to an object.
+
+    Like add_shadows() but returns a group with a single shadow filter.
+
+    Args:
+        obj: A shape or list of objects (can be nested).
+        stdev: Standard deviation of shadow gradient.
+        darkness: A number below one for lighter shadow, above one for darker.
+
+    Returns:
+        A group with ``obj`` as members and a filter applied to the group.
+
+    """
+    return filtered(obj, dict(type="shadow", stdev=stdev, darkness=darkness))
+
+
+def filtered(obj: Collection, fltr: dict) -> dict:
+    """Apply a filter to one or more shapes.
+
+    Args:
+        obj: A shape or (nested) list.
+        fltr: A filter.
+
+    Returns:
+        A group with ``obj`` as members and filter applied to group.
+
+    """
+    obj = obj if isinstance(obj, list) else [obj]
+    return dict(type="group", members=obj, filter=fltr)

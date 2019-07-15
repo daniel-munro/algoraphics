@@ -2,5 +2,8 @@
 
 """
 
-from .text import *
+from .mazes import *
+from .ripples import *
 from .structures import *
+from .text import *
+from .textures import *

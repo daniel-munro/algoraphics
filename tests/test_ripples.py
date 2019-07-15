@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import algoraphics.extras as ex
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -12,7 +13,7 @@ c = ag.Canvas(400, 400)
 circ = ag.points_on_arc(
     center=(200, 200), radius=100, theta_start=0, theta_end=360, spacing=10
 )
-x = ag.ripple_canvas(c.width, c.height, spacing=10, existing_pts=circ)
+x = ex.ripple_canvas(c.width, c.height, spacing=10, existing_pts=circ)
 
 c.add(x)
 c.png("png/ripples1.png")
@@ -31,7 +32,7 @@ trans_probs = dict(
 circ = ag.points_on_arc(
     center=(200, 200), radius=100, theta_start=0, theta_end=360, spacing=10
 )
-x = ag.ripple_canvas(
+x = ex.ripple_canvas(
     c.width, c.height, spacing=10, trans_probs=trans_probs, existing_pts=circ
 )
 

@@ -5,20 +5,19 @@ Functions for creating maze-like patterns.
 
 """
 
-import math
 import numpy as np
 import copy
 from typing import Sequence, Tuple, Union
 
-from .main import add_margin
-from .shapes import (
+from ..main import add_margin
+from ..shapes import (
     bounding_box,
     rotated_bounding_box,
     rotate_shapes,
     polygon,
     spline,
 )
-from .geom import (
+from ..geom import (
     points_on_line,
     points_on_arc,
     rotate_points,
@@ -27,7 +26,7 @@ from .geom import (
     rad,
     deg,
 )
-from .grid import grid_tree_neighbors
+from ..grid import grid_tree_neighbors
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
@@ -593,8 +592,8 @@ def fill_maze(
         bounds = bounding_box(outline)
     bounds = add_margin(bounds, 20)
 
-    rows = int(math.ceil((bounds[3] - bounds[1]) / float(spacing)))
-    cols = int(math.ceil((bounds[2] - bounds[0]) / float(spacing)))
+    rows = int(np.ceil((bounds[3] - bounds[1]) / float(spacing)))
+    cols = int(np.ceil((bounds[2] - bounds[0]) / float(spacing)))
     fill = maze(rows, cols, spacing, (bounds[0], bounds[1]), style)
 
     if rotation is not None:
