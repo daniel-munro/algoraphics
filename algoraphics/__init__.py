@@ -16,4 +16,4 @@ from .shapes import *
 from .svg import *
 # from .text import *
 # from .textures import *
-from .tiling import *
+# from .tiling import *

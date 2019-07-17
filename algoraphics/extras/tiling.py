@@ -10,8 +10,8 @@ import numpy as np
 from scipy import spatial
 from typing import Union, Tuple, List, Sequence
 
-from .main import add_margin, bounding_box, region_background
-from .shapes import (
+from ..main import add_margin, bounding_box, region_background
+from ..shapes import (
     rotated_bounding_box,
     rotate_shapes,
     keep_shapes_inside,
@@ -19,8 +19,8 @@ from .shapes import (
     line,
     set_style,
 )
-from .geom import midpoint, spaced_points
-from .color import Color
+from ..geom import midpoint, spaced_points
+from ..color import Color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]
