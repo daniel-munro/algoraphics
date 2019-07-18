@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import algoraphics.extras as ex
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +16,7 @@ def filament_fill(bounds):
     r = ag.distance(c, (bounds[2], bounds[3]))
     start = ag.rand_point_on_circle(c, r)
     dir_start = ag.direction_to(start, c)
-    filament = ag.filament(
+    filament = ex.filament(
         start=start,
         direction=ag.Delta(dir_start, delta=ag.Uniform(min=-20, max=20)),
         width=ag.Uniform(min=8, max=12),
@@ -28,7 +29,7 @@ def filament_fill(bounds):
 
 
 outline = ag.circle(c=(200, 200), r=100)
-x = ag.fill_region(outline, filament_fill)
+x = ex.fill_region(outline, filament_fill)
 ag.add_shadows(x["members"])
 
 c.add(x)
@@ -65,14 +66,14 @@ def doodle3_fun():
     return d
 
 
-doodle1 = ag.Doodle(doodle1_fun, footprint=[[True]])
-doodle2 = ag.Doodle(doodle2_fun, footprint=[[True, True]])
-doodle3 = ag.Doodle(doodle3_fun, footprint=[[True, True, True], [False, True, False]])
+doodle1 = ex.Doodle(doodle1_fun, footprint=[[True]])
+doodle2 = ex.Doodle(doodle2_fun, footprint=[[True, True]])
+doodle3 = ex.Doodle(doodle3_fun, footprint=[[True, True, True], [False, True, False]])
 doodles = [doodle1, doodle2, doodle3]
 
 outline = ag.circle(c=(200, 200), r=180)
 
-x = ag.fill_wrapping_paper(outline, 30, doodles, rotate=True)
+x = ex.fill_wrapping_paper(outline, 30, doodles, rotate=True)
 
 c.new(x)
 c.png("png/fill2.png")
@@ -86,7 +87,7 @@ outline = ag.circle(c=(200, 200), r=150)
 color = ag.Color(
     hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=ag.Uniform(min=0.5, max=0.7)
 )
-x = ag.fill_spots(outline)
+x = ex.fill_spots(outline)
 ag.set_style(x, "fill", color)
 
 c.new(x)

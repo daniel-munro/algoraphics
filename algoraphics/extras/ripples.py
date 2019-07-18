@@ -8,10 +8,11 @@ Create space-filling ripple effects.
 import numpy as np
 from typing import Union, Tuple, Dict, List, Sequence
 
-from ..main import _markov_next, add_margin
+from ..main import add_margin
 from ..geom import rotated_point, rad, endpoint, distance, Rtree
 from ..param import fixed_value
 from ..shapes import spline
+from .utils import _markov_next
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]

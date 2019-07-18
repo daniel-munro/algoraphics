@@ -151,29 +151,6 @@ def average_color(colors: Sequence[Color]) -> Color:
     return Color(RGB=RGB)
 
 
-def contrasting_lightness(color: Color, light_diff: float) -> Color:
-    """Get color with contrasting lightness to reference color.
-
-    Color is lighter if original lightness is < 0.5 and darker otherwise.
-    Used to create color pairs for a mixture of light and dark colors.
-
-    Args:
-        color: A color.
-        light_diff: Magnitude of difference in lightness, between 0 and 1.
-
-    Returns:
-        The contrasting color.
-
-    """
-    hsl = make_color(color).value()
-    if hsl[2] < 0.5:
-        new_light = min(hsl[2] + light_diff, 1.0)
-    else:
-        new_light = max(hsl[2] - light_diff, 0.0)
-    new_hsl = (hsl[0], hsl[1], new_light)
-    return Color(hsl=new_hsl)
-
-
 def map_colors_to_array(
     values: np.ndarray, colors: Sequence[Color], gradient_mode: str = "rgb"
 ) -> np.ndarray:

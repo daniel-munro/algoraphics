@@ -129,41 +129,6 @@ def region_background(region: dict, color: Color):
         region["members"] = [bg, region["members"]]
 
 
-def tint_region(region: dict, color: Color, opacity: float):
-    """Add color tint to a clipped region.
-
-    Args:
-        region: A clipped group shape.
-        color: The tint color.
-        opacity: The degree of tinting from 0 to 1.
-
-    """
-    bounds = add_margin(bounding_box(region["clip"]), 10)
-    tint = rectangle(bounds=bounds, fill=color, opacity=opacity)
-    if type(region["members"]) is list:
-        region["members"].append(tint)
-    else:
-        region["members"] = [region["members"], tint]
-
-
-def _markov_next(state: str, trans_probs: Dict[str, Dict[str, float]]) -> str:
-    """Get the next state in a first-order Markov chain.
-
-    Args:
-        state: The current state.
-        trans_probs: A dictionary of dictionaries containing
-          transition probabilities from one state (first key) to
-          another (second key).
-
-    Returns:
-        The next state.
-
-    """
-    states = list(trans_probs[state].keys())
-    probs = [trans_probs[state][s] for s in states]
-    return np.random.choice(states, p=probs)
-
-
 def add_shadows(
     objects: Sequence[Collection], stdev: Number = 10, darkness: Number = 0.5
 ):

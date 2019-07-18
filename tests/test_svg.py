@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import algoraphics.extras as ex
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,7 +16,7 @@ def frame1():
     color = ag.Color(
         hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=ag.Uniform(min=0.5, max=0.7)
     )
-    x = ag.fill_spots(outline, spacing=30)
+    x = ex.fill_spots(outline, spacing=30)
     ag.set_style(x, "fill", color)
     c.new(x)
     return c
@@ -34,7 +35,7 @@ def frame2():
     color = ag.Color(
         hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=ag.Uniform(min=0.5, max=0.7)
     )
-    x = ag.fill_spots(outline, spacing=30)
+    x = ex.fill_spots(outline, spacing=30)
     ag.set_style(x, "fill", color)
     c.new(x)
     return c
@@ -51,7 +52,7 @@ ag.video(frame2, seconds=2, fps=12, file_name="png/svg2.mp4")
 def frame3(t):
     outline = ag.circle(c=(200, 200), r=180)
     color = ag.Color(hue=ag.Uniform(min=0.6, max=0.8), sat=0.7, li=1 - 0.4 * abs(1 - t))
-    x = ag.fill_spots(outline, spacing=30)
+    x = ex.fill_spots(outline, spacing=30)
     ag.set_style(x, "fill", color)
     c.new(x)
     return c

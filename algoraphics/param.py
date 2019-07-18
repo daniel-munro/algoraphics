@@ -142,7 +142,7 @@ class Delta(Param):
         if start is not None:
             self.next = start
         elif min is not None and max is not None:
-            self.next = np.random.uniform(min.value(), max.value())
+            self.next = np.random.uniform(self.min.value(), self.max.value())
         else:
             self.next = 0 if delta is not None else 1
         self.delta = delta
@@ -169,11 +169,12 @@ class Delta(Param):
         """Multiply by ``ratio`` to get the next value."""
         this_ratio = fixed_value(self.ratio)
         val = self.next
-        new = self.next * this_ratio
-        if self.min is not None:
-            new = max(new, self.min.value())
-        if self.max is not None:
-            new = min(new, self.max.value())
+        new = val * this_ratio
+        mn, mx = self.min.value(), self.max.value()
+        if mn is not None:
+            new = max(new, mn)
+        if mx is not None:
+            new = min(new, mx)
         self.next = new
         return val
 

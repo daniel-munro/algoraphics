@@ -3,10 +3,10 @@
 """
 
 from .color import *
-from .fill import *
+# from .fill import *
 from .geom import *
 from .grid import *
-from .images import *
+# from .images import *
 from .main import *
 # from .mazes import *
 from .param import *

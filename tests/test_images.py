@@ -1,5 +1,6 @@
 import os
 import algoraphics as ag
+import algoraphics.extras as ex
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -7,29 +8,28 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Objects colored by sampling image #
 #####################################
 
-image = ag.open_image("test_images.jpg")
-ag.resize_image(image, 800, None)
+image = ex.open_image("test_images.jpg")
+ex.resize_image(image, 800, None)
 w, h = image.size
-x = ag.tile_canvas(w, h, shape="polygon", tile_size=100)
-ag.fill_shapes_from_image(x, image)
+x = ex.tile_canvas(w, h, shape="polygon", tile_size=100)
+ex.fill_shapes_from_image(x, image)
 
 c = ag.Canvas(image.width, image.height)
 c.add(x)
 c.png("png/images1.png")
 
 
-##################################################
-# Image segments colored from image and textured #
-##################################################
+#####################################
+# Image segments colored from image #
+#####################################
 
-image = ag.open_image("test_images.jpg")
-ag.resize_image(image, 800, None)
+image = ex.open_image("test_images.jpg")
+ex.resize_image(image, 800, None)
 w, h = image.size
-x = ag.image_regions(image, smoothness=3)
+x = ex.image_regions(image, smoothness=3)
 for outline in x:
-    color = ag.region_color(outline, image)
+    color = ex.region_color(outline, image)
     ag.set_style(outline, "fill", color)
-ag.add_paper_texture(x)
 
 c.new(x)
 c.png("png/images2.png")
@@ -39,17 +39,17 @@ c.png("png/images2.png")
 # Image segments with pattern fill #
 ####################################
 
-image = ag.open_image("test_images.jpg")
-ag.resize_image(image, 800, None)
+image = ex.open_image("test_images.jpg")
+ex.resize_image(image, 800, None)
 w, h = image.size
-x = ag.image_regions(image, smoothness=3)
+x = ex.image_regions(image, smoothness=3)
 for i, outline in enumerate(x):
-    color = ag.region_color(outline, image)
-    maze = ag.Maze_Style_Pipes(rel_thickness=0.6)
+    color = ex.region_color(outline, image)
+    maze = ex.Maze_Style_Pipes(rel_thickness=0.6)
     rot = color.value()[0] * 90
-    x[i] = ag.fill_maze(outline, spacing=5, style=maze, rotation=rot)
+    x[i] = ex.fill_maze(outline, spacing=5, style=maze, rotation=rot)
     ag.set_style(x[i]["members"], "fill", color)
-    ag.region_background(x[i], ag.contrasting_lightness(color, light_diff=0.2))
+    ag.region_background(x[i], ex.contrasting_lightness(color, light_diff=0.2))
 
 c.new(x)
 c.png("png/images3.png")

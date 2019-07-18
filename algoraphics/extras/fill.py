@@ -1,6 +1,6 @@
 """
 fill.py
-================
+=======
 Fill regions with objects in various ways.
 
 """
@@ -9,8 +9,8 @@ import math
 import numpy as np
 from typing import Union, Callable, Tuple, List, Sequence
 
-from .main import add_margin, flatten
-from .shapes import (
+from ..main import add_margin, flatten
+from ..shapes import (
     bounding_box,
     coverage,
     remove_hidden,
@@ -23,8 +23,8 @@ from .shapes import (
     scale_shapes,
     sample_points_in_shape,
 )
-from .geom import spaced_points
-from .param import Param, Delta, make_param, fixed_value
+from ..geom import spaced_points
+from ..param import Param, Delta, make_param, fixed_value
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]

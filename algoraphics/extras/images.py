@@ -11,8 +11,8 @@ from skimage.measure import find_contours, approximate_polygon
 from skimage.segmentation import slic, find_boundaries
 from typing import Union, Tuple, Sequence
 
-from .shapes import sample_points_in_shape, centroid, spline, set_style
-from .color import Color, average_color
+from ..shapes import sample_points_in_shape, centroid, spline, set_style
+from ..color import Color, average_color
 
 Number = Union[int, float]
 Point = Tuple[Number, Number]

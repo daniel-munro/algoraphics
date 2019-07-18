@@ -1,6 +1,6 @@
 """
 mazes.py
-=======
+========
 Functions for creating maze-like patterns.
 
 """
