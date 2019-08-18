@@ -10,24 +10,17 @@ c = ag.Canvas(400, 400)
 # Fixed-width filaments #
 #########################
 
-dirs = [ag.Delta(d, delta=ag.Uniform(min=-20, max=20)) for d in range(360)[::10]]
-width = ag.Uniform(min=8, max=12)
-length = ag.Uniform(min=8, max=12)
-# x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
-#                  seg_length=length, n_segments=40) for d in dirs]
-x = [
-    ex.filament(
-        start=(c.width / 2, c.height / 2),
-        direction=d,
-        width=width,
-        seg_length=length,
-        n_segments=20,
-    )
-    for d in dirs
-]
-
-# ag.set_style(x, 'fill', ag.Color(hsl=(ag.Uniform(min=0.6, max=0.75), 1, 0.5)))
-ag.set_style(x, "fill", ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
+start = (c.width / 2, c.height / 2)
+x = []
+for direc in range(360)[::10]:
+    backbone = [start]
+    for i in range(20):
+        backbone.append(
+            ag.Move(backbone[-1], direction=direc, distance=ag.Uniform(min=9, max=12))
+        )
+        direc = direc + ag.Uniform(min=-20, max=20)
+    x.append(ex.filament(backbone, width=ag.Uniform(min=8, max=12)))
+ag.set_styles(x, "fill", ag.Color(ag.Uniform(min=0, max=0.15), 1, 0.5))
 
 c.add(x)
 c.png("png/structures1.png")
@@ -37,15 +30,19 @@ c.png("png/structures1.png")
 # Fixed-width filaments with smooth curls #
 ###########################################
 
-direc = ag.Delta(
-    90, delta=ag.Delta(0, min=-20, max=20, delta=ag.Uniform(min=-3, max=3))
-)
-x = [
-    ex.filament(start=(z, -10), direction=direc, width=8, seg_length=10, n_segments=50)
-    for z in range(c.width)[::30]
-]
-
-ag.set_style(x, "fill", ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
+x = []
+for z in range(c.width)[::30]:
+    deldirec = 0
+    direc = 90
+    backbone = [(z, -10)]
+    for i in range(50):
+        backbone.append(
+            ag.Move(backbone[-1], direction=direc, distance=10)
+        )
+        deldirec = ag.Clip(deldirec + ag.Uniform(min=-3, max=3), min=-20, max=20)
+        direc = direc + deldirec
+    x.append(ex.filament(backbone, width=8))
+ag.set_styles(x, "fill", ag.Color(0.33, 1, ag.Uniform(min=0.15, max=0.35)))
 
 c.new(x)
 c.png("png/structures2.png")
@@ -55,62 +52,25 @@ c.png("png/structures2.png")
 # Tapered filaments (tentacles) #
 #################################
 
-dirs = [
-    ag.Delta(d, delta=ag.Delta(0, min=-20, max=20, delta=ag.Uniform(min=-30, max=30)))
-    for d in range(360)[::15]
-]
-# n_seg = 50
-# n_seg = 30
-# width = ag.Param(10, delta=-10/n_seg)
-# length = ag.Param(10, delta=-5/n_seg)
-# x = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
-#                  seg_length=length, n_segments=n_seg) for d in dirs]
-x = [
-    ex.tentacle(
-        start=(c.width / 2, c.height / 2),
-        length=225,
-        direction=d,
-        width=15,
-        seg_length=10,
-    )
-    for d in dirs
-]
-# n_seg = 40
-# width = ag.Param(10, delta=-10 / n_seg)
-# length = ag.Param(10, delta=-5 / n_seg)
-# y = [ag.filament(start=(w / 2., h / 2.), direction=d, width=width,
-#                  seg_length=length, n_segments=n_seg) for d in dirs]
-ag.set_style(x, "fill", ag.Color(hsl=(ag.Uniform(min=0.6, max=0.75), 1, 0.5)))
-# ag.set_style(y, 'fill', ag.Color(hsl=(ag.Uniform(min=0, max=0.15), 1, 0.5)))
+start = (c.width / 2, c.height / 2)
+x = []
+for d in range(360)[::15]:
+    deldirec = 0
+    direc = d
+    distance = 10
+    backbone = [start]
+    for i in range(25):
+        backbone.append(
+            ag.Move(backbone[-1], direction=direc, distance=distance)
+        )
+        deldirec = ag.Clip(deldirec + ag.Uniform(min=-30, max=30), min=-20, max=20)
+        direc = direc + deldirec
+        distance -= 0.2
+    x.append(ex.tentacle(backbone, width=15))
+ag.set_styles(x, "fill", ag.Color(ag.Uniform(min=0.6, max=0.75), 1, 0.5))
 
 c.new(x)
 c.png("png/structures3.png")
-
-
-###################################################
-# Tapered filaments (tentacles) with smooth curls #
-###################################################
-
-# direc = ag.Param(90, delta=ag.Param(0, min=-20, max=20,
-#                                     delta=ag.Uniform(min=-5, max=5)))
-# # n_seg = 80
-# n_seg = 50
-# width = ag.Param(20, delta=-20 / n_seg)
-# length = ag.Param(16, delta=-8 / n_seg)
-# x = [ag.filament(start=(z, -10), direction=direc, width=width,
-#                  seg_length=length, n_segments=n_seg) for z in range(w)[::30]]
-# # n_seg = 60
-# # width = ag.Param(20, delta=-20 / n_seg)
-# # length = ag.Param(16, delta=-8 / n_seg)
-# # y = [ag.filament(start=(z, -10), direction=direc, width=width,
-# #                  seg_length=length, n_segments=n_seg) for z in range(w)[::50]]
-
-# ag.set_style(x, 'fill',
-#              ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.15, max=0.35))))
-# # ag.set_style(y, 'fill', ag.Color(hsl=(0.33, 1, ag.Uniform(min=0.35, max=0.55))))
-
-# ag.write_SVG(x, w, h, 'svg/filaments4.svg')
-# ag.to_PNG('svg/filaments4.svg', 'png/filaments4.png')
 
 
 ################################################
@@ -145,11 +105,12 @@ x = [
         direction=d,
         branch_length=ag.Uniform(min=8, max=20),
         theta=ag.Uniform(min=15, max=20),
-        p=ag.Delta(1, delta=-0.08),
+        p=1,
+        delta_p=-0.08,
     )
     for d in range(360)[::20]
 ]
-ag.set_style(
+ag.set_styles(
     x,
     "stroke",
     ag.Color(hue=ag.Normal(0.12, stdev=0.05), sat=ag.Uniform(0.4, 0.7), li=0.3),

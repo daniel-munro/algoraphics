@@ -9,36 +9,36 @@ import numpy as np
 from typing import Union, Tuple, Dict, List, Sequence
 
 from ..main import add_margin
-from ..geom import rotated_point, rad, endpoint, distance, Rtree
+from ..geom import rotated_point, rad, endpoint, distance
 from ..param import fixed_value
-from ..shapes import spline
-from .utils import _markov_next
+from ..shapes import Spline
+from .utils import _markov_next, Rtree
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
 
 
-def _next_point(points: Rtree, spacing: Number,
-                mode: str) -> Union[Point, None]:
+def _next_point(points: Rtree, spacing: float, mode: str) -> Union[Pnt, None]:
     """Continue from last two elements of ``points``."""
     last = points.points[-2:]
-    if mode == 'R':
+    if mode == "R":
         angle = 60
         angle_inc = 5
         stop_angle = 300
         newpt_fun = lambda ang: rotated_point(last[-2], last[-1], rad(ang))
-    elif mode == 'L':
+    elif mode == "L":
         angle = 300
         angle_inc = -5
         stop_angle = 60
         newpt_fun = lambda ang: rotated_point(last[-2], last[-1], rad(ang))
-    elif mode == 'S':
+    elif mode == "S":
         angle = np.random.choice(range(360))
         direction = np.random.choice([-1, 1])
         angle_inc = direction * 1
         stop_angle = angle + direction * 359
         newpt_fun = lambda ang: endpoint(last[-1], angle, spacing)
-    elif mode == 'X':
+    elif mode == "X":
         angle = np.random.choice(range(120, 241))
         direction = np.random.choice([-1, 1])
         angle_inc = direction * 1
@@ -56,8 +56,9 @@ def _next_point(points: Rtree, spacing: Number,
             angle += angle_inc
 
 
-def _scan_for_space(open_space: Sequence[Point], points:
-                    Sequence[Point], spacing: Number) -> Union[Point, None]:
+def _scan_for_space(
+    open_space: Sequence[Pnt], points: Sequence[Pnt], spacing: float
+) -> Union[Pnt, None]:
     """Look for new starting point.
 
     Since a new ripple needs to be drawn with spacing on either side,
@@ -84,9 +85,13 @@ def _scan_for_space(open_space: Sequence[Point], points:
     return None
 
 
-def ripple_canvas(w: Number, h: Number, spacing: Number,
-                  trans_probs: Dict[str, Dict[str, float]] = None,
-                  existing_pts: Sequence[Point] = None) -> List[dict]:
+def ripple_canvas(
+    w: float,
+    h: float,
+    spacing: float,
+    trans_probs: Dict[str, Dict[str, float]] = None,
+    existing_pts: Sequence[Pnt] = None,
+) -> List[dict]:
     """Fill the canvas with ripples.
 
     The behavior of the ripples is determined by a first-order Markov
@@ -124,12 +129,9 @@ def ripple_canvas(w: Number, h: Number, spacing: Number,
     allpts = Rtree(existing_pts)  # for finding neighbors
 
     pts = [(x, bounds[1]) for x in np.arange(bounds[0], bounds[2], spacing)]
-    pts.extend([(bounds[2], y) for y in
-                np.arange(bounds[1], bounds[3], spacing)])
-    pts.extend([(x, bounds[3]) for x in
-                np.arange(bounds[2], bounds[0], -spacing)])
-    pts.extend([(bounds[0], y) for y in
-                np.arange(bounds[3], bounds[1], -spacing)])
+    pts.extend([(bounds[2], y) for y in np.arange(bounds[1], bounds[3], spacing)])
+    pts.extend([(x, bounds[3]) for x in np.arange(bounds[2], bounds[0], -spacing)])
+    pts.extend([(bounds[0], y) for y in np.arange(bounds[3], bounds[1], -spacing)])
     curves.append(pts)
     allpts.add_points(pts)
 
@@ -143,7 +145,7 @@ def ripple_canvas(w: Number, h: Number, spacing: Number,
     pts = [start]
     allpts.add_point(start)
 
-    mode = 'S'
+    mode = "S"
     more_space = True
     while more_space:
         newpt = _next_point(allpts, spacing, mode)
@@ -157,9 +159,9 @@ def ripple_canvas(w: Number, h: Number, spacing: Number,
             if new_start is not None:
                 pts = [new_start]
                 allpts.add_point(new_start)
-                mode = 'S'
+                mode = "S"
             else:
                 more_space = False
 
-    paths = [spline(points=p, fill='none', stroke='black') for p in curves]
+    paths = [Spline(points=p, fill="none", stroke="black") for p in curves]
     return paths

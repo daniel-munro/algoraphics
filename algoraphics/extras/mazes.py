@@ -14,8 +14,10 @@ from ..shapes import (
     bounding_box,
     rotated_bounding_box,
     rotate_shapes,
-    polygon,
-    spline,
+    Shape,
+    Polygon,
+    Spline,
+    Group,
 )
 from ..geom import (
     points_on_line,
@@ -26,11 +28,12 @@ from ..geom import (
     rad,
     deg,
 )
-from ..grid import grid_tree_neighbors
+from .grid import grid_tree_neighbors
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
-Collection = Union[dict, list]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
+Collection = Union[list, Shape, Group]
 
 
 def _rotated_piece(path: Sequence[dict], times: int) -> Sequence[dict]:
@@ -76,7 +79,7 @@ class Maze_Style:
         default.
 
         """
-        return polygon(points=points)
+        return Polygon(points)
 
     def tip(self):
         """Generate a dead-end cell.
@@ -140,7 +143,7 @@ class Maze_Style_Pipes(Maze_Style):
         self.w = rel_thickness / 2
 
     def output(self, points):
-        return spline(points=points)
+        return Spline(points)
 
     def right_turn(self):
         """"""
@@ -204,7 +207,7 @@ class Maze_Style_Round(Maze_Style):
         self.w = rel_thickness / 2
 
     def output(self, points):
-        return spline(points=points)
+        return Spline(points)
 
     def right_turn(self):
         """"""
@@ -263,7 +266,7 @@ class Maze_Style_Straight(Maze_Style):
         self.w = rel_thickness / 2
 
     def output(self, points):
-        return polygon(points=points)
+        return Polygon(points)
 
     def tip(self):
         """"""
@@ -313,7 +316,7 @@ class Maze_Style_Jagged(Maze_Style):
         self.max_w = max_w
 
     def output(self, points):
-        return polygon(points=points)
+        return Polygon(points)
 
     def dev(self):
         return np.random.uniform(self.min_w / 2, self.max_w / 2)
@@ -383,7 +386,7 @@ def _new_coords(prev_coords: Tuple[int, int], direction: int) -> Tuple[int, int]
 
 
 def _rotate_cell(
-    points: Union[Sequence[Point], Tuple[Sequence[Point], ...]], times: int
+    points: Union[Sequence[Pnt], Tuple[Sequence[Pnt], ...]], times: int
 ):
     """Rotate points at right angles within grid cell.
 
@@ -401,7 +404,7 @@ def _rotate_cell(
 
 
 def _translate_cell(
-    points: Union[Sequence[Point], Tuple[Sequence[Point], ...]], coords: Tuple[int, int]
+    points: Union[Sequence[Pnt], Tuple[Sequence[Pnt], ...]], coords: Tuple[int, int]
 ):
     """Translate points to grid coordinate.
 
@@ -531,8 +534,8 @@ def _draw_cell(
 
 
 def maze(
-    rows: int, cols: int, spacing: Number, start: Point, style: Maze_Style
-) -> dict:
+    rows: int, cols: int, spacing: float, start: Pnt, style: Maze_Style
+) -> Collection:
     """Generate a maze-like pattern spanning the specified grid.
 
     Args:
@@ -572,7 +575,7 @@ def maze(
 
 
 def fill_maze(
-    outline: Collection, spacing: Number, style: Maze_Style, rotation: Number = None
+    outline: Collection, spacing: float, style: Maze_Style, rotation: float = None
 ) -> dict:
     """Fill a region with a maze-like pattern.
 
@@ -599,4 +602,4 @@ def fill_maze(
     if rotation is not None:
         rotate_shapes(fill, rotation)
 
-    return dict(type="group", clip=outline, members=[fill])
+    return Group(clip=outline, members=[fill])

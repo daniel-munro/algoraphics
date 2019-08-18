@@ -4,16 +4,7 @@ API
 .. automodule:: algoraphics.color
    :members:
 
-.. automodule:: algoraphics.fill
-   :members:
-
 .. automodule:: algoraphics.geom
-   :members:
-
-.. automodule:: algoraphics.grid
-   :members:
-
-.. automodule:: algoraphics.images
    :members:
 
 .. automodule:: algoraphics.main
@@ -22,7 +13,7 @@ API
 .. automodule:: algoraphics.param
    :members:
 
-.. automodule:: algoraphics.ripples
+.. automodule:: algoraphics.point
    :members:
 
 .. automodule:: algoraphics.shapes
@@ -31,15 +22,24 @@ API
 .. automodule:: algoraphics.svg
    :members:
 
-.. automodule:: algoraphics.textures
-   :members:
-
-.. automodule:: algoraphics.tiling
-   :members:
-
 
 Extras API
 ==========
+
+.. automodule:: algoraphics.extras.fill
+   :members:
+
+.. automodule:: algoraphics.extras.grid
+   :members:
+
+.. automodule:: algoraphics.extras.images
+   :members:
+
+.. automodule:: algoraphics.extras.mazes
+   :members:
+
+.. automodule:: algoraphics.extras.ripples
+   :members:
 
 .. automodule:: algoraphics.extras.structures
    :members:
@@ -47,3 +47,8 @@ Extras API
 .. automodule:: algoraphics.extras.text
    :members:
 
+.. automodule:: algoraphics.extras.tiling
+   :members:
+
+.. automodule:: algoraphics.extras.utils
+   :members:

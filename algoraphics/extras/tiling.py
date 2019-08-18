@@ -5,9 +5,9 @@ Fill a region or the canvas with tiles or webs.
 
 """
 
-import math
 import numpy as np
 from scipy import spatial
+from copy import deepcopy
 from typing import Union, Tuple, List, Sequence
 
 from ..main import add_margin, bounding_box, region_background
@@ -15,20 +15,25 @@ from ..shapes import (
     rotated_bounding_box,
     rotate_shapes,
     keep_shapes_inside,
-    polygon,
-    line,
+    Shape,
+    Polygon,
+    Line,
+    Group,
     set_style,
 )
-from ..geom import midpoint, spaced_points
+from ..geom import midpoint
 from ..color import Color
+from .utils import spaced_points
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
-Bounds = Tuple[Number, Number, Number, Number]
-Collection = Union[list, dict]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
+# Bounds = Tuple[Number, Number, Number, Number]
+Bounds = Tuple[float, float, float, float]
+Collection = Union[list, Shape, Group]
 
 
-def voronoi_regions(points: Sequence[Point]) -> List[dict]:
+def voronoi_regions(points: Sequence[Pnt]) -> List[dict]:
     """Find Voronoi regions for a set of points.
 
     Args:
@@ -46,13 +51,13 @@ def voronoi_regions(points: Sequence[Point]) -> List[dict]:
         for region in vor.regions
         if -1 not in region and len(region) > 0
     ]
-    polygons = [polygon(points=region) for region in regions]
+    polygons = [Polygon(points=region) for region in regions]
     set_style(polygons, "stroke", "match")
     set_style(polygons, "stroke-width", 0.3)
     return polygons
 
 
-def voronoi_edges(points: Sequence[Point]) -> List[dict]:
+def voronoi_edges(points: Sequence[Pnt]) -> List[dict]:
     """Find the edges of Voronoi regions for a set of points.
 
     Args:
@@ -68,10 +73,10 @@ def voronoi_edges(points: Sequence[Point]) -> List[dict]:
         for edge in vor.ridge_vertices
         if -1 not in edge
     ]
-    return [line(p1=edge[0], p2=edge[1]) for edge in edges]
+    return [Line(p1=edge[0], p2=edge[1]) for edge in edges]
 
 
-def delaunay_regions(points: Sequence[Point]) -> List[dict]:
+def delaunay_regions(points: Sequence[Pnt]) -> List[dict]:
     """Find the Delaunay regions for a set of points.
 
     Args:
@@ -86,13 +91,13 @@ def delaunay_regions(points: Sequence[Point]) -> List[dict]:
 
     tri = spatial.Delaunay(np.array(points))
     regions = [[points[i] for i in region] for region in tri.simplices]
-    polygons = [polygon(points=region) for region in regions]
+    polygons = [Polygon(points=region) for region in regions]
     set_style(polygons, "stroke", "match")
     set_style(polygons, "stroke-width", 1)
     return polygons
 
 
-def delaunay_edges(points: Sequence[Point]) -> List[dict]:
+def delaunay_edges(points: Sequence[Pnt]) -> List[dict]:
     """Find edges of Delaunay regions for a set of points.
 
     Args:
@@ -112,14 +117,14 @@ def delaunay_edges(points: Sequence[Point]) -> List[dict]:
             edges.append(edge)
     edges = [list(x) for x in set(tuple(x) for x in edges)]  # unique edges
     edges = [[tuple(tri.points[i]) for i in ed] for ed in edges]
-    return [line(p1=ed[0], p2=ed[1]) for ed in edges]
+    return [Line(p1=ed[0], p2=ed[1]) for ed in edges]
 
 
 def tile_region(
     outline: Collection,
     shape: str = "polygon",
     edges: bool = False,
-    tile_size: Number = 500,
+    tile_size: float = 500,
     regularity: int = 10,
 ) -> dict:
     """Fill region with (uncolored) tiles or tile edges.
@@ -152,15 +157,15 @@ def tile_region(
         tiles = delaunay_edges(points)
     else:
         raise ValueError("Invalid tile specification.")
-    return dict(type="group", clip=outline, members=tiles)
+    return Group(clip=outline, members=tiles)
 
 
 def tile_canvas(
-    w: Number,
-    h: Number,
+    w: float,
+    h: float,
     shape: str = "polygon",
     edges: bool = False,
-    tile_size: Number = 500,
+    tile_size: float = 500,
     regularity: int = 10,
 ) -> List[dict]:
     """Fill canvas with (uncolored) tiles.
@@ -199,7 +204,7 @@ def tile_canvas(
 
 
 def nested_triangles(
-    tip: Point, height: Number, min_level: int, max_level: int
+    tip: Pnt, height: float, min_level: int, max_level: int
 ) -> List[dict]:
     """Generate nested equilateral triangles.
 
@@ -217,8 +222,8 @@ def nested_triangles(
     """
 
     def process_triangle(tip, height, level, triangles):
-        b1 = (tip[0] - height / math.sqrt(3), tip[1] - height)
-        b2 = (tip[0] + height / math.sqrt(3), tip[1] - height)
+        b1 = (tip[0] - height / np.sqrt(3), tip[1] - height)
+        b2 = (tip[0] + height / np.sqrt(3), tip[1] - height)
         if (level < min_level) or (level < max_level and np.random.random() < 0.75):
             process_triangle(tip, height / 2, level + 1, triangles)
             process_triangle(midpoint(tip, b1), height / 2, level + 1, triangles)
@@ -227,7 +232,7 @@ def nested_triangles(
                 (tip[0], tip[1] - height), -height / 2, level + 1, triangles
             )
         elif height > 0:  # only draw upward-pointing triangles
-            triangles.append(polygon(points=[tip, b1, b2]))
+            triangles.append(Polygon([tip, b1, b2]))
 
     triangles = []
     process_triangle(tip, height, 0, triangles)
@@ -259,14 +264,15 @@ def fill_nested_triangles(
     rotation = np.random.uniform(0, 360)
     bounds = add_margin(rotated_bounding_box(outline, rotation), 10)
     w = bounds[2] - bounds[0]
-    tip = (bounds[0] + w / 2, bounds[3] + (w / 2) * math.sqrt(3))
+    tip = (bounds[0] + w / 2, bounds[3] + (w / 2) * np.sqrt(3))
     height = tip[1] - bounds[1]
     triangles = nested_triangles(tip, height, min_level, max_level)
     rotate_shapes(triangles, rotation)
     keep_shapes_inside(triangles, outline)
-    region = dict(type="group", clip=outline, members=triangles)
+    region = Group(clip=outline, members=triangles)
     if color is not None:
-        set_style(region["members"], "fill", color)
+        for tri in region.members:
+            set_style(tri, "fill", deepcopy(color))
     if color2 is not None:
         region_background(region, color2)
     return region

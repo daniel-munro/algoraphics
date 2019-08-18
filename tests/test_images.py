@@ -46,9 +46,9 @@ x = ex.image_regions(image, smoothness=3)
 for i, outline in enumerate(x):
     color = ex.region_color(outline, image)
     maze = ex.Maze_Style_Pipes(rel_thickness=0.6)
-    rot = color.value()[0] * 90
+    rot = color.hue.state() * 90
     x[i] = ex.fill_maze(outline, spacing=5, style=maze, rotation=rot)
-    ag.set_style(x[i]["members"], "fill", color)
+    ag.set_style(x[i].members, "fill", color)
     ag.region_background(x[i], ex.contrasting_lightness(color, light_diff=0.2))
 
 c.new(x)

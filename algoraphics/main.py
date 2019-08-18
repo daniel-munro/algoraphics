@@ -6,15 +6,16 @@ General functions for creating graphics.
 """
 
 import numpy as np
-from typing import Union, Any, Sequence, Dict, Tuple
+from typing import Union, Any, Sequence, Tuple
 
 from .geom import distance
-from .shapes import rectangle, bounding_box
+from .shapes import rectangle, bounding_box, Shape, Group
 from .color import Color
 
-Number = Union[int, float]
-Collection = Union[dict, list]
-Bounds = Tuple[Number, Number, Number, Number]
+# Number = Union[int, float]
+Collection = Union[Shape, Group, list]
+# Bounds = Tuple[Number, Number, Number, Number]
+Bounds = Tuple[float, float, float, float]
 
 
 def flatten(objects: Any) -> list:
@@ -52,8 +53,8 @@ def shuffled(items: Sequence) -> list:
 def reorder_objects(
     objects: Sequence[Collection],
     by: str = "random",
-    w: Number = None,
-    h: Number = None,
+    w: float = None,
+    h: float = None,
 ):
     """Reorder objects in list.
 
@@ -89,7 +90,7 @@ def reorder_objects(
         objects.sort(key=key_fun, reverse=True)
 
 
-def add_margin(bounds: Bounds, margin: Number) -> Bounds:
+def add_margin(bounds: Bounds, margin: float) -> Bounds:
     """Add margin to bounds.
 
     A convenience function used when generating objects to avoid
@@ -121,16 +122,13 @@ def region_background(region: dict, color: Color):
         color: A color to apply to the region.
 
     """
-    bounds = add_margin(bounding_box(region["clip"]), 10)
+    bounds = add_margin(bounding_box(region.clip), 10)
     bg = rectangle(bounds=bounds, fill=color)
-    if type(region["members"]) is list:
-        region["members"].insert(0, bg)
-    else:
-        region["members"] = [bg, region["members"]]
+    region.members.insert(0, bg)
 
 
 def add_shadows(
-    objects: Sequence[Collection], stdev: Number = 10, darkness: Number = 0.5
+    objects: Sequence[Collection], stdev: float = 10, darkness: float = 0.5
 ):
     """Add shadows to objects.
 
@@ -148,10 +146,10 @@ def add_shadows(
     for i, obj in enumerate(objects):
         obj = obj if isinstance(obj, list) else [obj]
         fltr = dict(type="shadow", stdev=stdev, darkness=darkness)
-        objects[i] = dict(type="group", members=obj, filter=fltr)
+        objects[i] = Group(members=obj, filter=fltr)
 
 
-def with_shadow(obj: Collection, stdev: Number, darkness: Number) -> dict:
+def with_shadow(obj: Collection, stdev: float, darkness: float) -> dict:
     """Add shadow to an object.
 
     Like add_shadows() but returns a group with a single shadow filter.
@@ -180,4 +178,4 @@ def filtered(obj: Collection, fltr: dict) -> dict:
 
     """
     obj = obj if isinstance(obj, list) else [obj]
-    return dict(type="group", members=obj, filter=fltr)
+    return Group(members=obj, filter=fltr)

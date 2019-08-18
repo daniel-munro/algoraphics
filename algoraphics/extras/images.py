@@ -11,11 +11,12 @@ from skimage.measure import find_contours, approximate_polygon
 from skimage.segmentation import slic, find_boundaries
 from typing import Union, Tuple, Sequence
 
-from ..shapes import sample_points_in_shape, centroid, spline, set_style
+from ..shapes import sample_points_in_shape, centroid, Spline, set_style
 from ..color import Color, average_color
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
 
 
 def open_image(path: str) -> "Image":
@@ -58,7 +59,7 @@ def resize_image(image: "Image", width: int, height: int):
 
 
 def sample_colors(
-    image: "Image", points: Union[Point, Sequence[Point]]
+    image: "Image", points: Union[Pnt, Sequence[Pnt]]
 ) -> Union[Color, Sequence[Color]]:
     """Sample colors from an image.
 
@@ -120,8 +121,8 @@ def fill_shapes_from_image(shapes: Sequence[dict], image: "Image"):
 def _segment_image(
     image: "Image",
     n_segments: int = 100,
-    compactness: Number = 10,
-    smoothness: Number = 0,
+    compactness: float = 10,
+    smoothness: float = 0,
 ) -> np.ndarray:
     """Divide image into segments.
 
@@ -169,7 +170,7 @@ def pad_array(pixels: np.ndarray, margin: int = 1) -> np.ndarray:
 
 
 def _segments_to_shapes(
-    seg: np.ndarray, simplify: Number = None, expand: int = 1, smoothing: float = 0.2
+    seg: np.ndarray, simplify: float = None, expand: int = 1, smoothing: float = 0.2
 ) -> Sequence[dict]:
     """Convert an array of segment labels to spline shapes.
 
@@ -202,16 +203,16 @@ def _segments_to_shapes(
             points = approximate_polygon(points, simplify)
         points = list(points[:, ::-1])
         points = [tuple(p) for p in points]
-        shapes.append(spline(points=points, smoothing=smoothing, circular=True))
+        shapes.append(Spline(points, smoothing=smoothing, circular=True))
     return shapes
 
 
 def image_regions(
     image: "Image",
     n_segments: int = 100,
-    compactness: Number = 10,
-    smoothness: Number = 0,
-    simplify: Number = 1,
+    compactness: float = 10,
+    smoothness: float = 0,
+    simplify: float = 1,
     expand: int = 2,
     smoothing: float = 0.2,
 ) -> Sequence[dict]:

@@ -11,20 +11,28 @@ import subprocess
 
 # import cairosvg
 import tempfile
-from PIL import Image
-from io import BytesIO
-from base64 import b64encode
 from moviepy.editor import ImageSequenceClip
-from inspect import signature
+# from inspect import signature
 from typing import Union, Sequence, Callable, Tuple
 
 from .main import flatten
 from .geom import endpoint, rotated_point, direction_to, distance, rad
-from .shapes import scale_shapes, translate_shapes, rectangle
+from .shapes import (
+    scale_shapes,
+    translate_shapes,
+    rectangle,
+    Polygon,
+    Spline,
+    Line,
+    Circle,
+    Group,
+)
 from .color import Color
+from .param import fixed_value, Param
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
 
 
 class Canvas:
@@ -38,11 +46,12 @@ class Canvas:
 
     """
 
-    def __init__(self, width, height, background="white"):
+    def __init__(self, width: float, height: float, background: Color = "white"):
         self.width = width
         self.height = height
         self.objects = []
         self.background = background
+        self.t = 0
         # I could cache the SVG string, but how to know if it needs to
         # be updated?
         # self.svg = None
@@ -63,13 +72,13 @@ class Canvas:
 
     def get_svg(self) -> str:
         """Get the SVG representation of the canvas as a string."""
-        obj = self.objects[:]
-        if self.background is not None:
+        # obj = self.objects[:]
+        if self.background is not None and self.t == 0:
             bg = rectangle(
                 bounds=(-1, -1, self.width + 1, self.height + 1), fill=self.background
             )
-            obj.insert(0, bg)
-        return svg_string(obj, self.width, self.height)
+            self.objects.insert(0, bg)
+        return svg_string(self.objects, self.width, self.height, self.t)
 
     def svg(self, file_name: str, optimize: bool = True):
         """Write the canvas to an SVG file.
@@ -102,27 +111,34 @@ class Canvas:
         frmt = "PNG32:" if force_RGBA else ""
         # subprocess.run(["convert", "-background None", path, frmt + file_name])
         # For some reason it has to be this way to use '-background None':
-        subprocess.run("convert -background None {} {}".format(path, frmt + file_name), shell=True)
+        subprocess.run(
+            "convert -background None {} {}".format(path, frmt + file_name), shell=True
+        )
 
+    def _write_frames(self, n_frames: int, fps: int) -> Sequence[str]:
+        files = []
+        for i in range(n_frames):
+            handle, path = tempfile.mkstemp(suffix=".png")
+            self.png(path, force_RGBA=True)
+            files.append(path)
+            self.t += 1
+        return files
 
-def _encode_image(image: Image, frmt: str) -> str:
-    """Encode an image as a data string.
+    def gif(self, file_name: str, fps: int, n_frames: int = None, seconds: float = None):
+        """Create a GIF image of a dynamic graphic.
 
-    Used to embed images in SVG.
+        Args:
+            file_name: The file name to write to.
+            fps: Frames per second of the GIF.
+            n_frames: Number of frames to generate.
+            seconds: Specify length of the GIF in seconds instead of
+              number of frames.
 
-    Args:
-        image: A PIL Image.
-        frmt: Either 'JPEG' or 'PNG'.
-
-    Returns:
-        The image encoding.
-
-    """
-    formats = dict(JPEG="jpg", PNG="png")
-    enc = BytesIO()
-    image.save(enc, format=frmt)
-    data = b64encode(enc.getvalue()).decode("utf-8")
-    return "data:image/" + formats[frmt] + ";base64," + data
+        """
+        if n_frames is None:
+            n_frames = seconds * fps
+        files = self._write_frames(n_frames, fps)
+        ImageSequenceClip(files, fps=fps).write_gif(file_name, logger=None)
 
 
 def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
@@ -138,7 +154,7 @@ def _match_dict(dicts: Sequence[dict], d: dict) -> Union[int, None]:
 
 
 def _spline_path(
-    points: Sequence[Point], smoothing: float = 0.3, circular: bool = False
+    points: Sequence[Pnt], smoothing: float = 0.3, circular: bool = False
 ) -> str:
     """Generate path string for spline.
 
@@ -155,7 +171,7 @@ def _spline_path(
         An SVG path.
 
     """
-    # Add reference points at ends, which don't get drawn:
+    # Add control points at the ends:
     if circular:
         points = [points[-1]] + points + [points[0], points[1]]
     else:
@@ -182,114 +198,68 @@ def _spline_path(
     return path
 
 
-def _write_polygon(shape: dict, mods: str) -> str:
+def _write_polygon(shape: Polygon, mods: str, t: int = 0) -> str:
     """Generate the SVG representation of a polygon."""
-    points = " ".join([str(x[0]) + "," + str(x[1]) for x in shape["points"]])
-    return '<polygon points="' + points + '" ' + mods + "/>\n"
+    pts = [pt.state(t) for pt in shape.points]
+    points = " ".join(["{},{}".format(x[0], x[1]) for x in pts])
+    return '<polygon points="{}" {}/>\n'.format(points, mods)
 
 
-def _write_spline(shape: dict, mods: str) -> str:
+def _write_spline(shape: Spline, mods: str, t: int = 0) -> str:
     """Generate the SVG representation of a spline path."""
-    if len(shape["points"]) < 2:
+    pts = [pt.state(t) for pt in shape.points]
+    if len(pts) < 2:
         return ""
-    if "smoothing" not in shape:
-        shape["smoothing"] = 0.3
-    if "circular" not in shape:
-        shape["circular"] = False
-    d = _spline_path(shape["points"], shape["smoothing"], shape["circular"])
-    return '<path d="' + d + '" ' + mods + "/>\n"
+    d = _spline_path(pts, shape.smoothing, shape.circular)
+    return '<path d="{}" {}/>\n'.format(d, mods)
 
 
-def _write_circle(shape: dict, mods: str) -> str:
+def _write_circle(shape: Circle, mods: str, t: int = 0) -> str:
     """Generate the SVG representation of a circle."""
-    return (
-        '<circle cx="'
-        + str(shape["c"][0])
-        + '" cy="'
-        + str(shape["c"][1])
-        + '" r="'
-        + str(shape["r"])
-        + '" '
-        + mods
-        + "/>\n"
-    )
+    c = shape.c.state(t)
+    r = fixed_value(shape.r, t)
+    return '<circle cx="{}" cy="{}" r="{}" {}/>\n'.format(c[0], c[1], r, mods)
 
 
-def _write_line(shape: dict, mods: str) -> str:
-    """Generate the SVG representation of a line."""
-    return (
-        '<line x1="'
-        + str(shape["p1"][0])
-        + '" y1="'
-        + str(shape["p1"][1])
-        + '" x2="'
-        + str(shape["p2"][0])
-        + '" y2="'
-        + str(shape["p2"][1])
-        + '" '
-        + mods
-        + "/>\n"
-    )
-
-
-def _write_polyline(shape: dict, mods: str) -> str:
-    """Generate the SVG representation of a polyline."""
-    points = " ".join([str(x[0]) + "," + str(x[1]) for x in shape["points"]])
-    return '<polyline points="' + points + '" fill="none" ' + mods + "/>\n"
-
-
-def _write_raster(shape: dict, mods: str) -> str:
-    """Generate the SVG representation of a raster image."""
-    output = "<image "
-    if "w" not in shape:
-        shape["w"] = shape["image"].width
-    if "h" not in shape:
-        shape["h"] = shape["image"].height
-    if "x" in shape:
-        output += 'x="' + str(shape["x"]) + '" '
-    if "y" in shape:
-        output += 'y="' + str(shape["y"]) + '" '
-    output += (
-        'width="'
-        + str(shape["w"])
-        + '" height="'
-        + str(shape["h"])
-        + '" xlink:href="'
-        + _encode_image(shape["image"], shape["format"])
-        + '" '
-        + mods
-        + "/>\n"
-    )
-    return output
+def _write_line(shape: Line, mods: str, t: int = 0) -> str:
+    """Generate the SVG representation of a line or polyline."""
+    pts = [pt.state(t) for pt in shape.points]
+    if len(pts) == 2:
+        return '<line x1="{}" y1="{}" x2="{}" y2="{}" {}/>\n'.format(
+            pts[0][0], pts[0][1], pts[1][0], pts[1][1], mods
+        )
+    else:
+        points = " ".join(["{},{}".format(x[0], x[1]) for x in shape.points])
+        return '<polyline points="{}" fill="none" {}/>\n'.format(points, mods)
 
 
 def _write_group(
-    shape: dict, mods: str, defs: Sequence[str], filters: Sequence[dict]
+    shape: Group, mods: str, defs: Sequence[str], filters: Sequence[dict], t: int = 0
 ) -> str:
     """Generate an SVG group."""
     output = "<g "
-    if "clip" in shape:
+    if len(shape.clip) > 0:
         clip_id = "".join(np.random.choice(list(string.ascii_letters), 8))
         clip = '<clipPath id="' + clip_id + '">\n'
-        clip += "".join(
-            [_write_shape(o, defs, filters) for o in flatten(shape["clip"])]
-        )
+        clip += "".join([_write_shape(o, defs, filters) for o in flatten(shape.clip)])
         clip += "</clipPath>\n"
         defs.append(clip)
         output += 'clip-path="url(#' + clip_id + ')" '
     output += mods + ">\n"
     output += "".join(
-        [_write_shape(o, defs, filters) for o in flatten(shape["members"])]
+        [_write_shape(o, defs, filters, t) for o in flatten(shape.members)]
     )
     output += "</g>\n"
     return output
 
 
-def _write_shape(shape: dict, defs: Sequence[str], filters: Sequence[dict]) -> str:
+def _write_shape(
+    shape: dict, defs: Sequence[str], filters: Sequence[dict], t: int = 0
+) -> str:
     """Generate SVG representation of a shape.
 
     Args:
-        shape: A geometric shape, group, or raster dictionary.
+        shape: A geometric shape or group.
         defs: A list of strings used to collect SVG representations of
           all clip paths, filters, etc.
         filters: A collection of filter dictionaries used thus far so
@@ -299,66 +269,62 @@ def _write_shape(shape: dict, defs: Sequence[str], filters: Sequence[dict]) -> s
         An SVG encoding.
 
     """
-    style_string = 'style="' + _write_style(shape) + '" '
-
-    if "filter" in shape:
-        match = _match_dict(filters, shape["filter"])
+    if type(shape) is Group and shape.filter is not None:
+        match = _match_dict(filters, shape.filter)
         if match is None:
-            filters.append(shape["filter"])
+            filters.append(shape.filter)
             match = len(filters) - 1
         filter_id = "filter" + str(match)
         filter_string = 'filter="url(#' + filter_id + ')" '
     else:
         filter_string = ""
 
-    mods = style_string + filter_string
-
-    draw_funs = dict(
-        polygon=_write_polygon,
-        spline=_write_spline,
-        circle=_write_circle,
-        line=_write_line,
-        polyline=_write_polyline,
-        raster=_write_raster,
-    )
-
-    if shape["type"] == "group":
-        output = _write_group(shape, mods, defs, filters)
+    draw_funs = {
+        "<class 'algoraphics.shapes.Polygon'>": _write_polygon,
+        "<class 'algoraphics.shapes.Spline'>": _write_spline,
+        "<class 'algoraphics.shapes.Circle'>": _write_circle,
+        "<class 'algoraphics.shapes.Line'>": _write_line,
+    }
+    if type(shape) is Group:
+        output = _write_group(shape, filter_string, defs, filters, t)
     else:
-        output = draw_funs[shape["type"]](shape, mods)
+        style_string = 'style="' + _write_style(shape, t) + '" '
+        mods = style_string + filter_string
+        output = draw_funs[str(type(shape))](shape, mods, t)
 
     return output
 
 
-def _write_style(shape: dict) -> str:
+def _write_style(shape: dict, t: int = 0) -> str:
     """Generate an SVG representation of a shape's style.
 
     Args:
-        shape: A geometric shape, group, or raster dictionary.
+        shape: A geometric shape or group.
 
     Returns:
         An SVG encoding which should be inserted between the quotes of
         style="...".
 
     """
-    if "style" in shape:
-        style = shape["style"].copy()  # Keep input dict intact for reuse.
-    else:
-        style = dict()
-    if shape["type"] in ("spline", "circle", "polygon") and "fill" not in style:
+    style = shape.style.copy()  # Keep input dict intact for reuse.
+    if type(shape) in (Polygon, Spline, Circle) and "fill" not in style:
         style["fill"] = "none"
         if "stroke" not in style:
             style["stroke"] = "black"
-    if shape["type"] in ("line", "polyline") and "stroke" not in style:
+    if type(shape) is Line and "stroke" not in style:
         style["stroke"] = "black"
     if "fill" in style and type(style["fill"]) is tuple:
         # RGB = Color(hsl=style["fill"]).RGB()
         # style["fill"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
-        style["fill"] = Color(hsl=style["fill"]).hex()
+        style["fill"] = Color(*style["fill"]).state()
+    # elif "fill" in style and type(style["fill"]) is Color:
+    #     style["fill"] = style["fill"].hex()
     if "stroke" in style and type(style["stroke"]) is tuple:
         # RGB = Color(hsl=style["stroke"]).RGB()
         # style["stroke"] = "rgb(" + ", ".join([str(x) for x in RGB]) + ")"
-        style["stroke"] = Color(hsl=style["stroke"]).hex()
+        style["stroke"] = Color(*style["stroke"]).state()
+    # elif "stroke" in style and type(style["stroke"]) is Color:
+    #     style["stroke"] = style["stroke"].hex()
     if "stroke" in style and style["stroke"] == "match":
         # 'match' used to slightly expand filled shapes by setting the
         # stroke to match the fill.  Useful to prevent gap artifacts.
@@ -366,6 +332,10 @@ def _write_style(shape: dict) -> str:
             style["stroke"] = style["fill"]
         else:
             del style["stroke"]
+
+    for sty in style.keys():
+        if isinstance(style[sty], Param) or type(style[sty]) is Color:
+            style[sty] = style[sty].state(t)
 
     # Originally I used '_' in place of '-' so that style could be
     # set with dict(), but I don't think it's worth the confusion.  if
@@ -409,7 +379,7 @@ def _write_filters(filters: Sequence[dict]) -> str:
     return fltrs
 
 
-def svg_string(objects: Union[list, dict], w: Number, h: Number):
+def svg_string(objects: Union[list, dict], w: float, h: float, t: int = 0):
     """Create an SVG string for a collection of objects.
 
     Args:
@@ -417,6 +387,7 @@ def svg_string(objects: Union[list, dict], w: Number, h: Number):
           onto the canvas in order after flattening.
         w: Width of the canvas.
         h: Height of the canvas.
+        t: If objects are dynamic, the timepoint to render.
 
     """
     defs = []
@@ -425,11 +396,13 @@ def svg_string(objects: Union[list, dict], w: Number, h: Number):
     out += 'xmlns:xlink="http://www.w3.org/1999/xlink" '
     out += 'width="' + str(w) + '" height="' + str(h) + '">\n'
 
-    # flip y-axis so zero is at the bottom:
-    scale_shapes(objects, 1, -1)
-    translate_shapes(objects, 0, h)
+    # # flip y-axis so zero is at the bottom:
+    # scale_shapes(objects, 1, -1)
+    # translate_shapes(objects, 0, h)
 
-    objects = "".join([_write_shape(obj, defs, filters) for obj in flatten(objects)])
+    objects = "".join(
+        [_write_shape(obj, defs, filters, t) for obj in flatten(objects)]
+    )
 
     defs.extend(_write_filters(filters))
     out += "<defs>\n" + "".join(defs) + "</defs>\n"
@@ -494,14 +467,3 @@ def video(
         n_frames = seconds * fps
     files = _write_frames(function, n_frames, fps)
     ImageSequenceClip(files, fps=fps).write_videofile(file_name, logger=None)
-
-
-def _write_frames(function: Callable, n_frames: int, fps: int) -> Sequence[str]:
-    files = []
-    time_dep = len(signature(function).parameters) > 0
-    for i in range(n_frames):
-        canvas = function(i / fps) if time_dep else function()
-        handle, path = tempfile.mkstemp(suffix=".png")
-        canvas.png(path, force_RGBA=True)
-        files.append(path)
-    return files

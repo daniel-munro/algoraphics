@@ -6,7 +6,8 @@ Create structures such as filaments and trees.
 """
 
 import numpy as np
-from typing import Union, Tuple, Sequence, List
+import copy
+from typing import Tuple, Sequence, List
 
 from ..geom import (
     endpoint,
@@ -17,69 +18,60 @@ from ..geom import (
     rotate_and_move,
     line_to_polygon,
     jittered_points,
-    direction_to,
 )
-from ..shapes import polygon, spline, line, set_style
-from ..param import Param, Delta, Cyclical, Wander, fixed_value, make_param
+from ..shapes import Polygon, Spline, Line, set_style
+from ..param import Param, fixed_value, make_param
+from ..point import Point, Move, make_point
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
 
 
-def filament(
-    start: Point, direction: Param, width: Param, seg_length: Param, n_segments: int
-) -> List[dict]:
+def filament(backbone: Sequence[Point], width: Param) -> List[Polygon]:
     """Generate a meandering segmented filament.
 
     Args:
-        start: The midpoint of first edge of the filament.
-        direction: The direction (in degrees) of each segment.
-          Recommended to be a Delta for a meandering filament.  Nested
-          Deltas will produce meandering from higher-order
-          random walks.
-        width: The width of the filament (at segment joining edges).
-        seg_length: Average side length of each segment.
-        n_segments: Number of segments in the filament.
+        backbone: A list of Points specifying the midpoint of the
+          filament ends and segment boundaries.
+        width: The width/s of the filament (at segment joining edges).
 
     Returns:
-        A list of polygons (the segments from start to end).
+        A list of Polygons (the segments from start to end).
 
     """
-    start = fixed_value(start)
-    direction = make_param(direction)
     width = make_param(width)
-    seg_length = make_param(seg_length)
-    n_segments = fixed_value(n_segments)
-    widths = [width.value() for i in range(n_segments)]
-
-    backbone = Wander(start, direction=direction, distance=seg_length)
-    backbone = backbone.values(n_segments + 1)
-    dirs = [
-        direction_to(backbone[i], backbone[i + 1]) for i in range(len(backbone) - 1)
-    ]
-
+    widths = [copy.copy(width) for i in range(len(backbone) + 1)]
     # Filament starts with right angles:
-    p1 = endpoint(start, rad(dirs[0] + 90), widths[0] / 2)
-    p2 = endpoint(start, rad(dirs[0] - 90), widths[0] / 2)
+    p1 = Move(backbone[0], direction=backbone[1].direction - 90, distance=widths[0] / 2)
+    p2 = Move(backbone[0], direction=backbone[1].direction + 90, distance=widths[0] / 2)
     pt_pairs = [[p1, p2]]
-    for i in range(1, n_segments):
-        angle = dirs[i] - dirs[i - 1]
-        angle = (180 + (dirs[i - 1] - dirs[i])) / 2
-        # Points are more than width / 2 from backbone to account for
-        # the angles, so the trapezoids are the correct width.
-        dist = widths[i] / (2 * np.sin(rad(angle)))
-        p1 = endpoint(backbone[i], rad(dirs[i] + angle), dist)
-        p2 = endpoint(backbone[i], rad(dirs[i] + angle + 180), dist)
+    for i in range(1, len(backbone) - 1):
+        angle = (180 + (backbone[i].direction - backbone[i + 1].direction)) / 2
+        p1 = Move(
+            backbone[i],
+            direction=(backbone[i + 1].direction + angle),
+            distance=widths[i] / 2,
+        )
+        p2 = Move(
+            backbone[i],
+            direction=(backbone[i + 1].direction + angle + 180),
+            distance=widths[i] / 2,
+        )
         pt_pairs.append([p1, p2])
     # Filament ends with right angles:
-    p1 = endpoint(backbone[-1], rad(dirs[-1] + 90), widths[-1] / 2)
-    p2 = endpoint(backbone[-1], rad(dirs[-1] - 90), widths[-1] / 2)
+    p1 = Move(
+        backbone[-1], direction=backbone[-1].direction + 90, distance=widths[-1] / 2
+    )
+    p2 = Move(
+        backbone[-1], direction=backbone[-1].direction - 90, distance=widths[-1] / 2
+    )
     pt_pairs.append([p1, p2])
 
     segments = []
-    for i in range(n_segments):
+    for i in range(len(backbone) - 1):
         pts = [pt_pairs[i][0], pt_pairs[i][1], pt_pairs[i + 1][1], pt_pairs[i + 1][0]]
-        segments.append(polygon(points=pts))
+        segments.append(Polygon(pts))
 
     set_style(segments, "stroke", "match")
     set_style(segments, "stroke-width", 0.3)
@@ -87,44 +79,37 @@ def filament(
 
 
 def tentacle(
-    start: Point, direction: Param, length: Number, width: Param, seg_length: Number
-) -> List[dict]:
+        backbone: Sequence[Point], width: float
+) -> List[Polygon]:
     """Generate a filament that tapers to a point.
 
     Args:
-        start: The midpoint of first edge of the tentacle.
-        direction: The direction (in degrees) of each segment.
-          Recommended to be a Delta for a meandering filament.  Nested
-          Deltas will produce meandering from higher-order random
-          walks.
-        length: Approximate length of the tentacle.
-        width: The starting width of the tentacle.
-        seg_length: Average starting length of each segment.  They
-          will shrink toward to the tip.
+        backbone: A list of Points specifying the midpoint of the
+          filament ends and segment boundaries.
+        width: The width of the tentacle base.
 
     Returns:
         A list of polygons (the segments from base to tip).
 
     """
     width = fixed_value(width)
-    seg_length = fixed_value(seg_length)
-    length = fixed_value(length)
-
-    # Seg lengths will shrink from seg_length to 1/2 seg_length:
-    n_segments = int(length / (0.75 * seg_length))
-    width = Delta(width, delta=-(width / n_segments))
-    seg_length = Delta(seg_length, delta=-(seg_length / (2 * n_segments)))
-    return filament(start, direction, width, seg_length, n_segments)
+    x = filament(backbone, width)
+    delwidth = width / len(x)
+    for segment in x:
+        width -= delwidth
+        segment.points[2].distance = Param(width / 2)
+        segment.points[3].distance = Param(width / 2)
+    return x
 
 
 def _blow_paint_edge(
-    start: Point,
-    end: Point,
-    spacing: Number = 20,
-    length: Number = 40,
+    start: Pnt,
+    end: Pnt,
+    spacing: float = 20,
+    length: float = 40,
     len_dev: float = 0.25,
-    width: Number = 5,
-) -> List[Point]:
+    width: float = 5,
+) -> List[Pnt]:
     """Draw blow-paint shapes along an edge.
 
     Creates 'fingers' of paint along the edge, as if being blown along
@@ -179,11 +164,11 @@ def _blow_paint_edge(
 
 
 def blow_paint_area(
-    points: Sequence[Point],
-    spacing: Number = 20,
-    length: Number = 40,
+    points: Sequence[Pnt],
+    spacing: float = 20,
+    length: float = 40,
     len_dev: float = 0.25,
-    width: Number = 5,
+    width: float = 5,
 ) -> dict:
     """Draw a blow-paint effect around an area.
 
@@ -207,16 +192,16 @@ def blow_paint_area(
         pts.extend(
             _blow_paint_edge(points[i], points[i + 1], spacing, length, len_dev, width)
         )
-    return spline(points=pts, circular=True, smoothing=0.4)
+    return Spline(pts, circular=True, smoothing=0.4)
 
 
 def blow_paint_line(
-    points: Sequence[Point],
-    line_width: Number = 10,
-    spacing: Number = 20,
-    length: Number = 20,
+    points: Sequence[Pnt],
+    line_width: float = 10,
+    spacing: float = 20,
+    length: float = 20,
     len_dev: float = 0.33,
-    width: Number = 5,
+    width: float = 5,
 ) -> dict:
     """Draw a blow-paint effect connecting a sequence of points.
 
@@ -239,7 +224,7 @@ def blow_paint_line(
 
 
 def blow_paint_spot(
-    point: Point, length: Number = 10, len_dev: float = 0.7, width: Number = 3
+    point: Pnt, length: float = 10, len_dev: float = 0.7, width: float = 3
 ) -> dict:
     """Draw a paint splatter.
 
@@ -260,7 +245,7 @@ def blow_paint_spot(
 
 
 def tree(
-    start: Point, direction: Number, branch_length: Param, theta: Param, p: Param
+        start: Point, direction: Param, branch_length: Param, theta: Param, p: float, delta_p: float = 0
 ) -> List[dict]:
     """Generate a tree with randomly terminating branches.
 
@@ -272,61 +257,22 @@ def tree(
         p: The probability that a given branch will split instead of
           terminating.  Recommended to have a delta < 0 or ratio < 1
           so that the tree is guaranteed to terminate.
+        delta_p: The decrease in p at each branching.
 
     Returns:
         A list of line shapes.
 
     """
-    start = fixed_value(start)
-    direction = fixed_value(direction)
-    branch_length = make_param(branch_length)
-    theta = make_param(theta)
-    p = make_param(p)
+    start = make_point(start)
+    direction = make_param(direction)
+    branch_length = copy.deepcopy(make_param(branch_length))
+    theta = copy.deepcopy(make_param(theta))
+    p = fixed_value(p)
 
-    length = branch_length.value()
-    end = endpoint(start, rad(direction), length)
-    x = [line(p1=start, p2=end)]
-    if np.random.random() < p.value():
-        theta_this = theta.value()
-        x.extend(tree(end, direction + theta_this / 2, branch_length, theta, p))
-        x.extend(tree(end, direction - theta_this / 2, branch_length, theta, p))
+    end = Move(start, direction, branch_length)
+    x = [Line(p1=start, p2=end)]
+    if np.random.random() < p:
+        p += fixed_value(delta_p)
+        x.extend(tree(end, direction + theta / 2, branch_length, theta, p, delta_p))
+        x.extend(tree(end, direction - theta / 2, branch_length, theta, p, delta_p))
     return x
-
-
-def wave(start: Point, direction: Number, period: Number, length: Number) -> dict:
-    """Generate a wave spline.
-
-    The wave is generated as a series of points generated with
-    oscillating direction from the previous.  This allows for
-    different forms of randomness and dynamics to be used, but
-    amplitude is not independent of period.  All wave specifications
-    are approximate.
-
-    Args:
-        start: Starting point of the wave.
-        direction: Starting direction (in degrees) of the wave.
-        period: Peak-to-peak distance.
-        length: End-to-end length of the wave.
-
-    Returns:
-        A spline shape.
-
-    """
-    start = fixed_value(start)
-    direction = fixed_value(direction)
-    period = make_param(period)
-    length = fixed_value(length)
-
-    # Some of these calculations are wrong, but trig is hard.
-    n_pts = round(10 * length / period.value())
-    # Period and phase are chosen such that positive values come in pairs
-    # in each phase.  Then, Add half (2/4) of a phase's positive deltas to
-    # desired direction to start off in correct direction for phase 180.
-    direc = Delta(direction, delta=Cyclical(-50, 50, period=10, phase=0.3 * 360))
-    direc.values(3)  # Start wave in correct direction.
-
-    def dist_fun():
-        return (np.pi * period.value()) / (2 * 10)
-
-    x = Wander(start=start, direction=direc, distance=dist_fun)
-    return spline(points=x.values(n_pts))

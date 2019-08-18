@@ -5,7 +5,7 @@ Generate text in the form of shapes or SVG text.
 
 """
 
-import math
+import numpy as np
 from typing import Union, Tuple, List
 
 from ..geom import (
@@ -17,12 +17,13 @@ from ..geom import (
     deg,
 )
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
 
 
-def char_points(char: str, start: Point, h: Number, spacing:
-                Number) -> List[List[Point]]:
+def char_points(char: str, start: Pnt, h: float, spacing:
+                float) -> List[List[Pnt]]:
     """Generate points along a character shape.
 
     Args:
@@ -699,11 +700,11 @@ def char_points(char: str, start: Point, h: Number, spacing:
     elif char == '2':
         x = points_on_arc((0.25, 0.75), 0.25, 180, 0, sp)
         # Angle between (0, 0), (0.5, 0.75), and center:
-        theta1 = math.atan(3/2)
+        theta1 = np.arctan(3/2)
         # Angle between (0, 0), center, and (0.5, 0.75):
-        theta2 = math.pi - 2 * theta1
-        d = math.sqrt(0.5**2 + 0.75**2)
-        r = d * math.sin(theta1) / math.sin(theta2)
+        theta2 = np.pi - 2 * theta1
+        d = np.sqrt(0.5**2 + 0.75**2)
+        r = d * np.sin(theta1) / np.sin(theta2)
         c = (0.5 - r, 0.75)
         x.extend(points_on_arc(c, r, 0, deg(-theta2), sp))
         x.extend(points_on_line((0, 0), (0.5, 0), sp))
@@ -736,9 +737,9 @@ def char_points(char: str, start: Point, h: Number, spacing:
         x = points_on_line((0, 1), (2/3, 1), sp)
         # x.extend(points_on_line((2/3, 1), (0, 0), sp))
         cx = 2/3 + 1
-        r = math.sqrt(2)
-        # theta = 180 - deg(math.acos(4/5))
-        theta = 180 - deg(math.acos(1 / r))
+        r = np.sqrt(2)
+        # theta = 180 - deg(np.arccos(4/5))
+        theta = 180 - deg(np.arccos(1 / r))
         x.extend(points_on_arc((cx, 0), r, theta, 180, sp))
         points.append(x)
 
@@ -804,7 +805,7 @@ def char_points(char: str, start: Point, h: Number, spacing:
     return points
 
 
-def _rel_char_spacing(char: str) -> Tuple[Number, Number]:
+def _rel_char_spacing(char: str) -> Tuple[float, float]:
     """Get character's left and right spacing relative to line height."""
     spacing = {
         'A': (0.5, 0.5),
@@ -887,9 +888,9 @@ def _rel_char_spacing(char: str) -> Tuple[Number, Number]:
         return (0.5, 0.5)
 
 
-def text_points(text: str, height: Number, pt_spacing: Number, char_spacing:
-                Number = 0.1, grouping: str =
-                'points') -> Union[List[Point], List[List[Point]]]:
+def text_points(text: str, height: float, pt_spacing: float, char_spacing:
+                float = 0.1, grouping: str =
+                'points') -> Union[List[Pnt], List[List[Pnt]]]:
     """Generate points that spell out text.
 
     Text starts at (0, 0) and should be repositioned.

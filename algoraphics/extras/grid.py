@@ -6,9 +6,88 @@ Functions for working with grids.
 """
 
 import numpy as np
+import matplotlib.colors
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import minimum_spanning_tree, shortest_path
 from typing import Sequence, Tuple
+
+from ..color import Color, make_color
+
+
+def rgb_array_to_hsv(rgb: np.ndarray) -> np.ndarray:
+    """Convert matrix of rgb values to HSV.
+
+    Args:
+        rgb: An array of rgb colors.
+
+    Returns:
+        An array of HSV colors.
+    """
+    return matplotlib.colors.rgb_to_hsv(rgb)
+
+
+def hsv_array_to_rgb(hsv: np.ndarray) -> np.ndarray:
+    """Convert matrix of HSV values to rgb.
+
+    Args:
+        hsv: An array of HSV colors.
+
+    Returns:
+        An array of rgb colors.
+    """
+    return matplotlib.colors.hsv_to_rgb(hsv)
+
+
+def map_colors_to_array(
+    values: np.ndarray, colors: Sequence[Color], gradient_mode: str = "rgb"
+) -> np.ndarray:
+    """Map 2D array of values to a cyclical color gradient.
+
+    If values vary continuously in space, this produces a cyclical color
+    gradient.
+
+    Args:
+        values: A 2D array of floats.  Values should range from 0,
+          inclusive, to len(colors) + 1, exclusive.  Each value
+          corresponds to a proportional mixture of the colors at the
+          two indices it is between (with values higher than the last
+          index cycling back to the first color).
+        colors: A list of Color objects.
+        gradient_mode: Either 'rgb' or 'hsv' to indicate how the
+          colors are interpolated.
+
+    Returns:
+        A 3D array of RGB values (RGB mode because this is used for
+        PIL images).
+
+    """
+    colors = np.array([make_color(color).rgb() for color in colors])
+    if gradient_mode == "hsv":
+        colors = rgb_array_to_hsv(np.array([colors]))[0, :]
+
+    # Get the two colors per pixel to be mixed:
+    color1 = values.astype(int)
+    color2 = ((values + 1) % len(colors)).astype(int)
+    proportion = values % 1
+    c1 = colors[color1]
+    c2 = colors[color2]
+
+    if gradient_mode == "rgb":
+        # Weighted average for each of R, G, and B:
+        out = c1 + proportion[:, :, np.newaxis] * (c2 - c1)
+    else:
+        # For HSL, average hue should be in direction where hues are closer:
+        h1 = c1[:, :, 0]
+        h2 = c2[:, :, 0]
+        h1[h2 - h1 > 0.5] += 1
+        h2[h1 - h2 > 0.5] += 1
+        h = (h1 + proportion * (h2 - h1)) % 1
+        # Weighted average for each of H, S, and L:
+        out = c1 + proportion[:, :, np.newaxis] * (c2 - c1)
+        out[:, :, 0] = h
+        out = hsv_array_to_rgb(out)
+    out = (out * 255).astype("uint8")
+    return out
 
 
 def grid_tree(rows: int, cols: int) -> np.ndarray:

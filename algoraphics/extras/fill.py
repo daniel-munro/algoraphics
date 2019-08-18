@@ -5,7 +5,6 @@ Fill regions with objects in various ways.
 
 """
 
-import math
 import numpy as np
 from typing import Union, Callable, Tuple, List, Sequence
 
@@ -17,18 +16,21 @@ from ..shapes import (
     keep_points_inside,
     rotated_bounding_box,
     keep_shapes_inside,
-    circle,
+    Circle,
+    Group,
     rotate_shapes,
     translate_shapes,
     scale_shapes,
     sample_points_in_shape,
 )
-from ..geom import spaced_points
-from ..param import Param, Delta, make_param, fixed_value
+from ..param import fixed_value
+from .utils import spaced_points
 
-Number = Union[int, float]
-Point = Tuple[Number, Number]
-Bounds = Tuple[Number, Number, Number, Number]
+# Number = Union[int, float]
+# Point = Tuple[Number, Number]
+Pnt = Tuple[float, float]
+# Bounds = Tuple[Number, Number, Number, Number]
+Bounds = Tuple[float, float, float, float]
 Collection = Union[dict, list]
 
 
@@ -37,7 +39,7 @@ def fill_region(
     object_fun: Callable[[Bounds], Collection],
     min_coverage: float = 1,
     max_tries: int = None,
-) -> dict:
+) -> Group:
     """Fill a region by iteratively placing randomly generated objects.
 
     Args:
@@ -71,7 +73,7 @@ def fill_region(
         if space.area < old_area:
             objects.append(obj)
 
-    filled_region = dict(type="group", clip=outline, members=objects)
+    filled_region = Group(clip=outline, members=objects)
     remove_hidden(filled_region)
     return filled_region
 
@@ -139,7 +141,7 @@ class Doodle:
         return x
 
 
-def _doodle_fits(grid: np.ndarray, coords: Point, footprint: np.ndarray) -> bool:
+def _doodle_fits(grid: np.ndarray, coords: Pnt, footprint: np.ndarray) -> bool:
     """Determine whether a doodle will fit at a location.
 
     Args:
@@ -158,7 +160,7 @@ def _doodle_fits(grid: np.ndarray, coords: Point, footprint: np.ndarray) -> bool
     return np.sum(np.logical_and(subgrid, footprint)) == 0
 
 
-def _add_doodle(grid: np.ndarray, coords: Point, footprint: np.ndarray):
+def _add_doodle(grid: np.ndarray, coords: Pnt, footprint: np.ndarray):
     """Mark the space where a doodle is placed as occupied.
 
     Args:
@@ -189,7 +191,7 @@ def _next_cell(r, c, rows, cols):
 
 
 def grid_wrapping_paper(
-    rows: int, cols: int, spacing: Number, start: Point, doodles: Sequence[Doodle]
+    rows: int, cols: int, spacing: float, start: Pnt, doodles: Sequence[Doodle]
 ) -> List[Collection]:
     """Create a tiling of non-overlapping doodles.
 
@@ -248,8 +250,8 @@ def grid_wrapping_paper(
 
 
 def fill_wrapping_paper(
-    outline: Collection, spacing: Number, doodles: Sequence[Doodle], rotate: bool = True
-) -> dict:
+    outline: Collection, spacing: float, doodles: Sequence[Doodle], rotate: bool = True
+) -> Group:
     """Fill a region with a tiling of non-overlapping doodles.
 
     Args:
@@ -268,20 +270,20 @@ def fill_wrapping_paper(
     else:
         bounds = bounding_box(outline)
 
-    rows = int(math.ceil((bounds[3] - bounds[1]) / spacing))
-    cols = int(math.ceil((bounds[2] - bounds[0]) / spacing))
+    rows = int(np.ceil((bounds[3] - bounds[1]) / spacing))
+    cols = int(np.ceil((bounds[2] - bounds[0]) / spacing))
     fill = grid_wrapping_paper(rows, cols, spacing, (bounds[0], bounds[1]), doodles)
 
     if rotate:
         rotate_shapes(fill, rotation)
     keep_shapes_inside(fill, outline)
 
-    return dict(type="group", clip=outline, members=[fill])
+    return Group(clip=outline, members=fill)
 
 
 def fill_spots(
-    outline: Collection, spacing: Number = 10, radius: Param = None
-) -> List[dict]:
+    outline: Collection, spacing: float = 10
+) -> List[Circle]:
     """Fill a region with randomly sized spots.
 
     The spots are reminiscent of Ishihara color blindness tests.  The
@@ -292,14 +294,9 @@ def fill_spots(
         outline: A region outline shape.
         spacing: The approximate distance between the centers of
           neighboring spots.
-        radius: The spot radius.  By default the radii range from
-          ``spacing`` to ``spacing`` / 5 in a geometric sequence.  If
-          provided, it is recommended to supply a parameter with ratio
-          < 1 so that spaced-out larger points are plotted first, with
-          progressively smaller points inserted between existing ones.
 
     Returns:
-        A list of circle shapes.
+        A list of Circle shapes.
 
     """
     spacing = fixed_value(spacing)
@@ -310,9 +307,10 @@ def fill_spots(
     keep_points_inside(points, outline)
     if len(points) == 0:
         points = sample_points_in_shape(outline, 1)
-    if radius is None:
-        ratio = ((spacing / 5) / spacing) ** (1 / (len(points) - 1))
-        radius = Delta(spacing, ratio=ratio)
-    else:
-        radius = make_param(radius)
-    return [circle(c=points[i], r=radius.value()) for i in range(len(points))]
+    # ratio = ((spacing / 5) / spacing) ** (1 / (len(points) - 1))
+    # radius = Delta(spacing, ratio=ratio)
+    x = []
+    for i, pt in enumerate(points):
+        r = (1 - i / len(points)) * spacing
+        x.append(Circle(c=pt, r=r))
+    return x

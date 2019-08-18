@@ -28,14 +28,15 @@ c = ag.Canvas(400, 400)
 ######################################
 
 x = []
-x.append(ag.circle(c=(100, 100), r=80))
-x.append(ag.line(p1=(200, 30), p2=(250, 170)))
-x.append(ag.line(points=[(300, 30), (330, 170), (350, 90), (370, 160)]))
-x.append(ag.polygon(points=[(30, 230), (30, 370), (170, 230), (170, 370)]))
-x.append(
-    ex.wave(start=(230, 230), direction=45, period=ag.Delta(20, delta=0.1), length=200)
-)
-ag.wobble(x)
+x.append(ag.Circle(c=(100, 100), r=80))
+x.append(ag.Line(p1=(200, 30), p2=(250, 170)))
+x.append(ag.Line(points=[(300, 30), (330, 170), (350, 90), (370, 160)]))
+x.append(ag.Polygon([(30, 230), (30, 370), (170, 230), (170, 370)]))
+# x.append(
+#     ex.wave(start=(230, 230), direction=45, period=ag.Delta(20, delta=0.1), length=200)
+# )
+x.append(ag.Spline([(300, 230), (330, 370), (350, 290), (370, 360)]))
+ex.wobble(x)
 
 c.add(x)
 c.png("png/shapes1.png")
