@@ -304,10 +304,12 @@ class Dynamic(Param):
             self.value = self.start.state(t)
             # Initialize delta/ratio so they get their t=0 values.
             if self.delta is not None:
-                self.delta.state(t)
+                self.delta.state(0)
             if self.ratio is not None:
-                self.ratio.state(t)
-            self.t_prev = t
+                self.ratio.state(0)
+            self.t_prev = 0
+            # Initialize min/max:
+            mn, mx = self.min.state(t), self.max.state(t)
             return self.value
         else:
             assert t == self.t_prev + 1

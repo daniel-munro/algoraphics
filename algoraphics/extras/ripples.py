@@ -44,6 +44,8 @@ def _next_point(points: Rtree, spacing: float, mode: str) -> Union[Pnt, None]:
         angle_inc = direction * 1
         stop_angle = angle + direction * 359
         newpt_fun = lambda ang: rotated_point(last[-2], last[-1], rad(ang))
+    elif mode == "T":
+        return None
 
     while True:
         newpt = newpt_fun(angle)
@@ -163,5 +165,5 @@ def ripple_canvas(
             else:
                 more_space = False
 
-    paths = [Spline(points=p, fill="none", stroke="black") for p in curves]
+    paths = [Spline(points=p) for p in curves]
     return paths

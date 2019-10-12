@@ -10,6 +10,7 @@ import string
 import subprocess
 
 # import cairosvg
+# import cairo
 import tempfile
 from moviepy.editor import ImageSequenceClip
 # from inspect import signature
@@ -114,6 +115,25 @@ class Canvas:
         subprocess.run(
             "convert -background None {} {}".format(path, frmt + file_name), shell=True
         )
+        # I tried writing directly to PNG, but it was much slower:
+        # surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, self.width, self.height)
+        # ctx = cairo.Context(surface)
+        # for obj in flatten(self.objects):
+        #     # if "stroke" in obj.style and obj.style["stroke"] is not None:
+                
+        #     if type(obj) is Polygon:
+        #         pts = [p.state() for p in obj.points]
+        #         ctx.move_to(*pts[0])
+        #         for pt in pts[1:] + [pts[0]]:
+        #             ctx.line_to(*pt)
+        #         ctx.stroke()
+        #     elif type(obj) is Line:
+        #         pts = [p.state() for p in obj.points]
+        #         ctx.move_to(*pts[0])
+        #         for pt in pts[1:]:
+        #             ctx.line_to(*pt)
+        #         ctx.stroke()
+        #     surface.write_to_png(file_name)
 
     def _write_frames(self, n_frames: int, fps: int) -> Sequence[str]:
         files = []
@@ -394,7 +414,7 @@ def svg_string(objects: Union[list, dict], w: float, h: float, t: int = 0):
     filters = []
     out = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" '
     out += 'xmlns:xlink="http://www.w3.org/1999/xlink" '
-    out += 'width="' + str(w) + '" height="' + str(h) + '">\n'
+    out += 'width="{}" height="{}">\n'.format(w, h)
 
     # # flip y-axis so zero is at the bottom:
     # scale_shapes(objects, 1, -1)
@@ -407,7 +427,8 @@ def svg_string(objects: Union[list, dict], w: float, h: float, t: int = 0):
     defs.extend(_write_filters(filters))
     out += "<defs>\n" + "".join(defs) + "</defs>\n"
 
-    out += objects + "</svg>\n"
+    out += '<g transform="translate(0, {}) scale(1, -1)">\n'.format(h)
+    out += objects + "</g>\n</svg>\n"
     return out
 
 

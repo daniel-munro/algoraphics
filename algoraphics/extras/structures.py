@@ -12,16 +12,15 @@ from typing import Tuple, Sequence, List
 from ..geom import (
     endpoint,
     rad,
-    is_clockwise,
-    interpolate,
     move_toward,
     rotate_and_move,
     line_to_polygon,
     jittered_points,
 )
-from ..shapes import Polygon, Spline, Line, set_style
+from ..shapes import Polygon, Spline, Line
 from ..param import Param, fixed_value, make_param
 from ..point import Point, Move, make_point
+from .utils import is_clockwise, interpolate
 
 # Number = Union[int, float]
 # Point = Tuple[Number, Number]
@@ -43,8 +42,8 @@ def filament(backbone: Sequence[Point], width: Param) -> List[Polygon]:
     width = make_param(width)
     widths = [copy.copy(width) for i in range(len(backbone) + 1)]
     # Filament starts with right angles:
-    p1 = Move(backbone[0], direction=backbone[1].direction - 90, distance=widths[0] / 2)
-    p2 = Move(backbone[0], direction=backbone[1].direction + 90, distance=widths[0] / 2)
+    p1 = Move(backbone[0], direction=backbone[1].direction + 90, distance=widths[0] / 2)
+    p2 = Move(backbone[0], direction=backbone[1].direction - 90, distance=widths[0] / 2)
     pt_pairs = [[p1, p2]]
     for i in range(1, len(backbone) - 1):
         angle = (180 + (backbone[i].direction - backbone[i + 1].direction)) / 2
@@ -73,15 +72,13 @@ def filament(backbone: Sequence[Point], width: Param) -> List[Polygon]:
         pts = [pt_pairs[i][0], pt_pairs[i][1], pt_pairs[i + 1][1], pt_pairs[i + 1][0]]
         segments.append(Polygon(pts))
 
-    set_style(segments, "stroke", "match")
-    set_style(segments, "stroke-width", 0.3)
+    # set_style(segments, "stroke", "match")
+    # set_style(segments, "stroke-width", 0.3)
     return segments
 
 
-def tentacle(
-        backbone: Sequence[Point], width: float
-) -> List[Polygon]:
-    """Generate a filament that tapers to a point.
+def tentacle(backbone: Sequence[Point], width: Param) -> Spline:
+    """Generate a tentacle.
 
     Args:
         backbone: A list of Points specifying the midpoint of the
@@ -89,17 +86,41 @@ def tentacle(
         width: The width of the tentacle base.
 
     Returns:
-        A list of polygons (the segments from base to tip).
+        A Spline shape.
 
     """
-    width = fixed_value(width)
-    x = filament(backbone, width)
-    delwidth = width / len(x)
-    for segment in x:
-        width -= delwidth
-        segment.points[2].distance = Param(width / 2)
-        segment.points[3].distance = Param(width / 2)
-    return x
+    # width = fixed_value(width)
+    # x = filament(backbone, width)
+    # delwidth = width / len(x)
+    # for segment in x:
+    #     width -= delwidth
+    #     segment.points[2].distance = Param(width / 2)
+    #     segment.points[3].distance = Param(width / 2)
+    # return x
+    width = make_param(width)
+    delwidth = width / (len(backbone) - 1)
+    # Tentacle starts with right angles:
+    p1 = Move(backbone[0], direction=backbone[1].direction + 90, distance=width / 2)
+    p2 = Move(backbone[0], direction=backbone[1].direction - 90, distance=width / 2)
+    sides = [[p1], [p2]]  # Store points for each side.
+    for i in range(1, len(backbone) - 1):
+        width = width - delwidth
+        angle = (180 + (backbone[i].direction - backbone[i + 1].direction)) / 2
+        p1 = Move(
+            backbone[i],
+            direction=(backbone[i + 1].direction + angle),
+            distance=width / 2,
+        )
+        p2 = Move(
+            backbone[i],
+            direction=(backbone[i + 1].direction + angle + 180),
+            distance=width / 2,
+        )
+        sides[0].append(p1)
+        sides[1].append(p2)
+    points = sides[0] + list(reversed(sides[1]))
+    tentacle = Spline(points, circular=True)
+    return tentacle
 
 
 def _blow_paint_edge(
@@ -245,7 +266,12 @@ def blow_paint_spot(
 
 
 def tree(
-        start: Point, direction: Param, branch_length: Param, theta: Param, p: float, delta_p: float = 0
+    start: Point,
+    direction: Param,
+    branch_length: Param,
+    theta: Param,
+    p: float,
+    delta_p: float = 0,
 ) -> List[dict]:
     """Generate a tree with randomly terminating branches.
 

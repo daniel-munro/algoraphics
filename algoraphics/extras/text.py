@@ -9,13 +9,13 @@ import numpy as np
 from typing import Union, Tuple, List
 
 from ..geom import (
-    points_on_line,
-    points_on_arc,
     scale_points,
     translate_points,
     horizontal_range,
     deg,
 )
+from .utils import points_on_line, points_on_arc
+
 
 # Number = Union[int, float]
 # Point = Tuple[Number, Number]

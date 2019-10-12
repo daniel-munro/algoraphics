@@ -19,16 +19,10 @@ from ..shapes import (
     Spline,
     Group,
 )
-from ..geom import (
-    points_on_line,
-    points_on_arc,
-    rotate_points,
-    translate_points,
-    scale_points,
-    rad,
-    deg,
-)
+from ..geom import rotate_points, translate_points, scale_points, rad, deg
 from .grid import grid_tree_neighbors
+from .utils import points_on_line, points_on_arc
+
 
 # Number = Union[int, float]
 # Point = Tuple[Number, Number]
@@ -385,9 +379,7 @@ def _new_coords(prev_coords: Tuple[int, int], direction: int) -> Tuple[int, int]
     return (r, c)
 
 
-def _rotate_cell(
-    points: Union[Sequence[Pnt], Tuple[Sequence[Pnt], ...]], times: int
-):
+def _rotate_cell(points: Union[Sequence[Pnt], Tuple[Sequence[Pnt], ...]], times: int):
     """Rotate points at right angles within grid cell.
 
     Args:

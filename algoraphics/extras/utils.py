@@ -10,7 +10,7 @@ import rtree
 from typing import Dict, List, Union, Tuple, Sequence
 
 from ..color import Color, make_color
-from ..geom import distance, remove_close_points, jitter_points, endpoint, interpolate
+from ..geom import distance, jitter_points, endpoint, rad
 from ..shapes import Shape, Group, Polygon, Spline, Line, Circle
 
 Pnt = Tuple[float, float]
@@ -153,6 +153,117 @@ def spaced_points(n: int, bounds: Bounds, n_cand: int = 10) -> List[Pnt]:
         points.append(best_candidate)
         idx.add_point(best_candidate)
     return points
+
+
+def points_on_line(start: Pnt, end: Pnt, spacing: float) -> Sequence[Pnt]:
+    """Generate points along a line.
+
+    Args:
+        start: The first point.
+        end: The last point.
+        spacing: The approximate (max) distance between adjacent points.
+
+    Returns:
+        A list of points.
+
+    """
+    n_points = math.ceil(distance(start, end) / spacing) + 1
+
+    dx = float(end[0] - start[0]) / (n_points - 1)
+    dy = float(end[1] - start[1]) / (n_points - 1)
+
+    x = [start[0] + i * dx for i in range(n_points)]
+    y = [start[1] + i * dy for i in range(n_points)]
+    return list(zip(x, y))
+
+
+def interpolate(points: Sequence[Pnt], spacing: float):
+    """Insert interpolated points.
+
+    Insert equally-spaced, linearly interpolated points into list such
+    that consecutive points are no more than 'spacing' distance apart.
+
+    Args:
+        points: A list of points.
+        spacing: Maximum distance between adjacent points.
+
+    """
+    for i in reversed(range(1, len(points))):
+        if distance(points[i - 1], points[i]) > spacing:
+            newpts = points_on_line(points[i - 1], points[i], spacing)[1:-1]
+            points[i:i] = newpts
+
+
+def remove_close_points(points: Sequence[Pnt], spacing: float):
+    """Remove points that are closer than 'spacing'.
+
+    A point is removed if it follows the previous point too closely.
+    Consecutive points cannot both be removed, so the list is scanned
+    repeatedly until all consecutive points are at least 'spacing'
+    apart.
+
+    Args:
+        points: A list of points.
+        spacing: Minimum distance between adjacent points.
+
+    """
+    any_too_close = True
+    while any_too_close:
+        any_too_close = False
+        del_last = False
+        for i in reversed(range(1, len(points))):
+            if distance(points[i-1], points[i]) < spacing and not del_last:
+                del points[i]
+                any_too_close = True
+                del_last = True
+            else:
+                del_last = False
+
+
+def points_on_arc(
+    center: Pnt,
+    radius: float,
+    theta_start: float,
+    theta_end: float,
+    spacing: float,
+) -> Sequence[Pnt]:
+    """Generate points along an arc.
+
+    Args:
+        center: The center of the arc.
+        radius: The radius of the arc.
+        theta_start: The starting position in degrees.
+        theta_end: The ending position in degrees.
+        spacing: The approximate distance between adjacent points.
+
+    Returns:
+        A list of points.
+
+    """
+    theta_start = rad(theta_start)
+    theta_end = rad(theta_end)
+    theta = float(theta_end - theta_start)
+    n_points = int(abs(theta) * radius / spacing) + 1
+    theta_p = [theta_start + i * theta / (n_points - 1) for i in range(n_points)]
+    return [endpoint(center, t, radius) for t in theta_p]
+
+
+def is_clockwise(points: Sequence[Pnt]) -> bool:
+    """Determine the derection of a sequence of points around a polygon.
+
+    Finds whether a set of polygon points goes in a clockwise or
+    counterclockwise direction.  If edges cross, it gives the more
+    prominent direction.
+
+    Args:
+        points: A list of polygon vertices.
+
+    """
+    p = points + [points[0]]
+    edge_vals = [
+        (p[i + 1][0] - p[i][0]) * (p[i + 1][1] + p[i][1]) for i in range(len(points))
+    ]
+    return sum(edge_vals) > 0
 
 
 def wobble(shapes: Sequence, dev: float = 2):

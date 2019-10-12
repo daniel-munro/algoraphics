@@ -48,9 +48,9 @@ c.new(x)
 c.png("png/structures2.png")
 
 
-#################################
-# Tapered filaments (tentacles) #
-#################################
+#############
+# Tentacles #
+#############
 
 start = (c.width / 2, c.height / 2)
 x = []
