@@ -3,6 +3,8 @@ from setuptools import setup
 setup(
     name='algoraphics',
     author='Dan Munro',
+    varsion='1.0',
+    packages=['algoraphics', 'algoraphics.extras'],
     install_requires=[
         'cairosvg',
         'matplotlib',
